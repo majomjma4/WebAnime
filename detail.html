@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+    <script data-ui-preload>document.documentElement.classList.add("preload-ui");</script>
+    <style>
+  .preload-ui body { opacity: 0; }
+    </style>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <link rel="icon" href="img/icon3.png" />
+    <title>Solo Leveling | NekoraList</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary-dim": "#c0adff",
+              "primary-fixed-dim": "#dacdff",
+              "background": "#0e0e0e",
+              "on-background": "#e7e5e4",
+              "surface-bright": "#2c2c2c",
+              "on-surface-variant": "#acabaa",
+              "tertiary-dim": "#cecfef",
+              "on-tertiary-container": "#4c4e68",
+              "on-secondary-fixed-variant": "#5d5b5f",
+              "on-tertiary-fixed-variant": "#565873",
+              "inverse-surface": "#fcf8f8",
+              "error-container": "#7f2737",
+              "on-primary": "#4800bf",
+              "on-secondary-fixed": "#403e42",
+              "on-error-container": "#ff97a3",
+              "surface-container-highest": "#252626",
+              "on-surface": "#e7e5e4",
+              "outline": "#767575",
+              "on-error": "#490013",
+              "tertiary-fixed": "#ddddfe",
+              "surface-container-lowest": "#000000",
+              "surface-tint": "#cdbdff",
+              "surface": "#0e0e0e",
+              "tertiary-container": "#ddddfe",
+              "surface-variant": "#252626",
+              "inverse-on-surface": "#565554",
+              "inverse-primary": "#6834eb",
+              "surface-container-high": "#1f2020",
+              "primary-container": "#4f00d0",
+              "primary": "#cdbdff",
+              "secondary-fixed": "#e6e1e6",
+              "on-primary-fixed-variant": "#652fe7",
+              "outline-variant": "#484848",
+              "on-secondary-container": "#c2bec3",
+              "on-tertiary-fixed": "#3a3c55",
+              "secondary-dim": "#a09da1",
+              "secondary-container": "#3c3b3e",
+              "error": "#ec7c8a",
+              "on-primary-container": "#d6c9ff",
+              "tertiary": "#edecff",
+              "surface-container-low": "#131313",
+              "surface-container": "#191a1a",
+              "secondary-fixed-dim": "#d8d3d8",
+              "surface-dim": "#0e0e0e",
+              "on-tertiary": "#555671",
+              "on-secondary": "#211f23",
+              "tertiary-fixed-dim": "#cecfef",
+              "error-dim": "#b95463",
+              "secondary": "#a09da1",
+              "primary-fixed": "#e8deff",
+              "on-primary-fixed": "#4700bd"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .hide-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      .carousel-row {
+        --cards: 5;
+        --gap: 1rem;
+        --pad: 2.5rem;
+        display: flex;
+        gap: var(--gap);
+        justify-content: flex-start;
+        padding-inline: var(--pad);
+        scroll-snap-type: x mandatory;
+        scroll-padding-inline: var(--pad);
+        overflow-x: auto !important;
+        overflow-y: visible !important;
+      }
+      .carousel-card {
+        flex: 0 0 calc((100% - (var(--cards) - 1) * var(--gap)) / var(--cards));
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+        position: relative;
+        z-index: 0;
+      }
+      .carousel-card:hover {
+        z-index: 3;
+      }
+      body.trailer-open #detail-hero-content {
+        filter: blur(4px);
+        opacity: 0.55;
+      }
+      body.trailer-open #detail-trailer-modal {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      body.trailer-open #detail-trailer-card {
+        transform: scale(1);
+      }
+      body.trailer-open #detail-trailer-surface {
+        opacity: 0;
+        pointer-events: none;
+      }
+      body.trailer-open #detail-bg-video {
+        opacity: 0 !important;
+      }
+      body.trailer-open #detail-bg-image {
+        opacity: 0.9 !important;
+      }
+      #detail-bg-image,
+      #detail-bg-video {
+        object-position: center;
+      }
+      body.bg-video-off #detail-bg-video {
+        opacity: 0 !important;
+      }
+      body.bg-video-off #detail-bg-image {
+        opacity: 0.9 !important;
+      }
+      #detail-video-fade {
+        position: absolute;
+        inset: 0;
+        z-index: 25;
+        background: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 28%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.25) 65%, rgba(0,0,0,0) 75%);
+        pointer-events: none;
+      }
+      .video-fade-left {
+        -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.2) 15%, #000 45%, #000 100%);
+        mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.2) 15%, #000 45%, #000 100%);
+      }
+      body.bg-video-on #detail-bg-video {
+        opacity: 0.75;
+      }
+      body.bg-video-on #detail-bg-image {
+        opacity: 0;
+      }
+      body.bg-video-original #detail-bg-video {
+        opacity: 1;
+        filter: none;
+        transform: scale(1.2);
+        object-fit: contain;
+        object-position: right center;
+      }
+      .poster-fade-left::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(0deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.55) 35%, rgba(0,0,0,0) 70%);
+        pointer-events: none;
+      }
+      .poster-fade-left {
+        -webkit-mask-image: linear-gradient(0deg, transparent 0%, #000 20%, #000 100%);
+        mask-image: linear-gradient(0deg, transparent 0%, #000 20%, #000 100%);
+      }
+    </style>
+  </head>
+  <body class="bg-background text-on-background font-body selection:bg-primary-container selection:text-on-primary-container">
+    <!-- Navbar Component -->
+    <div data-layout="header"></div>
+    <main class="pt-20">
+      <!-- Hero Section -->
+      <section id="detail-hero" class="relative h-[614px] min-h-[500px] w-full mt-4 lg:mt-6">
+        <!-- Background Backdrop -->
+        <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+          <div class="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-background/90 via-background/60 to-transparent z-10 pointer-events-none"></div>
+          <video id="detail-bg-video" class="video-fade-left absolute inset-0 w-full h-full object-cover blur-sm scale-105 opacity-0 transition-all duration-700 pointer-events-none" playsinline muted loop></video>
+          <img id="detail-bg-image" alt="Background Art" class="video-fade-left w-full h-full object-cover blur-sm scale-105 opacity-65 transition-all duration-700 pointer-events-none" data-alt="Cinematic abstract anime background with purple tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrqwEEjoe5bagUJbWKcZWgC45ngsX0Z17k_3KXCOCfT-JxhGHibHsZF4XcWgUYFx9Cx8f28ZNY6rb5d7wQv2ZovPkapLlkV7YF3kgGjCosBXxE-XhQg955xcpecwdqgnUiE5W_A5a7FKB7JqqvzJscbnC9HKRKx64Vn0S1eatS7-omITY7gD9ku4SliLgqEvBHqdey4s3iIW35GUuucJiPf8TYxzlfsbIj6SEhhfz53BJ2H4xbXAJhCbej1WUWLeBDxQrnWicVY-cD"/>
+          <div id="detail-video-fade"></div>
+        </div>
+        <div class="absolute inset-x-0 -bottom-16 h-56 bg-gradient-to-t from-black/90 via-background/65 to-transparent z-10 pointer-events-none"></div>
+        <div class="absolute inset-x-0 -bottom-10 h-36 bg-gradient-to-t from-black/75 via-black/40 to-transparent z-10 pointer-events-none"></div>
+        <button id="detail-trailer-surface" class="absolute inset-y-0 right-0 w-1/2 h-full z-30 hidden transition-all duration-500 cursor-pointer group" type="button" aria-label="Reproducir trailer">
+          <span class="absolute inset-0 bg-transparent"></span>
+          <span class="absolute inset-0 flex items-center justify-end pr-[20rem]">
+            <span id="detail-trailer-icon" class="material-symbols-outlined text-8xl text-white/35 drop-shadow-[0_0_16px_rgba(0,0,0,0.7)] transition-all duration-500 opacity-30 group-hover:opacity-65 group-hover:text-white/70 group-hover:drop-shadow-[0_0_24px_rgba(59,130,246,0.45)] hidden">play_arrow</span>
+          </span>
+        </button>
+        <div id="detail-trailer-modal" class="absolute inset-0 z-30 hidden flex items-center justify-center opacity-0 pointer-events-none transition-all duration-500">
+          <div id="detail-trailer-overlay" class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+          <div id="detail-trailer-card" class="relative w-[min(88vw,1100px)] aspect-video bg-black/80 rounded-2xl overflow-hidden border border-white/10 shadow-[0_0_30px_rgba(0,0,0,0.45)] scale-95 transition-all duration-500">
+            <button id="detail-trailer-close" class="absolute top-3 right-3 z-20 w-9 h-9 rounded-full bg-black/60 text-white/80 hover:text-white hover:bg-black/80 transition-all duration-500" type="button" aria-label="Cerrar trailer">✕</button>
+            <video id="detail-trailer-video" class="w-full h-full object-cover" playsinline controls></video>
+          </div>
+        </div>
+        <!-- Content Container -->
+        <div id="detail-hero-content" class="relative z-20 max-w-7xl mx-auto h-full px-8 flex items-end pb-12 gap-12 transition-all duration-500 blur-0 opacity-100 pointer-events-none">
+          <!-- Large P?ster Card -->
+          <div class="hidden md:block w-72 lg:w-80 shrink-0 transform -translate-y-4 pointer-events-auto">
+            <div class="relative aspect-[2/3] rounded-lg overflow-hidden shadow-[0px_30px_60px_rgba(0,0,0,0.6)] bg-surface-container-high">
+              <img alt="Solo Leveling Póster" class="w-full h-full object-cover" data-alt="Anime protagonist character art vertical poster" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXTXqdDIpKJHKrJNqlN-s7KMfzwFvt6rOtGu823T9YwAdyi6UEeanLdk9bqVlZ8ho5vTFT7MDZ6vzPK4KY7BJP13NbLY_vk_gooV2eHcmjbyP9weV8jSsNAnMZ_QJT54fqop6etgY343bdhrCO--xxETu162oetRJCyr0HpWKNw2NpQCSK024fF7PvE7RiypLSPQDTXxOG-TO4cAplVg_TuTwzEooVYnPehX57TkY2_pMDoTFuAYFkM9vyCyuQz0AljMmSIz1r-XDr"/>
+</div>
+          </div>
+          <!-- Info Block -->
+          <div class="flex-1 flex flex-col gap-6 pointer-events-auto">
+            <div class="space-y-2">
+              <div class="flex items-center gap-3">
+                <span id="detail-badge" class="px-3 py-1 bg-primary/10 border border-primary/20 text-primary-dim text-xs font-bold rounded-full tracking-wider uppercase">Destacado</span>
+                <span class="flex items-center gap-1 text-primary-dim">
+                  <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                  <span class="font-bold text-lg">8.7</span>
+                  <span class="text-on-surface-variant text-sm font-normal ml-1">Puntuación</span>
+                </span>
+              </div>
+              <h1 class="font-headline text-5xl lg:text-7xl font-extrabold tracking-tighter text-on-surface">Solo Leveling</h1>
+              <p id="detail-status-meta" class="text-on-surface-variant font-medium flex gap-4 text-sm lg:text-base">
+                <span>Estado: En emisión</span>
+                <span class="text-outline-variant">&gt;&lt;</span>
+                <span>Episodios: 12/24</span>
+                <span class="text-outline-variant">&gt;&lt;</span>
+                <span>Duración: 24m</span>
+              </p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant text-sm rounded-full border border-outline-variant/10">Acción</span>
+              <span class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant text-sm rounded-full border border-outline-variant/10">Fantasía</span>
+              <span class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant text-sm rounded-full border border-outline-variant/10">Aventura</span>
+            </div>
+            <div class="flex flex-wrap gap-4 pt-2 items-center">
+              <a data-add-my-list class="px-8 py-3.5 bg-transparent border border-sky-400/40 text-on-surface font-bold rounded-full hover:border-sky-400/70 hover:bg-surface-container-high transition-all flex items-center gap-2 shadow-[0_0_14px_rgba(56,189,248,0.25)] hover:shadow-[0_0_22px_rgba(56,189,248,0.45)]" href="user.html"><span class="material-symbols-outlined">add</span><span data-add-label>A?adir a Mi Lista</span></a>
+              <button data-add-favorite class="group w-12 h-12 p-0 bg-transparent border border-rose-400/40 text-on-surface-variant rounded-full hover:border-rose-400/70 hover:bg-surface-container-high transition-all flex items-center justify-center relative shadow-[0_0_14px_rgba(244,63,94,0.3)] hover:shadow-[0_0_22px_rgba(244,63,94,0.55)]" type="button"><span class="material-symbols-outlined text-[20px]">favorite</span><span data-fav-label class="pointer-events-none absolute left-1/2 top-full mt-2 -translate-x-1/2 whitespace-nowrap rounded-full bg-surface-container-high px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-on-surface opacity-0 transition-opacity duration-200 group-hover:opacity-100">Agregar a Favoritos</span></button>
+              <button data-detail-status="completed" class="group w-12 h-12 p-0 bg-transparent border border-emerald-400/40 text-on-surface-variant rounded-full hover:border-emerald-400/70 hover:bg-surface-container-high transition-all flex items-center justify-center relative shadow-[0_0_14px_rgba(16,185,129,0.3)] hover:shadow-[0_0_22px_rgba(16,185,129,0.55)]" type="button">
+                <span class="material-symbols-outlined text-[20px]">check_circle</span>
+                <span data-detail-status-label class="pointer-events-none absolute left-1/2 top-full mt-2 -translate-x-1/2 whitespace-nowrap rounded-full bg-surface-container-high px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-on-surface opacity-0 transition-opacity duration-200 group-hover:opacity-100">Completado</span>
+              </button>
+              <button data-detail-status="pending" class="group w-12 h-12 p-0 bg-transparent border border-amber-400/40 text-on-surface-variant rounded-full hover:border-amber-400/70 hover:bg-surface-container-high transition-all flex items-center justify-center relative shadow-[0_0_14px_rgba(251,191,36,0.3)] hover:shadow-[0_0_22px_rgba(251,191,36,0.55)]" type="button">
+                <span class="material-symbols-outlined text-[20px]">schedule</span>
+                <span data-detail-status-label class="pointer-events-none absolute left-1/2 top-full mt-2 -translate-x-1/2 whitespace-nowrap rounded-full bg-surface-container-high px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-on-surface opacity-0 transition-opacity duration-200 group-hover:opacity-100">Pendiente</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Detailed Content Area -->
+      <section class="max-w-7xl mx-auto px-8 py-20 grid grid-cols-1 lg:grid-cols-3 gap-16">
+        <!-- Left Column: Sinopsis, Galer?a y Personajes -->
+        <div class="lg:col-span-2 space-y-12">
+          <!-- Synopsis -->
+          <div class="space-y-6">
+            <h2 class="font-headline text-3xl font-bold">Sinopsis</h2>
+            <p class="text-on-surface-variant leading-relaxed text-lg font-light max-w-3xl">
+              In a world where hunters, humans who possess magical abilities, must battle deadly monsters to protect the human race from certain annihilation, a notoriously weak hunter named Sung Jinwoo finds himself in a seemingly endless struggle for survival.
+              <br/><br/>
+              After narrowly surviving an overwhelmingly powerful double dungeon that nearly wipes out his entire party, a mysterious program called the System chooses him as its sole player and in turn, gives him the extremely rare ability to level up in strength, possibly beyond any known limits.
+            </p>
+          </div>
+          <div id="detail-media" class="space-y-6"></div>
+          <div class="space-y-8">
+            <div class="flex items-center justify-between">
+              <h2 class="font-headline text-3xl font-bold">Personajes </h2>
+            </div>
+            <div class="relative overflow-x-hidden">
+              <button id="chars-prev" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-surface-container-high/80 border border-outline-variant/20 text-primary flex items-center justify-center shadow-md" type="button"><span class="material-symbols-outlined text-base">chevron_left</span></button>
+              <button id="chars-next" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-surface-container-high/80 border border-outline-variant/20 text-primary flex items-center justify-center shadow-md" type="button"><span class="material-symbols-outlined text-base">chevron_right</span></button>
+              <div id="chars-row" class="flex gap-4 overflow-x-auto pb-4 hide-scrollbar scroll-smooth">
+              <div class="flex flex-col items-center gap-3 shrink-0">
+                <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-primary/20 p-1">
+                  <img alt="Jinwoo" class="w-full h-full object-cover rounded-full" data-alt="Anime character portrait circular crop" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjKtfx1NJtFTsDXvl4sLc-dIGd3LIH7h0Bdmu0SG3BL-T9eZrgPnb7OdButxKtXyal1v6NgHAKsx6sjhSEhB5bFopGB5Of_DUV-N66b_5ZppqVMWGIKxdHNEOVRUeGyIFM94SVqZSLaKZWkwYedNNfY0Ras76mQHXAruWbVw-WmDXedmiPPAKGlV9mXKq4_J5FwJZqpMDUVDpSlNTF40i-DYHdY_oj2Rj2FDEy3ZSavwbvrWRclJ1BNR3OaE6MxbkfXptHjmiKSgGc"/>
+                </div>
+                <span class="text-sm font-bold">Sung Jinwoo</span>
+                <span class="text-xs text-on-surface-variant">Protagonista</span>
+              </div>
+              <div class="flex flex-col items-center gap-3 shrink-0">
+                <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-transparent p-1">
+                  <img alt="Hae-In" class="w-full h-full object-cover rounded-full" data-alt="Anime character portrait circular crop" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrHgfJFm12i5ndbns7J4SrJ8yleY2Q91SSq4ZLfdJVYipHQUH-5aLCKyvEum8dqcI9WIr-L1S_xpKXkDF49GRwYdmg-zR-AkxuCXcG8tIRse7qQJ2nykDY8vzk6jO-QBDPmBEV8gcHHU0FKp6UY1NqpCxwEe5Wbk1cztc_8dm9lvhkZMM2-cfyqjLpWD63nNx515O3YSzkOw51IfGaPW9E3vrR06Dx-krOzjgv0dGZAYyXqLpYljVwkpYMABzwDYvIii8PBvZ6xhnZ"/>
+                </div>
+                <span class="text-sm font-bold">Cha Hae-In</span>
+                <span class="text-xs text-on-surface-variant">Cazador de Rango S</span>
+              </div>
+              <div class="flex flex-col items-center gap-3 shrink-0">
+                <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-transparent p-1">
+                  <img alt="Gun-Hee" class="w-full h-full object-cover rounded-full" data-alt="Anime character portrait circular crop" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVTnhUPiLiKxzepHIltmKZvgRv-amk6DpzKR4ZNslnHI5bq9VqxjDH5d0154ELAmO5OxoWDc2bLEQ6Fc-xJtmi9GU5nh6rmBFLTaNSMrHLhqWBFnoW2VwjvkXtH4PGtSl3JgvFUi7sa0mVXsaN42qw_j9fWgv714lsggyrzKbPGyjAO-VWwubYK0lDZvLQ-CQL-oYRoTP6u-4jXYD2Uj3-7Dd4J9VwEqMWyUJzKSUfzZHptsqeQWcy--KCkOG1D03PhYC_SwWxf7pm"/>
+                </div>
+                <span class="text-sm font-bold">Go Gun-Hee</span>
+                <span class="text-xs text-on-surface-variant">Presidente</span>
+              </div>
+              <div class="flex flex-col items-center gap-3 shrink-0">
+                <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-transparent p-1">
+                  <img alt="Jin-Ah" class="w-full h-full object-cover rounded-full" data-alt="Anime character portrait circular crop" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbkd52ec0RY40oQaRpreQb-P4RfWsSUOtsy4QY58-xXI4uWKQXxtSqp01A8JjdTM0-AygX0ruKQY61eSEWXUPfRUwW3x52llAP2D9iJ7-djTlQjVAzvWtp8dPCDaaJLIV8VTscyK__8_8gvIA4niK0OyG_ME84yfbOk2x4lE76ghNdXh7dlD-SLOsPMEzUlHu1zB7nHMDS-LLBrhiSAwgY9sCT2tJtaq07AzfZdwRe3ND1lWc1eJi_K1LbVZBroZFag0fHtqIk2eOU"/>
+                </div>
+                <span class="text-sm font-bold">Sung Jin-Ah</span>
+                <span class="text-xs text-on-surface-variant">Estudiante</span>
+              </div>
+              <div class="flex flex-col items-center gap-3 shrink-0">
+                <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-transparent p-1">
+                  <img alt="Joo-Hee" class="w-full h-full object-cover rounded-full" data-alt="Anime character portrait circular crop" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHX-e4mL71PhUWTl9q84UzFeYVQ9g8y50zUFPxJGAxGg5tcrOvkPOTPXvj8F-w4xyxY7ISh1f31yIbWjUlB9LGL357YjzbFhbiZ25iJXsmoYHscTT-CgjjszGa53_B97OdMWjOQtSpEpik3I4aTubNQA_xEpCuki_vXZu4YOxzBA2K8L2pHJh9BEz40IYqLIa0ZJy9FID01jymCJxkrH57n5mKBOzXxXD7G--5vC84VHr9mWjt6WYCGteFvrvRVYMFn39dIrAEl5Nx"/>
+                </div>
+                <span class="text-sm font-bold">Lee Joo-Hee</span>
+                <span class="text-xs text-on-surface-variant">Sanador</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+        <!-- Right Column: Informaci?n -->
+        <div class="space-y-10">
+          <div class="bg-surface-container-low rounded-lg p-8 border border-outline-variant/5 space-y-8">
+            <h3 class="font-headline text-xl font-bold border-b border-outline-variant/10 pb-4">Información</h3>
+            <div class="space-y-6">
+              <div class="flex flex-col gap-1">
+                <span class="text-xs text-on-surface-variant uppercase tracking-widest font-bold">Native Title</span>
+                <span class="text-on-surface font-medium">? ?? ??</span>
+              </div>
+              <div class="flex flex-col gap-1">
+                <span class="text-xs text-on-surface-variant uppercase tracking-widest font-bold">Studio</span>
+                <span class="text-primary font-medium">A-1 Pictures</span>
+              </div>
+              <div class="flex flex-col gap-1">
+                <span class="text-xs text-on-surface-variant uppercase tracking-widest font-bold">Source</span>
+                <span class="text-on-surface font-medium">? ?? ??</span>
+              </div>
+              <div class="flex flex-col gap-1">
+                <span class="text-xs text-on-surface-variant uppercase tracking-widest font-bold">Aired</span>
+                <span class="text-on-surface font-medium">? ?? ??</span>
+              </div>
+              <div class="flex flex-col gap-1">
+                <span class="text-xs text-on-surface-variant uppercase tracking-widest font-bold">Rating</span>
+                <span class="text-on-surface font-medium">? ?? ??</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Recommended Section -->
+      <section class="max-w-7xl mx-auto px-8 pb-32 space-y-10">
+        <div class="flex items-end justify-between">
+          <div>
+            <h2 class="font-headline text-4xl font-extrabold tracking-tight">Recomendado para Ti</h2>
+            <p class="text-on-surface-variant mt-2">Otros títulos que te pueden interesar</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
+          <!-- Card 1 -->
+          <a class="group cursor-pointer" href="detail.html"><div class="poster-fade-left relative aspect-[2/3] rounded-lg overflow-hidden bg-surface-container-high relative mb-4 transition-transform duration-500 ease-[cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.04]"><img alt="Tower of God" class="w-full h-full object-cover" data-alt="Anime fantasy poster vertical" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtqxKcGTcymR4IJol4SxeiIj-BJNATnZcsnFB2ZMYRTa74Vr0wv3vAZ6CEWT1rbGPSDGJrUxs1F6uIcQHQ8iKXtmZIvFLACNlD4UPMFWExAc8CUG2cd_tFeTP0tpM1N_eQ0OkRniEpPz16OEyZjUhmIpXAREqccEnQwbppVkAmyIwXrZjM_7S4FmDqxkG50F5ZTWxzmiWTlDi8zorXn_C5j-ZqIId_lDc6EU00FED-4xW5ht_oYkS0j8kh05o0Kt6g_KJgoKmdrqvi"/><div class="absolute top-3 right-3 bg-neutral-950/80 backdrop-blur-md px-2 py-1 rounded-md flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span> <span class="text-xs font-bold">8.1</span></div></div><h4 class="font-bold text-on-surface group-hover:text-primary transition-colors truncate">Tower of God</h4><p class="text-xs text-on-surface-variant mt-1">Adventure, Mystery</p></a>
+          <!-- Card 2 -->
+          <a class="group cursor-pointer" href="detail.html"><div class="poster-fade-left relative aspect-[2/3] rounded-lg overflow-hidden bg-surface-container-high relative mb-4 transition-transform duration-500 ease-[cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.04]"><img alt="Tower of God" class="w-full h-full object-cover" data-alt="Anime fantasy poster vertical" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtqxKcGTcymR4IJol4SxeiIj-BJNATnZcsnFB2ZMYRTa74Vr0wv3vAZ6CEWT1rbGPSDGJrUxs1F6uIcQHQ8iKXtmZIvFLACNlD4UPMFWExAc8CUG2cd_tFeTP0tpM1N_eQ0OkRniEpPz16OEyZjUhmIpXAREqccEnQwbppVkAmyIwXrZjM_7S4FmDqxkG50F5ZTWxzmiWTlDi8zorXn_C5j-ZqIId_lDc6EU00FED-4xW5ht_oYkS0j8kh05o0Kt6g_KJgoKmdrqvi"/><div class="absolute top-3 right-3 bg-neutral-950/80 backdrop-blur-md px-2 py-1 rounded-md flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span> <span class="text-xs font-bold">8.1</span></div></div><h4 class="font-bold text-on-surface group-hover:text-primary transition-colors truncate">Tower of God</h4><p class="text-xs text-on-surface-variant mt-1">Adventure, Mystery</p></a>
+          <!-- Card 3 -->
+          <a class="group cursor-pointer" href="detail.html"><div class="poster-fade-left relative aspect-[2/3] rounded-lg overflow-hidden bg-surface-container-high relative mb-4 transition-transform duration-500 ease-[cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.04]"><img alt="Tower of God" class="w-full h-full object-cover" data-alt="Anime fantasy poster vertical" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtqxKcGTcymR4IJol4SxeiIj-BJNATnZcsnFB2ZMYRTa74Vr0wv3vAZ6CEWT1rbGPSDGJrUxs1F6uIcQHQ8iKXtmZIvFLACNlD4UPMFWExAc8CUG2cd_tFeTP0tpM1N_eQ0OkRniEpPz16OEyZjUhmIpXAREqccEnQwbppVkAmyIwXrZjM_7S4FmDqxkG50F5ZTWxzmiWTlDi8zorXn_C5j-ZqIId_lDc6EU00FED-4xW5ht_oYkS0j8kh05o0Kt6g_KJgoKmdrqvi"/><div class="absolute top-3 right-3 bg-neutral-950/80 backdrop-blur-md px-2 py-1 rounded-md flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span> <span class="text-xs font-bold">8.1</span></div></div><h4 class="font-bold text-on-surface group-hover:text-primary transition-colors truncate">Tower of God</h4><p class="text-xs text-on-surface-variant mt-1">Adventure, Mystery</p></a>
+          <!-- Card 4 -->
+          <a class="group cursor-pointer" href="detail.html"><div class="poster-fade-left relative aspect-[2/3] rounded-lg overflow-hidden bg-surface-container-high relative mb-4 transition-transform duration-500 ease-[cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.04]"><img alt="Tower of God" class="w-full h-full object-cover" data-alt="Anime fantasy poster vertical" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtqxKcGTcymR4IJol4SxeiIj-BJNATnZcsnFB2ZMYRTa74Vr0wv3vAZ6CEWT1rbGPSDGJrUxs1F6uIcQHQ8iKXtmZIvFLACNlD4UPMFWExAc8CUG2cd_tFeTP0tpM1N_eQ0OkRniEpPz16OEyZjUhmIpXAREqccEnQwbppVkAmyIwXrZjM_7S4FmDqxkG50F5ZTWxzmiWTlDi8zorXn_C5j-ZqIId_lDc6EU00FED-4xW5ht_oYkS0j8kh05o0Kt6g_KJgoKmdrqvi"/><div class="absolute top-3 right-3 bg-neutral-950/80 backdrop-blur-md px-2 py-1 rounded-md flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span> <span class="text-xs font-bold">8.1</span></div></div><h4 class="font-bold text-on-surface group-hover:text-primary transition-colors truncate">Tower of God</h4><p class="text-xs text-on-surface-variant mt-1">Adventure, Mystery</p></a>
+          <!-- Card 5 -->
+          <a class="group cursor-pointer" href="detail.html"><div class="poster-fade-left relative aspect-[2/3] rounded-lg overflow-hidden bg-surface-container-high relative mb-4 transition-transform duration-500 ease-[cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.04]"><img alt="Tower of God" class="w-full h-full object-cover" data-alt="Anime fantasy poster vertical" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtqxKcGTcymR4IJol4SxeiIj-BJNATnZcsnFB2ZMYRTa74Vr0wv3vAZ6CEWT1rbGPSDGJrUxs1F6uIcQHQ8iKXtmZIvFLACNlD4UPMFWExAc8CUG2cd_tFeTP0tpM1N_eQ0OkRniEpPz16OEyZjUhmIpXAREqccEnQwbppVkAmyIwXrZjM_7S4FmDqxkG50F5ZTWxzmiWTlDi8zorXn_C5j-ZqIId_lDc6EU00FED-4xW5ht_oYkS0j8kh05o0Kt6g_KJgoKmdrqvi"/><div class="absolute top-3 right-3 bg-neutral-950/80 backdrop-blur-md px-2 py-1 rounded-md flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span> <span class="text-xs font-bold">8.1</span></div></div><h4 class="font-bold text-on-surface group-hover:text-primary transition-colors truncate">Tower of God</h4><p class="text-xs text-on-surface-variant mt-1">Adventure, Mystery</p></a>
+        </div>
+      </section>
+    </main>
+    <!-- Footer Component -->
+    <div data-layout="footer"></div>
+    <script src="layout.js"></script>
+    <script src="i18n.js"></script>
+    <script src="title-images.js?v=3"></script>
+    <script src="search.js"></script>
+    <script src="favorites.js"></script>
+    <script src="detail-links.js"></script>
+    <script src="detail-data.js"></script>
+    <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    if (window.AniDexI18n) window.AniDexI18n.init();
+    if (window.AniDexTitleImages) window.AniDexTitleImages.init();
+    if (window.AniDexSearch) window.AniDexSearch.init();
+    if (window.AniDexDetailLinks) window.AniDexDetailLinks.init();
+    if (window.AniDexFavorites) window.AniDexFavorites.init();
+    if (window.AniDexDetailLinks) window.AniDexDetailLinks.init();
+    if (window.AniDexDetailData) window.AniDexDetailData.init();
+  });
+    </script>
+    <script data-ui-unlock>document.documentElement.classList.remove("preload-ui");</script>
+  </body></html>
+
+

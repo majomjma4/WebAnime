@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output
+build/
+dist/
+.cache/
+.tmp/
+tmp/
+
+# Logs
+*.log
+
+# OS / editor
+.DS_Store
+Thumbs.db
+Desktop.ini
+.vscode/
+.idea/
+
+# Archives
+*.zip
+*.rar
+*.7z
+*.tar
+*.gz
+
+# Env files
+.env
+.env.*
+
+# Large local media (not required by current code)
+videos/
+trailer/
+*.mp4
+*.mov
+*.avi
