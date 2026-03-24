@@ -281,6 +281,8 @@ const AniDexDetailDataBoot = () => {
         titleMain.innerHTML = "Frieren: Beyond<br/>Journey&#39;s End<br/>Season 2";
       } else if (preferredTitle === "Jujutsu Kaisen: The Culling Game Part 1") {
         titleMain.innerHTML = "Jujutsu kaisen:<br/>The culling Game<br/>Parte 1";
+      } else if (preferredTitle === "Jujutsu Kaisen: Shimetsu Kaiyuu - Zenpen") {
+        titleMain.innerHTML = "Jujutsu Kaisen:<br/>Shimetsu Kaiyuu - Zenpen";
       } else if (preferredTitle === "Hell's Paradise Season 2") {
         titleMain.innerHTML = "Hell&#39;s Paradise<br/>Season 2";
       } else if (preferredTitle === "Sentenced to Be a Hero") {
@@ -337,31 +339,31 @@ const AniDexDetailDataBoot = () => {
     const bgYt = document.getElementById("detail-bg-yt");
     const trailerConfigByTitle = {
       "Frieren: Beyond Journey's End Season 2": {
-        src: "https://o.uguu.se/kRQnonbl.mp4",
+        src: "https://files.catbox.moe/6w5jzl.mp4",
         bgVideo: true,
         showPlay: false,
         originalQuality: true
       },
       "Jujutsu Kaisen: Shimetsu Kaiyuu - Zenpen": {
-        src: "https://d.uguu.se/GDuGpxiE.mp4",
+        src: "https://files.catbox.moe/jn0t8b.mp4",
         bgVideo: true,
         showPlay: false,
         originalQuality: true
       },
       "Hell's Paradise Season 2": {
-        src: "https://n.uguu.se/puhsOohL.mp4",
+        src: "https://files.catbox.moe/gtdtry.mp4",
         bgVideo: true,
         showPlay: false,
         originalQuality: true
       },
       "Sentenced to Be a Hero": {
-        src: "https://d.uguu.se/aSchXjRO.mp4",
+        src: "https://files.catbox.moe/vlcrpl.mp4",
         bgVideo: true,
         showPlay: false,
         originalQuality: true
       },
       "Oshi no Ko Season 3": {
-        src: "https://h.uguu.se/cXblYGQt.mp4",
+        src: "https://files.catbox.moe/0k4krs.mp4",
         bgVideo: true,
         showPlay: false,
         originalQuality: true
