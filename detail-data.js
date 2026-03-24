@@ -398,20 +398,20 @@
               document.body.classList.remove("bg-video-off");
             }).catch(() => {});
           }
-        }, 5000);
+        }, 2000);
         bgVideo.onended = () => {
           document.body.classList.remove("bg-video-on");
           document.body.classList.add("bg-video-off");
           if (bgPlayTimer) clearTimeout(bgPlayTimer);
-          bgPlayTimer = setTimeout(() => {
-            const playBg = bgVideo.play();
-            if (playBg?.then) {
-              playBg.then(() => {
-                document.body.classList.add("bg-video-on");
-                document.body.classList.remove("bg-video-off");
-              }).catch(() => {});
-            }
-          }, 5000);
+        bgPlayTimer = setTimeout(() => {
+          const playBg = bgVideo.play();
+          if (playBg?.then) {
+            playBg.then(() => {
+              document.body.classList.add("bg-video-on");
+              document.body.classList.remove("bg-video-off");
+            }).catch(() => {});
+          }
+        }, 2000);
         };
       } else if (bgVideo) {
         bgVideo.pause();
@@ -449,7 +449,7 @@
                 document.body.classList.remove("bg-video-off");
               }).catch(() => {});
             }
-          }, 5000);
+          }, 2000);
         }
       };
       trailerSurface.addEventListener("click", openTrailer);

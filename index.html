@@ -98,6 +98,25 @@
         .hero-mask {
             mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
         }
+        #hero-video,
+        #hero-image {
+            transition: opacity 0.7s ease;
+        }
+        #hero-video {
+            object-position: center;
+        }
+        body.hero-video-on #hero-video {
+            opacity: 0.75;
+        }
+        body.hero-video-on #hero-image {
+            opacity: 0;
+        }
+        body.hero-video-off #hero-video {
+            opacity: 0;
+        }
+        body.hero-video-off #hero-image {
+            opacity: 1;
+        }
         .text-shadow-glow {
             text-shadow: 0 0 20px rgba(205, 189, 255, 0.4);
         }
@@ -307,9 +326,10 @@
       <!-- Hero Section -->
       <section class="relative w-full h-[min(100vh,57.6rem)] flex items-end overflow-hidden">
         <div class="absolute inset-0 z-0">
+          <video id="hero-video" class="absolute inset-0 w-full h-full object-cover opacity-0 pointer-events-none" playsinline muted loop></video>
           <img id="hero-image" alt="Fondo de anime destacado" class="w-full h-full object-cover hero-m?sk scale-105 translate-y-[60px]" data-alt="Escena cinematográfica de alta calidad con iluminación etérea y tonos púrpura" src="https://lh3.googleusercontent.com/aida-public/AB6AXuASyl0CtuKLwGu8E0g6kJg-AFMonCwUb2HQ4hZvUGuD0_n-GwG61WBtLa1P4WxLShGtZ1WdK79L8IStuCkdamLElWUpBsSuyOjlLszhFAARPXJXAMh5O1B7nkmoUbt235bb4gzcno51HQSRTI6Oh2kkDxU1qcK6jFx8LgH0ImqNPAd91dTA_ZC-HvQVlTdYcRV6Atw2S7_DgDyx7j2rgSWD3OpPRb6OBprhy06fu2rokdR9xMrz_zaaSt7N3Zs--RXOE0QQpITwOxiB"/>
           <div class="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-transparent"></div>
-          <div class="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-background/95 via-background/60 to-transparent"></div>
+          <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-background/95 via-background/60 to-transparent"></div>
           <div class="absolute inset-0 bg-gradient-to-r from-background via-transparent to-transparent"></div>
         </div>
           <div class="relative z-10 px-8 md:px-16 pb-[86px] w-full md:w-1/2 max-w-none text-left translate-y-[60px]">
@@ -654,6 +674,7 @@
     <script>
   document.addEventListener("DOMContentLoaded", () => {
     const heroImage = document.getElementById("hero-image");
+    const heroVideo = document.getElementById("hero-video");
     const heroTitle = document.getElementById("hero-title");
     const heroMeta = document.getElementById("hero-meta");
     const heroDescription = document.getElementById("hero-description");
@@ -666,6 +687,8 @@
     let heroIndex = 0;
     let heroTimer = null;
     let heroRenderToken = 0;
+    let heroVideoToken = 0;
+    let heroVideoTimer = null;
     const summaryCache = new Map();
     const localHeroOverrides = [
       { match: "attack on titan", src: ["img/snk.jpg"] },
@@ -679,6 +702,87 @@
       { match: "kimetsu no yaiba", src: ["img/knY.webp"] },
       { match: "sword art online", src: ["img/SaO.webp"] }
     ];
+
+    const heroVideoConfigByTitle = {
+      "Frieren: Beyond Journey's End Season 2": "https://o.uguu.se/kRQnonbl.mp4",
+      "Jujutsu Kaisen: Shimetsu Kaiyuu - Zenpen": "https://d.uguu.se/GDuGpxiE.mp4",
+      "Hell's Paradise Season 2": "https://n.uguu.se/puhsOohL.mp4",
+      "Sentenced to Be a Hero": "https://d.uguu.se/aSchXjRO.mp4",
+      "Oshi no Ko Season 3": "https://h.uguu.se/cXblYGQt.mp4"
+    };
+
+    const stopHeroVideo = () => {
+      if (!heroVideo) return;
+      heroVideoToken += 1;
+      if (heroVideoTimer) {
+        clearTimeout(heroVideoTimer);
+        heroVideoTimer = null;
+      }
+      document.body.classList.remove("hero-video-on");
+      document.body.classList.add("hero-video-off");
+      heroVideo.pause();
+      heroVideo.removeAttribute("src");
+      heroVideo.load();
+    };
+
+    const startHeroVideo = (src) => {
+      if (!heroVideo || !src) {
+        stopHeroVideo();
+        return;
+      }
+      const token = ++heroVideoToken;
+      const startAfterMs = 2000;
+      const startAt = Date.now() + startAfterMs;
+      if (heroVideoTimer) {
+        clearTimeout(heroVideoTimer);
+        heroVideoTimer = null;
+      }
+      document.body.classList.add("hero-video-off");
+      document.body.classList.remove("hero-video-on");
+      heroVideo.pause();
+      heroVideo.removeAttribute("src");
+      heroVideo.load();
+      heroVideo.src = src;
+      heroVideo.preload = "metadata";
+      heroVideo.muted = true;
+      heroVideo.loop = true;
+      heroVideo.playsInline = true;
+      const tryPlay = () => {
+        if (token !== heroVideoToken) return;
+        const remaining = startAt - Date.now();
+        if (remaining > 0) {
+          heroVideoTimer = setTimeout(tryPlay, remaining);
+          return;
+        }
+        const playPromise = heroVideo.play();
+        if (playPromise?.then) {
+          playPromise
+            .then(() => {
+              if (token !== heroVideoToken) return;
+              document.body.classList.add("hero-video-on");
+              document.body.classList.remove("hero-video-off");
+            })
+            .catch(() => {});
+        }
+      };
+      heroVideoTimer = setTimeout(tryPlay, startAfterMs);
+      heroVideo.onloadeddata = () => {
+        if (token !== heroVideoToken) return;
+        tryPlay();
+      };
+      heroVideo.onerror = () => {
+        if (token !== heroVideoToken) return;
+        stopHeroVideo();
+      };
+    };
+
+    const applyHeroVideo = (item, title) => {
+      if (!heroVideo) return;
+      const key = item?.__displayTitle || item?.title || title || "";
+      const src = heroVideoConfigByTitle[key];
+      if (src) startHeroVideo(src);
+      else stopHeroVideo();
+    };
 
     const pickHeroImage = async (item, fallback) => {
       const title = `${item?.title || ""} ${item?.title_english || ""}`.toLowerCase();
@@ -749,6 +853,7 @@
         heroTitle.textContent = heroDisplayTitle;
         heroTitle.classList.remove("whitespace-nowrap");
       }
+      applyHeroVideo(item, heroDisplayTitle);
       heroMeta.textContent = `${item?.__episodes || item?.episodes || "?"} Episodios`;
       heroDescription.textContent = "Cargando sinopsis...";
       if (item?.__synopsis) {
@@ -865,12 +970,13 @@
         await setHero(0);
         heroTimer = setInterval(() => {
           setHero(heroIndex + 1);
-        }, 12000);
+        }, 30000);
       } catch {
         // fallback: keep static hero block
       }
     };
 
+    if (heroVideo) document.body.classList.add("hero-video-off");
     if (prevBtn) prevBtn.addEventListener("click", () => setHero(heroIndex - 1));
     if (nextBtn) nextBtn.addEventListener("click", () => setHero(heroIndex + 1));
     startHero();

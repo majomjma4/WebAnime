@@ -87,8 +87,8 @@
       .replaceAll("\u00C3\u00BA", "ú")
       .replaceAll("\u00C3\u00B1", "ñ")
       .replaceAll("\u00C3", "")
-      .replaceAll("Â¿", "¿")
-      .replaceAll("Â¡", "¡")
+      .replaceAll("¿", "¿")
+      .replaceAll("¡", "¡")
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
       .trim();
