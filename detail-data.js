@@ -1,4 +1,4 @@
-(() => {
+const AniDexDetailDataBoot = () => {
   const API = "https://api.jikan.moe/v4";
   const DETAIL_OVERRIDES = {
     57658: {
@@ -190,10 +190,10 @@
     setTimeout(updateState, 0);
   };
 
-  const slider = (title, items, renderItemHtml, idBase) => {
-    const section = document.createElement("div");
-    section.className = "space-y-4";
-    section.innerHTML = `<div class="flex items-center justify-between"><h3 class="font-headline text-3xl font-bold">${title}</h3></div>`;
+    const slider = (title, items, renderItemHtml, idBase) => {
+      const section = document.createElement("div");
+      section.className = "space-y-4";
+      section.innerHTML = `<div class="flex items-center justify-between"><h3 class="font-headline text-3xl font-bold">${title}</h3></div>`;
     const rowWrap = document.createElement("div");
     rowWrap.className = "relative overflow-x-hidden";
     const prev = document.createElement("button");
@@ -206,13 +206,13 @@
     next.type = "button";
     next.className = "absolute right-0 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-surface-container-high/80 border border-outline-variant/20 text-primary flex items-center justify-center shadow-md";
     next.innerHTML = '<span class="material-symbols-outlined text-base">chevron_right</span>';
-    const row = document.createElement("div");
-    row.id = `${idBase}-row`;
-    row.className = "carousel-row no-scrollbar pb-2 scroll-smooth";
-    row.style.setProperty("--cards", idBase === "detail-images" ? "4" : "5");
-    row.style.setProperty("--gap", "1rem");
-    row.style.setProperty("--pad", "0rem");
-    row.style.paddingInline = "0";
+      const row = document.createElement("div");
+      row.id = `${idBase}-row`;
+      row.className = "carousel-row no-scrollbar pb-2 scroll-smooth";
+      row.style.setProperty("--cards", idBase === "detail-images" ? "4" : "5");
+      row.style.setProperty("--gap", "1rem");
+      row.style.setProperty("--pad", "0rem");
+      row.style.paddingInline = "0";
     items.forEach((it) => {
       const card = document.createElement("div");
       card.className = "carousel-card shrink-0";
@@ -320,9 +320,11 @@
     const trailerModal = document.getElementById("detail-trailer-modal");
     const trailerCard = document.getElementById("detail-trailer-card");
     const trailerVideo = document.getElementById("detail-trailer-video");
+    const trailerYt = document.getElementById("detail-trailer-yt");
     const trailerClose = document.getElementById("detail-trailer-close");
     const trailerOverlay = document.getElementById("detail-trailer-overlay");
     const bgVideo = document.getElementById("detail-bg-video");
+    const bgYt = document.getElementById("detail-bg-yt");
     const trailerConfigByTitle = {
       "Frieren: Beyond Journey's End Season 2": {
         src: "https://o.uguu.se/kRQnonbl.mp4",
@@ -363,14 +365,50 @@
     };
     const trailerConfig = trailerConfigByTitle[preferredTitle];
     const trailerSrc = trailerConfig?.src;
-    if (trailerSrc && trailerSurface && trailerModal && trailerVideo) {
+    const youtubeId = trailerConfig?.youtubeId || full?.trailer?.youtube_id || full?.trailer?.youtubeId;
+    const hasTrailer = Boolean(trailerSrc || youtubeId);
+    const buildYoutubeEmbed = (id, opts = {}) => {
+      const params = new URLSearchParams({
+        autoplay: opts.autoplay ? "1" : "0",
+        mute: opts.mute ? "1" : "0",
+        controls: opts.controls ? "1" : "0",
+        playsinline: "1",
+        loop: opts.loop ? "1" : "0",
+        playlist: opts.loop ? id : "",
+        modestbranding: "1",
+        rel: "0",
+        iv_load_policy: "3"
+      });
+      return `https://www.youtube.com/embed/${encodeURIComponent(id)}?${params.toString()}`;
+    };
+    if (hasTrailer && trailerSurface && trailerModal) {
       document.body.classList.remove("bg-video-on");
       document.body.classList.remove("bg-video-original");
+      document.body.classList.remove("bg-video-youtube");
       trailerSurface.classList.remove("hidden");
       trailerModal.classList.remove("hidden");
-      trailerVideo.src = trailerSrc;
-      if (src) trailerVideo.poster = src;
-      trailerVideo.preload = "metadata";
+      if (trailerVideo) {
+        if (trailerSrc) trailerVideo.src = trailerSrc;
+        else {
+          trailerVideo.pause();
+          trailerVideo.removeAttribute("src");
+          trailerVideo.load();
+        }
+        if (src) trailerVideo.poster = src;
+        trailerVideo.preload = "metadata";
+      }
+      if (trailerYt) {
+        trailerYt.src = "about:blank";
+      }
+      const useYouTube = Boolean(youtubeId);
+      if (useYouTube) {
+        document.body.classList.add("bg-video-youtube");
+        if (trailerVideo) trailerVideo.classList.add("hidden");
+        if (trailerYt) trailerYt.classList.remove("hidden");
+      } else {
+        if (trailerVideo) trailerVideo.classList.remove("hidden");
+        if (trailerYt) trailerYt.classList.add("hidden");
+      }
       let bgPlayTimer = null;
       const trailerIcon = document.getElementById("detail-trailer-icon");
       if (trailerIcon) {
@@ -380,42 +418,61 @@
           trailerIcon.classList.add("hidden");
         }
       }
-      if (bgVideo && trailerConfig?.bgVideo) {
+      if (trailerConfig?.bgVideo) {
         document.body.classList.add("bg-video-off");
-        bgVideo.src = trailerSrc;
-        bgVideo.preload = "metadata";
-        bgVideo.muted = true;
-        bgVideo.loop = false;
-        bgVideo.playsInline = true;
-        if (trailerConfig?.originalQuality) {
-          document.body.classList.add("bg-video-original");
+        if (useYouTube && bgYt && youtubeId) {
+          if (bgVideo) {
+            bgVideo.pause();
+            bgVideo.removeAttribute("src");
+            bgVideo.load();
+          }
+          bgYt.src = "about:blank";
+          bgPlayTimer = setTimeout(() => {
+            const ytSrc = buildYoutubeEmbed(youtubeId, { autoplay: true, mute: true, controls: false, loop: true });
+            bgYt.src = ytSrc;
+            document.body.classList.add("bg-video-on");
+            document.body.classList.remove("bg-video-off");
+          }, 2000);
+        } else if (bgVideo && trailerSrc) {
+          bgVideo.src = trailerSrc;
+          bgVideo.preload = "metadata";
+          bgVideo.muted = true;
+          bgVideo.loop = false;
+          bgVideo.playsInline = true;
+          if (trailerConfig?.originalQuality) {
+            document.body.classList.add("bg-video-original");
+          }
+          bgPlayTimer = setTimeout(() => {
+            const playBg = bgVideo.play();
+            if (playBg?.then) {
+              playBg.then(() => {
+                document.body.classList.add("bg-video-on");
+                document.body.classList.remove("bg-video-off");
+              }).catch(() => {});
+            }
+          }, 2000);
+          bgVideo.onended = () => {
+            document.body.classList.remove("bg-video-on");
+            document.body.classList.add("bg-video-off");
+            if (bgPlayTimer) clearTimeout(bgPlayTimer);
+            bgPlayTimer = setTimeout(() => {
+              const playBg = bgVideo.play();
+              if (playBg?.then) {
+                playBg.then(() => {
+                  document.body.classList.add("bg-video-on");
+                  document.body.classList.remove("bg-video-off");
+                }).catch(() => {});
+              }
+            }, 2000);
+          };
         }
-        bgPlayTimer = setTimeout(() => {
-          const playBg = bgVideo.play();
-          if (playBg?.then) {
-            playBg.then(() => {
-              document.body.classList.add("bg-video-on");
-              document.body.classList.remove("bg-video-off");
-            }).catch(() => {});
-          }
-        }, 2000);
-        bgVideo.onended = () => {
-          document.body.classList.remove("bg-video-on");
-          document.body.classList.add("bg-video-off");
-          if (bgPlayTimer) clearTimeout(bgPlayTimer);
-        bgPlayTimer = setTimeout(() => {
-          const playBg = bgVideo.play();
-          if (playBg?.then) {
-            playBg.then(() => {
-              document.body.classList.add("bg-video-on");
-              document.body.classList.remove("bg-video-off");
-            }).catch(() => {});
-          }
-        }, 2000);
-        };
-      } else if (bgVideo) {
-        bgVideo.pause();
-        bgVideo.removeAttribute("src");
+      } else {
+        if (bgVideo) {
+          bgVideo.pause();
+          bgVideo.removeAttribute("src");
+          bgVideo.load();
+        }
+        if (bgYt) bgYt.src = "about:blank";
       }
       const openTrailer = () => {
         document.body.classList.add("trailer-open");
@@ -426,28 +483,45 @@
           bgPlayTimer = null;
         }
         if (bgVideo) bgVideo.pause();
-        trailerVideo.muted = false;
-        trailerVideo.volume = 0.9;
-        const playPromise = trailerVideo.play();
-        if (playPromise?.catch) playPromise.catch(() => {});
+        if (useYouTube && trailerYt && youtubeId) {
+          trailerYt.src = buildYoutubeEmbed(youtubeId, { autoplay: true, mute: false, controls: true, loop: false });
+        } else if (trailerVideo) {
+          trailerVideo.muted = false;
+          trailerVideo.volume = 0.9;
+          const playPromise = trailerVideo.play();
+          if (playPromise?.catch) playPromise.catch(() => {});
+        }
       };
       const closeTrailer = () => {
         document.body.classList.remove("trailer-open");
-        trailerVideo.pause();
-        trailerVideo.currentTime = 0;
-        if (bgVideo && trailerConfig?.bgVideo) {
+        if (useYouTube && trailerYt) {
+          trailerYt.src = "about:blank";
+        }
+        if (trailerVideo) {
+          trailerVideo.pause();
+          trailerVideo.currentTime = 0;
+        }
+        if (trailerConfig?.bgVideo) {
           document.body.classList.remove("bg-video-on");
           document.body.classList.add("bg-video-off");
           if (bgPlayTimer) {
             clearTimeout(bgPlayTimer);
           }
           bgPlayTimer = setTimeout(() => {
-            const playBg = bgVideo.play();
-            if (playBg?.then) {
-              playBg.then(() => {
-                document.body.classList.add("bg-video-on");
-                document.body.classList.remove("bg-video-off");
-              }).catch(() => {});
+            if (useYouTube && bgYt && youtubeId) {
+              bgYt.src = buildYoutubeEmbed(youtubeId, { autoplay: true, mute: true, controls: false, loop: true });
+              document.body.classList.add("bg-video-on");
+              document.body.classList.remove("bg-video-off");
+              return;
+            }
+            if (bgVideo) {
+              const playBg = bgVideo.play();
+              if (playBg?.then) {
+                playBg.then(() => {
+                  document.body.classList.add("bg-video-on");
+                  document.body.classList.remove("bg-video-off");
+                }).catch(() => {});
+              }
             }
           }, 2000);
         }
@@ -552,40 +626,99 @@
         "Huellas de luz",
         "Destino compartido"
       ];
-      const episodesMarkup = Array.from({ length: episodesTotal }).map((_, index) => {
+      const episodeItems = Array.from({ length: episodesTotal }).map((_, index) => {
         const epNumber = index + 1;
         const epCode = `${episodePrefix}-${epNumber}`;
         const epTitle = episodeTitles[index] || `Episodio ${epNumber}`;
         const epSynopsis = episodeSnippets[index % episodeSnippets.length];
         const linkUrl = linksForTitle[epNumber];
-        const episodeAttrs = linkUrl
-          ? `data-episode-link="${linkUrl}" data-episode-embed="${toEmbed(linkUrl)}"`
-          : `data-episode-image="${cover}" data-episode-title="${epTitle}"`;
-        const episodeClasses = "cursor-pointer";
+        return { epNumber, epCode, epTitle, epSynopsis, linkUrl };
+      });
+
+      const renderEpisodeCard = (item) => {
+        const episodeAttrs = item.linkUrl
+          ? `data-episode-link="${item.linkUrl}" data-episode-embed="${toEmbed(item.linkUrl)}"`
+          : `data-episode-image="${cover}" data-episode-title="${item.epTitle}"`;
         return `
-          <div class="flex gap-6 items-center rounded-2xl border border-white/5 bg-surface-container-low/70 p-4 transition-all duration-300 hover:border-violet-400/70 hover:shadow-[0_0_18px_rgba(139,92,246,0.35)] hover:-translate-y-0.5 ${episodeClasses}" data-episode="${epNumber}" ${episodeAttrs}>
+          <div class="episode-card flex gap-6 items-center rounded-2xl border border-white/5 bg-surface-container-low/70 p-4 transition-all duration-300 hover:border-violet-400/70 hover:shadow-[0_0_18px_rgba(139,92,246,0.35)] hover:-translate-y-0.5 cursor-pointer" data-episode="${item.epNumber}" ${episodeAttrs}>
             <div class="flex items-center gap-4 flex-shrink-0">
               <div class="w-20 h-20 rounded-[6px] overflow-hidden bg-surface-container-high">
-                <img src="${cover}" alt="Episodio ${epCode}" class="w-full h-full object-cover" />
+                <img src="${cover}" alt="Episodio ${item.epCode}" class="w-full h-full object-cover" />
               </div>
-              <span class="min-w-[3.5rem] text-center px-4 py-2 rounded-full text-sm font-bold uppercase tracking-widest text-violet-100 bg-violet-500/25 border border-violet-400/50">2-${epNumber}</span>
+              <span class="min-w-[3.5rem] text-center px-4 py-2 rounded-full text-sm font-bold uppercase tracking-widest text-violet-100 bg-violet-500/25 border border-violet-400/50">${episodePrefix}-${item.epNumber}</span>
             </div>
             <div class="min-w-0 ml-2 flex flex-col justify-center">
-              <h3 class="font-semibold text-white text-base">${epTitle}</h3>
-              <p class="text-on-surface-variant text-sm mt-2">${epSynopsis}</p>
+              <h3 class="font-semibold text-white text-base">${item.epTitle}</h3>
+              <p class="text-on-surface-variant text-sm mt-2">${item.epSynopsis}</p>
             </div>
           </div>
         `;
-      }).join("");
+      };
 
       const episodesSection = document.createElement("div");
       episodesSection.id = "detail-episodes";
       episodesSection.className = "space-y-6";
       episodesSection.innerHTML = `
         <h2 class="font-headline text-3xl font-bold">Episodios</h2>
-        <div class="space-y-4">${episodesMarkup}</div>
+        <div class="space-y-4" data-episodes-list></div>
+        <div class="pt-2 flex justify-center">
+          <button type="button" data-episodes-more class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full border border-violet-400/40 bg-violet-500/10 px-6 py-3 text-sm font-bold uppercase tracking-widest text-violet-100 shadow-[0_0_14px_rgba(139,92,246,0.25)] transition-all duration-300 hover:bg-violet-500/20 hover:border-violet-300 hover:shadow-[0_0_22px_rgba(139,92,246,0.45)] hover:-translate-y-0.5">
+            Ver más episodios
+          </button>
+        </div>
       `;
-      synopsisBlockEl.insertAdjacentElement("afterend", episodesSection);
+
+      const listEl = episodesSection.querySelector("[data-episodes-list]");
+      const moreBtn = episodesSection.querySelector("[data-episodes-more]");
+      let shown = 0;
+      const pageSize = 10;
+      let bindEpisodeCards = null;
+      const ensureEpisodeHoverFix = () => {
+        if (document.getElementById("episode-hover-fix")) return;
+        const style = document.createElement("style");
+        style.id = "episode-hover-fix";
+        style.textContent = `
+          body.episode-scroll-fix .episode-card{
+            transform:none !important;
+            box-shadow:none !important;
+            border-color: rgba(255,255,255,0.05) !important;
+          }
+        `;
+        document.head.appendChild(style);
+        let scrollTimer = null;
+        window.addEventListener("scroll", () => {
+          document.body.classList.add("episode-scroll-fix");
+          if (scrollTimer) clearTimeout(scrollTimer);
+          scrollTimer = setTimeout(() => {
+            document.body.classList.remove("episode-scroll-fix");
+          }, 140);
+        }, { passive: true });
+      };
+      ensureEpisodeHoverFix();
+      const appendBatch = () => {
+        const nextItems = episodeItems.slice(shown, shown + pageSize);
+        if (!nextItems.length) return;
+        listEl.insertAdjacentHTML("beforeend", nextItems.map(renderEpisodeCard).join(""));
+        shown += nextItems.length;
+        if (shown >= episodeItems.length) {
+          moreBtn?.classList.add("hidden");
+        } else {
+          moreBtn?.classList.remove("hidden");
+        }
+        if (typeof bindEpisodeCards === "function") {
+          bindEpisodeCards();
+        }
+      };
+      appendBatch();
+      if (moreBtn) {
+        moreBtn.addEventListener("click", appendBatch);
+      }
+      const episodesHost = document.getElementById("detail-episodes-host");
+      if (episodesHost) {
+        episodesHost.appendChild(episodesSection);
+      } else {
+        synopsisBlockEl.insertAdjacentElement("afterend", episodesSection);
+      }
 
       const episodeModalId = "detail-episode-modal";
       let episodeModal = document.getElementById(episodeModalId);
@@ -595,7 +728,7 @@
         episodeModal.className = "fixed inset-0 z-[90] hidden";
         episodeModal.innerHTML = `
           <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
-          <div class="relative mx-auto mt-[12vh] w-[min(92vw,720px)] rounded-2xl bg-surface-container-high/95 border border-violet-500/30 p-4 shadow-2xl overflow-hidden">
+          <div class="relative mx-auto mt-[12vh] w-[min(92vw,720px)] rounded-2xl bg-surface-container-high/95 border border-violet-500/30 p-4 shadow-2xl overflow-hidden" data-episode-shell>
             <button type="button" data-episode-close class="absolute top-3 right-3 w-9 h-9 rounded-full bg-surface-container-low text-on-surface-variant hover:text-on-surface flex items-center justify-center">x</button>
             <video data-episode-video-player class="w-full rounded-xl bg-black" controls playsinline preload="metadata">
               <source data-episode-video-source type="video/mp4" />
@@ -606,10 +739,7 @@
       }
 
       const videoCard = episodesSection.querySelector("[data-episode-video]");
-      const linkCards = Array.from(episodesSection.querySelectorAll("[data-episode-link]"));
-      const imageCards = Array.from(episodesSection.querySelectorAll("[data-episode-image]"));
-
-      if (linkCards.length) {
+      const ensureLinkModal = () => {
         let linkModal = document.getElementById("detail-episode-link-modal");
         if (!linkModal) {
           linkModal = document.createElement("div");
@@ -617,7 +747,7 @@
           linkModal.className = "fixed inset-0 z-[90] hidden";
           linkModal.innerHTML = `
             <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
-            <div class="relative mx-auto mt-[8vh] w-[min(94vw,1100px)] h-[min(80vh,720px)] overflow-visible">
+            <div class="relative mx-auto mt-[8vh] w-[min(94vw,1100px)] h-[min(80vh,720px)] overflow-visible" data-link-shell>
               <button type="button" data-link-close class="absolute -top-5 -right-5 w-10 h-10 rounded-full bg-violet-500 text-white text-lg font-bold shadow-lg shadow-violet-500/40 hover:bg-violet-400 flex items-center justify-center">&times;</button>
               <div class="w-full h-full overflow-hidden">
                 <iframe data-link-frame class="w-full h-full bg-black" allow="autoplay; fullscreen" allowfullscreen referrerpolicy="no-referrer"></iframe>
@@ -626,9 +756,35 @@
           `;
           document.body.appendChild(linkModal);
         }
+        return linkModal;
+      };
+
+      const ensureImageModal = () => {
+        let imageModal = document.getElementById("detail-episode-image-modal");
+        if (!imageModal) {
+          imageModal = document.createElement("div");
+          imageModal.id = "detail-episode-image-modal";
+          imageModal.className = "fixed inset-0 z-[90] hidden";
+          imageModal.innerHTML = `
+            <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+            <div class="relative w-full h-full flex items-center justify-center p-6">
+              <div class="relative inline-flex overflow-visible" data-image-shell>
+                <button type="button" data-image-close class="absolute -top-8 -right-12 w-10 h-10 rounded-full bg-violet-500/60 text-white text-lg font-bold shadow-lg shadow-violet-500/40 backdrop-blur hover:bg-violet-400/70 flex items-center justify-center">&times;</button>
+                <img data-image-frame class="max-w-[92vw] max-h-[82vh] rounded-2xl object-contain" alt="Portada episodio" />
+              </div>
+            </div>
+          `;
+          document.body.appendChild(imageModal);
+        }
+        return imageModal;
+      };
+
+      bindEpisodeCards = () => {
+        const linkModal = ensureLinkModal();
+        const imageModal = ensureImageModal();
         const linkFrame = linkModal.querySelector("[data-link-frame]");
-        const closeBtn = linkModal.querySelector("[data-link-close]");
-        const backdrop = linkModal.firstElementChild;
+        const linkCloseBtn = linkModal.querySelector("[data-link-close]");
+        const linkBackdrop = linkModal.firstElementChild;
         const closeLink = () => {
           if (linkFrame) linkFrame.src = "";
           linkModal.classList.add("hidden");
@@ -639,31 +795,9 @@
           linkFrame.src = link;
           linkModal.classList.remove("hidden");
         };
-        linkCards.forEach((card) => {
-          card.addEventListener("click", () => openLink(card));
-        });
-        if (closeBtn) closeBtn.addEventListener("click", closeLink);
-        if (backdrop) backdrop.addEventListener("click", closeLink);
-      }
-
-      if (imageCards.length) {
-        let imageModal = document.getElementById("detail-episode-image-modal");
-        if (!imageModal) {
-          imageModal = document.createElement("div");
-          imageModal.id = "detail-episode-image-modal";
-          imageModal.className = "fixed inset-0 z-[90] hidden";
-          imageModal.innerHTML = `
-            <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
-            <div class="relative mx-auto mt-[10vh] w-[min(90vw,720px)] overflow-visible">
-              <button type="button" data-image-close class="absolute -top-5 -right-5 w-10 h-10 rounded-full bg-violet-500 text-white text-lg font-bold shadow-lg shadow-violet-500/40 hover:bg-violet-400 flex items-center justify-center">&times;</button>
-              <img data-image-frame class="w-full rounded-2xl bg-black object-cover" alt="Portada episodio" />
-            </div>
-          `;
-          document.body.appendChild(imageModal);
-        }
         const imageFrame = imageModal.querySelector("[data-image-frame]");
-        const closeBtn = imageModal.querySelector("[data-image-close]");
-        const backdrop = imageModal.firstElementChild;
+        const imageCloseBtn = imageModal.querySelector("[data-image-close]");
+        const imageBackdrop = imageModal.firstElementChild;
         const closeImage = () => {
           if (imageFrame) imageFrame.removeAttribute("src");
           imageModal.classList.add("hidden");
@@ -676,12 +810,49 @@
           imageFrame.alt = title;
           imageModal.classList.remove("hidden");
         };
+        const linkCards = Array.from(episodesSection.querySelectorAll("[data-episode-link]"));
+        const imageCards = Array.from(episodesSection.querySelectorAll("[data-episode-image]"));
+        linkCards.forEach((card) => {
+          if (card.dataset.episodeBound) return;
+          card.dataset.episodeBound = "1";
+          card.addEventListener("click", () => openLink(card));
+        });
         imageCards.forEach((card) => {
+          if (card.dataset.episodeBound) return;
+          card.dataset.episodeBound = "1";
           card.addEventListener("click", () => openImage(card));
         });
-        if (closeBtn) closeBtn.addEventListener("click", closeImage);
-        if (backdrop) backdrop.addEventListener("click", closeImage);
-      }
+        if (linkCloseBtn && !linkCloseBtn.dataset.bound) {
+          linkCloseBtn.dataset.bound = "1";
+          linkCloseBtn.addEventListener("click", closeLink);
+        }
+        if (linkBackdrop && !linkBackdrop.dataset.bound) {
+          linkBackdrop.dataset.bound = "1";
+          linkBackdrop.addEventListener("click", closeLink);
+        }
+        if (!linkModal.dataset.outsideBound) {
+          linkModal.dataset.outsideBound = "1";
+          linkModal.addEventListener("click", (e) => {
+            if (!e.target.closest("[data-link-shell]")) closeLink();
+          });
+        }
+        if (imageCloseBtn && !imageCloseBtn.dataset.bound) {
+          imageCloseBtn.dataset.bound = "1";
+          imageCloseBtn.addEventListener("click", closeImage);
+        }
+        if (imageBackdrop && !imageBackdrop.dataset.bound) {
+          imageBackdrop.dataset.bound = "1";
+          imageBackdrop.addEventListener("click", closeImage);
+        }
+        if (!imageModal.dataset.outsideBound) {
+          imageModal.dataset.outsideBound = "1";
+          imageModal.addEventListener("click", (e) => {
+            if (!e.target.closest("[data-image-shell]")) closeImage();
+          });
+        }
+      };
+
+      bindEpisodeCards();
       if (videoCard && episodeModal) {
         const player = episodeModal.querySelector("[data-episode-video-player]");
         const source = episodeModal.querySelector("[data-episode-video-source]");
@@ -707,6 +878,12 @@
         videoCard.addEventListener("click", openEpisode);
         if (closeBtn) closeBtn.addEventListener("click", closeEpisode);
         if (backdrop) backdrop.addEventListener("click", closeEpisode);
+        if (!episodeModal.dataset.outsideBound) {
+          episodeModal.dataset.outsideBound = "1";
+          episodeModal.addEventListener("click", (e) => {
+            if (!e.target.closest("[data-episode-shell]")) closeEpisode();
+          });
+        }
       }
     }
 
@@ -740,28 +917,101 @@
         .join("");
     }
 
+    const synopsisBlock = Array.from(document.querySelectorAll("h2"))
+      .find((x) => /sinopsis/i.test(x.textContent || ""))?.parentElement;
     const infoBox = Array.from(document.querySelectorAll("h3")).find((x) => /informaci/i.test(x.textContent || ""));
     const infoList = infoBox?.parentElement?.querySelector(".space-y-6");
     if (infoList) {
       infoList.innerHTML = "";
       renderMetaBlock(infoList, "Título (EN)", full.title_english || "N/A");
       renderMetaBlock(infoList, "Título (JP)", full.title_japanese || "N/A");
-      renderMetaBlock(infoList, "Título Original", full.title || "N/A");
-      renderMetaBlock(infoList, "Tipo", toSpanishType(full.type));
-      if (!isMovie) {
-        renderMetaBlock(infoList, "Episodios", full.episodes || "N/A");
-      }
       renderMetaBlock(infoList, "Duración", toSpanishDuration(full.duration) || "N/A");
-      if (!isMovie || full.year) {
-        renderMetaBlock(infoList, "Año", `${full.year || "N/A"}`);
-      }
-      renderMetaBlock(infoList, "Temporadas", `${((full?.relations || []).filter((r) => /sequel/i.test(r?.relation || "")).length + 1) || 1}`);
-      renderMetaBlock(infoList, "Estado", toSpanishStatus(full.status));
-      renderMetaBlock(infoList, "Géneros", (genresEs(full.genres) || "N/A").replace(/,/g, " ·"));
       renderMetaBlock(infoList, "Clasificación", toSpanishRating(full.rating) || "N/A");
       renderMetaBlock(infoList, "Ranking", full.rank ? `# ${full.rank}` : "N/A");
       renderMetaBlock(infoList, "Estudio", full.studios?.[0]?.name || "N/A");
     }
+
+    const alignMediaToInfo = () => {
+      if (window.innerWidth < 1024) {
+        if (synopsisBlock) synopsisBlock.style.minHeight = "";
+        return;
+      }
+      const infoCard = infoBox?.parentElement || null;
+      const leftCol = synopsisBlock?.closest(".detail-left-col") || null;
+      if (!infoCard || !synopsisBlock || !leftCol) {
+        if (synopsisBlock) {
+          synopsisBlock.style.minHeight = "";
+          synopsisBlock.style.display = "";
+          synopsisBlock.style.flexDirection = "";
+          synopsisBlock.style.justifyContent = "";
+        }
+        if (leftCol) {
+          leftCol.style.minHeight = "";
+          leftCol.style.display = "";
+          leftCol.style.flexDirection = "";
+          leftCol.style.justifyContent = "";
+        }
+        return;
+      }
+
+      const synRect = synopsisBlock.getBoundingClientRect();
+      const infoRect = infoCard.getBoundingClientRect();
+      const gap = infoRect.height - synRect.height;
+      const episodesSection = document.getElementById("detail-episodes");
+
+      if (episodesSection) {
+        leftCol.style.minHeight = "";
+        leftCol.style.display = "";
+        leftCol.style.flexDirection = "";
+        leftCol.style.justifyContent = "";
+        synopsisBlock.style.marginTop = "0px";
+
+        const leftTop = leftCol.getBoundingClientRect().top;
+        const synRectNow = synopsisBlock.getBoundingClientRect();
+        const centerOffset = Math.round((infoRect.height - synRectNow.height) / 2);
+        if (centerOffset > 0) {
+          const desiredTop = leftTop + centerOffset;
+          const offset = Math.round(desiredTop - synRectNow.top);
+          synopsisBlock.style.marginTop = offset > 0 ? `${offset}px` : "0px";
+        }
+
+        episodesSection.style.marginTop = "0px";
+        const episodesRect = episodesSection.getBoundingClientRect();
+        const delta = infoRect.bottom - episodesRect.top;
+        if (Math.abs(delta) > 1) {
+          episodesSection.style.marginTop = `${Math.round(delta)}px`;
+        } else {
+          episodesSection.style.marginTop = "0px";
+        }
+        return;
+      }
+
+      if (gap > 0) {
+        leftCol.style.minHeight = `${Math.round(infoRect.height)}px`;
+        if (gap > 80) {
+          leftCol.style.display = "flex";
+          leftCol.style.flexDirection = "column";
+          leftCol.style.justifyContent = "center";
+        } else {
+          leftCol.style.display = "";
+          leftCol.style.flexDirection = "";
+          leftCol.style.justifyContent = "";
+        }
+      } else {
+        leftCol.style.minHeight = "";
+        leftCol.style.display = "";
+        leftCol.style.flexDirection = "";
+        leftCol.style.justifyContent = "";
+        synopsisBlock.style.marginTop = "";
+      }
+    };
+
+    requestAnimationFrame(() => {
+      alignMediaToInfo();
+      setTimeout(alignMediaToInfo, 120);
+      window.addEventListener("load", alignMediaToInfo);
+      window.addEventListener("resize", alignMediaToInfo);
+    });
 
     const charsRow = document.querySelector(".hide-scrollbar");
     if (charsRow) {
@@ -776,26 +1026,330 @@
       charsRow.innerHTML = topChars.map((c, idx) => {
         const cleanName = (c.character?.name || "Personaje").replace(/,/g, "");
         const roleLabel = /main/i.test(c?.role || "") ? "principal" : "secundario";
-        const desc =
-          roleLabel === "principal"
-            ? "Figura clave que impulsa la historia con metas y conflictos."
-            : "Personaje de apoyo que enriquece la trama con matices propios.";
+        const fallbackMini = roleLabel === "principal"
+          ? `${cleanName} es un personaje clave que impulsa la historia.`
+          : `${cleanName} es un personaje secundario que apoya la historia.`;
+        const desc = fallbackMini;
+        const charId = c.character?.mal_id || "";
+        const charImg = c.character?.images?.jpg?.image_url || "";
         return `
-        <div class="carousel-card flex flex-col items-center gap-2 shrink-0 text-center">
+        <div class="carousel-card flex flex-col items-center gap-2 shrink-0 text-center cursor-pointer" data-char-id="${charId}" data-char-name="${cleanName}" data-char-role="${roleLabel}" data-char-img="${charImg}">
           <div class="w-24 h-24 overflow-hidden border border-primary/20 rounded-full">
             <img alt="${c.character?.name || "Personaje"}" class="w-full h-full object-cover" src="${c.character?.images?.jpg?.image_url || ""}"/>
           </div>
           <span class="text-sm font-bold break-words whitespace-normal">${cleanName}</span>
           <span class="text-[11px] font-semibold text-primary-dim">${roleLabel}</span>
-          <span class="text-xs text-on-surface-variant leading-snug break-words whitespace-normal">${desc}</span>
+          <span data-char-mini class="text-xs text-on-surface-variant leading-snug break-words whitespace-normal">${desc}</span>
         </div>`;
       }).join("");
       const prev = document.getElementById("chars-prev");
       const next = document.getElementById("chars-next");
       bindHorizontalArrows(charsRow, prev, next, 5);
+
+      const characterCache = new Map();
+      const cleanVoiceName = (name) => {
+        const raw = (name || "").trim();
+        if (!raw) return "";
+        if (raw.includes(",")) {
+          const parts = raw.split(",").map((p) => p.trim()).filter(Boolean);
+          const last = parts[0] || "";
+          const first = parts[1] || "";
+          const firstToken = first.split(/\s+/)[0] || "";
+          const lastToken = last.split(/\s+/)[0] || "";
+          return [firstToken, lastToken].filter(Boolean).join(" ").trim();
+        }
+        const tokens = raw.split(/\s+/).filter(Boolean);
+        if (tokens.length === 1) return tokens[0];
+        return `${tokens[0]} ${tokens[tokens.length - 1]}`.trim();
+      };
+      const stripBioFields = (value) => {
+        let out = (value || "").replace(/\s+/g, " ").trim();
+        if (!out) return "";
+        out = out.replace(/\((?:[^)]*?cm[^)]*?|[^)]*?kg[^)]*?)\)/gi, "");
+        out = out.replace(
+          /\b(?:Age|Birthday|Height|Weight|Blood type|Affiliations|Occupation|Rank|Graduation Rank|Species)\s*:\s*[^.\n]+[.\n]?/gi,
+          ""
+        );
+        return out.replace(/\s+/g, " ").trim();
+      };
+      const isPhysical = (s) =>
+        /(años|edad|altura|peso|cm|kg|estatura|apariencia|físic|cuerpo|complexión|rostro|cabell|ojos|pelo|color de|mide|nació|nacido)/i.test(
+          s
+        );
+      const getMiniSummary = async (aboutText) => {
+        const cleaned = stripBioFields(aboutText || "");
+        if (!cleaned) return "";
+        const aboutEs = await translateToEs(cleaned);
+        const sentences = aboutEs
+          .split(/(?<=[.!?])\s+/)
+          .map((s) => s.trim())
+          .filter(Boolean);
+        let chosen = "";
+        for (const s of sentences) {
+          if (isPhysical(s)) continue;
+          const w = s.split(" ").filter(Boolean);
+          if (w.length >= 6 && w.length <= 24) {
+            chosen = s;
+            break;
+          }
+        }
+        if (!chosen) return "";
+        const words = chosen.split(" ").filter(Boolean);
+        if (words.length > 24) {
+          chosen = words.slice(0, 24).join(" ");
+          if (!/[.!?]$/.test(chosen)) chosen = `${chosen}.`;
+        }
+        return chosen;
+      };
+      const ensureCharacterModal = () => {
+        let modal = document.getElementById("detail-character-modal");
+        if (modal) return modal;
+        modal = document.createElement("div");
+        modal.id = "detail-character-modal";
+        modal.className = "fixed inset-0 z-[95] hidden";
+        modal.innerHTML = `
+          <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" data-char-backdrop></div>
+          <div class="relative w-full h-full flex items-center justify-center p-4">
+            <div class="relative w-[min(92vw,560px)] rounded-2xl bg-surface-container-high/95 border border-white/10 shadow-2xl overflow-hidden" data-char-shell>
+              <button type="button" data-char-close class="absolute top-3 right-3 w-9 h-9 rounded-full bg-surface-container-low text-on-surface-variant hover:text-on-surface flex items-center justify-center">×</button>
+              <div class="grid grid-cols-1 sm:grid-cols-[240px_1fr] gap-6 p-6 items-stretch">
+                <div class="w-full h-full min-h-[260px] sm:min-h-[320px] rounded-2xl overflow-hidden bg-black/30 shadow-[0_0_24px_rgba(0,0,0,0.35)] flex items-center justify-center">
+                  <img data-char-img class="max-w-full max-h-full object-contain block" alt="Personaje" />
+                </div>
+                <div class="space-y-4">
+                  <div>
+                    <h3 data-char-name class="text-2xl font-extrabold font-headline">Personaje</h3>
+                    <p data-char-role class="text-xs uppercase tracking-widest text-primary-dim font-semibold mt-1">Rol</p>
+                  </div>
+                  <div class="h-px w-16 bg-violet-400/40"></div>
+                  <div>
+                    <h4 class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Descripción</h4>
+                    <p data-char-info class="text-sm text-on-surface-variant leading-relaxed mt-2">Cargando información del personaje...</p>
+                  </div>
+                  <div class="h-px w-16 bg-violet-400/40"></div>
+                  <div data-char-fields-wrap>
+                    <h4 class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Datos personales</h4>
+                    <div data-char-fields class="mt-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-2 text-sm text-on-surface-variant"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(modal);
+        return modal;
+      };
+
+      const closeCharacterModal = () => {
+        const modal = document.getElementById("detail-character-modal");
+        if (modal) modal.classList.add("hidden");
+      };
+
+      const openCharacterModal = async (card) => {
+        const modal = ensureCharacterModal();
+        const imgEl = modal.querySelector("[data-char-img]");
+        const nameEl = modal.querySelector("[data-char-name]");
+        const roleEl = modal.querySelector("[data-char-role]");
+        const infoEl = modal.querySelector("[data-char-info]");
+        const fieldsWrap = modal.querySelector("[data-char-fields-wrap]");
+        const fieldsEl = modal.querySelector("[data-char-fields]");
+        const charId = card.getAttribute("data-char-id");
+        const charName = card.getAttribute("data-char-name") || "Personaje";
+        const charRole = card.getAttribute("data-char-role") || "";
+        const charImg = card.getAttribute("data-char-img") || "";
+        if (nameEl) nameEl.textContent = charName;
+        if (roleEl) roleEl.textContent = charRole ? `Rol: ${charRole}` : "Rol";
+        if (imgEl && charImg) imgEl.src = charImg;
+        const miniFromCard = card.querySelector("[data-char-mini]")?.textContent?.trim() || "";
+        if (infoEl) infoEl.textContent = miniFromCard || "";
+        if (fieldsWrap) fieldsWrap.classList.add("hidden");
+        if (fieldsEl) fieldsEl.innerHTML = "";
+        modal.classList.remove("hidden");
+
+        if (!charId) {
+          if (infoEl) infoEl.textContent = miniFromCard || "";
+          return;
+        }
+        if (characterCache.has(charId)) {
+          const cached = characterCache.get(charId);
+          if (cached.full) {
+            if (infoEl) {
+              const cachedMini = cached.miniSummary || "";
+              infoEl.textContent = cachedMini || miniFromCard || "";
+            }
+            if (imgEl && cached.img) imgEl.src = cached.img;
+            if (fieldsEl) fieldsEl.innerHTML = cached.fieldsHtml || "";
+            if (fieldsWrap) {
+              if (cached.fieldsHtml) fieldsWrap.classList.remove("hidden");
+              else fieldsWrap.classList.add("hidden");
+            }
+            return;
+          }
+          if (imgEl && cached.img) imgEl.src = cached.img;
+          if (infoEl && cached.miniSummary) infoEl.textContent = cached.miniSummary;
+        }
+        try {
+          const res = await fetch(`${API}/characters/${charId}/full`);
+          if (!res.ok) throw new Error("fetch failed");
+          const json = await res.json();
+          const data = json?.data || {};
+          const aboutRaw = (data?.about || "").trim();
+          const aboutClean = aboutRaw ? aboutRaw.replace(/\s+/g, " ").trim() : "";
+          const fieldMap = {
+            "Birthday": "Cumpleaños",
+            "Height": "Altura"
+          };
+          const fields = [];
+          const labelSplitRe = /\b(?:Birthday|Height)\b\s*:/i;
+          const sanitizeValue = (label, value) => {
+            if (value === undefined || value === null) return "";
+            let clean = String(value).replace(/\s+/g, " ").trim();
+            if (!clean) return "";
+            if (labelSplitRe.test(clean)) clean = clean.split(labelSplitRe)[0].trim();
+            if (label === "Altura") {
+              const m = clean.match(/(\d+(?:[.,]\d+)?)\s*cm/i);
+              if (m) return `${m[1].replace(",", ".")} cm`;
+            }
+            return clean;
+          };
+          const addField = (label, value) => {
+            if (!label) return;
+            const clean = sanitizeValue(label, value);
+            if (!clean) return;
+            if (fields.some((f) => f.label === label)) return;
+            fields.push({ label, value: clean });
+          };
+          addField("Cumpleaños", data?.birthday);
+          addField("Altura", data?.height);
+          if (typeof data?.favorites === "number") {
+            addField("Popularidad", `♥ ${data.favorites} favoritos`);
+          }
+          const voices = Array.isArray(data?.voices) ? data.voices : [];
+          const voiceNames = (lang) =>
+            voices
+              .filter((v) => (v?.language || "").toLowerCase().includes(lang))
+              .map((v) => cleanVoiceName(v?.person?.name))
+              .filter(Boolean)
+              .join(" ");
+          const voiceJp = voiceNames("japanese");
+          const voiceEs = voiceNames("spanish") || voiceNames("español");
+          addField("Doblaje japonés", voiceJp);
+          addField("Doblaje español", voiceEs);
+          let aboutStripped = aboutClean;
+          Object.keys(fieldMap).forEach((key) => {
+            const re = new RegExp(`${key}\\s*:\\s*([^\\.\\n]+)`, "i");
+            const match = aboutStripped.match(re);
+            if (match) {
+              addField(fieldMap[key], match[1].trim());
+              aboutStripped = aboutStripped.replace(match[0], "").trim();
+            }
+          });
+          const escapeHtml = (value) =>
+            (value || "").replace(/[&<>"']/g, (ch) => ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;"
+            }[ch]));
+          const noTranslateLabels = new Set(["Doblaje japonés", "Doblaje español"]);
+          const translateValue = async (label, value) => {
+            if (!value) return value;
+            if (noTranslateLabels.has(label)) return value;
+            if (!/[a-zA-Z]/.test(value)) return value;
+            try {
+              return await translateToEs(value);
+            } catch {
+              return value;
+            }
+          };
+          const miniSummary = await getMiniSummary(aboutClean);
+          const aboutHtml = miniSummary ? `<p>${escapeHtml(miniSummary)}</p>` : "";
+          const fieldsHtml = fields.length
+            ? (await Promise.all(
+                fields.map(async (f) => {
+                  const val = await translateValue(f.label, f.value);
+                  return `<span class="text-primary-dim font-semibold text-right">${escapeHtml(f.label)}:</span><span>${escapeHtml(val)}</span>`;
+                })
+              )).join("")
+            : "";
+          const img =
+            data?.images?.webp?.image_url ||
+            data?.images?.jpg?.image_url ||
+            charImg ||
+            "";
+          characterCache.set(charId, { aboutHtml, fieldsHtml, img, miniSummary, full: true });
+          if (infoEl) infoEl.innerHTML = aboutHtml || (miniFromCard ? `<p>${escapeHtml(miniFromCard)}</p>` : "");
+          if (imgEl && img) imgEl.src = img;
+          if (fieldsEl) fieldsEl.innerHTML = fieldsHtml;
+          if (fieldsWrap) {
+            if (fieldsHtml) fieldsWrap.classList.remove("hidden");
+            else fieldsWrap.classList.add("hidden");
+          }
+          const miniEl = card.querySelector("[data-char-mini]");
+          if (miniEl && miniSummary) miniEl.textContent = miniSummary;
+        } catch {
+          if (infoEl) infoEl.textContent = miniFromCard || "";
+        }
+      };
+
+      const modal = ensureCharacterModal();
+      const modalClose = modal.querySelector("[data-char-close]");
+      const modalBackdrop = modal.querySelector("[data-char-backdrop]");
+      if (modalClose && !modalClose.dataset.bound) {
+        modalClose.dataset.bound = "1";
+        modalClose.addEventListener("click", closeCharacterModal);
+      }
+      if (modalBackdrop && !modalBackdrop.dataset.bound) {
+        modalBackdrop.dataset.bound = "1";
+        modalBackdrop.addEventListener("click", closeCharacterModal);
+      }
+      if (!modal.dataset.outsideBound) {
+        modal.dataset.outsideBound = "1";
+        modal.addEventListener("click", (e) => {
+          if (!e.target.closest("[data-char-shell]")) closeCharacterModal();
+        });
+      }
+      Array.from(charsRow.querySelectorAll("[data-char-id]")).forEach((card) => {
+        if (card.dataset.bound) return;
+        card.dataset.bound = "1";
+        card.addEventListener("click", () => openCharacterModal(card));
+      });
+
+      const populateMiniSummaries = async () => {
+        const cards = Array.from(charsRow.querySelectorAll("[data-char-id]"));
+        for (const card of cards) {
+          const miniEl = card.querySelector("[data-char-mini]");
+          const charId = card.getAttribute("data-char-id");
+          if (!miniEl || !charId) continue;
+          const cached = characterCache.get(charId);
+          if (cached?.miniSummary) {
+            miniEl.textContent = cached.miniSummary;
+            continue;
+          }
+          try {
+            const res = await fetch(`${API}/characters/${charId}/full`);
+            if (!res.ok) throw new Error("fetch failed");
+            const json = await res.json();
+            const data = json?.data || {};
+            const aboutRaw = (data?.about || "").trim();
+            const miniSummary = await getMiniSummary(aboutRaw);
+            if (miniSummary) miniEl.textContent = miniSummary;
+            const cachedImg =
+              data?.images?.webp?.image_url ||
+              data?.images?.jpg?.image_url ||
+              card.getAttribute("data-char-img") ||
+              "";
+            characterCache.set(charId, { miniSummary, img: cachedImg, full: false });
+          } catch {
+            // ignore
+          }
+          await new Promise((r) => setTimeout(r, 180));
+        }
+      };
+      populateMiniSummaries();
     }
 
-    const synopsisBlock = Array.from(document.querySelectorAll("h2")).find((x) => /sinopsis/i.test(x.textContent || ""))?.parentElement;
     const mediaBlock = document.getElementById("detail-media") || synopsisBlock;
     if (mediaBlock) {
       const images = pics.slice(0, 20);
@@ -877,5 +1431,7 @@
   };
 
   window.AniDexDetailData = { init };
-})();
+};
+
+AniDexDetailDataBoot();
 

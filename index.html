@@ -712,7 +712,6 @@
     };
 
     const stopHeroVideo = () => {
-      if (!heroVideo) return;
       heroVideoToken += 1;
       if (heroVideoTimer) {
         clearTimeout(heroVideoTimer);
@@ -720,9 +719,11 @@
       }
       document.body.classList.remove("hero-video-on");
       document.body.classList.add("hero-video-off");
-      heroVideo.pause();
-      heroVideo.removeAttribute("src");
-      heroVideo.load();
+      if (heroVideo) {
+        heroVideo.pause();
+        heroVideo.removeAttribute("src");
+        heroVideo.load();
+      }
     };
 
     const startHeroVideo = (src) => {
