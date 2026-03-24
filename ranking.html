@@ -151,8 +151,8 @@
       line-height: 1.2;
     }
     .hover-preview-meta {
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 0.45rem;
       font-size: 0.75rem;
       color: rgba(229, 231, 235, 0.78);
@@ -163,11 +163,20 @@
       display: inline-flex;
       align-items: center;
       gap: 0.3rem;
+      justify-content: center;
+      width: 100%;
+      min-width: 0;
+      text-align: center;
+      white-space: nowrap;
       padding: 0.22rem 0.55rem;
       border-radius: 9999px;
       background: linear-gradient(135deg, rgba(99,102,241,0.35), rgba(168,85,247,0.35));
       border: 1px solid rgba(168, 85, 247, 0.45);
       box-shadow: 0 0 10px rgba(168, 85, 247, 0.25);
+    }
+    .hover-preview-meta > span:only-child,
+    .hover-preview-meta > span:last-child:nth-child(odd) {
+      grid-column: 1 / -1;
     }
     .hover-preview-score {
       color: #cdbdff;
@@ -183,14 +192,22 @@
       flex: 1;
       display: flex;
       align-items: center;
+      text-align: center;
     }
     .hover-preview-genres {
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 0.4rem;
       margin-top: 0.25rem;
     }
     .hover-preview-genres span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-width: 0;
+      text-align: center;
+      white-space: nowrap;
       font-size: 0.7rem;
       padding: 0.18rem 0.55rem;
       border-radius: 9999px;
@@ -198,6 +215,17 @@
       border: 1px solid rgba(59, 130, 246, 0.35);
       color: rgba(240, 249, 255, 0.95);
       box-shadow: 0 0 10px rgba(56, 189, 248, 0.18);
+    }
+    .hover-preview-genres span:only-child,
+    .hover-preview-genres span:last-child:nth-child(odd),
+    .hover-preview-genres span.is-wide {
+      grid-column: 1 / -1;
+    }
+    .hover-preview-genres.is-stacked {
+      grid-template-columns: 1fr;
+    }
+    .hover-preview-genres.is-stacked span {
+      grid-column: 1 / -1;
     }
     </style>
     <link rel="icon" href="img/icon3.png" />
@@ -216,7 +244,7 @@
         </div>
 
         <section class="mt-10">
-          <div id="ranking-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div id="ranking-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8">
             <div class="rounded-xl border border-zinc-800 bg-zinc-900 p-6 text-zinc-400">Cargando ranking...</div>
           </div>
         </section>
@@ -298,7 +326,7 @@
         var media = document.createElement('div');
         media.className = 'relative';
         var imgWrap = document.createElement('div');
-        imgWrap.className = 'relative aspect-[2/3] sm:aspect-auto sm:h-56 sm:w-40 overflow-hidden';
+        imgWrap.className = 'relative w-40 sm:w-44 aspect-[2/3] overflow-hidden flex-none';
         var img = document.createElement('img');
         img.className = 'w-full h-full object-cover';
         img.loading = 'lazy';

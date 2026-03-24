@@ -136,6 +136,14 @@
 
   function finalizeLayout() {
     setActiveMenu();
+    try {
+      const savedAvatar = localStorage.getItem("anidex_profile_avatar");
+      if (savedAvatar) {
+        document.querySelectorAll("img[data-profile-avatar]").forEach((img) => {
+          img.src = savedAvatar;
+        });
+      }
+    } catch {}
     isReady = true;
     while (readyCallbacks.length) {
       const fn = readyCallbacks.shift();

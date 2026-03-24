@@ -74,6 +74,16 @@
     });
     return { completed, pending };
   };
+  const updateListCounters = () => {
+    const myCount = readKey(KEY_MY_LIST).length;
+    const favCount = readKey(KEY_FAVORITES).length;
+    document.querySelectorAll("[data-count-mylist]").forEach((el) => {
+      el.textContent = String(myCount);
+    });
+    document.querySelectorAll("[data-count-favorites]").forEach((el) => {
+      el.textContent = String(favCount);
+    });
+  };
   const updateStatusCounters = () => {
     const { completed, pending } = calcStatusCounts();
     document.querySelectorAll("[data-count-completed]").forEach((el) => {
@@ -82,6 +92,7 @@
     document.querySelectorAll("[data-count-pending]").forEach((el) => {
       el.textContent = String(pending);
     });
+    updateListCounters();
   };
 
   const syncStatusEverywhere = (item, status) => {
@@ -295,6 +306,12 @@
       return;
     }
     grid.innerHTML = visible.map((it) => {
+      const cardClass = showAll
+        ? "group cursor-pointer relative z-0 transition-transform duration-300 hover:scale-[1.02] rounded-2xl bg-surface-container-low/60 border border-white/5 p-3"
+        : "group cursor-pointer overflow-visible relative z-0 hover:z-50 w-36 shrink-0 transition-transform duration-300 hover:scale-[1.04]";
+      const titleClass = showAll
+        ? "text-sm font-bold leading-tight mt-2"
+        : "text-sm font-bold truncate px-1";
       const status = getStatusForTitle(it.title) || it.status || "";
       const isCompleted = status === "completed";
       const isPending = status === "pending";
@@ -308,7 +325,7 @@
       const pendingTip = isPending ? "Eliminar de Pendientes" : "Pendiente";
       const removeTip = "Eliminar de Mi Lista";
       return `
-      <div class="group cursor-pointer overflow-visible relative z-0 hover:z-50 w-36 shrink-0 transition-transform duration-300 hover:scale-[1.04]" data-detail-title="${it.title}" data-detail-id="${it.mal_id || ""}" data-detail-img="${it.image || ""}">
+      <div class="${cardClass}" data-detail-title="${it.title}" data-detail-id="${it.mal_id || ""}" data-detail-img="${it.image || ""}">
         <div class="aspect-[2/3] rounded-lg relative mb-2 z-0 isolate transition-all duration-300 ring-1 ring-white/10 group-hover:ring-violet-400/70 group-hover:shadow-[0_0_25px_rgba(139,92,246,0.45)]">
           <div class="absolute inset-0 rounded-lg overflow-hidden bg-surface-container-high z-0 pointer-events-none">
             <img alt="${it.title}" class="w-full h-full object-cover" src="${it.image || ""}"/>
@@ -329,7 +346,7 @@
             </button>
           </div>
         </div>
-        <h5 class="text-sm font-bold truncate px-1">${it.title}</h5>
+        <h5 class="${titleClass}">${it.title}</h5>
       </div>`;
     }).join("");
     if (!showAll && list.length > 8) {
@@ -415,6 +432,12 @@
       return;
     }
     grid.innerHTML = visible.map((it) => {
+      const cardClass = showAll
+        ? "group cursor-pointer relative z-0 transition-transform duration-300 hover:scale-[1.02] rounded-2xl bg-surface-container-low/60 border border-white/5 p-3"
+        : "group cursor-pointer overflow-visible relative z-0 hover:z-50 w-36 shrink-0 transition-transform duration-300 hover:scale-[1.04]";
+      const titleClass = showAll
+        ? "text-sm font-bold leading-tight mt-2"
+        : "text-sm font-bold truncate px-1";
       const status = getStatusForTitle(it.title) || it.status || "";
       const isCompleted = status === "completed";
       const isPending = status === "pending";
@@ -428,7 +451,7 @@
       const pendingTip = isPending ? "Eliminar de Pendientes" : "Pendiente";
       const removeTip = "Eliminar de Favoritos";
       return `
-      <div class="group cursor-pointer overflow-visible relative z-0 hover:z-50 w-36 shrink-0 transition-transform duration-300 hover:scale-[1.04]" data-detail-title="${it.title}" data-detail-id="${it.mal_id || ""}" data-detail-img="${it.image || ""}">
+      <div class="${cardClass}" data-detail-title="${it.title}" data-detail-id="${it.mal_id || ""}" data-detail-img="${it.image || ""}">
         <div class="aspect-[2/3] rounded-lg relative mb-2 z-0 isolate transition-all duration-300 ring-1 ring-white/10 group-hover:ring-violet-400/70 group-hover:shadow-[0_0_25px_rgba(139,92,246,0.45)]">
           <div class="absolute inset-0 rounded-lg overflow-hidden bg-surface-container-high z-0 pointer-events-none">
             <img alt="${it.title}" class="w-full h-full object-cover" src="${it.image || ""}"/>
@@ -449,7 +472,7 @@
             </button>
           </div>
         </div>
-        <h5 class="text-sm font-bold truncate px-1">${it.title}</h5>
+        <h5 class="${titleClass}">${it.title}</h5>
       </div>`;
     }).join("");
     if (!showAll && list.length > 8) {
@@ -535,7 +558,7 @@
       return;
     }
     grid.innerHTML = list.map((it) => `
-      <div class="group cursor-pointer overflow-visible relative z-0 hover:z-50 w-36 shrink-0 transition-transform duration-300 hover:scale-[1.04]" data-detail-title="${it.title}" data-detail-id="${it.mal_id || ""}" data-detail-img="${it.image || ""}">
+      <div class="group cursor-pointer relative z-0 transition-transform duration-300 hover:scale-[1.02] rounded-2xl bg-surface-container-low/60 border border-white/5 p-3" data-detail-title="${it.title}" data-detail-id="${it.mal_id || ""}" data-detail-img="${it.image || ""}">
         <div class="aspect-[2/3] rounded-lg relative mb-2 z-0 isolate transition-all duration-300 ring-1 ring-white/10 group-hover:ring-violet-400/70 group-hover:shadow-[0_0_25px_rgba(139,92,246,0.45)]">
           <div class="absolute inset-0 rounded-lg overflow-hidden bg-surface-container-high z-0 pointer-events-none">
             <img alt="${it.title}" class="w-full h-full object-cover" src="${it.image || ""}"/>
@@ -546,7 +569,7 @@
             <span class="pointer-events-none absolute left-1/2 top-full mt-2 -translate-x-1/2 whitespace-nowrap rounded-md bg-black/90 px-2 py-1 text-[10px] font-semibold uppercase tracking-widest text-white opacity-0 transition-opacity duration-150 group-hover/remove:opacity-100 z-50">${statusFilter === "completed" ? "Eliminar de Completados" : "Eliminar de Pendientes"}</span>
           </button>
         </div>
-        <h5 class="text-sm font-bold truncate px-1">${it.title}</h5>
+        <h5 class="text-sm font-bold leading-tight mt-2">${it.title}</h5>
       </div>`).join("");
 
     grid.querySelectorAll("[data-remove-status]").forEach((b) => {

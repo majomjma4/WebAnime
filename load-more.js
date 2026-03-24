@@ -26,6 +26,8 @@
   let activePreviewUrl = "";
   const synopsisCache = new Map();
   let fallbackIndex = 0;
+  const previewPrefetchDelay = 90;
+  const previewPrefetchConcurrency = 4;
   const fallbackPool = isCatalog
     ? [
         { title: "Millennium Actress", year: 2001, type: "Movie", status: "Finished Airing", score: 7.9, genres: ["Drama", "Romance"], image: "https://cdn.myanimelist.net/images/anime/2/11232l.jpg" },
@@ -355,11 +357,26 @@
     if (synopsisEl) synopsisEl.textContent = data.synopsis || "Sinopsis no disponible.";
     if (genresWrap) {
       genresWrap.innerHTML = "";
+      const spans = [];
       (data.genres || []).forEach((genre) => {
         const span = document.createElement("span");
         span.textContent = genre;
         genresWrap.appendChild(span);
+        spans.push(span);
       });
+      if (spans.length > 1) {
+        requestAnimationFrame(() => {
+          let hasWide = false;
+          spans.forEach((span) => {
+            const overflowed = span.scrollWidth > span.clientWidth + 1;
+            span.classList.toggle("is-wide", overflowed);
+            if (overflowed) hasWide = true;
+          });
+          genresWrap.classList.toggle("is-stacked", hasWide);
+        });
+      } else {
+        genresWrap.classList.remove("is-stacked");
+      }
     }
   }
 
@@ -411,6 +428,32 @@
       scope.querySelectorAll("[data-anime-card], article.featured-card, #ranking-grid article")
     );
     cards.forEach(bindHoverPreview);
+  }
+
+  function warmPreviewCache(root) {
+    const scope = root && root.nodeType === 1 ? root : document;
+    const cards = Array.from(
+      scope.querySelectorAll("[data-anime-card], article.featured-card, #ranking-grid article")
+    ).filter((card) => !card.dataset.previewPrefetch);
+    if (!cards.length) return;
+    cards.forEach((card) => { card.dataset.previewPrefetch = "1"; });
+    let index = 0;
+    const total = cards.length;
+    const workers = Array.from({ length: Math.min(previewPrefetchConcurrency, total) }, async () => {
+      while (index < total) {
+        const card = cards[index++];
+        if (!card) break;
+        try {
+          await getPreviewData(card);
+        } catch {
+          // Ignore prefetch errors
+        }
+        if (previewPrefetchDelay) {
+          await new Promise((r) => setTimeout(r, previewPrefetchDelay));
+        }
+      }
+    });
+    Promise.all(workers).catch(() => {});
   }
 
   function hydrateSeen() {
@@ -605,6 +648,7 @@
       window.__aniSuppressSortOnce = true;
       window.AniDexFilters.apply();
     }
+    warmPreviewCache(grid);
   }
 
   if (hasLoadMore) {
@@ -615,9 +659,14 @@
       show: () => { if (loadBtn) loadBtn.style.display = ""; }
     };
     bindHoverPreviewFor(grid);
+    warmPreviewCache(grid);
   }
 
   window.AniDexHoverPreview = {
-    bind: (root) => bindHoverPreviewFor(root || document)
+    bind: (root) => {
+      const scope = root || document;
+      bindHoverPreviewFor(scope);
+      warmPreviewCache(scope);
+    }
   };
 })();

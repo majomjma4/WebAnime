@@ -88,6 +88,11 @@
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
     }
+    .glass-panel {
+      background: linear-gradient(135deg, rgba(19, 19, 19, 0.92), rgba(36, 32, 46, 0.9));
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
     .hide-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     .transparent-scrollbar {
@@ -113,55 +118,115 @@
     <!-- Navbar Component -->
     <div data-layout="header"></div>
 
-    <main class="pt-32 pb-20 px-6 max-w-7xl mx-auto space-y-12">
-      <!-- Header: User Profile Card -->
-      <section class="relative group">
-        <div id="profile-card" class="bg-surface-container-low p-8 rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.35)] border border-white/10 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden transition-all duration-300 hover:shadow-[0_30px_80px_rgba(0,0,0,0.45)] hover:scale-[1.01]">
-          <span class="pointer-events-none absolute -top-24 -right-24 h-56 w-56 rounded-full bg-white/5 blur-3xl"></span>
-          <span class="pointer-events-none absolute -bottom-24 -left-24 h-56 w-56 rounded-full bg-white/5 blur-3xl"></span>
-          <div class="relative w-32 h-32 rounded-full overflow-visible border-4 border-primary shadow-lg flex-shrink-0">
-            <img alt="Foto de perfil" class="w-full h-full object-cover rounded-full" data-profile-avatar src="https://upload.wikimedia.org/wikipedia/en/b/bd/Doraemon_character.png"/>
-            <button class="absolute -bottom-2 -right-0 w-7 h-7 rounded-full bg-surface-container-high text-on-surface flex items-center justify-center shadow-lg z-50" type="button" aria-label="Editar perfil" id="profile-avatar-edit">
-              <span class="material-symbols-outlined text-[14px]">edit</span>
-            </button>
-          </div>
-          <div class="flex-1 space-y-4 text-center md:text-left">
-            <div>
-              <h1 class="font-headline text-4xl md:text-6xl font-extrabold tracking-tight text-on-surface">AnimeFan99</h1>
-              <p class="text-on-surface-variant font-medium mt-3">Curando el mejor shonen desde 2018</p>
+    <main class="relative pt-32 pb-20 px-6 max-w-7xl mx-auto space-y-10">
+      <div class="pointer-events-none absolute -top-40 right-[-10%] h-72 w-72 rounded-full bg-violet-500/15 blur-3xl"></div>
+      <div class="pointer-events-none absolute top-16 left-[-10%] h-72 w-72 rounded-full bg-sky-500/15 blur-3xl"></div>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      <section class="relative group lg:col-span-6">
+        <div id="profile-card" class="glass-panel rounded-3xl overflow-hidden border border-white/10 shadow-[0_30px_80px_rgba(0,0,0,0.45)]">
+          <div class="h-1 w-full bg-gradient-to-r from-sky-400 via-violet-400 to-primary"></div>
+          <div class="p-8 md:p-10 space-y-8">
+            <div class="flex flex-wrap items-start justify-between gap-4">
+              <div>
+                <h2 class="font-headline text-2xl md:text-3xl font-black italic tracking-tight text-primary uppercase">PERFIL</h2>
+                <p class="text-on-surface-variant font-label text-[10px] tracking-widest">ID: NK-2489542</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="bg-emerald-500/15 text-emerald-300 px-3 py-1 rounded-full font-label text-[10px] font-bold tracking-widest uppercase">Perfil activo</span>
+                <button class="rounded-full bg-surface-container-low/70 border border-white/10 w-8 h-8 flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors -mt-1 -ml-1" type="button" id="profile-settings-btn" aria-label="Ajustes de perfil">
+                  <span class="material-symbols-outlined text-[18px]">settings</span>
+                </button>
+              </div>
             </div>
-            <div class="flex flex-wrap justify-center md:justify-start gap-4 pt-2">
-              <button type="button" data-open-status="completed" class="bg-gradient-to-br from-emerald-500 to-teal-600 px-6 py-3 rounded-xl font-label font-bold uppercase text-xs tracking-widest shadow-lg hover:scale-105 active:scale-95 transition-transform cursor-pointer">
-                <span class="block text-primary font-bold text-2xl" data-count-completed>0</span>
-                <span class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">ANIMES COMPLETADOS</span>
-              </button>
-              <button type="button" data-open-status="pending" class="bg-gradient-to-br from-amber-500 to-orange-600 px-6 py-3 rounded-xl font-label font-bold uppercase text-xs tracking-widest shadow-lg hover:scale-105 active:scale-95 transition-transform cursor-pointer">
-                <span class="block text-primary font-bold text-2xl" data-count-pending>0</span>
-                <span class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">ANIMES PENDIENTES</span>
-              </button>
-              <!-- Estadísticas de días/episodios vistos removidas ya que no aplica a listas sin reproducción -->
+
+            <div class="grid grid-cols-1 lg:grid-cols-[auto,1fr] gap-8 items-start">
+              <div class="flex flex-col items-center lg:items-start gap-4">
+                <div class="relative w-36 h-36 rounded-2xl p-1 bg-gradient-to-br from-violet-500 via-fuchsia-500 to-sky-500 shadow-[0_0_30px_rgba(139,92,246,0.45)] flex-shrink-0">
+                  <div class="w-full h-full rounded-2xl bg-surface-container-lowest p-1">
+                    <img alt="Foto de perfil" class="w-full h-full object-cover rounded-2xl" data-profile-avatar src="https://upload.wikimedia.org/wikipedia/en/b/bd/Doraemon_character.png"/>
+                  </div>
+                </div>
+              </div>
+              <div class="space-y-5 text-center lg:text-left">
+                <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3">
+                  <h1 class="font-headline text-4xl md:text-5xl font-extrabold tracking-tight text-on-surface">NekoraUser_62</h1>
+                </div>
+                <p class="text-on-surface-variant font-medium">Curando el mejor shonen desde 2018</p>
+              </div>
+              <div class="lg:col-span-2">
+                <div class="grid w-full grid-cols-3 gap-2 text-left">
+                  <div class="rounded-2xl border border-white/10 bg-white/5 px-3 py-1.5 w-full">
+                    <div class="text-[10px] uppercase tracking-widest text-on-surface-variant">Miembro desde</div>
+                    <div class="mt-1 text-sm font-semibold text-on-surface">2018</div>
+                  </div>
+                  <div class="rounded-2xl border border-white/10 bg-white/5 px-3 py-1.5 w-full">
+                    <div class="text-[10px] uppercase tracking-widest text-on-surface-variant">&Uacute;ltimo acceso</div>
+                    <div class="mt-1 text-sm font-semibold text-on-surface">Hoy</div>
+                  </div>
+                  <div class="rounded-2xl border border-white/10 bg-white/5 px-3 py-1.5 w-full">
+                    <div class="text-[10px] uppercase tracking-widest text-on-surface-variant">Horas vistas</div>
+                    <div class="mt-1 text-sm font-semibold text-on-surface">128 h</div>
+                  </div>
+                </div>
+                <div class="mt-4 rounded-2xl border border-white/10 bg-white/5 p-4">
+                  <div class="text-[10px] uppercase tracking-widest text-on-surface-variant">Preferencias</div>
+                  <div class="mt-2 flex flex-wrap gap-2 text-xs" data-pref-display>
+                    <span class="rounded-full border border-sky-400/40 bg-gradient-to-br from-sky-500/20 to-violet-500/10 px-3 py-1 text-sky-200 shadow-[0_0_14px_rgba(56,189,248,0.25)]">Sub. espa&ntilde;ol</span>
+                    <span class="rounded-full border border-rose-400/40 bg-gradient-to-br from-rose-500/20 to-amber-500/10 px-3 py-1 text-rose-200 shadow-[0_0_14px_rgba(244,63,94,0.22)]">Acci&oacute;n</span>
+                    <span class="rounded-full border border-violet-400/40 bg-gradient-to-br from-violet-500/20 to-fuchsia-500/10 px-3 py-1 text-violet-200 shadow-[0_0_14px_rgba(139,92,246,0.22)]">Fant&aacute;sia</span>
+                    <span class="rounded-full border border-emerald-400/40 bg-gradient-to-br from-emerald-500/20 to-teal-500/10 px-3 py-1 text-emerald-200 shadow-[0_0_14px_rgba(16,185,129,0.2)]">Seinen</span>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="flex flex-col gap-3 items-center md:items-end">
-            <button class="bg-gradient-to-br from-primary to-primary-container px-8 py-4 rounded-full font-label font-bold uppercase text-xs tracking-widest shadow-lg hover:scale-105 active:scale-95 transition-transform inline-block" type="button" id="profile-edit-btn">EDITAR PERFIL</button>
-            <a id="premium-access-btn" class="bg-gradient-to-br from-sky-500 to-violet-500 px-8 py-4 rounded-full font-label font-bold uppercase text-xs tracking-widest shadow-lg hover:scale-105 active:scale-95 transition-transform inline-block text-center text-white" href="pago.html">ACCESO PREMIUM</a>
-            <button id="premium-cancel-btn" class="hidden bg-gradient-to-br from-rose-500 to-red-600 px-8 py-4 rounded-full font-label font-bold uppercase text-xs tracking-widest shadow-lg hover:scale-105 active:scale-95 transition-transform inline-block text-center text-white" type="button">CANCELAR SUSCRIPCIÓN</button>
-            <a id="auth-create-btn" class="bg-gradient-to-br from-primary to-primary-container px-8 py-4 rounded-full font-label font-bold uppercase text-xs tracking-widest shadow-lg hover:scale-105 active:scale-95 transition-transform inline-block text-center" href="registro.html">CREAR CUENTA</a>
-            <a id="auth-login-btn" class="bg-gradient-to-br from-primary to-primary-container px-8 py-4 rounded-full font-label font-bold uppercase text-xs tracking-widest shadow-lg hover:scale-105 active:scale-95 transition-transform inline-block text-center" href="ingresar.html">ACCEDER</a>
-            <button id="logout-btn" class="hidden bg-gradient-to-br from-rose-500 to-red-600 px-8 py-4 rounded-full font-label font-bold uppercase text-xs tracking-widest shadow-lg hover:scale-105 active:scale-95 transition-transform inline-block text-center text-white" type="button">CERRAR SESION</button>
           </div>
         </div>
       </section>
 
-      <!-- Main Dashboard Grid -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
-        <!-- Favorites & Activity Content -->
-        <div class="lg:col-span-8 space-y-12">
-          <!-- Visto Recientemente removed -->
+      <section class="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <button type="button" data-open-list="my-list" class="group rounded-3xl border border-white/10 bg-surface-container-low/70 p-6 text-left shadow-[0_16px_40px_rgba(0,0,0,0.35)] transition-all hover:-translate-y-1 hover:border-violet-400/60 hover:shadow-[0_24px_60px_rgba(139,92,246,0.35)]">
+          <div class="flex items-center justify-between">
+            <div class="text-xs uppercase tracking-[0.2em] text-on-surface-variant">Mi lista</div>
+            <span class="material-symbols-outlined text-violet-400">playlist_add</span>
+          </div>
+          <div class="mt-4 text-4xl font-bold text-on-surface" data-count-mylist>0</div>
+          <p class="mt-2 text-sm text-on-surface-variant">T&iacute;tulos guardados para ver despu&eacute;s.</p>
+        </button>
+        <button type="button" data-open-list="favorites" class="group rounded-3xl border border-white/10 bg-surface-container-low/70 p-6 text-left shadow-[0_16px_40px_rgba(0,0,0,0.35)] transition-all hover:-translate-y-1 hover:border-fuchsia-400/60 hover:shadow-[0_24px_60px_rgba(236,72,153,0.35)]">
+          <div class="flex items-center justify-between">
+            <div class="text-xs uppercase tracking-[0.2em] text-on-surface-variant">Favoritos</div>
+            <span class="material-symbols-outlined text-fuchsia-400">favorite</span>
+          </div>
+          <div class="mt-4 text-4xl font-bold text-on-surface" data-count-favorites>0</div>
+          <p class="mt-2 text-sm text-on-surface-variant">Tus historias imprescindibles.</p>
+        </button>
+        <button type="button" data-open-status="pending" class="group rounded-3xl border border-white/10 bg-surface-container-low/70 p-6 text-left shadow-[0_16px_40px_rgba(0,0,0,0.35)] transition-all hover:-translate-y-1 hover:border-amber-400/60 hover:shadow-[0_24px_60px_rgba(251,191,36,0.35)]">
+          <div class="flex items-center justify-between">
+            <div class="text-xs uppercase tracking-[0.2em] text-on-surface-variant">Pendientes</div>
+            <span class="material-symbols-outlined text-amber-300">schedule</span>
+          </div>
+          <div class="mt-4 text-4xl font-bold text-on-surface" data-count-pending>0</div>
+          <p class="mt-2 text-sm text-on-surface-variant">Lo pr&oacute;ximo en tu marat&oacute;n.</p>
+        </button>
+        <button type="button" data-open-status="completed" class="group rounded-3xl border border-white/10 bg-surface-container-low/70 p-6 text-left shadow-[0_16px_40px_rgba(0,0,0,0.35)] transition-all hover:-translate-y-1 hover:border-emerald-400/60 hover:shadow-[0_24px_60px_rgba(52,211,153,0.35)]">
+          <div class="flex items-center justify-between">
+            <div class="text-xs uppercase tracking-[0.2em] text-on-surface-variant">Completados</div>
+            <span class="material-symbols-outlined text-emerald-400">done_all</span>
+          </div>
+          <div class="mt-4 text-4xl font-bold text-on-surface" data-count-completed>0</div>
+          <p class="mt-2 text-sm text-on-surface-variant">Historias finalizadas con &eacute;xito.</p>
+        </button>
+      </section>
+    </div>
 
-          <section class="space-y-6">
-            <div class="flex justify-between items-end px-2">
-              <h2 class="font-headline text-2xl font-bold">Mi Lista</h2>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div class="lg:col-span-8 space-y-8">
+          <section class="space-y-6 rounded-3xl border border-white/5 bg-surface-container-low/60 p-6 shadow-[0_18px_40px_rgba(0,0,0,0.35)]">
+            <div class="flex flex-wrap justify-between items-end gap-4">
+              <div>
+                <h2 class="font-headline text-2xl font-bold">Mi Lista</h2>
+                <p class="text-sm text-on-surface-variant">Tus animes listos para continuar.</p>
+              </div>
               <div class="flex items-center gap-2">
                 <button class="w-9 h-9 rounded-full bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors flex items-center justify-center" type="button" data-scroll-left="my-list-grid" aria-label="Desplazar a la izquierda">
                   <span class="material-symbols-outlined text-[18px]">chevron_left</span>
@@ -172,13 +237,15 @@
                 <button class="text-primary text-sm font-bold hover:underline" type="button" data-open-list="my-list">Ver todo</button>
               </div>
             </div>
-            <div id="my-list-grid" class="flex gap-4 overflow-x-auto no-scrollbar overflow-visible py-1"></div>
+            <div id="my-list-grid" class="flex gap-4 overflow-x-auto no-scrollbar overflow-visible py-2"></div>
           </section>
 
-          <!-- Favorites Grid -->
-          <section class="space-y-6">
-            <div class="flex justify-between items-end px-2">
-              <h2 class="font-headline text-2xl font-bold">Favoritos</h2>
+          <section class="space-y-6 rounded-3xl border border-white/5 bg-surface-container-low/60 p-6 shadow-[0_18px_40px_rgba(0,0,0,0.35)]">
+            <div class="flex flex-wrap justify-between items-end gap-4">
+              <div>
+                <h2 class="font-headline text-2xl font-bold">Favoritos</h2>
+                <p class="text-sm text-on-surface-variant">Las historias que te marcaron.</p>
+              </div>
               <div class="flex items-center gap-2">
                 <button class="w-9 h-9 rounded-full bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors flex items-center justify-center" type="button" data-scroll-left="favorites-grid" aria-label="Desplazar a la izquierda">
                   <span class="material-symbols-outlined text-[18px]">chevron_left</span>
@@ -189,65 +256,83 @@
                 <button class="text-primary text-sm font-bold hover:underline" type="button" data-open-list="favorites">Ver todo</button>
               </div>
             </div>
-            <div id="favorites-grid" class="flex gap-4 overflow-x-auto no-scrollbar overflow-visible py-1"></div>
+            <div id="favorites-grid" class="flex gap-4 overflow-x-auto no-scrollbar overflow-visible py-2"></div>
           </section>
         </div>
-        <!-- Right Rail: Recomendados -->
-        <aside class="lg:col-span-4 space-y-4 bg-surface-container-low rounded-2xl p-4">
-          <div class="flex items-center justify-between px-2">
-            <h2 class="font-headline text-xl font-bold">Recomendados</h2>
+
+        <aside class="lg:col-span-4 space-y-6">
+          <div class="rounded-3xl border border-white/5 bg-gradient-to-b from-surface-container-low to-surface-container-high/70 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.4)]">
+            <div class="flex items-center justify-between">
+              <h2 class="font-headline text-xl font-bold">Configuraci&oacute;n</h2>
+              <span class="material-symbols-outlined text-primary">settings</span>
+            </div>
+            <p class="mt-2 text-sm text-on-surface-variant">Gestiona tu cuenta y personaliza tu perfil.</p>
+            <div class="mt-4 flex flex-col gap-3">
+              <button class="bg-gradient-to-br from-primary to-primary-container px-6 py-3 rounded-full font-label font-bold uppercase text-xs tracking-widest shadow-lg hover:scale-105 active:scale-95 transition-transform inline-block" type="button" id="profile-edit-btn">EDITAR PERFIL</button>
+              <a id="premium-access-btn" class="bg-gradient-to-br from-sky-500 to-violet-500 px-6 py-3 rounded-full font-label font-bold uppercase text-xs tracking-widest shadow-lg hover:scale-105 active:scale-95 transition-transform inline-block text-center text-white" href="pago.html">ACCESO PREMIUM</a>
+              <button id="premium-cancel-btn" class="hidden bg-gradient-to-br from-rose-500 to-red-600 px-6 py-3 rounded-full font-label font-bold uppercase text-xs tracking-widest shadow-lg hover:scale-105 active:scale-95 transition-transform inline-block text-center text-white" type="button">CANCELAR SUSCRIPCI&Oacute;N</button>
+              <a id="auth-create-btn" class="bg-gradient-to-br from-primary to-primary-container px-6 py-3 rounded-full font-label font-bold uppercase text-xs tracking-widest shadow-lg hover:scale-105 active:scale-95 transition-transform inline-block text-center" href="registro.html">CREAR CUENTA</a>
+              <a id="auth-login-btn" class="bg-gradient-to-br from-primary to-primary-container px-6 py-3 rounded-full font-label font-bold uppercase text-xs tracking-widest shadow-lg hover:scale-105 active:scale-95 transition-transform inline-block text-center" href="ingresar.html">ACCEDER</a>
+              <button id="logout-btn" class="hidden bg-gradient-to-br from-rose-500 to-red-600 px-6 py-3 rounded-full font-label font-bold uppercase text-xs tracking-widest shadow-lg hover:scale-105 active:scale-95 transition-transform inline-block text-center text-white" type="button">CERRAR SESI&Oacute;N</button>
+            </div>
           </div>
-          <div class="space-y-3">
-            <button class="w-full bg-surface-container-low hover:bg-surface-container-high rounded-xl p-3 flex items-center gap-3 border border-transparent hover:border-violet-400/40 hover:shadow-[0_0_18px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="5114" data-title="Fullmetal Alchemist: Brotherhood" onclick="window.location.href='detail.html?mal_id=5114&q=Fullmetal%20Alchemist%3A%20Brotherhood'">
-              <span class="absolute top-2 right-2 rounded-full bg-violet-500/90 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-white">Anime</span>
-              <img src="https://cdn.myanimelist.net/images/anime/1223/96541.jpg" alt="Fullmetal Alchemist: Brotherhood" class="w-12 h-16 object-cover rounded-md" />
-              <div class="text-left">
-                <p class="text-sm font-bold">Fullmetal Alchemist: Brotherhood</p>
-                <p class="text-xs text-on-surface-variant">Accion - Aventura</p>
-              </div>
-            </button>
-            <button class="w-full bg-surface-container-low hover:bg-surface-container-high rounded-xl p-3 flex items-center gap-3 border border-transparent hover:border-violet-400/40 hover:shadow-[0_0_18px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="9253" data-title="Steins;Gate" onclick="window.location.href='detail.html?mal_id=9253&q=Steins%3BGate'">
-              <span class="absolute top-2 right-2 rounded-full bg-violet-500/90 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-white">Anime</span>
-              <img src="https://cdn.myanimelist.net/images/anime/5/73199.jpg" alt="Steins;Gate" class="w-12 h-16 object-cover rounded-md" />
-              <div class="text-left">
-                <p class="text-sm font-bold">Steins;Gate</p>
-                <p class="text-xs text-on-surface-variant">Sci-Fi - Suspenso</p>
-              </div>
-            </button>
-            <button class="w-full bg-surface-container-low hover:bg-surface-container-high rounded-xl p-3 flex items-center gap-3 border border-transparent hover:border-violet-400/40 hover:shadow-[0_0_18px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="32281" data-title="Kimi no Na wa." onclick="window.location.href='detail.html?mal_id=32281&q=Kimi%20no%20Na%20wa.'">
-              <span class="absolute top-2 right-2 rounded-full bg-fuchsia-500/90 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-white">Pelicula</span>
-              <img src="https://cdn.myanimelist.net/images/anime/5/87048.jpg" alt="Kimi no Na wa." class="w-12 h-16 object-cover rounded-md" />
-              <div class="text-left">
-                <p class="text-sm font-bold">Kimi no Na wa.</p>
-                <p class="text-xs text-on-surface-variant">Romance - Fantasia</p>
-              </div>
-            </button>
-            <button class="w-full bg-surface-container-low hover:bg-surface-container-high rounded-xl p-3 flex items-center gap-3 border border-transparent hover:border-violet-400/40 hover:shadow-[0_0_18px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="16498" data-title="Shingeki no Kyojin" onclick="window.location.href='detail.html?mal_id=16498&q=Shingeki%20no%20Kyojin'">
-              <span class="absolute top-2 right-2 rounded-full bg-violet-500/90 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-white">Anime</span>
-              <img src="https://cdn.myanimelist.net/images/anime/10/47347.jpg" alt="Shingeki no Kyojin" class="w-12 h-16 object-cover rounded-md" />
-              <div class="text-left">
-                <p class="text-sm font-bold">Attack on Titan</p>
-                <p class="text-xs text-on-surface-variant">Accion - Drama</p>
-              </div>
-            </button>
-            <button class="w-full bg-surface-container-low hover:bg-surface-container-high rounded-xl p-3 flex items-center gap-3 border border-transparent hover:border-violet-400/40 hover:shadow-[0_0_18px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="12355" data-title="Ookami Kodomo no Ame to Yuki" onclick="window.location.href='detail.html?mal_id=12355&q=Ookami%20Kodomo%20no%20Ame%20to%20Yuki'">
-              <span class="absolute top-2 right-2 rounded-full bg-fuchsia-500/90 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-white">Pelicula</span>
-              <img src="https://cdn.myanimelist.net/images/anime/9/35721.jpg" alt="Wolf Children" class="w-12 h-16 object-cover rounded-md" />
-              <div class="text-left">
-                <p class="text-sm font-bold">Wolf Children</p>
-                <p class="text-xs text-on-surface-variant">Drama - Fantasia</p>
-              </div>
-            </button>
-            <button class="w-full bg-surface-container-low hover:bg-surface-container-high rounded-xl p-3 flex items-center gap-3 border border-transparent hover:border-violet-400/40 hover:shadow-[0_0_18px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="40591" data-title="Kaguya-sama: Love is War" onclick="window.location.href='detail.html?mal_id=40591&q=Kaguya-sama%3A%20Love%20is%20War'">
-              <span class="absolute top-2 right-2 rounded-full bg-violet-500/90 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-white">Anime</span>
-              <img src="https://cdn.myanimelist.net/images/anime/1295/106551.jpg" alt="Kaguya-sama: Love is War" class="w-12 h-16 object-cover rounded-md" />
-              <div class="text-left">
-                <p class="text-sm font-bold">Kaguya-sama: Love is War</p>
-                <p class="text-xs text-on-surface-variant">Romance - Comedia</p>
-              </div>
-            </button>
+
+          <div class="space-y-4 bg-gradient-to-b from-surface-container-low to-surface-container-high/70 rounded-3xl p-6 border border-white/5 shadow-[0_20px_50px_rgba(0,0,0,0.4)]">
+            <div class="flex items-center justify-between">
+              <h2 class="font-headline text-xl font-bold">Recomendados</h2>
+            </div>
+            <div class="space-y-3">
+              <button class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-3 flex items-center gap-3 border border-white/5 hover:border-violet-400/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="5114" data-title="Fullmetal Alchemist: Brotherhood" onclick="window.location.href='detail.html?mal_id=5114&q=Fullmetal%20Alchemist%3A%20Brotherhood'">
+                <span class="absolute top-2 right-2 rounded-full bg-violet-500/90 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-white">Anime</span>
+                <img src="https://cdn.myanimelist.net/images/anime/1223/96541.jpg" alt="Fullmetal Alchemist: Brotherhood" class="w-12 h-16 object-cover rounded-md" />
+                <div class="text-left">
+                  <p class="text-sm font-bold">Fullmetal Alchemist: Brotherhood</p>
+                  <p class="text-xs text-on-surface-variant">Acci&oacute;n - Aventura</p>
+                </div>
+              </button>
+              <button class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-3 flex items-center gap-3 border border-white/5 hover:border-violet-400/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="9253" data-title="Steins;Gate" onclick="window.location.href='detail.html?mal_id=9253&q=Steins%3BGate'">
+                <span class="absolute top-2 right-2 rounded-full bg-violet-500/90 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-white">Anime</span>
+                <img src="https://cdn.myanimelist.net/images/anime/5/73199.jpg" alt="Steins;Gate" class="w-12 h-16 object-cover rounded-md" />
+                <div class="text-left">
+                  <p class="text-sm font-bold">Steins;Gate</p>
+                  <p class="text-xs text-on-surface-variant">Sci-Fi - Suspenso</p>
+                </div>
+              </button>
+              <button class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-3 flex items-center gap-3 border border-white/5 hover:border-violet-400/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="32281" data-title="Kimi no Na wa." onclick="window.location.href='detail.html?mal_id=32281&q=Kimi%20no%20Na%20wa.'">
+                <span class="absolute top-2 right-2 rounded-full bg-fuchsia-500/90 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-white">Pel&iacute;cula</span>
+                <img src="https://cdn.myanimelist.net/images/anime/5/87048.jpg" alt="Kimi no Na wa." class="w-12 h-16 object-cover rounded-md" />
+                <div class="text-left">
+                  <p class="text-sm font-bold">Kimi no Na wa.</p>
+                  <p class="text-xs text-on-surface-variant">Romance - Fantas&iacute;a</p>
+                </div>
+              </button>
+              <button class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-3 flex items-center gap-3 border border-white/5 hover:border-violet-400/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="16498" data-title="Shingeki no Kyojin" onclick="window.location.href='detail.html?mal_id=16498&q=Shingeki%20no%20Kyojin'">
+                <span class="absolute top-2 right-2 rounded-full bg-violet-500/90 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-white">Anime</span>
+                <img src="https://cdn.myanimelist.net/images/anime/10/47347.jpg" alt="Shingeki no Kyojin" class="w-12 h-16 object-cover rounded-md" />
+                <div class="text-left">
+                  <p class="text-sm font-bold">Attack on Titan</p>
+                  <p class="text-xs text-on-surface-variant">Acci&oacute;n - Drama</p>
+                </div>
+              </button>
+              <button class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-3 flex items-center gap-3 border border-white/5 hover:border-violet-400/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="12355" data-title="Ookami Kodomo no Ame to Yuki" onclick="window.location.href='detail.html?mal_id=12355&q=Ookami%20Kodomo%20no%20Ame%20to%20Yuki'">
+                <span class="absolute top-2 right-2 rounded-full bg-fuchsia-500/90 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-white">Pel&iacute;cula</span>
+                <img src="https://cdn.myanimelist.net/images/anime/9/35721.jpg" alt="Wolf Children" class="w-12 h-16 object-cover rounded-md" />
+                <div class="text-left">
+                  <p class="text-sm font-bold">Wolf Children</p>
+                  <p class="text-xs text-on-surface-variant">Drama - Fantas&iacute;a</p>
+                </div>
+              </button>
+              <button class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-3 flex items-center gap-3 border border-white/5 hover:border-violet-400/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="40591" data-title="Kaguya-sama: Love is War" onclick="window.location.href='detail.html?mal_id=40591&q=Kaguya-sama%3A%20Love%20is%20War'">
+                <span class="absolute top-2 right-2 rounded-full bg-violet-500/90 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-white">Anime</span>
+                <img src="https://cdn.myanimelist.net/images/anime/1295/106551.jpg" alt="Kaguya-sama: Love is War" class="w-12 h-16 object-cover rounded-md" />
+                <div class="text-left">
+                  <p class="text-sm font-bold">Kaguya-sama: Love is War</p>
+                  <p class="text-xs text-on-surface-variant">Romance - Comedia</p>
+                </div>
+              </button>
+            </div>
+            <a class="mt-4 inline-flex w-full items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-600 px-4 py-2 text-xs font-bold uppercase tracking-widest text-white shadow-lg hover:scale-105 active:scale-95 transition-transform" href="destacados.html">Ver m&aacute;s</a>
           </div>
-          <a class="mt-4 inline-flex w-full items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-600 px-4 py-2 text-xs font-bold uppercase tracking-widest text-white shadow-lg hover:scale-105 active:scale-95 transition-transform" href="destacados.html">Ver m&aacute;s</a>
         </aside>
       </div>
     </main>
@@ -270,12 +355,22 @@
     <!-- Edit Profile Modal -->
     <div id="profile-modal" class="fixed inset-0 z-[60] hidden">
       <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" data-profile-close></div>
-      <div class="relative mx-auto mt-28 w-[92%] max-w-2xl rounded-2xl bg-surface-container-high p-6 shadow-2xl">
+      <div class="relative mx-auto mt-16 w-[92%] max-w-2xl rounded-2xl bg-surface-container-high p-6 shadow-2xl">
         <div class="flex items-center justify-between mb-4">
           <h3 class="font-headline text-xl font-bold">Editar perfil</h3>
           <button class="rounded-full bg-surface-container-low w-8 h-8 flex items-center justify-center text-xs font-bold text-on-surface-variant hover:text-on-surface" type="button" data-profile-close aria-label="Cerrar">x</button>
         </div>
-        <div class="space-y-4">
+        <div class="space-y-4 max-h-[70vh] overflow-y-auto pr-2 transparent-scrollbar">
+          <div class="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-4">
+            <img data-profile-avatar src="https://upload.wikimedia.org/wikipedia/en/b/bd/Doraemon_character.png" alt="Avatar actual" class="w-14 h-14 rounded-xl object-cover" />
+            <div class="flex-1">
+              <p class="text-xs uppercase tracking-widest text-on-surface-variant">Foto de perfil</p>
+              <button id="profile-avatar-open" class="mt-2 inline-flex items-center gap-2 rounded-full bg-surface-container-low px-4 py-2 text-xs font-bold uppercase tracking-widest text-on-surface-variant hover:text-on-surface" type="button">
+                <span class="material-symbols-outlined text-[16px]">image</span>
+                Cambiar avatar
+              </button>
+            </div>
+          </div>
           <div class="space-y-2">
             <label class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Nombre de usuario</label>
             <input id="profile-name-input" class="w-full rounded-xl bg-surface-container-low border border-outline-variant px-4 py-3 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/40" type="text" placeholder="Tu nombre" />
@@ -283,6 +378,11 @@
           <div class="space-y-2">
             <label class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Descripción</label>
             <textarea id="profile-desc-input" class="w-full rounded-xl bg-surface-container-low border border-outline-variant px-4 py-3 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/40 min-h-[120px]" placeholder="Escribe una breve Descripción"></textarea>
+          </div>
+          <div class="space-y-3">
+            <label class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Preferencias</label>
+            <div id="preferences-picker" class="space-y-3"></div>
+            <p class="text-[11px] text-on-surface-variant">Selecciona varias opciones y se verán reflejadas en tu perfil.</p>
           </div>
           <div class="space-y-2">
             <label class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Color del recuadro</label>
@@ -312,17 +412,26 @@
     <!-- Full Lists Modal -->
     <div id="lists-modal" class="fixed inset-0 z-[70] hidden">
       <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" data-lists-close></div>
-      <div class="relative mx-auto mt-20 w-[92%] max-w-6xl rounded-2xl bg-surface-container-high p-6 shadow-2xl">
-        <div class="flex items-center justify-between mb-4">
-          <h3 class="font-headline text-2xl font-bold" id="lists-modal-title">Mi Lista</h3>
-          <button class="rounded-full bg-surface-container-low w-8 h-8 flex items-center justify-center text-xs font-bold text-on-surface-variant hover:text-on-surface" type="button" data-lists-close aria-label="Cerrar">x</button>
+      <div class="relative mx-auto mt-16 w-[92%] max-w-6xl rounded-3xl border border-white/10 bg-gradient-to-br from-surface-container-low to-surface-container-high/90 p-6 md:p-8 shadow-[0_30px_80px_rgba(0,0,0,0.6)]">
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+          <div>
+            <h3 class="font-headline text-2xl font-bold" id="lists-modal-title">Mi Lista</h3>
+            <p class="text-sm text-on-surface-variant">Explora todos tus t&iacute;tulos guardados.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-on-surface-variant">Mi lista: <span data-count-mylist>0</span></span>
+            <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-on-surface-variant">Favoritos: <span data-count-favorites>0</span></span>
+            <button class="rounded-full bg-surface-container-low w-9 h-9 flex items-center justify-center text-xs font-bold text-on-surface-variant hover:text-on-surface" type="button" data-lists-close aria-label="Cerrar">
+              <span class="material-symbols-outlined text-[18px]">close</span>
+            </button>
+          </div>
         </div>
-        <div id="lists-modal-body" class="max-h-[70vh] overflow-y-auto overflow-x-hidden pr-2 transparent-scrollbar">
+        <div id="lists-modal-body" class="max-h-[72vh] overflow-y-auto overflow-x-hidden pr-1 transparent-scrollbar">
           <div id="my-list-modal" class="space-y-4 hidden">
-            <div id="my-list-grid-full" data-show-all="1" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+            <div id="my-list-grid-full" data-show-all="1" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 gap-5"></div>
           </div>
           <div id="favorites-modal" class="space-y-4 hidden">
-            <div id="favorites-grid-full" data-show-all="1" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+            <div id="favorites-grid-full" data-show-all="1" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 gap-5"></div>
           </div>
         </div>
       </div>
@@ -331,17 +440,26 @@
     <!-- Status Modal -->
     <div id="status-modal" class="fixed inset-0 z-[70] hidden">
       <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" data-status-close></div>
-      <div class="relative mx-auto mt-20 w-[92%] max-w-6xl rounded-2xl bg-surface-container-high p-6 shadow-2xl">
-        <div class="flex items-center justify-between mb-4">
-          <h3 class="font-headline text-2xl font-bold" id="status-modal-title">Completados</h3>
-          <button class="rounded-full bg-surface-container-low w-8 h-8 flex items-center justify-center text-xs font-bold text-on-surface-variant hover:text-on-surface" type="button" data-status-close aria-label="Cerrar">x</button>
+      <div class="relative mx-auto mt-16 w-[92%] max-w-6xl rounded-3xl border border-white/10 bg-gradient-to-br from-surface-container-low to-surface-container-high/90 p-6 md:p-8 shadow-[0_30px_80px_rgba(0,0,0,0.6)]">
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+          <div>
+            <h3 class="font-headline text-2xl font-bold" id="status-modal-title">Completados</h3>
+            <p class="text-sm text-on-surface-variant">Tus avances organizados por estado.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-on-surface-variant">Completados: <span data-count-completed>0</span></span>
+            <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-on-surface-variant">Pendientes: <span data-count-pending>0</span></span>
+            <button class="rounded-full bg-surface-container-low w-9 h-9 flex items-center justify-center text-xs font-bold text-on-surface-variant hover:text-on-surface" type="button" data-status-close aria-label="Cerrar">
+              <span class="material-symbols-outlined text-[18px]">close</span>
+            </button>
+          </div>
         </div>
-        <div id="status-modal-body" class="max-h-[70vh] overflow-y-auto overflow-x-hidden pr-2 transparent-scrollbar">
+        <div id="status-modal-body" class="max-h-[72vh] overflow-y-auto overflow-x-hidden pr-1 transparent-scrollbar">
           <div id="completed-section" class="space-y-4 hidden">
-            <div id="completed-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+            <div id="completed-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 gap-5"></div>
           </div>
           <div id="pending-section" class="space-y-4 hidden">
-            <div id="pending-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+            <div id="pending-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 gap-5"></div>
           </div>
         </div>
       </div>
@@ -367,6 +485,7 @@
     <script>
   (function () {
     const editBtn = document.getElementById("profile-avatar-edit");
+    const openBtn = document.getElementById("profile-avatar-open");
     const modal = document.getElementById("avatar-modal");
     const grid = document.getElementById("avatar-grid");
     const avatarImg = document.querySelector("img[alt='Foto de perfil']");
@@ -428,7 +547,8 @@
       closeModal();
     });
 
-    editBtn.addEventListener("click", openModal);
+    if (editBtn) editBtn.addEventListener("click", openModal);
+    if (openBtn) openBtn.addEventListener("click", openModal);
     modal.querySelectorAll("[data-avatar-close]").forEach((el) => el.addEventListener("click", closeModal));
   })();
     </script>
@@ -513,6 +633,7 @@
     <script>
   (function () {
     const editBtn = document.getElementById("profile-edit-btn");
+    const settingsBtn = document.getElementById("profile-settings-btn");
     const modal = document.getElementById("profile-modal");
     const closeEls = modal ? modal.querySelectorAll("[data-profile-close]") : [];
     const nameInput = document.getElementById("profile-name-input");
@@ -522,6 +643,27 @@
     const descEl = document.querySelector("p.text-on-surface-variant.font-medium");
     const cardEl = document.getElementById("profile-card");
     const colorOptions = document.getElementById("profile-color-options");
+    const prefsWrap = document.getElementById("preferences-picker");
+    const prefsDisplay = document.querySelector("[data-pref-display]");
+    const PREF_KEY = "anidex_profile_prefs";
+    const PREF_GROUPS = {
+      "Idioma": ["Sub. espa\u00f1ol", "Doblaje espa\u00f1ol", "Japon\u00e9s", "Ingl\u00e9s"],
+      "G\u00e9nero": ["Acci\u00f3n", "Fantas\u00eda", "Drama", "Comedia", "Romance", "Terror", "Sci-Fi"],
+      "Duraci\u00f3n": ["Corta", "Media", "Larga"],
+      "Tono": ["\u00c9pico", "Oscuro", "Ligero", "Emotivo"]
+    };
+    const PREF_DEFAULTS = {
+      "Idioma": ["Sub. espa\u00f1ol"],
+      "G\u00e9nero": ["Acci\u00f3n", "Fantas\u00eda"],
+      "Duraci\u00f3n": ["Media"],
+      "Tono": ["\u00c9pico"]
+    };
+    const PREF_STYLES = {
+      "Idioma": "border-sky-400/40 bg-gradient-to-br from-sky-500/20 to-violet-500/10 text-sky-200 shadow-[0_0_14px_rgba(56,189,248,0.25)]",
+      "G\u00e9nero": "border-rose-400/40 bg-gradient-to-br from-rose-500/20 to-amber-500/10 text-rose-200 shadow-[0_0_14px_rgba(244,63,94,0.22)]",
+      "Duraci\u00f3n": "border-emerald-400/40 bg-gradient-to-br from-emerald-500/20 to-teal-500/10 text-emerald-200 shadow-[0_0_14px_rgba(16,185,129,0.2)]",
+      "Tono": "border-violet-400/40 bg-gradient-to-br from-violet-500/20 to-fuchsia-500/10 text-violet-200 shadow-[0_0_14px_rgba(139,92,246,0.22)]"
+    };
     const colorClasses = [
       "bg-gradient-to-br",
       "from-zinc-950", "from-zinc-900", "via-zinc-900", "to-zinc-800",
@@ -536,14 +678,107 @@
       "from-purple-900/50", "via-pink-900/40"
     ];
 
-    if (!editBtn || !modal || !nameInput || !descInput || !saveBtn || !nameEl || !descEl) return;
+    if ((!editBtn && !settingsBtn) || !modal || !nameInput || !descInput || !saveBtn || !nameEl || !descEl) return;
+
+    const getOrCreateUserSuffix = () => {
+      try {
+        let suffix = localStorage.getItem("anidex_user_suffix");
+        if (!suffix) {
+          suffix = String(Math.floor(10 + Math.random() * 90));
+          localStorage.setItem("anidex_user_suffix", suffix);
+        }
+        return suffix;
+      } catch (e) {
+        return String(Math.floor(10 + Math.random() * 90));
+      }
+    };
+    const getOrCreateUserId = () => {
+      try {
+        let id = localStorage.getItem("anidex_user_id");
+        if (!id) {
+          const year = new Date().getFullYear();
+          const rand = Math.floor(1000 + Math.random() * 9000);
+          id = `NK-${year}-${rand}`;
+          localStorage.setItem("anidex_user_id", id);
+        }
+        return id;
+      } catch (e) {
+        const year = new Date().getFullYear();
+        const rand = Math.floor(1000 + Math.random() * 9000);
+        return `NK-${year}-${rand}`;
+      }
+    };
+
+    const normalizePrefs = (prefs) => {
+      const out = {};
+      Object.keys(PREF_GROUPS).forEach((k) => {
+        const list = prefs && Array.isArray(prefs[k]) ? prefs[k] : [];
+        out[k] = list;
+      });
+      return out;
+    };
+
+    const loadPrefs = () => {
+      try {
+        const raw = localStorage.getItem(PREF_KEY);
+        if (raw) return normalizePrefs(JSON.parse(raw));
+      } catch (e) {}
+      return normalizePrefs(PREF_DEFAULTS);
+    };
+
+    const savePrefs = (prefs) => {
+      try {
+        localStorage.setItem(PREF_KEY, JSON.stringify(prefs));
+      } catch (e) {}
+    };
+
+    const renderPrefDisplay = (prefs) => {
+      if (!prefsDisplay) return;
+      const chips = [];
+      Object.keys(PREF_GROUPS).forEach((group) => {
+        (prefs[group] || []).forEach((value) => {
+          const style = PREF_STYLES[group] || "border-white/10 bg-white/5 text-on-surface-variant";
+          chips.push(`<span class="rounded-full border ${style} px-3 py-1 text-xs">${value}</span>`);
+        });
+      });
+      prefsDisplay.innerHTML = chips.length
+        ? chips.join("")
+        : '<span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-on-surface-variant">Sin preferencias</span>';
+    };
+
+    const renderPrefPicker = (prefs) => {
+      if (!prefsWrap) return;
+      const chipBase = "rounded-full border px-3 py-1 text-[11px] uppercase tracking-widest transition-all";
+      const chipActive = "border-primary/50 bg-primary/15 text-primary shadow-[0_0_12px_rgba(168,85,247,0.25)]";
+      const chipInactive = "border-white/10 bg-surface-container-low/50 text-on-surface-variant hover:border-primary/40 hover:text-primary";
+      prefsWrap.innerHTML = Object.entries(PREF_GROUPS).map(([group, options]) => {
+        const chips = options.map((opt) => {
+          const isOn = (prefs[group] || []).includes(opt);
+          const cls = `${chipBase} ${isOn ? chipActive : chipInactive}`;
+          return `<button type="button" class="${cls}" data-pref-cat="${group}" data-pref-val="${opt}">${opt}</button>`;
+        }).join("");
+        return `
+          <div class="rounded-2xl border border-white/10 bg-white/5 p-3">
+            <div class="text-[10px] uppercase tracking-widest text-on-surface-variant">${group}</div>
+            <div class="mt-2 flex flex-wrap gap-2">${chips}</div>
+          </div>`;
+      }).join("");
+    };
 
     const loadProfile = () => {
       try {
+        const defaultName = `NekoraUser_${getOrCreateUserSuffix()}`;
+        getOrCreateUserId();
         const savedName = localStorage.getItem("anidex_profile_name");
         const savedDesc = localStorage.getItem("anidex_profile_desc");
         const savedColor = localStorage.getItem("anidex_profile_color");
-        if (savedName) nameEl.textContent = savedName;
+        const cleanedName = (savedName || "").trim();
+        if (cleanedName && cleanedName.toLowerCase() !== "animefan99") {
+          nameEl.textContent = cleanedName;
+        } else {
+          nameEl.textContent = defaultName;
+          localStorage.setItem("anidex_profile_name", defaultName);
+        }
         if (savedDesc) descEl.textContent = savedDesc;
         if (savedColor && cardEl) {
           colorClasses.forEach((c) => cardEl.classList.remove(c));
@@ -554,6 +789,9 @@
             if (selected) selected.classList.add("ring-2", "ring-violet-400");
           }
         }
+        const prefs = loadPrefs();
+        renderPrefPicker(prefs);
+        renderPrefDisplay(prefs);
       } catch (e) {}
     };
 
@@ -569,7 +807,8 @@
     };
 
     saveBtn.addEventListener("click", () => {
-      const newName = nameInput.value.trim() || "AnimeFan99";
+      const defaultName = `NekoraUser_${getOrCreateUserSuffix()}`;
+      const newName = nameInput.value.trim() || defaultName;
       const newDesc = descInput.value.trim() || "Curando el mejor shonen desde 2018";
       nameEl.textContent = newName;
       descEl.textContent = newDesc;
@@ -594,7 +833,26 @@
       });
     }
 
-    editBtn.addEventListener("click", openModal);
+    if (prefsWrap) {
+      prefsWrap.addEventListener("click", (e) => {
+        const btn = e.target.closest("[data-pref-cat]");
+        if (!btn) return;
+        const cat = btn.getAttribute("data-pref-cat");
+        const val = btn.getAttribute("data-pref-val");
+        if (!cat || !val) return;
+        const prefs = loadPrefs();
+        const list = new Set(prefs[cat] || []);
+        if (list.has(val)) list.delete(val);
+        else list.add(val);
+        prefs[cat] = Array.from(list);
+        savePrefs(prefs);
+        renderPrefPicker(prefs);
+        renderPrefDisplay(prefs);
+      });
+    }
+
+    if (editBtn) editBtn.addEventListener("click", openModal);
+    if (settingsBtn) settingsBtn.addEventListener("click", openModal);
     closeEls.forEach((el) => el.addEventListener("click", closeModal));
     loadProfile();
   })();
