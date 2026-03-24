@@ -368,6 +368,102 @@
           <a class="group cursor-pointer" href="detail.html"><div class="poster-fade-left relative aspect-[2/3] rounded-lg overflow-hidden bg-surface-container-high relative mb-4 transition-transform duration-500 ease-[cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.04]"><img alt="Tower of God" class="w-full h-full object-cover" data-alt="Anime fantasy poster vertical" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtqxKcGTcymR4IJol4SxeiIj-BJNATnZcsnFB2ZMYRTa74Vr0wv3vAZ6CEWT1rbGPSDGJrUxs1F6uIcQHQ8iKXtmZIvFLACNlD4UPMFWExAc8CUG2cd_tFeTP0tpM1N_eQ0OkRniEpPz16OEyZjUhmIpXAREqccEnQwbppVkAmyIwXrZjM_7S4FmDqxkG50F5ZTWxzmiWTlDi8zorXn_C5j-ZqIId_lDc6EU00FED-4xW5ht_oYkS0j8kh05o0Kt6g_KJgoKmdrqvi"/><div class="absolute top-3 right-3 bg-neutral-950/80 backdrop-blur-md px-2 py-1 rounded-md flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span> <span class="text-xs font-bold">8.1</span></div></div><h4 class="font-bold text-on-surface group-hover:text-primary transition-colors truncate">Tower of God</h4><p class="text-xs text-on-surface-variant mt-1">Adventure, Mystery</p></a>
         </div>
       </section>
+      <!-- Comments Section -->
+      <section class="max-w-7xl mx-auto px-8 pb-32 space-y-8" id="comments-section">
+        <div class="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <h2 class="font-headline text-4xl font-extrabold tracking-tight">Comentarios</h2>
+            <p class="text-on-surface-variant mt-2">Comparte tu opinión y califica el título con estrellitas.</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-[1.1fr,0.9fr] gap-8">
+          <form id="comment-form" class="rounded-3xl border border-white/10 bg-surface-container-low/60 p-6 md:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.4)] space-y-6">
+            <div>
+              <h3 class="font-headline text-2xl font-bold">Deja tu comentario</h3>
+              <p class="text-sm text-on-surface-variant mt-1">Sé breve, claro y respetuoso.</p>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-3">
+              <div class="flex items-center justify-between gap-3">
+                <span class="text-xs uppercase tracking-[0.3em] text-on-surface-variant">Puntuación</span>
+                <span id="rating-value" class="text-sm font-semibold text-on-surface">0/5</span>
+              </div>
+              <div class="flex items-center gap-2" id="rating-stars">
+                <button type="button" class="comment-star text-on-surface-variant transition-all duration-200" data-star="1" aria-label="1 estrella">
+                  <span class="material-symbols-outlined text-[24px] transition-transform duration-200" style="font-variation-settings: 'FILL' 1;">star</span>
+                </button>
+                <button type="button" class="comment-star text-on-surface-variant transition-all duration-200" data-star="2" aria-label="2 estrellas">
+                  <span class="material-symbols-outlined text-[24px] transition-transform duration-200" style="font-variation-settings: 'FILL' 1;">star</span>
+                </button>
+                <button type="button" class="comment-star text-on-surface-variant transition-all duration-200" data-star="3" aria-label="3 estrellas">
+                  <span class="material-symbols-outlined text-[24px] transition-transform duration-200" style="font-variation-settings: 'FILL' 1;">star</span>
+                </button>
+                <button type="button" class="comment-star text-on-surface-variant transition-all duration-200" data-star="4" aria-label="4 estrellas">
+                  <span class="material-symbols-outlined text-[24px] transition-transform duration-200" style="font-variation-settings: 'FILL' 1;">star</span>
+                </button>
+                <button type="button" class="comment-star text-on-surface-variant transition-all duration-200" data-star="5" aria-label="5 estrellas">
+                  <span class="material-symbols-outlined text-[24px] transition-transform duration-200" style="font-variation-settings: 'FILL' 1;">star</span>
+                </button>
+              </div>
+              <p id="rating-help" class="text-xs text-on-surface-variant">Selecciona tu calificación antes de comentar.</p>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-2">
+              <label for="comment-text" class="text-xs uppercase tracking-[0.3em] text-on-surface-variant">Tu comentario</label>
+              <textarea id="comment-text" rows="4" maxlength="400" class="w-full bg-transparent border border-white/10 rounded-2xl px-4 py-3 text-sm text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:ring-2 focus:ring-primary/40" placeholder="Escribe algo que ayude a otros fans..."></textarea>
+              <div class="flex items-center justify-between text-xs text-on-surface-variant">
+                <span id="comment-error" class="hidden text-rose-300">Agrega una puntuación y un comentario.</span>
+                <span id="comment-count">0/400</span>
+              </div>
+            </div>
+            <div class="flex flex-wrap items-center gap-4">
+              <button type="submit" id="comment-submit" class="rounded-full bg-gradient-to-br from-sky-500 to-violet-500 px-6 py-3 text-sm font-bold uppercase tracking-widest text-white shadow-lg hover:scale-105 active:scale-95 transition-transform">Publicar</button>
+              <span class="text-xs text-on-surface-variant">Tu opinión ayuda a la comunidad.</span>
+            </div>
+          </form>
+          <div class="rounded-3xl border border-white/10 bg-surface-container-low/60 p-6 md:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.4)] space-y-4">
+            <div class="flex items-center justify-between">
+              <h3 class="font-headline text-2xl font-bold">Opiniones recientes</h3>
+              <div class="flex items-center gap-3">
+                <label class="flex items-center gap-2 rounded-full border border-white/10 bg-surface-container-high/70 px-3 py-1 text-xs text-on-surface-variant shadow-[0_8px_18px_rgba(0,0,0,0.25)]">
+                  <span class="uppercase tracking-widest">Filtro</span>
+                  <select id="comments-filter" class="bg-surface-container-high text-xs text-on-surface border border-white/10 rounded-full px-2 py-0.5 focus:outline-none focus:ring-2 focus:ring-primary/40">
+                    <option value="0">Todas</option>
+                    <option value="5">5 estrellas</option>
+                    <option value="4">4 estrellas</option>
+                    <option value="3">3 estrellas</option>
+                    <option value="2">2 estrellas</option>
+                    <option value="1">1 estrella</option>
+                  </select>
+                </label>
+                <span id="comments-total" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-on-surface-variant">0 comentarios</span>
+              </div>
+            </div>
+            <div id="comments-list" class="space-y-4"></div>
+            <div id="comments-more-wrap" class="hidden pt-2 flex justify-center">
+              <button id="comments-more" type="button" class="rounded-full border border-white/10 bg-white/5 px-5 py-2 text-xs font-semibold uppercase tracking-widest text-on-surface-variant hover:border-primary/50 hover:text-primary transition-all">Ver más comentarios</button>
+            </div>
+          </div>
+          <div id="report-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 px-6">
+            <div class="w-[260px] max-w-[260px] rounded-2xl border border-white/10 bg-surface-container-high p-4 shadow-[0_24px_60px_rgba(0,0,0,0.45)] space-y-3">
+              <div class="flex items-center justify-between">
+                <h4 class="text-lg font-semibold">Reportar comentario</h4>
+                <button id="report-close" type="button" class="w-8 h-8 rounded-full border border-white/10 bg-white/5 text-on-surface-variant hover:text-on-surface">✕</button>
+              </div>
+              <p id="report-snippet" class="text-xs text-on-surface-variant line-clamp-3"></p>
+              <div class="space-y-2 text-sm">
+                <label class="flex items-center gap-2"><input type="radio" name="report-reason" value="Spam o publicidad" class="accent-primary">Spam o publicidad</label>
+                <label class="flex items-center gap-2"><input type="radio" name="report-reason" value="Lenguaje ofensivo" class="accent-primary">Lenguaje ofensivo</label>
+                <label class="flex items-center gap-2"><input type="radio" name="report-reason" value="Spoilers" class="accent-primary">Spoilers</label>
+                <label class="flex items-center gap-2"><input type="radio" name="report-reason" value="Contenido inapropiado" class="accent-primary">Contenido inapropiado</label>
+                <label class="flex items-center gap-2"><input type="radio" name="report-reason" value="Otro motivo" class="accent-primary">Otro motivo</label>
+              </div>
+              <div class="flex items-center justify-end gap-2 pt-2">
+                <button id="report-cancel" type="button" class="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs uppercase tracking-widest text-on-surface-variant hover:text-on-surface">Cancelar</button>
+                <button id="report-submit" type="button" class="rounded-full bg-gradient-to-br from-sky-500 to-violet-500 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white opacity-50 pointer-events-none">Enviar reporte</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
     <!-- Footer Component -->
     <div data-layout="footer"></div>
@@ -388,6 +484,395 @@
     if (window.AniDexDetailLinks) window.AniDexDetailLinks.init();
     if (window.AniDexDetailData) window.AniDexDetailData.init();
   });
+    </script>
+    <script>
+  (function () {
+    const form = document.getElementById("comment-form");
+    const textarea = document.getElementById("comment-text");
+    const count = document.getElementById("comment-count");
+    const error = document.getElementById("comment-error");
+    const list = document.getElementById("comments-list");
+    const total = document.getElementById("comments-total");
+    const moreWrap = document.getElementById("comments-more-wrap");
+    const moreBtn = document.getElementById("comments-more");
+    const filterSelect = document.getElementById("comments-filter");
+    const reportModal = document.getElementById("report-modal");
+    const reportClose = document.getElementById("report-close");
+    const reportCancel = document.getElementById("report-cancel");
+    const reportSubmit = document.getElementById("report-submit");
+    const reportSnippet = document.getElementById("report-snippet");
+    const stars = Array.from(document.querySelectorAll(".comment-star"));
+    const starsWrap = document.getElementById("rating-stars");
+    const ratingValue = document.getElementById("rating-value");
+    const submitBtn = document.getElementById("comment-submit");
+    if (!form || !textarea || !list || !total || !ratingValue) return;
+
+    let rating = 0;
+    let hoverRating = 0;
+    const key = `anidex_comments_${document.title || "detail"}`;
+    let visibleCount = 3;
+    let filterRating = 0;
+    let reportTargetButton = null;
+    if (filterSelect) {
+      filterSelect.addEventListener("change", () => {
+        filterRating = Number(filterSelect.value || 0);
+        visibleCount = 3;
+        renderComments();
+      });
+    }
+    if (moreBtn) {
+      moreBtn.addEventListener("click", () => {
+        visibleCount += 3;
+        renderComments();
+      });
+    }
+    const getMalId = () => {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get("mal_id") || params.get("id");
+      return id && /^\d+$/.test(id) ? id : null;
+    };
+    const getProfileName = () => {
+      const raw = localStorage.getItem("anidex_profile_name");
+      const clean = (raw || "").trim();
+      return clean || "NekoraUser";
+    };
+    const updateSubmitState = () => {
+      if (!submitBtn) return;
+      const disabled = rating === 0 || textarea.value.trim().length === 0;
+      submitBtn.disabled = disabled;
+      submitBtn.classList.toggle("opacity-50", disabled);
+      submitBtn.classList.toggle("pointer-events-none", disabled);
+    };
+
+    const paintStars = (value, isHover) => {
+      stars.forEach((btn) => {
+        const val = Number(btn.dataset.star || 0);
+        const active = val <= value;
+        btn.classList.toggle("text-yellow-300", active && isHover);
+        btn.classList.toggle("text-yellow-400", active && !isHover);
+        btn.classList.toggle("text-on-surface-variant", !active);
+        const icon = btn.querySelector(".material-symbols-outlined");
+        if (icon) {
+          icon.classList.toggle("-translate-y-0.5", active);
+        }
+      });
+    };
+
+    const setRating = (value) => {
+      rating = value;
+      paintStars(rating, false);
+      ratingValue.textContent = `${rating}/5`;
+      updateSubmitState();
+    };
+
+    const loadComments = () => {
+      try {
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : [];
+      } catch {
+        return [];
+      }
+    };
+    const saveComments = (items) => {
+      try {
+        localStorage.setItem(key, JSON.stringify(items));
+      } catch {}
+    };
+
+    let jikanCache = null;
+    const formatDate = (value) => {
+      if (!value) return "";
+      try {
+        return new Date(value).toLocaleDateString("es-ES", { day: "2-digit", month: "short", year: "numeric" });
+      } catch {
+        return String(value);
+      }
+    };
+    const truncate = (text, max = 200) => {
+      const clean = String(text || "").replace(/\s+/g, " ").trim();
+      if (!clean) return "";
+      if (clean.length <= max) return clean;
+      const slice = clean.slice(0, max).trim();
+      const lastPeriod = slice.lastIndexOf(".");
+      if (lastPeriod > 20) {
+        return slice.slice(0, lastPeriod + 1).trim();
+      }
+      const trimmed = slice.replace(/[.!?]+$/, "").trim();
+      return trimmed ? `${trimmed}.` : ".";
+    };
+    const translationCacheKey = "jikan_review_translations_v1";
+    const loadTranslationCache = () => {
+      try {
+        const raw = localStorage.getItem(translationCacheKey);
+        return raw ? JSON.parse(raw) : {};
+      } catch {
+        return {};
+      }
+    };
+    const saveTranslationCache = (cache) => {
+      try {
+        localStorage.setItem(translationCacheKey, JSON.stringify(cache));
+      } catch {}
+    };
+    const isLikelySpanish = (text) => {
+      const lower = String(text || "").toLowerCase();
+      if (/[áéíóúñü]/.test(lower)) return true;
+      const hits = [" el ", " la ", " de ", " que ", " y ", " en ", " los ", " las ", " un ", " una ", " para ", " con ", " por ", " como "];
+      let count = 0;
+      hits.forEach((word) => {
+        if (lower.includes(word)) count += 1;
+      });
+      return count >= 2;
+    };
+    let translationCache = loadTranslationCache();
+    const translateToSpanish = async (text) => {
+      const clean = String(text || "").replace(/\s+/g, " ").trim();
+      if (!clean) return "";
+      if (isLikelySpanish(clean)) return clean;
+      if (translationCache[clean]) return translationCache[clean];
+      try {
+        const query = encodeURIComponent(clean.slice(0, 500));
+        const res = await fetch(`https://api.mymemory.translated.net/get?q=${query}&langpair=en|es`);
+        if (!res.ok) return "";
+        const json = await res.json();
+        let translated = String(json?.responseData?.translatedText || "").replace(/\s+/g, " ").trim();
+        if (!translated) return "";
+        if (!isLikelySpanish(translated) && translated.toLowerCase() === clean.toLowerCase()) {
+          return "";
+        }
+        translationCache[clean] = translated;
+        saveTranslationCache(translationCache);
+        return translated;
+      } catch {
+        return "";
+      }
+    };
+    const fetchJikanReviews = async () => {
+      const malId = getMalId();
+      if (!malId) return [];
+      try {
+        const res = await fetch(`https://api.jikan.moe/v4/anime/${malId}/reviews?page=1&preliminary=true`);
+        if (!res.ok) return [];
+        const json = await res.json();
+        const data = Array.isArray(json?.data) ? json.data : [];
+        const mapped = data.slice(0, 6).map((review) => {
+          const score = Number(review?.score || 0);
+          const rating = score ? Math.max(1, Math.round(score / 2)) : 0;
+          const rawText = String(review?.review || "").trim();
+          return {
+            author: review?.user?.username || "",
+            rating,
+            date: formatDate(review?.date),
+            text: rawText || "",
+            source: "jikan"
+          };
+        });
+        for (const item of mapped) {
+          if (!item.text) {
+            item.text = "Comentario no disponible en español.";
+            continue;
+          }
+          const translated = await translateToSpanish(item.text);
+          item.text = translated ? truncate(translated) : "Comentario no disponible en español.";
+        }
+        return mapped;
+      } catch {
+        return [];
+      }
+    };
+    const loadJikanReviews = async () => {
+      if (jikanCache) return jikanCache;
+      jikanCache = await fetchJikanReviews();
+      return jikanCache;
+    };
+
+    const renderComments = async () => {
+      const rawItems = loadComments();
+      const localItems = rawItems.filter((item) => (item.author || "").trim().length > 0);
+      if (localItems.length !== rawItems.length) {
+        saveComments(localItems);
+      }
+      const localMapped = localItems.map((item, idx) => ({ ...item, source: "local", localIndex: idx }));
+      const remoteItems = await loadJikanReviews();
+      const items = [...localMapped, ...remoteItems];
+      const filtered = filterRating ? items.filter((item) => Number(item.rating) === filterRating) : items;
+      total.textContent = `${filtered.length} comentario${filtered.length === 1 ? "" : "s"}`;
+      if (!filtered.length) {
+        list.innerHTML = "";
+        if (moreWrap) moreWrap.classList.add("hidden");
+        return;
+      }
+      const currentUser = getProfileName();
+      const visibleItems = filtered.slice(0, Math.min(visibleCount, filtered.length));
+      list.innerHTML = visibleItems.map((item) => {
+        const ratingNum = Number(item.rating) || 0;
+        const starsHtml = Array.from({ length: 5 }).map((_, i) => {
+          const on = i < ratingNum;
+          return `<span class="material-symbols-outlined text-[16px] ${on ? "text-yellow-400" : "text-on-surface-variant"}" style="font-variation-settings: 'FILL' 1;">star</span>`;
+        }).join("");
+        const author = (item.author || "").trim();
+        const canDelete = item.source === "local" && author && author === currentUser;
+        const authorHtml = author
+          ? `<div class="text-sm font-semibold text-amber-200">${author}</div>`
+          : "";
+        const reportLabel = item.source === "jikan" ? "Reportar" : "Reportar";
+        return `
+          <div class="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-2">
+            <div class="flex items-center justify-between gap-3">
+              <div>
+                ${authorHtml}
+                <div class="flex items-center gap-1">${starsHtml}</div>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs text-on-surface-variant">${item.date}</span>
+                <button type="button" class="text-xs text-sky-200 hover:text-sky-100" data-comment-report data-comment-author="${author}" data-comment-text="${String(item.text || "").slice(0, 120).replace(/\"/g, "&quot;")}">${reportLabel}</button>
+                ${canDelete ? `<button type="button" class="text-xs text-rose-300 hover:text-rose-200" data-comment-delete="${item.localIndex}">Eliminar</button>` : ""}
+              </div>
+            </div>
+            <p class="text-sm text-on-surface leading-relaxed">${item.text}</p>
+          </div>`;
+      }).join("");
+      list.querySelectorAll("[data-comment-delete]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const index = Number(btn.getAttribute("data-comment-delete"));
+          const itemsNow = loadComments();
+          itemsNow.splice(index, 1);
+          saveComments(itemsNow);
+          renderComments();
+        });
+      });
+      list.querySelectorAll("[data-comment-report]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          if (!reportModal) return;
+          reportTargetButton = btn;
+          const preview = btn.getAttribute("data-comment-text") || "";
+          reportSnippet.textContent = preview;
+          reportModal.classList.remove("hidden");
+          reportModal.classList.add("flex");
+          reportSubmit.classList.add("opacity-50", "pointer-events-none");
+          reportModal.querySelectorAll("input[name='report-reason']").forEach((input) => {
+            input.checked = false;
+          });
+        });
+      });
+      if (moreWrap) {
+        if (filtered.length > visibleCount) {
+          moreWrap.classList.remove("hidden");
+        } else {
+          moreWrap.classList.add("hidden");
+        }
+      }
+    };
+    const closeReport = () => {
+      if (!reportModal) return;
+      reportModal.classList.add("hidden");
+      reportModal.classList.remove("flex");
+      reportTargetButton = null;
+    };
+    if (reportModal) {
+      reportModal.addEventListener("click", (event) => {
+        if (event.target === reportModal) closeReport();
+      });
+    }
+    if (reportClose) reportClose.addEventListener("click", closeReport);
+    if (reportCancel) reportCancel.addEventListener("click", closeReport);
+    if (reportModal) {
+      reportModal.querySelectorAll("input[name='report-reason']").forEach((input) => {
+        input.addEventListener("change", () => {
+          if (!reportSubmit) return;
+          reportSubmit.classList.remove("opacity-50", "pointer-events-none");
+        });
+      });
+    }
+    if (reportSubmit) {
+      reportSubmit.addEventListener("click", () => {
+        if (!reportTargetButton) return;
+        reportTargetButton.innerHTML = '<span class="material-symbols-outlined text-[14px]">flag</span><span>Reportado</span>';
+        reportTargetButton.classList.add("text-rose-300");
+        reportTargetButton.classList.remove("text-sky-200");
+        reportTargetButton.classList.add("inline-flex", "items-center", "gap-1");
+        reportTargetButton.disabled = true;
+        closeReport();
+      });
+    }
+
+    stars.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        hoverRating = 0;
+        setRating(Number(btn.dataset.star || 0));
+      });
+      btn.addEventListener("mouseenter", () => {
+        hoverRating = Number(btn.dataset.star || 0);
+        paintStars(hoverRating, true);
+        ratingValue.textContent = `${hoverRating}/5`;
+      });
+    });
+    if (starsWrap) {
+      starsWrap.addEventListener("mousemove", (e) => {
+        const target = e.target.closest(".comment-star");
+        if (!target) return;
+        const val = Number(target.dataset.star || 0);
+        if (val !== hoverRating) {
+          hoverRating = val;
+          paintStars(hoverRating, true);
+          ratingValue.textContent = `${hoverRating}/5`;
+        }
+      });
+      starsWrap.addEventListener("mouseleave", () => {
+        hoverRating = 0;
+        paintStars(rating, false);
+        ratingValue.textContent = `${rating}/5`;
+      });
+    }
+
+    const normalizeWords = (text) =>
+      text
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean);
+    const clampWords = (text, limit) => {
+      const words = normalizeWords(text);
+      if (words.length <= limit) return { text, words };
+      const trimmed = words.slice(0, limit).join(" ");
+      return { text: trimmed, words: trimmed ? normalizeWords(trimmed) : [] };
+    };
+    const updateCount = () => {
+      const words = normalizeWords(textarea.value);
+      count.textContent = `${words.length}/200 palabras`;
+      updateSubmitState();
+    };
+    textarea.addEventListener("input", () => {
+      const { text, words } = clampWords(textarea.value, 200);
+      if (textarea.value !== text) textarea.value = text;
+      count.textContent = `${words.length}/200 palabras`;
+      updateSubmitState();
+    });
+    updateCount();
+    renderComments();
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const text = textarea.value.trim();
+      if (!text || rating === 0) {
+        if (error) error.classList.remove("hidden");
+        return;
+      }
+      if (error) error.classList.add("hidden");
+      const items = loadComments();
+      items.unshift({
+        text,
+        rating,
+        author: getProfileName(),
+        date: new Date().toLocaleDateString("es-ES", { day: "2-digit", month: "short", year: "numeric" })
+      });
+      saveComments(items);
+      textarea.value = "";
+      setRating(0);
+      updateCount();
+      renderComments();
+    });
+    updateSubmitState();
+  })();
     </script>
     <script data-ui-unlock>document.documentElement.classList.remove("preload-ui");</script>
   </body></html>

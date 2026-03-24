@@ -83,6 +83,44 @@
     document.querySelectorAll("[data-count-favorites]").forEach((el) => {
       el.textContent = String(favCount);
     });
+    document.querySelectorAll('[data-open-list="my-list"]').forEach((btn) => {
+      btn.disabled = myCount === 0;
+      btn.classList.toggle("is-disabled", myCount === 0);
+    });
+    document.querySelectorAll('[data-open-list="favorites"]').forEach((btn) => {
+      btn.disabled = favCount === 0;
+      btn.classList.toggle("is-disabled", favCount === 0);
+    });
+    return { myCount, favCount };
+  };
+  const closeIfOpen = (modal) => {
+    if (!modal) return;
+    modal.classList.add("hidden");
+    document.body.style.overflow = "";
+  };
+  const closeEmptyModals = ({ myCount, favCount, completed, pending }) => {
+    const listsModal = document.getElementById("lists-modal");
+    if (listsModal && !listsModal.classList.contains("hidden")) {
+      const myWrap = document.getElementById("my-list-modal");
+      const favWrap = document.getElementById("favorites-modal");
+      if (myWrap && !myWrap.classList.contains("hidden") && myCount === 0) {
+        closeIfOpen(listsModal);
+      }
+      if (favWrap && !favWrap.classList.contains("hidden") && favCount === 0) {
+        closeIfOpen(listsModal);
+      }
+    }
+    const statusModal = document.getElementById("status-modal");
+    if (statusModal && !statusModal.classList.contains("hidden")) {
+      const completedWrap = document.getElementById("completed-section");
+      const pendingWrap = document.getElementById("pending-section");
+      if (completedWrap && !completedWrap.classList.contains("hidden") && completed === 0) {
+        closeIfOpen(statusModal);
+      }
+      if (pendingWrap && !pendingWrap.classList.contains("hidden") && pending === 0) {
+        closeIfOpen(statusModal);
+      }
+    }
   };
   const updateStatusCounters = () => {
     const { completed, pending } = calcStatusCounts();
@@ -92,7 +130,16 @@
     document.querySelectorAll("[data-count-pending]").forEach((el) => {
       el.textContent = String(pending);
     });
-    updateListCounters();
+    document.querySelectorAll('[data-open-status="completed"]').forEach((btn) => {
+      btn.disabled = completed === 0;
+      btn.classList.toggle("is-disabled", completed === 0);
+    });
+    document.querySelectorAll('[data-open-status="pending"]').forEach((btn) => {
+      btn.disabled = pending === 0;
+      btn.classList.toggle("is-disabled", pending === 0);
+    });
+    const { myCount, favCount } = updateListCounters();
+    closeEmptyModals({ myCount, favCount, completed, pending });
   };
 
   const syncStatusEverywhere = (item, status) => {
@@ -299,7 +346,7 @@
     const visible = showAll ? list : list.slice(0, 8);
     if (!list.length) {
       grid.innerHTML = `
-        <div class="col-span-full bg-surface-container-low rounded-2xl p-6 flex flex-col items-center text-center gap-3">
+        <div class="col-span-full bg-surface-container-low rounded-2xl p-6 flex flex-col items-center text-center gap-3 w-full max-w-md mx-auto justify-self-center">
           <img src="https://media1.tenor.com/m/2jDTzP6EqAwAAAAd/doraemon-cries.gif" alt="Doraemon triste" class="w-20 h-20 rounded-full opacity-90" />
           <p class="text-sm text-on-surface-variant font-semibold">No hay nada aún agregado.</p>
         </div>`;
@@ -307,10 +354,10 @@
     }
     grid.innerHTML = visible.map((it) => {
       const cardClass = showAll
-        ? "group cursor-pointer relative z-0 transition-transform duration-300 hover:scale-[1.02] rounded-2xl bg-surface-container-low/60 border border-white/5 p-3"
-        : "group cursor-pointer overflow-visible relative z-0 hover:z-50 w-36 shrink-0 transition-transform duration-300 hover:scale-[1.04]";
+        ? "group cursor-pointer relative z-0 transition-transform duration-300 hover:scale-[1.02] rounded-2xl bg-surface-container-low/60 border border-white/5 p-1.5 hover:bg-surface-container-high/80 hover:border-violet-400/40 hover:shadow-[0_0_24px_rgba(139,92,246,0.35)] flex flex-col"
+        : "group cursor-pointer overflow-visible relative z-0 hover:z-50 flex-none basis-[calc((100%-4rem)/5)] max-w-[calc((100%-4rem)/5)] transition-transform duration-300 hover:scale-[1.04] rounded-2xl bg-surface-container-low/50 border border-white/5 p-2 hover:bg-surface-container-high/70 hover:border-violet-400/40 hover:shadow-[0_0_24px_rgba(139,92,246,0.35)] hover:ring-2 hover:ring-violet-400/80 snap-start";
       const titleClass = showAll
-        ? "text-sm font-bold leading-tight mt-2"
+        ? "text-[12px] font-semibold leading-tight mt-1"
         : "text-sm font-bold truncate px-1";
       const status = getStatusForTitle(it.title) || it.status || "";
       const isCompleted = status === "completed";
@@ -326,7 +373,7 @@
       const removeTip = "Eliminar de Mi Lista";
       return `
       <div class="${cardClass}" data-detail-title="${it.title}" data-detail-id="${it.mal_id || ""}" data-detail-img="${it.image || ""}">
-        <div class="aspect-[2/3] rounded-lg relative mb-2 z-0 isolate transition-all duration-300 ring-1 ring-white/10 group-hover:ring-violet-400/70 group-hover:shadow-[0_0_25px_rgba(139,92,246,0.45)]">
+        <div class="${showAll ? "aspect-[5/8]" : "aspect-[2/3]"} rounded-lg relative mb-2 z-0 isolate transition-all duration-300 ring-1 ring-white/10 group-hover:ring-violet-400/70 group-hover:shadow-[0_0_25px_rgba(139,92,246,0.45)]">
           <div class="absolute inset-0 rounded-lg overflow-hidden bg-surface-container-high z-0 pointer-events-none">
             <img alt="${it.title}" class="w-full h-full object-cover" src="${it.image || ""}"/>
           </div>
@@ -419,13 +466,14 @@
       const showAll = document.body?.dataset?.showAllLists === "1" || grid.dataset.showAll === "1";
       renderMyListGrid(grid, list, showAll);
     });
+    if (window.refreshUserCarousels) window.refreshUserCarousels();
   };
 
   const renderFavoritesGrid = (grid, list, showAll) => {
     const visible = showAll ? list : list.slice(0, 8);
     if (!list.length) {
       grid.innerHTML = `
-        <div class="col-span-full bg-surface-container-low rounded-2xl p-6 flex flex-col items-center text-center gap-3">
+        <div class="col-span-full bg-surface-container-low rounded-2xl p-6 flex flex-col items-center text-center gap-3 w-full max-w-md mx-auto justify-self-center">
           <img src="https://media1.tenor.com/m/2jDTzP6EqAwAAAAd/doraemon-cries.gif" alt="Doraemon triste" class="w-20 h-20 rounded-full opacity-90" />
           <p class="text-sm text-on-surface-variant font-semibold">No hay nada aún agregado.</p>
         </div>`;
@@ -433,10 +481,10 @@
     }
     grid.innerHTML = visible.map((it) => {
       const cardClass = showAll
-        ? "group cursor-pointer relative z-0 transition-transform duration-300 hover:scale-[1.02] rounded-2xl bg-surface-container-low/60 border border-white/5 p-3"
-        : "group cursor-pointer overflow-visible relative z-0 hover:z-50 w-36 shrink-0 transition-transform duration-300 hover:scale-[1.04]";
+        ? "group cursor-pointer relative z-0 transition-transform duration-300 hover:scale-[1.02] rounded-2xl bg-surface-container-low/60 border border-white/5 p-1.5 hover:bg-surface-container-high/80 hover:border-violet-400/40 hover:shadow-[0_0_24px_rgba(139,92,246,0.35)] flex flex-col"
+        : "group cursor-pointer overflow-visible relative z-0 hover:z-50 flex-none basis-[calc((100%-4rem)/5)] max-w-[calc((100%-4rem)/5)] transition-transform duration-300 hover:scale-[1.04] rounded-2xl bg-surface-container-low/50 border border-white/5 p-2 hover:bg-surface-container-high/70 hover:border-violet-400/40 hover:shadow-[0_0_24px_rgba(139,92,246,0.35)] hover:ring-2 hover:ring-violet-400/80 snap-start";
       const titleClass = showAll
-        ? "text-sm font-bold leading-tight mt-2"
+        ? "text-[12px] font-semibold leading-tight mt-1"
         : "text-sm font-bold truncate px-1";
       const status = getStatusForTitle(it.title) || it.status || "";
       const isCompleted = status === "completed";
@@ -452,7 +500,7 @@
       const removeTip = "Eliminar de Favoritos";
       return `
       <div class="${cardClass}" data-detail-title="${it.title}" data-detail-id="${it.mal_id || ""}" data-detail-img="${it.image || ""}">
-        <div class="aspect-[2/3] rounded-lg relative mb-2 z-0 isolate transition-all duration-300 ring-1 ring-white/10 group-hover:ring-violet-400/70 group-hover:shadow-[0_0_25px_rgba(139,92,246,0.45)]">
+        <div class="${showAll ? "aspect-[5/8]" : "aspect-[2/3]"} rounded-lg relative mb-2 z-0 isolate transition-all duration-300 ring-1 ring-white/10 group-hover:ring-violet-400/70 group-hover:shadow-[0_0_25px_rgba(139,92,246,0.45)]">
           <div class="absolute inset-0 rounded-lg overflow-hidden bg-surface-container-high z-0 pointer-events-none">
             <img alt="${it.title}" class="w-full h-full object-cover" src="${it.image || ""}"/>
           </div>
@@ -545,6 +593,7 @@
       const showAll = document.body?.dataset?.showAllLists === "1" || grid.dataset.showAll === "1";
       renderFavoritesGrid(grid, list, showAll);
     });
+    if (window.refreshUserCarousels) window.refreshUserCarousels();
   };
 
   const renderStatusGrid = (grid, statusFilter) => {
@@ -558,8 +607,8 @@
       return;
     }
     grid.innerHTML = list.map((it) => `
-      <div class="group cursor-pointer relative z-0 transition-transform duration-300 hover:scale-[1.02] rounded-2xl bg-surface-container-low/60 border border-white/5 p-3" data-detail-title="${it.title}" data-detail-id="${it.mal_id || ""}" data-detail-img="${it.image || ""}">
-        <div class="aspect-[2/3] rounded-lg relative mb-2 z-0 isolate transition-all duration-300 ring-1 ring-white/10 group-hover:ring-violet-400/70 group-hover:shadow-[0_0_25px_rgba(139,92,246,0.45)]">
+      <div class="group cursor-pointer relative z-0 transition-transform duration-300 hover:scale-[1.02] rounded-2xl bg-surface-container-low/60 border border-white/5 p-1.5 hover:bg-surface-container-high/80 hover:border-violet-400/40 hover:shadow-[0_0_24px_rgba(139,92,246,0.35)] flex flex-col" data-detail-title="${it.title}" data-detail-id="${it.mal_id || ""}" data-detail-img="${it.image || ""}">
+        <div class="aspect-[5/8] rounded-lg relative mb-2 z-0 isolate transition-all duration-300 ring-1 ring-white/10 group-hover:ring-violet-400/70 group-hover:shadow-[0_0_25px_rgba(139,92,246,0.45)]">
           <div class="absolute inset-0 rounded-lg overflow-hidden bg-surface-container-high z-0 pointer-events-none">
             <img alt="${it.title}" class="w-full h-full object-cover" src="${it.image || ""}"/>
           </div>
@@ -569,7 +618,7 @@
             <span class="pointer-events-none absolute left-1/2 top-full mt-2 -translate-x-1/2 whitespace-nowrap rounded-md bg-black/90 px-2 py-1 text-[10px] font-semibold uppercase tracking-widest text-white opacity-0 transition-opacity duration-150 group-hover/remove:opacity-100 z-50">${statusFilter === "completed" ? "Eliminar de Completados" : "Eliminar de Pendientes"}</span>
           </button>
         </div>
-        <h5 class="text-sm font-bold leading-tight mt-2">${it.title}</h5>
+        <h5 class="text-[12px] font-semibold leading-tight mt-1">${it.title}</h5>
       </div>`).join("");
 
     grid.querySelectorAll("[data-remove-status]").forEach((b) => {
