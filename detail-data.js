@@ -230,6 +230,7 @@ const AniDexDetailDataBoot = () => {
   };
 
   const init = async () => {
+    const isLogged = localStorage.getItem("nekora_logged_in") === "true";
     const params = new URLSearchParams(location.search);
     const query = params.get("q") || document.querySelector("h1")?.textContent?.trim() || "Solo Leveling";
     const malIdParam = params.get("mal_id");
@@ -253,6 +254,11 @@ const AniDexDetailDataBoot = () => {
     const chars = (await byId(selectedId, "characters")) || [];
     const vids = (await byId(selectedId, "videos")) || {};
     const pics = (await byId(selectedId, "pictures")) || [];
+    const forceTitles = [
+      "Jujutsu Kaisen: Shimetsu Kaiyuu - Zenpen"
+    ];
+    const requestedTitle = preTitle || query || "";
+    const forceTitle = forceTitles.find((t) => norm(t) === norm(requestedTitle));
     const override = DETAIL_OVERRIDES[selectedId];
     if (override) {
       if (override.title) {
@@ -261,6 +267,10 @@ const AniDexDetailDataBoot = () => {
       }
       if (override.synopsis) full.synopsis = override.synopsis;
       if (override.episodes) full.episodes = override.episodes;
+    }
+    if (forceTitle) {
+      full.title = forceTitle;
+      full.title_english = forceTitle;
     }
 
     const preferredTitle = full.title_english || full.title || full.title_japanese || "Anime";
@@ -328,12 +338,6 @@ const AniDexDetailDataBoot = () => {
     const trailerConfigByTitle = {
       "Frieren: Beyond Journey's End Season 2": {
         src: "https://o.uguu.se/kRQnonbl.mp4",
-        bgVideo: true,
-        showPlay: false,
-        originalQuality: true
-      },
-      "Jujutsu Kaisen: The Culling Game Part 1": {
-        src: "trailer/jjk.mp4",
         bgVideo: true,
         showPlay: false,
         originalQuality: true
@@ -673,6 +677,32 @@ const AniDexDetailDataBoot = () => {
       let shown = 0;
       const pageSize = 10;
       let bindEpisodeCards = null;
+      const lockEpisodes = () => {
+        const cards = Array.from(episodesSection.querySelectorAll(".episode-card"));
+        cards.forEach((card) => {
+          if (card.hasAttribute("data-episode-video")) return;
+          if (card.dataset.locked) return;
+          card.dataset.locked = "1";
+          card.classList.add("relative", "overflow-hidden", "cursor-not-allowed", "transition-transform", "duration-300", "hover:-translate-y-1", "hover:shadow-[0_10px_26px_rgba(0,0,0,0.4)]");
+          card.insertAdjacentHTML(
+            "beforeend",
+            `<div class="absolute inset-0 bg-black/60 backdrop-blur-[1px] flex flex-col items-center justify-center gap-2 text-center px-4">
+              <span class="material-symbols-outlined text-[28px] text-white">lock</span>
+              <button type="button" class="text-xs font-semibold uppercase tracking-widest text-on-surface hover:text-white transition-colors" data-episode-login>
+                Inicia Sesion y accede al modo premium para ver los episodios
+              </button>
+            </div>`
+          );
+          const loginBtn = card.querySelector("[data-episode-login]");
+          const overlay = card.querySelector(".absolute.inset-0");
+          const goRegister = (e) => {
+            e.stopPropagation();
+            window.location.href = "registro.html";
+          };
+          if (loginBtn) loginBtn.addEventListener("click", goRegister);
+          if (overlay) overlay.addEventListener("click", goRegister);
+        });
+      };
       const ensureEpisodeHoverFix = () => {
         if (document.getElementById("episode-hover-fix")) return;
         const style = document.createElement("style");
@@ -704,6 +734,10 @@ const AniDexDetailDataBoot = () => {
           moreBtn?.classList.add("hidden");
         } else {
           moreBtn?.classList.remove("hidden");
+        }
+        if (!isLogged) {
+          lockEpisodes();
+          return;
         }
         if (typeof bindEpisodeCards === "function") {
           bindEpisodeCards();
@@ -852,7 +886,9 @@ const AniDexDetailDataBoot = () => {
         }
       };
 
-      bindEpisodeCards();
+      if (isLogged) {
+        bindEpisodeCards();
+      }
       if (videoCard && episodeModal) {
         const player = episodeModal.querySelector("[data-episode-video-player]");
         const source = episodeModal.querySelector("[data-episode-video-source]");

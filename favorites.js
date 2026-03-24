@@ -3,6 +3,10 @@
   const KEY_FAVORITES = "anidex_favorites_v1";
   const KEY_STATUS = "anidex_status_v1";
   const norm = (v) => (v || "").toLowerCase().trim();
+  const pathName = window.location.pathname.toLowerCase();
+  const isDetailPage = pathName.includes("detail");
+  const isIndexPage = pathName.endsWith("/index.html") || pathName.endsWith("index.html") || pathName === "/" || pathName === "";
+  const isLoggedIn = localStorage.getItem("nekora_logged_in") === "true";
 
   const readKey = (k) => {
     try { return JSON.parse(localStorage.getItem(k) || "[]"); }
@@ -290,6 +294,10 @@
   };
 
   const refreshMyListButtonState = (btn) => {
+    if (!isLoggedIn && (isDetailPage || isIndexPage)) {
+      setMyListDefaultState(btn);
+      return;
+    }
     const t = getButtonTitle(btn);
     if (!t) return;
     if (exists(KEY_MY_LIST, t)) setMyListAddedState(btn);
@@ -306,6 +314,14 @@
     document.querySelectorAll("[data-add-my-list]").forEach((btn) => {
       if (btn.dataset.boundMyList === "1") return;
       btn.dataset.boundMyList = "1";
+      if (!isLoggedIn && (isDetailPage || isIndexPage)) {
+        setMyListDefaultState(btn);
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
+          window.location.href = "registro.html";
+        });
+        return;
+      }
       refreshMyListButtonState(btn);
       btn.addEventListener("click", (e) => {
         e.preventDefault();

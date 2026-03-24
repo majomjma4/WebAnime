@@ -505,6 +505,7 @@
     const starsWrap = document.getElementById("rating-stars");
     const ratingValue = document.getElementById("rating-value");
     const submitBtn = document.getElementById("comment-submit");
+    const isLogged = localStorage.getItem("nekora_logged_in") === "true";
     if (!form || !textarea || !list || !total || !ratingValue) return;
 
     let rating = 0;
@@ -513,6 +514,44 @@
     let visibleCount = 3;
     let filterRating = 0;
     let reportTargetButton = null;
+    if (!isLogged) {
+      form.classList.add("relative", "overflow-hidden");
+      form.insertAdjacentHTML(
+        "afterbegin",
+        `<div class="absolute inset-0 bg-black/55 backdrop-blur-[1px] flex items-center justify-center z-10">
+          <button type="button" class="flex items-center gap-2 rounded-full bg-surface-container-high/80 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-on-surface hover:bg-surface-container-high transition-colors" data-comment-login>
+            <span class="material-symbols-outlined text-base">lock</span>
+            Inicia sesión para comentar
+          </button>
+        </div>`
+      );
+      const loginBtn = form.querySelector("[data-comment-login]");
+      const overlay = form.querySelector(".absolute.inset-0");
+      const goRegister = () => { window.location.href = "registro.html"; };
+      if (loginBtn) loginBtn.addEventListener("click", goRegister);
+      if (overlay) overlay.addEventListener("click", goRegister);
+      textarea.setAttribute("disabled", "true");
+      submitBtn?.setAttribute("disabled", "true");
+      starsWrap?.classList.add("pointer-events-none", "opacity-60");
+      textarea.classList.add("opacity-60");
+      if (submitBtn) {
+        submitBtn.classList.add("opacity-50", "pointer-events-none");
+      }
+    }
+    const myListBtn = document.querySelector("[data-add-my-list]");
+    const favoriteBtn = document.querySelector("[data-add-favorite]");
+    const statusBtns = document.querySelectorAll("[data-detail-status]");
+    if (!isLogged) {
+      if (myListBtn) {
+        myListBtn.setAttribute("href", "registro.html");
+        myListBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          window.location.href = "registro.html";
+        });
+      }
+      if (favoriteBtn) favoriteBtn.classList.add("hidden");
+      statusBtns.forEach((btn) => btn.classList.add("hidden"));
+    }
     if (filterSelect) {
       filterSelect.addEventListener("change", () => {
         filterRating = Number(filterSelect.value || 0);
@@ -725,7 +764,7 @@
               </div>
               <div class="flex items-center gap-2">
                 <span class="text-xs text-on-surface-variant">${item.date}</span>
-                <button type="button" class="text-xs text-sky-200 hover:text-sky-100" data-comment-report data-comment-author="${author}" data-comment-text="${String(item.text || "").slice(0, 120).replace(/\"/g, "&quot;")}">${reportLabel}</button>
+                ${isLogged ? `<button type="button" class="text-xs text-sky-200 hover:text-sky-100" data-comment-report data-comment-author="${author}" data-comment-text="${String(item.text || "").slice(0, 120).replace(/\"/g, "&quot;")}">${reportLabel}</button>` : ""}
                 ${canDelete ? `<button type="button" class="text-xs text-rose-300 hover:text-rose-200" data-comment-delete="${item.localIndex}">Eliminar</button>` : ""}
               </div>
             </div>

@@ -135,7 +135,7 @@
   </head>
   <body class="bg-background text-on-background font-body min-h-screen flex flex-col auth-page overflow-hidden">
     <div class="fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-6 py-6 pointer-events-none">
-      <a href="user.html" class="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-sky-500/90 px-5 py-3 text-sm font-bold uppercase tracking-widest text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)] shadow-lg shadow-sky-500/35 hover:bg-sky-400/95 transition-all">
+      <a href="user.html" class="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-sky-500/90 px-5 py-3 text-sm font-bold uppercase tracking-widest text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)] shadow-lg shadow-sky-500/35 hover:bg-sky-400/95 transition-all" data-auth-back>
         <span class="material-symbols-outlined text-base leading-none">arrow_back</span>
         Regresar
       </a>
@@ -194,6 +194,21 @@
         </form>
       </section>
     </main>
+    <script>
+      (function () {
+        const logged = localStorage.getItem("nekora_logged_in") === "true";
+        const backBtn = document.querySelector("[data-auth-back]");
+        if (!logged) {
+          if (backBtn) backBtn.href = "index.html";
+          try {
+            history.pushState({ guest: true }, "", location.href);
+            window.addEventListener("popstate", () => {
+              window.location.href = "index.html";
+            });
+          } catch {}
+        }
+      })();
+    </script>
 
     <script src="layout.js"></script>
     <div id="register-success" class="fixed inset-0 z-[80] hidden">

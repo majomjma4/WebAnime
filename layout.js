@@ -98,6 +98,63 @@
       .join("");
   }
 
+  function getOrCreateUserSuffix() {
+    try {
+      let suffix = localStorage.getItem("anidex_user_suffix");
+      if (!suffix) {
+        suffix = String(Math.floor(10 + Math.random() * 90));
+        localStorage.setItem("anidex_user_suffix", suffix);
+      }
+      return suffix;
+    } catch {
+      return String(Math.floor(10 + Math.random() * 90));
+    }
+  }
+
+  function getGuestName() {
+    const saved = localStorage.getItem("anidex_profile_name");
+    if (saved && saved.trim()) return saved.trim();
+    return `NekoraUser_${getOrCreateUserSuffix()}`;
+  }
+
+  function isLoggedIn() {
+    return localStorage.getItem("nekora_logged_in") === "true";
+  }
+
+  function setupGuestMenu() {
+    const favLink = document.querySelector("[data-favorites-link]");
+    const profileBtn = document.querySelector("[data-profile-trigger]");
+    const guestMenu = document.querySelector("[data-guest-menu]");
+    const nameEls = document.querySelectorAll("[data-profile-name]");
+    const logged = isLoggedIn();
+
+    if (favLink) favLink.classList.toggle("hidden", !logged);
+    if (guestMenu) guestMenu.classList.add("hidden");
+    nameEls.forEach((el) => { el.textContent = getGuestName(); });
+
+    if (profileBtn && !profileBtn.dataset.bound) {
+      profileBtn.dataset.bound = "1";
+      profileBtn.addEventListener("click", (e) => {
+        if (isLoggedIn()) {
+          window.location.href = "user.html";
+          return;
+        }
+        e.preventDefault();
+        if (!guestMenu) return;
+        const isOpen = !guestMenu.classList.contains("hidden");
+        guestMenu.classList.toggle("hidden", isOpen);
+        profileBtn.setAttribute("aria-expanded", isOpen ? "false" : "true");
+      });
+      document.addEventListener("click", (e) => {
+        if (isLoggedIn()) return;
+        if (!guestMenu || guestMenu.classList.contains("hidden")) return;
+        if (profileBtn.contains(e.target) || guestMenu.contains(e.target)) return;
+        guestMenu.classList.add("hidden");
+        profileBtn.setAttribute("aria-expanded", "false");
+      });
+    }
+  }
+
   function initI18nWhenReady() {
     if (window.AniDexI18n) {
       window.AniDexI18n.init();
@@ -144,6 +201,7 @@
         });
       }
     } catch {}
+    setupGuestMenu();
     isReady = true;
     while (readyCallbacks.length) {
       const fn = readyCallbacks.shift();
