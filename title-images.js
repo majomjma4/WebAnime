@@ -254,16 +254,45 @@
     );
   }
 
+  const TOP_CACHE_TTL = 1000 * 60 * 60 * 6; // 6 horas
+  function loadTopCache(type) {
+    try {
+      const raw = localStorage.getItem(`anidex_top_cache_v1_${type}`);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      if (!parsed || !Array.isArray(parsed.items)) return null;
+      const fresh = Date.now() - Number(parsed.ts || 0) < TOP_CACHE_TTL;
+      return { items: parsed.items, fresh };
+    } catch {
+      return null;
+    }
+  }
+  function saveTopCache(type, items) {
+    try {
+      localStorage.setItem(`anidex_top_cache_v1_${type}`, JSON.stringify({ ts: Date.now(), items }));
+    } catch {}
+  }
+
   async function fetchTop(type, needed) {
     const key = `${type}:${needed}`;
     if (cache[key]) return cache[key];
+
+    const cached = loadTopCache(type);
+    if (cached?.items?.length && cached.fresh) {
+      cache[key] = cached.items;
+      return cached.items;
+    }
 
     const out = [];
     let page = 1;
     while (out.length < needed && page <= 5) {
       const url =
         `${API_BASE}?filter=bypopularity&type=${encodeURIComponent(type)}&limit=25&page=${page}`;
-      const res = await fetch(url);
+      let res = await fetch(url);
+      if (res.status === 429) {
+        await new Promise((r) => setTimeout(r, 900));
+        res = await fetch(url);
+      }
       if (!res.ok) break;
       const json = await res.json();
       const rows = json?.data || [];
@@ -271,8 +300,14 @@
       out.push(...rows);
       page += 1;
     }
-    cache[key] = out;
-    return out;
+    if (out.length) {
+      saveTopCache(type, out);
+      cache[key] = out;
+      return out;
+    }
+    const fallback = cached?.items || [];
+    cache[key] = fallback;
+    return fallback;
   }
 
   function setTitle(card, title) {

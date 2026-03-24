@@ -4,6 +4,7 @@
   const isCatalog = path.includes("peliculas");
   const hideCardYears = path.includes("series") || path.includes("peliculas");
   const previewDelayMs = path.includes("destacados") ? 1500 : 800;
+  const isSeriesPage = path.includes("series");
   const grid = document.querySelector("section[aria-label='Grid de anime']");
   const loadBtn = Array.from(document.querySelectorAll("button"))
     .find((b) => (b.textContent || "").toLowerCase().includes("cargar"));
@@ -431,6 +432,7 @@
   }
 
   function warmPreviewCache(root) {
+    if (isSeriesPage) return;
     const scope = root && root.nodeType === 1 ? root : document;
     const cards = Array.from(
       scope.querySelectorAll("[data-anime-card], article.featured-card, #ranking-grid article")
@@ -659,14 +661,14 @@
       show: () => { if (loadBtn) loadBtn.style.display = ""; }
     };
     bindHoverPreviewFor(grid);
-    warmPreviewCache(grid);
+    if (!isSeriesPage) warmPreviewCache(grid);
   }
 
   window.AniDexHoverPreview = {
     bind: (root) => {
       const scope = root || document;
       bindHoverPreviewFor(scope);
-      warmPreviewCache(scope);
+      if (!isSeriesPage) warmPreviewCache(scope);
     }
   };
 })();
