@@ -1,0 +1,2 @@
+views\destacados.html:243:      .replace(/PEL?CULA/gi, "PEL[REPL]CULA")
+.\views\destacados.html:243:      .replace(/PEL?CULA/gi, "PEL[REPL]CULA")

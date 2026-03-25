@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html class="dark" lang="es">
+  <head>
+    <script data-ui-preload>
+    document.documentElement.classList.add("preload-ui");
+    </script>
+    <style>
+    .preload-ui body {
+      opacity: 0;
+    }
+    </style>
+    <meta charset="UTF-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>NekoraList - Catálogo</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet"
+    />
+    <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet"
+    />
+    <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary-dim": "#c0adff",
+            "primary-fixed-dim": "#dacdff",
+            "background": "#0e0e0e",
+            "on-background": "#e7e5e4",
+            "surface-bright": "#2c2c2c",
+            "on-surface-variant": "#acabaa",
+            "tertiary-dim": "#cecfef",
+            "on-tertiary-container": "#4c4e68",
+            "on-secondary-fixed-variant": "#5d5b5f",
+            "on-tertiary-fixed-variant": "#565873",
+            "inverse-surface": "#fcf8f8",
+            "error-container": "#7f2737",
+            "on-primary": "#4800bf",
+            "on-secondary-fixed": "#403e42",
+            "on-error-container": "#ff97a3",
+            "surface-container-highest": "#252626",
+            "on-surface": "#e7e5e4",
+            "outline": "#767575",
+            "on-error": "#490013",
+            "tertiary-fixed": "#ddddfe",
+            "surface-container-lowest": "#000000",
+            "surface-tint": "#cdbdff",
+            "surface": "#0e0e0e",
+            "tertiary-container": "#ddddfe",
+            "surface-variant": "#252626",
+            "inverse-on-surface": "#565554",
+            "inverse-primary": "#6834eb",
+            "surface-container-high": "#1f2020",
+            "primary-container": "#4f00d0",
+            "primary": "#cdbdff",
+            "secondary-fixed": "#e6e1e6",
+            "on-primary-fixed-variant": "#652fe7",
+            "outline-variant": "#484848",
+            "on-secondary-container": "#c2bec3",
+            "on-tertiary-fixed": "#3a3c55",
+            "secondary-dim": "#a09da1",
+            "secondary-container": "#3c3b3e",
+            "error": "#ec7c8a",
+            "on-primary-container": "#d6c9ff",
+            "tertiary": "#edecff",
+            "surface-container-low": "#131313",
+            "surface-container": "#191a1a",
+            "secondary-fixed-dim": "#d8d3d8",
+            "surface-dim": "#0e0e0e",
+            "on-tertiary": "#555671",
+            "on-secondary": "#211f23",
+            "tertiary-fixed-dim": "#cecfef",
+            "error-dim": "#b95463",
+            "secondary": "#a09da1",
+            "primary-fixed": "#e8deff",
+            "on-primary-fixed": "#4700bd"
+          },
+          fontFamily: {
+            "headline": ["Manrope"],
+            "body": ["Inter"],
+            "label": ["Inter"]
+          },
+          borderRadius: {
+            "DEFAULT": "1rem",
+            "lg": "1.5rem",
+            "xl": "2rem",
+            "full": "9999px"
+          },
+          boxShadow: {
+            "elevated": "0 16px 40px rgba(0,0,0,0.35)",
+            "card": "0 10px 24px rgba(0,0,0,0.28)"
+          },
+          transitionTimingFunction: {
+            "snappy": "cubic-bezier(0.2,0,0,1)"
+          }
+        }
+      }
+    }
+    </script>
+    <style>
+    .material-symbols-outlined {
+      font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .filter-panel {
+        overflow: visible;
+        max-height: none;
+        width: calc(100% + 1.7rem);
+        min-height: calc(100vh - 10rem);
+        padding-bottom: 1.5rem;
+      }
+    [data-anime-card] {
+      border: 1px solid transparent;
+      transition: transform 300ms cubic-bezier(0.2,0,0,1), border-color 300ms ease, box-shadow 300ms ease;
+    }
+    [data-anime-card]:hover {
+      border-color: rgba(168, 85, 247, 0.35);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25), 0 0 16px rgba(168, 85, 247, 0.18);
+    }
+    .hover-preview-modal {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 220ms ease;
+      z-index: 999;
+    }
+    .hover-preview-modal.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .hover-preview-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+    }
+    .hover-preview-panel {
+      position: relative;
+      z-index: 1;
+      width: min(88vw, 450px);
+      min-height: 380px;
+      display: flex;
+      align-items: stretch;
+      gap: 22px;
+      padding: 26px;
+      cursor: pointer;
+      border-radius: 1.2rem;
+      background: rgba(16, 16, 20, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 24px 50px rgba(0, 0, 0, 0.55);
+      transform: scale(0.96);
+      opacity: 0;
+      transition: opacity 220ms ease, transform 220ms ease;
+    }
+    .hover-preview-modal.is-open .hover-preview-panel {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .hover-preview-poster {
+      width: 200px;
+      flex: 0 0 200px;
+      aspect-ratio: 2 / 3;
+      border-radius: 0.9rem;
+      overflow: hidden;
+      background: #111113;
+    }
+    .hover-preview-poster img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .hover-preview-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 0.5rem;
+      min-width: 0;
+      flex: 1;
+    }
+    .hover-preview-title {
+      font-weight: 700;
+      font-size: 1.25rem;
+      line-height: 1.2;
+    }
+    .hover-preview-meta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.45rem;
+      font-size: 0.75rem;
+      color: rgba(229, 231, 235, 0.78);
+    }
+    .hover-preview-score,
+    .hover-preview-year,
+    .hover-preview-extra {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      justify-content: center;
+      width: 100%;
+      min-width: 0;
+      text-align: center;
+      white-space: nowrap;
+      padding: 0.22rem 0.55rem;
+      border-radius: 9999px;
+      background: linear-gradient(135deg, rgba(99,102,241,0.35), rgba(168,85,247,0.35));
+      border: 1px solid rgba(168, 85, 247, 0.45);
+      box-shadow: 0 0 10px rgba(168, 85, 247, 0.25);
+    }
+    .hover-preview-meta > span:only-child,
+    .hover-preview-meta > span:last-child:nth-child(odd) {
+      grid-column: 1 / -1;
+    }
+    .hover-preview-score {
+      color: #cdbdff;
+      font-weight: 700;
+    }
+    .hover-preview-score .material-symbols-outlined {
+      font-size: 0.8rem;
+    }
+    .hover-preview-synopsis {
+      font-size: 0.86rem;
+      line-height: 1.45;
+      color: rgba(229, 231, 235, 0.75);
+      flex: 1;
+      display: flex;
+      align-items: center;
+      text-align: center;
+    }
+    .hover-preview-genres {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.4rem;
+      margin-top: 0.25rem;
+    }
+    .hover-preview-genres span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-width: 0;
+      text-align: center;
+      white-space: nowrap;
+      font-size: 0.7rem;
+      padding: 0.18rem 0.55rem;
+      border-radius: 9999px;
+      background: linear-gradient(135deg, rgba(34,211,238,0.28), rgba(99,102,241,0.25));
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      color: rgba(240, 249, 255, 0.95);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.18);
+    }
+    .hover-preview-genres span:only-child,
+    .hover-preview-genres span:last-child:nth-child(odd),
+    .hover-preview-genres span.is-wide {
+      grid-column: 1 / -1;
+    }
+    .hover-preview-genres.is-stacked {
+      grid-template-columns: 1fr;
+    }
+    .hover-preview-genres.is-stacked span {
+      grid-column: 1 / -1;
+    }
+    </style>
+    <link rel="icon" href="../img/icon3.png" />
+  </head>
+  <body class="bg-background text-on-background font-body selection:bg-[#AC85DB]/30 selection:text-[#996AD2]">
+    <div class="min-h-screen">
+      <!-- Navbar Component -->
+      <div data-layout="header"></div>
+
+      <main class="mx-auto max-w-screen-2xl px-6 pb-[clamp(0.9rem,1.6vw,1.6rem)] pt-28">
+          <div class="grid grid-cols-1 gap-10 lg:grid-cols-12">
+            <!-- Sidebar Component -->
+          <aside class="lg:col-span-2">
+            <section class="rounded-lg bg-surface-container-low p-6 filter-panel" aria-label="Filtros">
+            <h2 class="font-headline text-xl font-bold text-on-surface">Filtros</h2>
+            <div class="space-y-6">
+                <div class="space-y-2">
+                  <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant" for="filter-search"
+                  >Buscar</label
+                  >
+                  <div class="flex items-center gap-2 rounded-xl bg-surface-container-high px-4 py-3">
+                    <span class="material-symbols-outlined text-primary">search</span>
+                    <input
+                    id="filter-search"
+                    class="w-full bg-transparent border-none focus:ring-0"
+                    type="search"
+                    placeholder="Ej: Frieren"
+                    aria-label="Buscar anime"
+                    />
+                  </div>
+                </div>
+                <div class="space-y-2">
+                  <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant">GéNekoraLists</label>
+                  <!-- Dropdown de géNekoraLists renderizado por controllers/filters.js -->
+          </div>
+          <div class="space-y-4">
+            <div class="space-y-2">
+              <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant" for="filter-year"
+              >Año</label
+              >
+              <select
+              id="filter-year"
+              class="w-full rounded-xl bg-surface-container-high px-4 py-3 text-on-surface"
+              aria-label="Filtrar por año"
+              >
+              <option>Todos</option>
+              <option>2026</option>
+              <option>2023</option>
+              <option>2022</option>
+            </select>
+          </div>
+          <div class="space-y-2">
+            <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant" for="filter-type"
+            >Tipo</label
+            >
+            <select
+            id="filter-type"
+            class="w-full rounded-xl bg-surface-container-high px-4 py-3 text-on-surface"
+            aria-label="Filtrar por tipo"
+            >
+            <option>Todos</option>
+            <option>Serie</option>
+            <option></option>
+            <option>OVA</option>
+          </select>
+        </div>
+        <div class="space-y-2">
+          <label
+          class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant"
+          for="filter-status"
+          >Estado</label
+          >
+          <select
+          id="filter-status"
+          class="w-full rounded-xl bg-surface-container-high px-4 py-3 text-on-surface"
+          aria-label="Filtrar por estado"
+          >
+          <option>Todos</option>
+          <option>En emisión</option>
+          <option>Finalizado</option>
+        </select>
+      </div>
+    </div>
+    <div class="flex gap-3">
+      <button class="flex-1 rounded-full bg-surface-container-high py-3 text-sm font-semibold text-on-surface" type="button">
+        Reiniciar
+      </button>
+      <button class="flex-1 rounded-full bg-primary py-3 text-sm font-bold text-on-primary" type="button">
+        Aplicar
+      </button>
+    </div>
+  </div>
+</section>
+<section class="mt-6 rounded-lg bg-surface-container-low p-4" aria-label="Ranking">
+  <div class="mb-3 flex items-center justify-between gap-3">
+    <h3 class="text-sm font-bold uppercase tracking-widest text-on-surface-variant">Top 5 Ranking</h3>
+    <a class="text-xs font-semibold text-primary hover:text-primary-dim" href="ranking.html">Ver ranking</a>
+  </div>
+  <div id="sidebar-ranking" data-sidebar-ranking data-ranking-type="movie" class="space-y-3">
+    <div class="text-xs text-on-surface-variant">Cargando ranking...</div>
+  </div>
+</section>
+</aside>
+
+<!-- Catalog Content -->
+<section class="lg:col-span-10" aria-label="Resultados de catálogo">
+  <header class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+    <div>
+      <h1 class="font-headline text-4xl font-extrabold text-on-surface">Descubrimiento</h1>
+    </div>
+    <div class="flex items-center gap-3 text-sm text-on-surface-variant">
+      <span>Ordenar por:</span>
+      <button class="flex items-center gap-1 font-bold text-on-surface" type="button" aria-label="Ordenar resultados">
+        Popularidad <span class="material-symbols-outlined text-sm">expand_more</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- States (loading/empty/error) -->
+  <section class="space-y-6" aria-live="polite">
+    <div class="hidden" data-state="loading">
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+        <article class="animate-pulse rounded-lg bg-surface-container-low p-4">
+          <div class="aspect-[2/3] rounded-lg bg-surface-container-high"></div>
+          <div class="space-y-3">
+            <div class="h-3 w-48 rounded-full bg-surface-container-high"></div>
+            <div class="h-5 w-48/4 rounded-lg bg-surface-container-high"></div>
+            <div class="h-3 w-48/2 rounded-full bg-surface-container-high"></div>
+          </div>
+        </article>
+        <article class="animate-pulse rounded-lg bg-surface-container-low p-4">
+          <div class="aspect-[2/3] rounded-lg bg-surface-container-high"></div>
+          <div class="space-y-3">
+            <div class="h-3 w-48 rounded-full bg-surface-container-high"></div>
+            <div class="h-5 w-48/3 rounded-lg bg-surface-container-high"></div>
+            <div class="h-3 w-48/2 rounded-full bg-surface-container-high"></div>
+          </div>
+        </article>
+        <article class="animate-pulse rounded-lg bg-surface-container-low p-4">
+          <div class="aspect-[2/3] rounded-lg bg-surface-container-high"></div>
+          <div class="space-y-3">
+            <div class="h-3 w-48 rounded-full bg-surface-container-high"></div>
+            <div class="h-5 w-48/5 rounded-lg bg-surface-container-high"></div>
+            <div class="h-3 w-48/2 rounded-full bg-surface-container-high"></div>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <div class="hidden" data-state="empty">
+      <div class="rounded-lg bg-surface-container-low p-10 text-center">
+        <h2 class="text-2xl font-bold text-on-surface">Sin resultados</h2>
+        <p class="mt-2 text-on-surface-variant">Prueba otros filtros para ver más títulos disponibles.</p>
+      </div>
+    </div>
+
+    <div class="hidden" data-state="error">
+      <div class="rounded-lg bg-error-container/30 p-10 text-center">
+        <h2 class="text-2xl font-bold text-on-error-container">Ocurrió un error</h2>
+        <p class="mt-2 text-on-error-container/80">No pudimos cargar el catálogo. Inténtalo nuevamente</p>
+        <button class="mt-6 rounded-full bg-primary px-6 py-3 text-sm font-bold text-on-primary" type="button">
+          Reintentar
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- AnimeCard Component -->
+  <section class="mt-[clamp(0.6rem,0.9vw,0.8rem)] grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6" aria-label="Grid de anime">
+    <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="your name" data-genres="romance,fantasia" data-year="2016" data-type="Película original" data-status="Finalizada">
+      <a class="block" href="detail.html" aria-label="Your Name">
+        <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
+          <img alt="Your Name" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx21519-SUo3ZQuCbYhJ.png" loading="lazy"/>
+          <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2016</span>
+        </div>
+        <div class="space-y-2 mt-2">
+          
+          <h3 class="font-headline text-lg font-bold text-on-surface truncate">Your Name</h3>
+        </div>
+      </a>
+    </article>
+
+    <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="spirited away" data-genres="fantasia,aventura" data-year="2001" data-type="Recopilatoria" data-status="En cartelera">
+      <a class="block" href="detail.html" aria-label="Spirited Away">
+        <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
+          <img alt="Spirited Away" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx199-sWefXJvXkDOb.jpg" loading="lazy"/>
+          <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2001</span>
+        </div>
+        <div class="space-y-2 mt-2">
+          
+          <h3 class="font-headline text-lg font-bold text-on-surface truncate">Spirited Away</h3>
+        </div>
+      </a>
+    </article>
+
+    <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="a silent voice" data-genres="drama,romance" data-year="2016" data-type="Precuela" data-status="Próximamente" data-mal-id="28851">
+      <a class="block" href="detail.html" aria-label="A Silent Voice" data-mal-id="28851">
+        <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
+          <img alt="A Silent Voice" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx20954-sYRfE5jQRtSB.jpg" loading="lazy"/>
+          <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2016</span>
+        </div>
+        <div class="space-y-2 mt-2">
+          
+          <h3 class="font-headline text-lg font-bold text-on-surface truncate">A Silent Voice</h3>
+        </div>
+      </a>
+    </article>
+
+    <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="weathering with you" data-genres="romance,fantasia" data-year="2019" data-type="Secuela" data-status="Retrasada">
+      <a class="block" href="detail.html" aria-label="Weathering With You">
+        <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
+          <img alt="Weathering With You" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx106286-5COcpd0J9VbL.png" loading="lazy"/>
+          <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2019</span>
+        </div>
+        <div class="space-y-2 mt-2">
+          
+          <h3 class="font-headline text-lg font-bold text-on-surface truncate">Weathering With You</h3>
+        </div>
+      </a>
+    </article>
+
+    <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="princess mononoke" data-genres="accion,aventura" data-year="1997" data-type="Spin-off" data-status="Cancelada">
+      <a class="block" href="detail.html" aria-label="Princess Mononoke">
+        <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
+          <img alt="Princess Mononoke" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx164-ySuGzCWVw2cL.jpg" loading="lazy"/>
+          <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">1997</span>
+        </div>
+        <div class="space-y-2 mt-2">
+          
+          <h3 class="font-headline text-lg font-bold text-on-surface truncate">Princess Mononoke</h3>
+        </div>
+      </a>
+    </article>
+
+    <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="demon slayer: mugen train" data-genres="accion,fantasia" data-year="2020" data-type="Basada en serie" data-status="Finalizada">
+      <a class="block" href="detail.html" aria-label="Demon Slayer: Mugen Train">
+        <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
+          <img alt="Demon Slayer: Mugen Train" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx112151-1qlQwPB1RrJe.png" loading="lazy"/>
+          <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2020</span>
+        </div>
+        <div class="space-y-2 mt-2">
+          
+          <h3 class="font-headline text-lg font-bold text-on-surface truncate">Demon Slayer: Mugen Train</h3>
+        </div>
+      </a>
+    </article>
+
+    <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="akira" data-genres="accion,sci-fi" data-year="1988" data-type="" data-status="Finalizado">
+      <a class="block" href="detail.html" aria-label="Akira">
+        <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
+          <img alt="Akira" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx47-4CR68arv452h.jpg" loading="lazy"/>
+          <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">1988</span>
+        </div>
+        <div class="space-y-2 mt-2">
+          
+          <h3 class="font-headline text-lg font-bold text-on-surface truncate">Akira</h3>
+        </div>
+      </a>
+    </article>
+
+    <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="perfect blue" data-genres="thriller,drama" data-year="1997" data-type="" data-status="Finalizado">
+      <a class="block" href="detail.html" aria-label="Perfect Blue">
+        <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
+          <img alt="Perfect Blue" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx437-69NMlXKFeuse.jpg" loading="lazy"/>
+          <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">1997</span>
+        </div>
+        <div class="space-y-2 mt-2">
+          
+          <h3 class="font-headline text-lg font-bold text-on-surface truncate">Perfect Blue</h3>
+        </div>
+      </a>
+    </article>
+
+    <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="howl's moving castle" data-genres="fantasia,romance" data-year="2004" data-type="" data-status="Finalizado">
+      <a class="block" href="detail.html" aria-label="Howl's Moving Castle">
+        <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
+          <img alt="Howl's Moving Castle" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx431-o8Lj3XkjHm2k.jpg" loading="lazy"/>
+          <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2004</span>
+        </div>
+        <div class="space-y-2 mt-2">
+          
+          <h3 class="font-headline text-lg font-bold text-on-surface truncate">Howl's Moving Castle</h3>
+        </div>
+      </a>
+    </article>
+
+    <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="castle in the sky" data-genres="aventura,fantasia" data-year="1986" data-type="" data-status="Finalizado">
+      <a class="block" href="detail.html" aria-label="Castle in the Sky">
+        <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
+          <img alt="Castle in the Sky" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx513-yM7Dlt65N4Rl.jpg" loading="lazy"/>
+          <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">1986</span>
+        </div>
+        <div class="space-y-2 mt-2">
+          
+          <h3 class="font-headline text-lg font-bold text-on-surface truncate">Castle in the Sky</h3>
+        </div>
+      </a>
+    </article>
+
+    <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="the girl who leapt through time" data-genres="sci-fi,romance" data-year="2006" data-type="" data-status="Finalizado">
+      <a class="block" href="detail.html" aria-label="The Girl Who Leapt Through Time">
+        <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
+          <img alt="The Girl Who Leapt Through Time" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx2236-tH5fWFkHyVGg.png" loading="lazy"/>
+          <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2006</span>
+        </div>
+        <div class="space-y-2 mt-2">
+          
+          <h3 class="font-headline text-lg font-bold text-on-surface truncate">The Girl Who Leapt Through Time</h3>
+        </div>
+      </a>
+    </article>
+
+    <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="wolf children" data-genres="drama,fantasia" data-year="2012" data-type="" data-status="Finalizado">
+      <a class="block" href="detail.html" aria-label="Wolf Children">
+        <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
+          <img alt="Wolf Children" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx12355-wNsvhEsXEgrH.png" loading="lazy"/>
+          <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2012</span>
+        </div>
+        <div class="space-y-2 mt-2">
+          
+          <h3 class="font-headline text-lg font-bold text-on-surface truncate">Wolf Children</h3>
+        </div>
+      </a>
+    </article>
+
+    <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="the boy and the heron" data-genres="fantasia,drama" data-year="2023" data-type="" data-status="Finalizado">
+      <a class="block" href="detail.html" aria-label="The Boy and the Heron">
+        <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
+          <img alt="The Boy and the Heron" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx109979-BRHXpBkCw4oc.jpg" loading="lazy"/>
+          <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2023</span>
+        </div>
+        <div class="space-y-2 mt-2">
+          
+          <h3 class="font-headline text-lg font-bold text-on-surface truncate">The Boy and the Heron</h3>
+        </div>
+      </a>
+    </article>
+
+    <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="paprika" data-genres="sci-fi,thriller" data-year="2006" data-type="" data-status="Finalizado">
+      <a class="block" href="detail.html" aria-label="Paprika">
+        <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
+          <img alt="Paprika" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/b1943-jMCEYL1Ixmgc.png" loading="lazy"/>
+          <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2006</span>
+        </div>
+        <div class="space-y-2 mt-2">
+          
+          <h3 class="font-headline text-lg font-bold text-on-surface truncate">Paprika</h3>
+        </div>
+      </a>
+    </article>
+
+    <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="tokyo godfathers" data-genres="drama,comedia" data-year="2003" data-type="" data-status="Finalizado">
+      <a class="block" href="detail.html" aria-label="Tokyo Godfathers">
+        <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
+          <img alt="Tokyo Godfathers" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx759-XSKBju6xutdR.jpg" loading="lazy"/>
+          <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2003</span>
+        </div>
+        <div class="space-y-2 mt-2">
+          
+          <h3 class="font-headline text-lg font-bold text-on-surface truncate">Tokyo Godfathers</h3>
+        </div>
+      </a>
+    </article>
+
+    <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="promare" data-genres="accion,sci-fi" data-year="2019" data-type="" data-status="Finalizado">
+      <a class="block" href="detail.html" aria-label="Promare">
+        <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
+          <img alt="Promare" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx99425-CQ500X23zp4i.png" loading="lazy"/>
+          <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2019</span>
+        </div>
+        <div class="space-y-2 mt-2">
+          
+          <h3 class="font-headline text-lg font-bold text-on-surface truncate">Promare</h3>
+        </div>
+      </a>
+    </article>
+
+    <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="redline" data-genres="accion,sci-fi" data-year="2009" data-type="" data-status="Finalizado">
+      <a class="block" href="detail.html" aria-label="Redline">
+        <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
+          <img alt="Redline" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx6675-NF4tFzAxSjkj.png" loading="lazy"/>
+          <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2009</span>
+        </div>
+        <div class="space-y-2 mt-2">
+          
+          <h3 class="font-headline text-lg font-bold text-on-surface truncate">Redline</h3>
+        </div>
+      </a>
+    </article>
+
+    <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="kiki's delivery service" data-genres="fantasia,comedia" data-year="1989" data-type="" data-status="Finalizado">
+      <a class="block" href="detail.html" aria-label="Kiki's Delivery Service">
+        <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
+          <img alt="Kiki's Delivery Service" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx512-UwP8X4BR8YoM.png" loading="lazy"/>
+          <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">1989</span>
+        </div>
+        <div class="space-y-2 mt-2">
+          
+          <h3 class="font-headline text-lg font-bold text-on-surface truncate">Kiki's Delivery Service</h3>
+        </div>
+      </a>
+    </article>
+
+    <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="the wind rises" data-genres="drama,historico" data-year="2013" data-type="" data-status="Finalizado">
+      <a class="block" href="detail.html" aria-label="The Wind Rises">
+        <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
+          <img alt="The Wind Rises" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx16662-HUI8irtoTdOJ.jpg" loading="lazy"/>
+          <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2013</span>
+        </div>
+        <div class="space-y-2 mt-2">
+          
+          <h3 class="font-headline text-lg font-bold text-on-surface truncate">The Wind Rises</h3>
+        </div>
+      </a>
+    </article>
+
+    <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="5 centimeters per second" data-genres="romance,drama" data-year="2007" data-type="" data-status="Finalizado">
+      <a class="block" href="detail.html" aria-label="5 Centimeters per Second">
+        <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
+          <img alt="5 Centimeters per Second" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx1689-rJKhjLEjQHSy.jpg" loading="lazy"/>
+          <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2007</span>
+        </div>
+        <div class="space-y-2 mt-2">
+          
+          <h3 class="font-headline text-lg font-bold text-on-surface truncate">5 Centimeters per Second</h3>
+        </div>
+      </a>
+    </article>
+
+    <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="millennium actress" data-genres="drama,romance" data-year="2001" data-type="Película original" data-status="Finalizada">
+      <a class="block" href="detail.html" aria-label="Millennium Actress">
+        <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
+          <img alt="Millennium Actress" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="../img/fondoanime.png" loading="lazy"/>
+          <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2001</span>
+        </div>
+        <div class="space-y-2 mt-2">
+          
+          <h3 class="font-headline text-lg font-bold text-on-surface truncate">Millennium Actress</h3>
+        </div>
+      </a>
+    </article>
+
+
+    <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="the tale of the princess kaguya" data-genres="drama,historico" data-year="2013" data-type="Película original" data-status="Finalizada">
+      <a class="block" href="detail.html" aria-label="The Tale of the Princess Kaguya">
+        <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
+          <img alt="The Tale of the Princess Kaguya" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="../img/fondoanime.png" loading="lazy"/>
+          <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2013</span>
+        </div>
+        <div class="space-y-2 mt-2">
+          
+          <h3 class="font-headline text-lg font-bold text-on-surface truncate">The Tale of the Princess Kaguya</h3>
+        </div>
+      </a>
+    </article>
+  </section>
+
+  <div class="mt-12 flex justify-center">
+  <button
+    class="rounded-full border border-primary/30 bg-primary/10 px-8 py-4 text-sm font-bold text-primary transition-colors hover:bg-primary/20 inline-flex items-center gap-2"
+    type="button"
+    aria-label="Cargar más resultados"
+    >
+    <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+    Cargar más
+  </button>
+</div>
+</section>
+</div>
+</main>
+
+<!-- Footer Component -->
+<div data-layout="footer"></div>
+<script src="../controllers/layout.js"></script>
+</div>
+
+<script src="../controllers/i18n.js"></script>
+<script src="../controllers/title-images.js?v=9"></script>
+<script src="../controllers/search.js?v=2"></script>
+<script src="../controllers/filters.js?v=11"></script>
+<script src="../controllers/detail-links.js"></script>
+<script src="../controllers/load-more.js?v=2"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Fix mojibake and duplicated words in peliculas page text
+      const fixMap = {
+        "Películas": "Películas",
+        "Películas": "Películas",
+        "Fantasía": "Fantasía",
+        "Fantasía": "Fantasía",
+        "Acción": "Acción",
+        "más": "más"
+      };
+      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+      let node;
+      while ((node = walker.nextNode())) {
+        const t = node.nodeValue || "";
+        let out = t;
+        Object.keys(fixMap).forEach((k) => {
+          if (out.includes(k)) out = out.replaceAll(k, fixMap[k]);
+        });
+        out = out.replace(/anime\s*peliculas/gi, "Anime y Películas");
+        out = out.replace(/pel[?i]culas\s*pel[?i]culas/gi, "Películas");
+        out = out.replace(/pel[i]culas+/gi, "Películas");
+        out = out.replace(/depeliculastacado/gi, "Destacado");
+        if (out !== t) node.nodeValue = out;
+      }
+      // Preserve original poster src for catalog cards (avoid scripts wiping it)
+      document.querySelectorAll("[data-anime-card] img").forEach((img) => {
+        if (!img.dataset.src) img.dataset.src = img.getAttribute("src") || "";
+      });
+      if (window.AniDexI18n) window.AniDexI18n.init();
+      if (window.AniDexTitleImages) window.AniDexTitleImages.init();
+      if (window.AniDexSearch) window.AniDexSearch.init();
+      if (window.AniDexFilters) window.AniDexFilters.init();
+      // Re-aplicar filtros despues de i18n en peliculas
+      setTimeout(() => {
+        if (window.AniDexFilters) window.AniDexFilters.init();
+      }, 1100);
+      if (window.AniDexDetailLinks) window.AniDexDetailLinks.init();
+      // En pagina de peliculas: mostrar el año de publicación y abajo a la izquierda.
+      const applyYearBadges = () => {
+        document.querySelectorAll("span.absolute.left-3").forEach((badge) => {
+          const card = badge.closest("[data-year]");
+          const year = card ? card.getAttribute("data-year") : "";
+          if (!year) return;
+          if ((badge.textContent || "").trim() !== year) badge.textContent = year;
+          badge.classList.remove("top-3");
+          badge.classList.add("bottom-3");
+        });
+      };
+      applyYearBadges();
+      const badgeObserver = new MutationObserver(() => applyYearBadges());
+      badgeObserver.observe(document.body, { childList: true, subtree: true, characterData: true });
+    });
+</script>
+<script data-ui-unlock>document.documentElement.classList.remove("preload-ui");</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

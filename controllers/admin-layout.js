@@ -1,9 +1,10 @@
 (() => {
+  const basePath = window.location.pathname.includes('/views/') ? '../' : '';
   async function loadAdminSidebar() {
     const host = document.querySelector('[data-admin-sidebar]');
     if (!host) return;
     try {
-      const res = await fetch('partials/admin-layout.html', { cache: 'no-store' });
+      const res = await fetch(basePath + "partials/admin-layout.html", { cache: 'no-store' });
       if (!res.ok) return;
       const html = await res.text();
       const container = document.createElement('div');
@@ -57,14 +58,16 @@
       'pointer-events:none',
       'transition:opacity 0.2s ease'
     ].join(';');
-    toast.textContent = 'Función en desarrollo';
+    toast.textContent = 'Funci?n en desarrollo';
     document.body.appendChild(toast);
 
     let toastTimer = null;
     const showToast = () => {
+  const basePath = window.location.pathname.includes('/views/') ? '../' : '';
       toast.style.opacity = '1';
       clearTimeout(toastTimer);
       toastTimer = setTimeout(() => {
+  const basePath = window.location.pathname.includes('/views/') ? '../' : '';
         toast.style.opacity = '0';
       }, 1400);
     };
@@ -95,8 +98,8 @@
       ];
       const titles = [
         'Cyberpunk: Edgerunners (Season 2)','Solo Leveling: Arise OVA','Blue Lock - Episode Nagi','Monster: Special Edition (Remaster)',
-        'Frieren: Beyond Journey’s End - OVA','Jujutsu Kaisen: Culling Game','Oshi no Ko: Side Story','Hell’s Paradise: Rebirth',
-        'Pluto: Director’s Cut','Vinland Saga: North Arc','Haikyuu!! Final Serve','Spy x Family: Code White',
+        'Frieren: Beyond Journeys End - OVA','Jujutsu Kaisen: Culling Game','Oshi no Ko: Side Story','Hells Paradise: Rebirth',
+        'Pluto: Directors Cut','Vinland Saga: North Arc','Haikyuu!! Final Serve','Spy x Family: Code White',
         'Chainsaw Man: School Arc','Berserk: Eclipse Remake','Mob Psycho 100: Encore','Attack on Titan: Aftermath',
         'Death Note: Legacy Files','Demon Slayer: Infinity Path','Your Name: Recut','A Silent Voice: Reprise',
         'Steins;Gate: Chrono Shift','Fullmetal Alchemist: Redux','Hunter x Hunter: Lost Pages','Naruto: New Dawn'
@@ -106,8 +109,8 @@
         'Bones','Production I.G','Ufotable','Kyoto Animation','OLM'
       ];
       const dates = [
-        'Oct 24, 2023 · 09:12 AM','Oct 23, 2023 · 04:45 PM','Oct 22, 2023 · 11:20 AM','Oct 21, 2023 · 10:00 PM',
-        'Oct 20, 2023 · 08:05 AM','Oct 19, 2023 · 06:18 PM','Oct 18, 2023 · 01:33 PM','Oct 17, 2023 · 09:49 AM'
+        'Oct 24, 2023  09:12 AM','Oct 23, 2023  04:45 PM','Oct 22, 2023  11:20 AM','Oct 21, 2023  10:00 PM',
+        'Oct 20, 2023  08:05 AM','Oct 19, 2023  06:18 PM','Oct 18, 2023  01:33 PM','Oct 17, 2023  09:49 AM'
       ];
       const initials = (name) => name.split(' ').map((p) => p[0]).slice(0,2).join('').toUpperCase();
       const badgeColors = ['text-primary','text-tertiary-dim','text-on-surface-variant','text-primary','text-on-surface','text-tertiary-dim'];
@@ -115,7 +118,7 @@
       rows.forEach((row, idx) => {
         const name = `${names[idx % names.length]} #${idx + 1}`;
         const role = roles[idx % roles.length];
-        const title = `${titles[idx % titles.length]} · Req ${idx + 1}`;
+        const title = `${titles[idx % titles.length]}  Req ${idx + 1}`;
         const source = sources[idx % sources.length];
         const date = dates[idx % dates.length];
 
@@ -141,6 +144,7 @@
     let currentPage = 1;
     const pageSize = 4;
     const updatePagination = () => {
+  const basePath = window.location.pathname.includes('/views/') ? '../' : '';
       const tableBody = document.querySelector('tbody');
       if (tableBody) {
         tableBody.insertAdjacentHTML('beforeend', '');
@@ -269,6 +273,7 @@
     const searchInput = document.querySelector('[data-admin-search]');
     if (searchInput) {
       searchInput.addEventListener('input', () => {
+  const basePath = window.location.pathname.includes('/views/') ? '../' : '';
         const term = searchInput.value.trim().toLowerCase();
         const rows = Array.from(document.querySelectorAll('[data-admin-request-row]'));
         if (!term) {

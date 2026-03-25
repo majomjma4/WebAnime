@@ -1,15 +1,15 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="dark" lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="img/icon3.png" />
+    <link rel="icon" href="../img/icon3.png" />
     <title>NekoraList - Personaje</title>
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body class="bg-background text-on-surface" style="background:#0e0e0e;color:#e7e5e4;">
     <main class="max-w-6xl mx-auto px-6 py-10">
-      <a href="javascript:history.back()" class="text-sm text-violet-400">← Volver</a>
+      <a href="javascript:history.back()" class="text-sm text-violet-400">? Volver</a>
       <div class="mt-6 grid md:grid-cols-2 gap-8">
         <div>
           <img id="char-image" class="w-full max-w-md border border-zinc-700 object-cover" alt="Personaje" />
@@ -21,8 +21,8 @@
         </div>
       </div>
     </main>
-    <script src="character-data.js"></script>
+    <script src="../models/character-data.js"></script>
     <script>document.addEventListener("DOMContentLoaded",()=>window.AniDexCharacterData&&window.AniDexCharacterData.init());</script>
-    <script src="layout.js"></script>
+    <script src="../controllers/layout.js"></script>
   </body>
 </html>

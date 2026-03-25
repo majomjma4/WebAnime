@@ -37,7 +37,7 @@
       };
     });
 
-    // Handler en vivo: evita href viejos cuando el card cambia dinámicamente.
+    // Handler en vivo: evita href viejos cuando el card cambia dinmicamente.
     if (!document.body.dataset.detailLiveBound) {
       document.body.dataset.detailLiveBound = "1";
       document.addEventListener("click", (e) => {

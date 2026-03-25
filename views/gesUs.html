@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 
 <html class="dark" lang="en"><head>
+<link rel="icon" href="../img/icon3.png" />
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>CinemaCurator Admin - Manage Users</title>
+<title>NekoraList - Gestión de Usuarios</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -94,6 +95,7 @@
 <main class="ml-64 flex-1 flex flex-col">
 <!-- TopAppBar Anchor -->
 <header class="fixed top-0 right-0 w-[calc(100%-16rem)] z-40 bg-[#0e0e0e]/70 backdrop-blur-xl flex justify-between items-center h-20 px-12">
+<link rel="icon" href="../img/icon3.png" />
 <div class="flex items-center gap-4">
 <h2 class="font-['Manrope'] font-semibold text-lg text-on-surface">Gestionar Usuarios</h2>
 <span class="px-3 py-1 bg-surface-container-high text-primary text-xs font-bold rounded-full" data-admin-users-total>10 en Total</span>
@@ -160,7 +162,7 @@
 <div class="bg-surface-container-low rounded-lg overflow-hidden border-none shadow-2xl">
 <div class="p-8 border-b border-outline-variant/10 flex justify-between items-center">
 <div>
-<h3 class="text-xl font-headline font-bold">Información de Usuarios</h3>
+<h3 class="text-xl font-headline font-bold">Informacin de Usuarios</h3>
 <p class="text-sm text-on-surface-variant mt-1">Administra los usuarios registrados, revisa su actividad y gestiona sus permisos.</p>
 </div>
 <div class="flex gap-3">
@@ -181,8 +183,8 @@
 <thead>
 <tr class="bg-surface-container/50">
 <th class="px-8 py-5 text-xs font-bold uppercase tracking-widest text-outline">USUARIO</th>
-<th class="px-8 py-5 text-xs font-bold uppercase tracking-widest text-outline">CORREO ELECTRÓNICO</th>
-<th class="px-8 py-5 text-xs font-bold uppercase tracking-widest text-outline">FECHA DE UNIÓN</th>
+<th class="px-8 py-5 text-xs font-bold uppercase tracking-widest text-outline">CORREO ELECTRNICO</th>
+<th class="px-8 py-5 text-xs font-bold uppercase tracking-widest text-outline">FECHA DE UNIN</th>
 <th class="px-8 py-5 text-xs font-bold uppercase tracking-widest text-outline">ESTADO</th>
 <th class="px-8 py-5 text-xs font-bold uppercase tracking-widest text-outline text-right">ACCIONES</th>
 </tr>
@@ -367,7 +369,7 @@
 </div>
 <div class="flex justify-between mt-4 text-[10px] text-outline uppercase tracking-widest font-bold">
 <span>Lunes</span>
-<span>Miércoles</span>
+<span>Mircoles</span>
 <span>Viernes</span>
 <span>Domingo</span>
 </div>
@@ -600,5 +602,5 @@
     }
   })();
 </script>
-<script src="admin-layout.js"></script>
+<script src="../controllers/admin-layout.js"></script>
 </body></html>

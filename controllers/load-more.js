@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
   const API_BASE = "https://api.jikan.moe/v4/anime";
   const path = window.location.pathname.toLowerCase();
   const isCatalog = path.includes("peliculas");
@@ -68,30 +68,30 @@
 
   function translateGenre(label) {
     const map = {
-      "Action": "Acción",
+      "Action": "Accin",
       "Adventure": "Aventura",
       "Comedy": "Comedia",
       "Drama": "Drama",
-      "Fantasy": "Fantasía",
-      "Sci-Fi": "Ciencia ficción",
+      "Fantasy": "Fantasa",
+      "Sci-Fi": "Ciencia ficcin",
       "Slice of Life": "Recuentos de la vida",
       "Supernatural": "Sobrenatural",
       "Romance": "Romance",
       "Mystery": "Misterio",
       "Thriller": "Suspenso",
-      "Psychological": "Psicológico",
+      "Psychological": "Psicolgico",
       "Horror": "Terror",
       "Sports": "Deportes",
-      "Music": "Música",
+      "Music": "Msica",
       "School": "Escolar",
-      "Historical": "Histórico",
+      "Historical": "Histrico",
       "Military": "Militar",
       "Space": "Espacio",
       "Mecha": "Mecha",
       "Game": "Juegos",
       "Vampire": "Vampiros",
       "Demons": "Demonios",
-      "Samurai": "Samurái",
+      "Samurai": "Samuri",
       "Police": "Policial",
       "Super Power": "Superpoderes",
       "Harem": "Harem",
@@ -345,7 +345,7 @@
     const isMovieCard =
       typeLabel.includes("movie") ||
       typeLabel.includes("pelicula") ||
-      typeLabel.includes("película") ||
+      typeLabel.includes("pelcula") ||
       card?.dataset?.featuredType === "movie";
     const showDuration = isMovieCard && data.duration;
     const showEpisodes = !isMovieCard && data.episodes;
