@@ -3,7 +3,7 @@
 <html class="dark" lang="es"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<link rel="icon" href="../img/icon3.png" />
+<link rel="icon" href="img/icon3.png" />
 <title>NekoraList - Añadir Nuevo Anime</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;family=Inter:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -113,7 +113,7 @@
 <!-- Form Content -->
 <section class="pt-32 pb-20 px-12 max-w-6xl mx-auto">
 <div class="flex flex-col gap-2 mb-12">
-<h1 class="text-5xl font-headline font-extrabold tracking-tight text-on-surface">Aadir Nuevo Anime</h1>
+<h1 class="text-5xl font-headline font-extrabold tracking-tight text-on-surface">Añadir Nuevo Anime</h1>
 <p class="text-on-surface-variant text-lg">Completa los detalles para catalogar una nueva obra maestra.</p>
 </div>
 <form class="grid grid-cols-12 gap-8">
@@ -340,8 +340,9 @@
     });
   })();
 </script>
-<script src="../controllers/admin-layout.js"></script>
+<script src="controllers/admin-layout.js"></script>
 </body></html>
+
 
 
 

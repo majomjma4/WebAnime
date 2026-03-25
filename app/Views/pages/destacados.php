@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="dark" lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="../img/icon3.png" />
+    <link rel="icon" href="img/icon3.png" />
     <title>NekoraList - Destacados</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -214,14 +214,14 @@
       <div class="mb-8 flex items-center justify-between gap-4">
         <div>
           <h1 class="font-['Manrope'] text-3xl md:text-4xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-violet-400 to-purple-400 drop-shadow-[0_6px_18px_rgba(99,102,241,0.35)]">Destacados</h1>
-          <p class="text-zinc-400 mt-2">Animes y pelÃ­culas mas populares.</p>
+          <p class="text-zinc-400 mt-2">Animes y películas mas populares.</p>
         </div>
         <div class="flex items-center gap-2">
           <label class="text-xs uppercase tracking-widest text-zinc-400" for="featured-type">Tipo</label>
           <select id="featured-type" class="rounded-full bg-zinc-900 border border-zinc-800 px-4 py-2 text-sm text-zinc-100">
             <option value="all">Todos</option>
             <option value="anime">Anime</option>
-            <option value="movie">PelÃ­cula</option>
+            <option value="movie">Película</option>
           </select>
         </div>
       </div>
@@ -229,7 +229,7 @@
       <section>
   <div id="featured-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
 </section>
-<script src="../controllers/load-more.js?v=3"></script>
+<script src="controllers/load-more.js?v=3"></script>
 <script>
 (function () {
   const select = document.getElementById("featured-type");
@@ -240,9 +240,9 @@
   const norm = (v) => (v || "").toString().toLowerCase().replace(/\s+/g, " ").trim();
   const fixText = (s) => {
     return (s || "")
-      .replace(/PELÃCULA/gi, "PELÃCULA")
-      .replace(/PelÃ­cula/gi, "PelÃ­cula")
-      .replace(/PelÃ­cula/gi, "PelÃ­cula");
+      .replace(/PELÃƒÂCULA/gi, "PELÃƒÂCULA")
+      .replace(/Película/gi, "Película")
+      .replace(/Película/gi, "Película");
   };
 
   const setBadge = (media, score) => {
@@ -251,7 +251,7 @@
     if (!badge) {
       badge = document.createElement("div");
       badge.className = "anidex-score-badge absolute top-5 right-4 bg-black/70 px-3 py-1.5 rounded-full text-sm font-bold text-white flex items-center gap-1";
-      badge.innerHTML = "<span class=\"text-[16px] leading-none\">â˜…</span><span>--</span>";
+      badge.innerHTML = "<span class=\"text-[16px] leading-none\">Ã¢Â­Â</span><span>--</span>";
       media.appendChild(badge);
     }
     const valueEl = badge.querySelector("span:last-child");
@@ -266,14 +266,14 @@
     const imgSrc = it?.images?.webp?.large_image_url || it?.images?.jpg?.large_image_url || it?.images?.jpg?.image_url || "";
     const title = it?.title || "Anime";
     const genres = (it?.genres || []).map((g) => g?.name).filter(Boolean).slice(0, 2).join(", ");
-    const genresText = genres || "Sin categorÃ­as";
+    const genresText = genres || "Sin categorías";
     const type = norm(it?.type).includes("movie") ? "movie" : "anime";
     article.dataset.featuredType = type;
     article.setAttribute("data-type", type);
     article.innerHTML = `
       <div class="relative aspect-[2/3] p-2">
         <img class="w-full h-full object-cover rounded-lg transition-transform duration-500 ease-[cubic-bezier(0.2,0,0,1)]" src="${imgSrc}" alt="${title}" />
-        <span class="absolute top-5 left-4 rounded-full bg-violet-500/90 px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest">${type === "movie" ? "PelÃ­cula" : "Anime"}</span>
+        <span class="absolute top-5 left-4 rounded-full bg-violet-500/90 px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest">${type === "movie" ? "Película" : "Anime"}</span>
       </div>
       <div class="p-4">
         <h3 class="text-lg font-bold">${fixText(title)}</h3>
@@ -360,10 +360,10 @@
     </main>
     <!-- Footer Component -->
     <div data-layout="footer"></div>
-    <script src="../controllers/layout.js"></script>
-    <script src="../controllers/i18n.js"></script>
-    <script src="../controllers/search.js"></script>
-    <script src="../controllers/detail-links.js"></script>
+    <script src="controllers/layout.js"></script>
+    <script src="controllers/i18n.js"></script>
+    <script src="controllers/search.js"></script>
+    <script src="controllers/detail-links.js"></script>
     <script>
     document.addEventListener("DOMContentLoaded", () => {
       if (window.AniDexI18n) window.AniDexI18n.init();
@@ -373,4 +373,5 @@
     </script>
   </body>
 </html>
+
 

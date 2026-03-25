@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="../img/icon3.png" />
+    <link rel="icon" href="img/icon3.png" />
     <title>NekoraList - Personaje</title>
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
@@ -23,6 +23,7 @@
     </main>
     <script src="../models/character-data.js"></script>
     <script>document.addEventListener("DOMContentLoaded",()=>window.AniDexCharacterData&&window.AniDexCharacterData.init());</script>
-    <script src="../controllers/layout.js"></script>
+    <script src="controllers/layout.js"></script>
   </body>
 </html>
+

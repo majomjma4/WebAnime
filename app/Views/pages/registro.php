@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="dark" lang="es">
   <head>
     <meta charset="UTF-8" />
@@ -81,7 +81,7 @@
     .auth-bg {
       background-image:
         linear-gradient(to bottom, rgba(14,14,14,0.75), rgba(14,14,14,0.95)),
-        url('../img/fondoanime.png'),
+        url('img/fondoanime.png'),
         url(https://lh3.googleusercontent.com/aida-public/AB6AXuBLuWyRtfEWU2y5PdTv2Ss_SZbPEs9yQc0AmxQP3e_PJrxazRMc0Th_482PYo0XjqXN6GK6GFZT8lM5Ex_K1hChX0SjfDPp0lTWdJ41HPTrQAVhOi8yL_G_ginRX5Kiy9HhmlSHK_dDdQWqsNBxVUuw1zzDMVpdhxt194d7Qwq5_CP_9jSpHSEJFBEQgMlxmp-x-Vy92WQ7SxVS48_rOEeP3cVbpEyD_V9kR0CLyoQgTjXTHYuJIDxGfzeq0VkKiUXGrnWao-XxfVcG);
       background-size: cover;
       background-position: center;
@@ -89,7 +89,7 @@
     .auth-page {
       background-image:
         linear-gradient(to bottom, rgba(14,14,14,0.55), rgba(14,14,14,0.85)),
-        url('../img/fondoanime.png'),
+        url('img/fondoanime.png'),
         url(https://lh3.googleusercontent.com/aida-public/AB6AXuBLuWyRtfEWU2y5PdTv2Ss_SZbPEs9yQc0AmxQP3e_PJrxazRMc0Th_482PYo0XjqXN6GK6GFZT8lM5Ex_K1hChX0SjfDPp0lTWdJ41HPTrQAVhOi8yL_G_ginRX5Kiy9HhmlSHK_dDdQWqsNBxVUuw1zzDMVpdhxt194d7Qwq5_CP_9jSpHSEJFBEQgMlxmp-x-Vy92WQ7SxVS48_rOEeP3cVbpEyD_V9kR0CLyoQgTjXTHYuJIDxGfzeq0VkKiUXGrnWao-XxfVcG);
       background-size: cover;
       background-position: center;
@@ -131,7 +131,7 @@
       caret-color: #e7e5e4;
     }
     </style>
-    <link rel="icon" href="../img/icon3.png" />
+    <link rel="icon" href="img/icon3.png" />
   </head>
   <body class="bg-background text-on-background font-body min-h-screen flex flex-col auth-page overflow-hidden">
     <div class="fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-6 py-6 pointer-events-none">
@@ -149,7 +149,7 @@
           <h1 class="font-headline font-extrabold text-[clamp(1.5rem,3.6vw,2.8rem)] tracking-tight leading-tight whitespace-nowrap">
             Unete a <span class="inline-flex whitespace-nowrap"><span class="text-white">Nekora</span><span class="text-violet-400">List</span></span>
           </h1>
-          <p class="text-on-surface-variant max-w-md">Crea tu perfil y organiza, sigue o consulta la informaciÃ³n de tus animes favoritos.</p>
+          <p class="text-on-surface-variant max-w-md">Crea tu perfil y organiza, sigue o consulta la información de tus animes favoritos.</p>
         </div>
 
         <form id="register-form" class="mt-8 flex flex-col gap-6" autocomplete="off">
@@ -162,7 +162,7 @@
               </div>
             </div>
             <div class="flex flex-col gap-2">
-              <label class="text-xs font-semibold uppercase tracking-widest text-on-surface-variant ml-1">Correo electrÃ³nico</label>
+              <label class="text-xs font-semibold uppercase tracking-widest text-on-surface-variant ml-1">Correo electrónico</label>
               <div class="relative group">
                 <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary">alternate_email</span>
                 <input name="register-email" class="w-full bg-surface-container-lowest border-none rounded-xl py-4 pl-12 pr-4 text-on-surface placeholder:text-on-surface-variant/60 focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="tu@anime.com" type="email" required autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" />
@@ -171,17 +171,17 @@
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="flex flex-col gap-2">
-              <label class="text-xs font-semibold uppercase tracking-widest text-on-surface-variant ml-1">ContraseÃ±a</label>
+              <label class="text-xs font-semibold uppercase tracking-widest text-on-surface-variant ml-1">Contraseña</label>
               <div class="relative group">
                 <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary">lock</span>
-                <input class="w-full bg-surface-container-lowest border-none rounded-xl py-4 pl-12 pr-4 text-on-surface placeholder:text-on-surface-variant/60 focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" id="register-pass" name="register-pass" type="password" required autocomplete="new-password" />
+                <input class="w-full bg-surface-container-lowest border-none rounded-xl py-4 pl-12 pr-4 text-on-surface placeholder:text-on-surface-variant/60 focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="••••••••" id="register-pass" name="register-pass" type="password" required autocomplete="new-password" />
               </div>
             </div>
             <div class="flex flex-col gap-2">
-              <label class="text-xs font-semibold uppercase tracking-widest text-on-surface-variant ml-1">Confirmar contraseÃ±a</label>
+              <label class="text-xs font-semibold uppercase tracking-widest text-on-surface-variant ml-1">Confirmar contraseña</label>
               <div class="relative group">
                 <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary">verified_user</span>
-                <input class="w-full bg-surface-container-lowest border-none rounded-xl py-4 pl-12 pr-4 text-on-surface placeholder:text-on-surface-variant/60 focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" id="register-pass-confirm" name="register-pass-confirm" type="password" required autocomplete="new-password" />
+                <input class="w-full bg-surface-container-lowest border-none rounded-xl py-4 pl-12 pr-4 text-on-surface placeholder:text-on-surface-variant/60 focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="••••••••" id="register-pass-confirm" name="register-pass-confirm" type="password" required autocomplete="new-password" />
               </div>
             </div>
           </div>
@@ -189,7 +189,7 @@
             Crear cuenta
           </button>
           <p class="text-center text-on-surface-variant text-sm">
-            Â¿Ya tienes cuenta? <a class="text-primary font-semibold hover:underline decoration-primary/40 transition-all" href="ingresar\.php">Inicia sesiÃ³n aquÃ­</a>
+            ¿Ya tienes cuenta? <a class="text-primary font-semibold hover:underline decoration-primary/40 transition-all" href="ingresar\.php">Inicia sesión aquí</a>
           </p>
         </form>
       </section>
@@ -210,21 +210,21 @@
       })();
     </script>
 
-    <script src="../controllers/layout.js"></script>
+    <script src="controllers/layout.js"></script>
     <div id="register-success" class="fixed inset-0 z-[80] hidden">
       <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
       <div class="relative mx-auto mt-[20vh] w-[92%] max-w-md rounded-2xl bg-surface-container-high/90 border border-violet-500/30 p-6 shadow-2xl text-center overflow-hidden">
         <span class="pointer-events-none absolute -top-20 -right-16 h-40 w-40 rounded-full bg-violet-500/20 blur-3xl"></span>
         <span class="pointer-events-none absolute -bottom-24 -left-16 h-44 w-44 rounded-full bg-fuchsia-500/20 blur-3xl"></span>
         <button type="button" id="register-close" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant hover:text-on-surface flex items-center justify-center">x</button>
-        <img src="../img/doraemon.gif" alt="Doraemon feliz" class="w-20 h-20 mx-auto mb-4 rounded-full" />
-        <h3 class="font-headline text-3xl font-extrabold text-white">Â¡Bienvenido a</h3>
+        <img src="img/doraemon.gif" alt="Doraemon feliz" class="w-20 h-20 mx-auto mb-4 rounded-full" />
+        <h3 class="font-headline text-3xl font-extrabold text-white">¡Bienvenido a</h3>
         <h4 class="font-headline text-2xl font-extrabold text-violet-400 mt-2">
           NekoraList, <span id="register-name">Usuario</span>!
         </h4>
         <p class="text-white/80 text-sm leading-relaxed mt-4">
-          Tu viaje por el mundo del anime comienza ahora. â­<br/>
-          Agrega tus favoritos, organiza tu lista y descubre nuevas aventuras cada dÃ­a.
+          Tu viaje por el mundo del anime comienza ahora. Ã¢Â­Â<br/>
+          Agrega tus favoritos, organiza tu lista y descubre nuevas aventuras cada día.
         </p>
       </div>
     </div>
@@ -247,7 +247,7 @@
       const pass = document.getElementById("register-pass");
       const passConfirm = document.getElementById("register-pass-confirm");
       if (pass && passConfirm && pass.value !== passConfirm.value) {
-        alert("Las contraseÃ±as no coinciden.");
+        alert("Las contraseñas no coinciden.");
         return;
       }
       const name = (nameInput && nameInput.value.trim()) || "";
@@ -275,7 +275,7 @@
     }
   })();
     </script>
-    <script src="../controllers/i18n.js"></script>
+    <script src="controllers/i18n.js"></script>
     <script>
   document.addEventListener("DOMContentLoaded", () => {
     if (window.AniDexI18n) window.AniDexI18n.init();
@@ -283,4 +283,5 @@
     </script>
   </body>
 </html>
+
 

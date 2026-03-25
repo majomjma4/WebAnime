@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="dark" lang="es">
   <head>
     <meta charset="UTF-8" />
@@ -81,7 +81,7 @@
     .auth-bg {
       background-image:
         linear-gradient(to bottom, rgba(14,14,14,0.75), rgba(14,14,14,0.95)),
-        url('../img/fondoanime.png'),
+        url('img/fondoanime.png'),
         url(https://lh3.googleusercontent.com/aida-public/AB6AXuD3ytvgUmt57CRt0afVvpQ0-GHIIPkdzkKWeggGF9-2QfAFg1KfLtYfbvUmzXHI9-jsBNyu819HWIKk4RwxZ6sKHkAQGo-F2EdL5KW_Xe8SS6JfPNo6a0pkJi6x35GdY5uWXk8RF51RpF4cjbjz1Sf20sieqviNoDgM7mGxSQgBsCrKE1cNySASqIGQ9XZzHKXwU2RCQNBF0p6UxGRwfwQfhdP6YU2YgM0MEE5H9br5y_zAv68ddKPwgkJqWYTBxPbNA4ySFAh2WR8I);
       background-size: cover;
       background-position: center;
@@ -89,7 +89,7 @@
     .auth-page {
       background-image:
         linear-gradient(to bottom, rgba(14,14,14,0.55), rgba(14,14,14,0.85)),
-        url('../img/fondoanime.png'),
+        url('img/fondoanime.png'),
         url(https://lh3.googleusercontent.com/aida-public/AB6AXuD3ytvgUmt57CRt0afVvpQ0-GHIIPkdzkKWeggGF9-2QfAFg1KfLtYfbvUmzXHI9-jsBNyu819HWIKk4RwxZ6sKHkAQGo-F2EdL5KW_Xe8SS6JfPNo6a0pkJi6x35GdY5uWXk8RF51RpF4cjbjz1Sf20sieqviNoDgM7mGxSQgBsCrKE1cNySASqIGQ9XZzHKXwU2RCQNBF0p6UxGRwfwQfhdP6YU2YgM0MEE5H9br5y_zAv68ddKPwgkJqWYTBxPbNA4ySFAh2WR8I);
       background-size: cover;
       background-position: center;
@@ -131,7 +131,7 @@
       caret-color: #e7e5e4;
     }
     </style>
-    <link rel="icon" href="../img/icon3.png" />
+    <link rel="icon" href="img/icon3.png" />
   </head>
   <body class="bg-background text-on-background font-body min-h-screen flex flex-col auth-page">
     <div class="fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-6 py-6 pointer-events-none">
@@ -149,7 +149,7 @@
           <h1 class="font-headline font-extrabold text-[clamp(1.5rem,3.6vw,2.8rem)] tracking-tight leading-tight whitespace-nowrap">
             Bienvenido a <span class="inline-flex whitespace-nowrap"><span class="text-white">Nekora</span><span class="text-violet-400">List</span></span>
           </h1>
-          <p class="text-on-surface-variant">Accede a tu perfil para guardar y organizar tus tÃ­tulos.</p>
+          <p class="text-on-surface-variant">Accede a tu perfil para guardar y organizar tus títulos.</p>
         </div>
 
         <form id="login-form" class="mt-8 flex flex-col gap-6" autocomplete="off">
@@ -161,22 +161,22 @@
             </div>
           </div>
           <div class="flex flex-col gap-2">
-            <label class="text-xs font-semibold uppercase tracking-widest text-on-surface-variant ml-1" for="login-pass">ContraseÃ±a</label>
+            <label class="text-xs font-semibold uppercase tracking-widest text-on-surface-variant ml-1" for="login-pass">Contraseña</label>
             <div class="relative group">
               <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary">lock</span>
-              <input id="login-pass" name="login-pass" class="w-full bg-surface-container-lowest border-none rounded-xl py-4 pl-12 pr-4 text-on-surface placeholder:text-on-surface-variant/60 focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" type="password" required autocomplete="new-password" />
+              <input id="login-pass" name="login-pass" class="w-full bg-surface-container-lowest border-none rounded-xl py-4 pl-12 pr-4 text-on-surface placeholder:text-on-surface-variant/60 focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="••••••••" type="password" required autocomplete="new-password" />
             </div>
             <div class="flex justify-end">
-              <a class="text-xs text-primary-dim hover:text-primary transition-colors" href="#">Â¿Olvidaste tu contraseÃ±a?</a>
+              <a class="text-xs text-primary-dim hover:text-primary transition-colors" href="#">¿Olvidaste tu contraseña?</a>
             </div>
           </div>
           <button class="w-full bg-gradient-to-br from-primary to-primary-container text-on-primary py-4 rounded-full font-headline font-bold text-lg hover:scale-[1.02] active:scale-95 transition-all duration-300 shadow-lg shadow-primary/20" type="submit">
-            Iniciar sesiÃ³n
+            Iniciar sesión
           </button>
         </form>
 
         <p class="mt-6 text-center text-sm text-on-surface-variant">
-          Â¿No tienes cuenta? <a class="text-primary-dim font-bold hover:underline" href="registro\.php">RegÃ­strate ahora</a>
+          ¿No tienes cuenta? <a class="text-primary-dim font-bold hover:underline" href="registro\.php">Regístrate ahora</a>
         </p>
       </section>
     </main>
@@ -196,19 +196,19 @@
       })();
     </script>
 
-    <script src="../controllers/layout.js"></script>
+    <script src="controllers/layout.js"></script>
     <div id="login-success" class="fixed inset-0 z-[80] hidden">
       <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
       <div class="relative mx-auto mt-[20vh] w-[92%] max-w-md rounded-2xl bg-surface-container-high/90 border border-violet-500/30 p-6 shadow-2xl text-center overflow-hidden">
         <span class="pointer-events-none absolute -top-20 -right-16 h-40 w-40 rounded-full bg-violet-500/20 blur-3xl"></span>
         <span class="pointer-events-none absolute -bottom-24 -left-16 h-44 w-44 rounded-full bg-fuchsia-500/20 blur-3xl"></span>
         <button type="button" id="login-close" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant hover:text-on-surface flex items-center justify-center">x</button>
-        <img src="../img/doraemon.gif" alt="Doraemon feliz" class="w-20 h-20 mx-auto mb-4 rounded-full" />
+        <img src="img/doraemon.gif" alt="Doraemon feliz" class="w-20 h-20 mx-auto mb-4 rounded-full" />
         <h3 id="login-title" class="font-headline text-2xl font-extrabold text-violet-400">
-          Â¡Bienvenido de nuevo, <span id="login-name">Usuario</span>!
+          ¡Bienvenido de nuevo, <span id="login-name">Usuario</span>!
         </h3>
         <p id="login-subtitle" class="text-white/80 text-sm leading-relaxed mt-4">
-          Tu colecciÃ³n de animes te estaba esperando. â­
+          Tu colección de animes te estaba esperando. ÃƒÂ¢Ã‚Â­Ã‚Â
         </p>
       </div>
     </div>
@@ -236,11 +236,11 @@
       const isAdmin = name === "Admin99" && pass === "1221";
       if (nameEl) nameEl.textContent = name;
       if (isAdmin) {
-        if (titleEl) titleEl.textContent = "Bienvenido, administrador ðŸ‘‘";
+        if (titleEl) titleEl.textContent = "Bienvenido, administrador 👑";
         if (subtitleEl) subtitleEl.textContent = "Tienes el control total de NekoraList";
       } else {
-        if (titleEl) titleEl.innerHTML = `Â¡Bienvenido de nuevo, <span id="login-name">${name || "Usuario"}</span>!`;
-        if (subtitleEl) subtitleEl.textContent = "Tu colecciÃ³n de animes te estaba esperando. â­";
+        if (titleEl) titleEl.innerHTML = `¡Bienvenido de nuevo, <span id="login-name">${name || "Usuario"}</span>!`;
+        if (subtitleEl) subtitleEl.textContent = "Tu colección de animes te estaba esperando. ÃƒÂ¢Ã‚Â­Ã‚Â";
       }
       try {
         localStorage.setItem("nekora_logged_in", "true");
@@ -277,7 +277,7 @@
     }
   })();
     </script>
-    <script src="../controllers/i18n.js"></script>
+    <script src="controllers/i18n.js"></script>
     <script>
   document.addEventListener("DOMContentLoaded", () => {
     if (window.AniDexI18n) window.AniDexI18n.init();
@@ -285,4 +285,5 @@
     </script>
   </body>
 </html>
+
 

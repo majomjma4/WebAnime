@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="dark" lang="es">
   <head>
     <script data-ui-preload>document.documentElement.classList.add("preload-ui");</script>
@@ -274,7 +274,7 @@
       grid-column: 1 / -1;
     }
     </style>
-    <link rel="icon" href="../img/icon3.png" />
+    <link rel="icon" href="img/icon3.png" />
 
 
   </head>
@@ -298,12 +298,12 @@
                   </div>
                 </div>
                 <div class="space-y-2">
-                  <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant">GÃ©NekoraLists</label>
-                  <!-- Dropdown de gÃ©NekoraLists renderizado por controllers/filters.js -->
+                  <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant">Géneros</label>
+                  <!-- Dropdown de géNekoraLists renderizado por controllers/filters.js -->
                 </div>
                 <div class="space-y-4">
                   <div class="space-y-2">
-                    <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant" for="filter-year">AÃ±o</label>
+                    <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant" for="filter-year">Año</label>
                     <select id="filter-year" class="w-full rounded-xl bg-surface-container-high px-4 py-3 text-on-surface" aria-label="Filtrar por ao">
                       <option>Todos</option>
                       <option>2026</option>
@@ -316,7 +316,7 @@
                     <select id="filter-type" class="w-full rounded-xl bg-surface-container-high px-4 py-3 text-on-surface" aria-label="Filtrar por tipo">
                       <option>Todos</option>
                       <option>Serie</option>
-                      <option>PelÃ­cula</option>
+                      <option>Película</option>
                       <option>OVA</option>
                     </select>
                   </div>
@@ -324,7 +324,7 @@
                     <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant" for="filter-status">Estado</label>
                     <select id="filter-status" class="w-full rounded-xl bg-surface-container-high px-4 py-3 text-on-surface" aria-label="Filtrar por estado">
                       <option>Todos</option>
-                      <option>En emisiÃ³n</option>
+                      <option>En emisión</option>
                       <option>Finalizado</option>
                     </select>
                   </div>
@@ -347,7 +347,7 @@
           </aside>
 
           <!-- Catalog Content -->
-          <section class="lg:col-span-10" aria-label="Resultados de catÃ¡logo">
+          <section class="lg:col-span-10" aria-label="Resultados de catálogo">
             <header class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
               <div>
                 <h1 class="font-headline text-4xl font-extrabold text-on-surface">Descubrimiento</h1>
@@ -394,14 +394,14 @@
               <div class="hidden" data-state="empty">
                 <div class="rounded-lg bg-surface-container-low p-10 text-center">
                   <h2 class="text-2xl font-bold text-on-surface">Sin resultados</h2>
-                  <p class="mt-2 text-on-surface-variant">Prueba otros filtros para ver mÃ¡s tÃ­tulos disponibles.</p>
+                  <p class="mt-2 text-on-surface-variant">Prueba otros filtros para ver más títulos disponibles.</p>
                 </div>
               </div>
 
               <div class="hidden" data-state="error">
                 <div class="rounded-lg bg-error-container/30 p-10 text-center">
                   <h2 class="text-2xl font-bold text-on-error-container">Ocurrio un error</h2>
-                  <p class="mt-2 text-on-error-container/80">No pudimos cargar el catÃ¡logo. IntÃ©ntalo nuevamente</p>
+                  <p class="mt-2 text-on-error-container/80">No pudimos cargar el catálogo. Inténtalo nuevamente</p>
                   <button class="mt-6 rounded-full bg-primary px-6 py-3 text-sm font-bold text-on-primary" type="button">Reintentar</button>
                 </div>
               </div>
@@ -409,7 +409,7 @@
 
             <!-- AnimeCard Component -->
             <section class="mt-[clamp(0.6rem,0.9vw,0.8rem)] grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6" aria-label="Grid de anime">
-              <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="jujutsu kaisen" data-genres="accion,fantasia" data-year="2020" data-type="Serie de TV" data-status="En emisiÃ³n">
+              <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="jujutsu kaisen" data-genres="accion,fantasia" data-year="2020" data-type="Serie de TV" data-status="En emisión">
                 <a class="block" href="detail\.php" aria-label="Jujutsu Kaisen">
                   <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
                     <img alt="Jujutsu Kaisen" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAf_5yu8ItByDxj1mtS86M1c4L-O9mK0YowNyDHJw9W3iBVZ8FyDg-EqWFT6-8OHsq_coAIAP0l958Z_MmlAFEJw4WhJphbR4l9vrMyWi2j3WVvXgYbjrEmsF1lNw_pei3FsECFfbJAjngFTubB3gifJd8ggZOoo0o4uF2DMo2NTvstvfpwoVeh2cIGu3izqmnqcGUvtn3bfztDQjI_3f_PqRWRxgPC6iAsoNpidsC32rJsZNIfPPYMhlo5KeRXtnq6jjUFrMUTk0d4" loading="lazy"/>
@@ -448,7 +448,7 @@
                 </a>
               </article>
 
-              <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="demon slayer" data-genres="accion,fantasia" data-year="2019" data-type="Especiales" data-status="PrÃ³ximamente">
+              <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="demon slayer" data-genres="accion,fantasia" data-year="2019" data-type="Especiales" data-status="Próximamente">
                 <a class="block" href="detail\.php" aria-label="Demon Slayer">
                   <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
                     <img alt="Demon Slayer" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAR9x5iy6NpAOvezWnwzK2vesTKLBp29cvFNXUtwXht6dD1l_D5gxqns-j0rTWWHrKxrDe_gNz2hRv_bp72i7d3-B1XfbVcKL9UOdKUyxhkn7PVkTFK6gvR6FYot0OR1ZFv5kxq0aRiZ5uP-MPaYLYP3NbHMNLEF22YktmuRvb3820xC4ub0dVEhj3jZVy7-ZDMJBIgRaWhSUwsjWpaA_FPrQNkZspeF-urqaKWFj1HOZJbRz951KKRSdvfM9UeaS3zgtT822TzJSbT" loading="lazy"/>
@@ -659,7 +659,7 @@
               <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="steins;gate" data-genres="sci-fi,thriller" data-year="2011" data-type="Serie de TV" data-status="Finalizado">
                 <a class="block" href="detail\.php" aria-label="Steins;Gate">
                   <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
-                    <img alt="Steins;Gate" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="../img/fondoanime.png" loading="lazy"/>
+                    <img alt="Steins;Gate" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="img/fondoanime.png" loading="lazy"/>
                     <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2011</span>
                   </div>
                   <div class="space-y-2 mt-2">
@@ -672,7 +672,7 @@
               <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="one punch man" data-genres="accion,comedia" data-year="2015" data-type="Serie de TV" data-status="Finalizado">
                 <a class="block" href="detail\.php" aria-label="One Punch Man">
                   <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
-                    <img alt="One Punch Man" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="../img/fondoanime.png" loading="lazy"/>
+                    <img alt="One Punch Man" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="img/fondoanime.png" loading="lazy"/>
                     <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2015</span>
                   </div>
                   <div class="space-y-2 mt-2">
@@ -685,7 +685,7 @@
               <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="hunter x hunter" data-genres="accion,aventura" data-year="2011" data-type="Serie de TV" data-status="Finalizado">
                 <a class="block" href="detail\.php" aria-label="Hunter x Hunter">
                   <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
-                    <img alt="Hunter x Hunter" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="../img/fondoanime.png" loading="lazy"/>
+                    <img alt="Hunter x Hunter" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="img/fondoanime.png" loading="lazy"/>
                     <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2011</span>
                   </div>
                   <div class="space-y-2 mt-2">
@@ -710,9 +710,9 @@
             </section>
 
             <div class="mt-12 flex justify-center">
-              <button class="rounded-full border border-primary/30 bg-primary/10 px-8 py-4 text-sm font-bold text-primary transition-colors hover:bg-primary/20 inline-flex items-center gap-2" type="button" aria-label="Cargar mÃ¡s resultados">
+              <button class="rounded-full border border-primary/30 bg-primary/10 px-8 py-4 text-sm font-bold text-primary transition-colors hover:bg-primary/20 inline-flex items-center gap-2" type="button" aria-label="Cargar más resultados">
                 <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">add_circle</span>
-                Cargar mÃ¡s
+                Cargar más
               </button>
             </div>
           </section>
@@ -721,14 +721,14 @@
 
       <!-- Footer Component -->
       <div data-layout="footer"></div>
-      <script src="../controllers/layout.js"></script>
+      <script src="controllers/layout.js"></script>
     </div>
-    <script src="../controllers/i18n.js"></script>
-    <script src="../controllers/title-images.js?v=3"></script>
-    <script src="../controllers/search.js"></script>
-    <script src="../controllers/filters.js?v=11"></script>
-    <script src="../controllers/detail-links.js"></script>
-    <script src="../controllers/load-more.js?v=2"></script>
+    <script src="controllers/i18n.js"></script>
+    <script src="controllers/title-images.js?v=3"></script>
+    <script src="controllers/search.js"></script>
+    <script src="controllers/filters.js?v=11"></script>
+    <script src="controllers/detail-links.js"></script>
+    <script src="controllers/load-more.js?v=2"></script>
     <script>
   document.addEventListener("DOMContentLoaded", () => {
     // Ajuste global de etiquetas: Series -> Animes, Serie -> Anime
@@ -744,16 +744,16 @@
         .replace(/Series\b/g, "Animes")
         .replace(/Serie(?!\s+de\s+TV)\b/g, "Anime");
       const fixes = [
-        ["AcciÃ³n", "AcciÃ³n"],
-        ["FantasÃ­a", "FantasÃ­a"],
-        ["emision", "emisiÃ³n"],
-        ["titulos", "tÃ­tulos"],
-        ["Tambien", "TambiÃ©n"],
-        ["tambien", "tambiÃ©n"],
-        ["GeNekoraLists", "GÃ©NekoraLists"],
-        ["Informacion", "InformaciÃ³n"],
-        ["Duracion", "DuraciÃ³n"],
-        ["Anio", "AÃ±o"]
+        ["Acción", "Acción"],
+        ["Fantasía", "Fantasía"],
+        ["emision", "emisión"],
+        ["titulos", "títulos"],
+        ["Tambien", "También"],
+        ["tambien", "también"],
+        ["Géneros", "Géneros"],
+        ["Informacion", "Información"],
+        ["Duracion", "Duración"],
+        ["Anio", "Año"]
       ];
       fixes.forEach(([bad, good]) => {
         node.nodeValue = node.nodeValue.replaceAll(bad, good);
@@ -761,7 +761,7 @@
       node.nodeValue = node.nodeValue.replace(/Serie\s+([0-9+]+)\s+eps/g, "$1 ep");
     });
 
-    // En animes: badge abajo izquierda con el aÃ±o de publicaciÃ³n
+    // En animes: badge abajo izquierda con el año de publicación
     const applyYearBadges = () => {
       document.querySelectorAll("span.absolute.left-3").forEach((badge) => {
         const card = badge.closest("[data-year]");
@@ -796,4 +796,5 @@
     <script data-ui-unlock>document.documentElement.classList.remove("preload-ui");</script>
   </body>
 </html>
+
 

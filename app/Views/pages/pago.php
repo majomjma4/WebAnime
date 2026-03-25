@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 
 <html class="dark" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<link rel="icon" href="../img/icon3.png"/>
+<link rel="icon" href="img/icon3.png"/>
 <title>NekoraList - Pago Seguro</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -195,25 +195,25 @@
       <label class="cursor-pointer">
         <input class="sr-only peer" type="radio" name="method-type" value="visa"/>
         <span class="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-on-surface-variant transition-all hover:border-[#38bdf8] hover:text-[#38bdf8] hover:bg-[#38bdf8]/10 peer-checked:border-[#38bdf8] peer-checked:text-[#38bdf8] peer-checked:bg-[#38bdf8]/10 peer-checked:shadow-[0_0_12px_rgba(56,189,248,0.35)] pay-option pay-option--card">
-          <img src="../img/visa.png" alt="Visa" class="h-4 w-4 object-contain" loading="lazy" decoding="async"/>Visa
+          <img src="img/visa.png" alt="Visa" class="h-4 w-4 object-contain" loading="lazy" decoding="async"/>Visa
         </span>
       </label>
       <label class="cursor-pointer">
         <input class="sr-only peer" type="radio" name="method-type" value="amex"/>
         <span class="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-on-surface-variant transition-all hover:border-[#38bdf8] hover:text-[#38bdf8] hover:bg-[#38bdf8]/10 peer-checked:border-[#38bdf8] peer-checked:text-[#38bdf8] peer-checked:bg-[#38bdf8]/10 peer-checked:shadow-[0_0_12px_rgba(56,189,248,0.35)] pay-option pay-option--card">
-          <img src="../img/amex.png" alt="American Express" class="h-4 w-4 object-contain" loading="lazy" decoding="async"/>Amex
+          <img src="img/amex.png" alt="American Express" class="h-4 w-4 object-contain" loading="lazy" decoding="async"/>Amex
         </span>
       </label>
       <label class="cursor-pointer">
         <input class="sr-only peer" type="radio" name="method-type" value="discover"/>
         <span class="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-on-surface-variant transition-all hover:border-[#38bdf8] hover:text-[#38bdf8] hover:bg-[#38bdf8]/10 peer-checked:border-[#38bdf8] peer-checked:text-[#38bdf8] peer-checked:bg-[#38bdf8]/10 peer-checked:shadow-[0_0_12px_rgba(56,189,248,0.35)] pay-option pay-option--card">
-          <img src="../img/discover.png" alt="Discover" class="h-4 w-4 object-contain" loading="lazy" decoding="async"/>Discover
+          <img src="img/discover.png" alt="Discover" class="h-4 w-4 object-contain" loading="lazy" decoding="async"/>Discover
         </span>
       </label>
       <label class="cursor-pointer">
         <input class="sr-only peer" type="radio" name="method-type" value="jcb"/>
         <span class="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-on-surface-variant transition-all hover:border-[#38bdf8] hover:text-[#38bdf8] hover:bg-[#38bdf8]/10 peer-checked:border-[#38bdf8] peer-checked:text-[#38bdf8] peer-checked:bg-[#38bdf8]/10 peer-checked:shadow-[0_0_12px_rgba(56,189,248,0.35)] pay-option pay-option--card">
-          <img src="../img/jcb.png" alt="JCB" class="h-4 w-4 object-contain" loading="lazy" decoding="async"/>JCB
+          <img src="img/jcb.png" alt="JCB" class="h-4 w-4 object-contain" loading="lazy" decoding="async"/>JCB
         </span>
       </label>
     </div>
@@ -282,7 +282,7 @@
 <!-- Product Card -->
 <div class="bg-surface-container p-4 rounded-lg flex gap-4 items-center">
 <div class="w-24 h-24 bg-surface-container-highest rounded-lg overflow-hidden flex-shrink-0 relative border border-primary/20">
-<img alt="NekoraList icon" class="w-full h-full object-cover" data-alt="NekoraList icon" src="../img/icon.png"/>
+<img alt="NekoraList icon" class="w-full h-full object-cover" data-alt="NekoraList icon" src="img/icon.png"/>
 <div class="absolute inset-0 bg-primary/10 mix-blend-overlay"></div>
 </div>
 <div class="flex-grow">
@@ -330,7 +330,7 @@
     <span class="pointer-events-none absolute -top-20 -right-16 h-40 w-40 rounded-full bg-violet-500/20 blur-3xl"></span>
     <span class="pointer-events-none absolute -bottom-24 -left-16 h-44 w-44 rounded-full bg-fuchsia-500/20 blur-3xl"></span>
     <button type="button" id="payment-close" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant hover:text-on-surface flex items-center justify-center">x</button>
-    <img src="../img/doraemon.gif" alt="Sticker feliz" class="w-20 h-20 mx-auto mb-4 rounded-full" />
+    <img src="img/doraemon.gif" alt="Sticker feliz" class="w-20 h-20 mx-auto mb-4 rounded-full" />
     <h3 class="font-headline text-3xl font-extrabold text-white whitespace-nowrap">COMPRA EXITOSA!!!!</h3>
     <h4 class="font-headline text-2xl font-extrabold text-violet-400 mt-2">
       Gracias, <span id="payment-name">Usuario</span>!
@@ -338,7 +338,7 @@
     <p class="text-white/80 text-sm leading-relaxed mt-4">
   Tu acceso a NekoraList se ha activado. Disfruta de tu experiencia premium<br/>
   y explora todo el contenido exclusivo que hemos preparado para ti.<br/>
-  Â¡Bienvenido a la comunidad de NekoraList!
+  ¡Bienvenido a la comunidad de NekoraList!
 </p>
   </div>
 </div>
@@ -619,10 +619,11 @@
     validateForm(false);
   });
 </script>
-<script src="../controllers/layout.js"></script>
-<script src="../controllers/i18n.js"></script>
-<script src="../controllers/search.js"></script>
+<script src="controllers/layout.js"></script>
+<script src="controllers/i18n.js"></script>
+<script src="controllers/search.js"></script>
 </body></html>
+
 
 
 

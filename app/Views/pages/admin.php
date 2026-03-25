@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <html class="dark" lang="en"><head>
-<link rel="icon" href="../img/icon3.png" />
+<link rel="icon" href="img/icon3.png" />
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>NekoraList - Solicitudes</title>
@@ -99,7 +99,7 @@
 <main class="ml-64 min-h-screen">
 <!-- TopAppBar Component -->
 <header class="fixed top-0 right-0 w-[calc(100%-16rem)] z-40 bg-[#0e0e0e]/70 backdrop-blur-xl flex justify-between items-center h-20 px-12">
-<link rel="icon" href="../img/icon3.png" />
+<link rel="icon" href="img/icon3.png" />
 <h1 class="font-headline font-semibold text-lg text-on-surface">Solicitudes de Anime</h1>
 <div class="flex items-center gap-8">
 <!-- Search Bar -->
@@ -117,7 +117,7 @@
 <div class="col-span-8 bg-surface-container-low p-8 rounded-lg flex justify-between items-end relative overflow-hidden group" data-admin-queue>
 <div class="relative z-10">
 <h2 class="font-headline text-4xl font-extrabold mb-2 text-on-surface tracking-tighter">Resumen de la Cola</h2>
-<p class="text-on-surface-variant text-lg font-body max-w-md">Tienes <span class="text-primary font-bold" data-admin-pending-text>24 solicitudes pendientes</span> esperando revisin hoy. Mantn el catlogo actualizado.</p>
+<p class="text-on-surface-variant text-lg font-body max-w-md">Tienes <span class="text-primary font-bold" data-admin-pending-text>24 solicitudes pendientes</span> esperando revisión hoy. Mantén el catálogo actualizado.</p>
 </div>
 <div class="relative z-10 text-right">
 <span class="block text-5xl font-extrabold font-headline text-primary-container/40" data-admin-pending-count>24</span>
@@ -131,8 +131,8 @@
 <div class="col-span-4 bg-primary-container p-8 rounded-lg flex flex-col justify-between shadow-xl shadow-primary-container/10 cursor-pointer" data-admin-quick-action>
 <span class="material-symbols-outlined text-on-primary-container text-4xl" data-icon="auto_awesome">auto_awesome</span>
 <div>
-<h3 class="font-headline font-bold text-on-primary-container text-xl uppercase tracking-tight">ACCIN RPIDA</h3>
-<p class="text-on-primary-container/70 text-sm mt-1">Aprobar automticamente solicitudes de Curadores de Confianza.</p>
+<h3 class="font-headline font-bold text-on-primary-container text-xl uppercase tracking-tight">ACCIÓN RÁPIDA</h3>
+<p class="text-on-primary-container/70 text-sm mt-1">Aprobar automáticamente solicitudes de Curadores de Confianza.</p>
 </div>
 </div>
 </section>
@@ -143,8 +143,8 @@
 <thead>
 <tr class="text-on-surface-variant text-[10px] uppercase tracking-[0.2em] font-bold border-b border-outline-variant/10">
 <th class="px-8 py-6">USUARIO</th>
-<th class="px-8 py-6">TTULO SOLICITADO</th>
-<th class="px-8 py-6">FECHA DE ENVO</th>
+<th class="px-8 py-6">TÍTULO SOLICITADO</th>
+<th class="px-8 py-6">FECHA DE ENVÍO</th>
 <th class="px-8 py-6 text-right">ACCIONES</th>
 </tr>
 </thead>
@@ -168,7 +168,7 @@
 
 </div>
 </main>
-<script src="../controllers/admin-layout.js"></script>
+<script src="controllers/admin-layout.js"></script>
 <script data-admin-pagination-script>
 (function(){
   function initAdmin(){
@@ -294,6 +294,7 @@
 })();
 </script>
 </body></html>
+
 
 
 

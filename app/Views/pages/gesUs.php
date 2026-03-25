@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <html class="dark" lang="en"><head>
-<link rel="icon" href="../img/icon3.png" />
+<link rel="icon" href="img/icon3.png" />
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>NekoraList - Gestión de Usuarios</title>
@@ -95,7 +95,7 @@
 <main class="ml-64 flex-1 flex flex-col">
 <!-- TopAppBar Anchor -->
 <header class="fixed top-0 right-0 w-[calc(100%-16rem)] z-40 bg-[#0e0e0e]/70 backdrop-blur-xl flex justify-between items-center h-20 px-12">
-<link rel="icon" href="../img/icon3.png" />
+<link rel="icon" href="img/icon3.png" />
 <div class="flex items-center gap-4">
 <h2 class="font-['Manrope'] font-semibold text-lg text-on-surface">Gestionar Usuarios</h2>
 <span class="px-3 py-1 bg-surface-container-high text-primary text-xs font-bold rounded-full" data-admin-users-total>10 en Total</span>
@@ -602,5 +602,6 @@
     }
   })();
 </script>
-<script src="../controllers/admin-layout.js"></script>
+<script src="controllers/admin-layout.js"></script>
 </body></html>
+

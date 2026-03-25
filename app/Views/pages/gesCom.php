@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <html class="dark" lang="en"><head>
-<link rel="icon" href="../img/icon3.png" />
+<link rel="icon" href="img/icon3.png" />
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>NekoraList - Gestión de Comentarios</title>
@@ -131,7 +131,7 @@
 <p class="text-[10px] text-on-surface-variant mt-2 italic">Hilos activos</p>
 </div>
 <div class="bg-surface-container-low p-6 rounded-lg border-l-4 border-primary-container shadow-lg">
-<p class="text-on-surface-variant text-xs uppercase font-bold tracking-widest mb-1">TASA DE INTERACCIN</p>
+<p class="text-on-surface-variant text-xs uppercase font-bold tracking-widest mb-1">TASA DE INTERACCIÓN</p>
 <h3 class="text-3xl font-headline font-extrabold tracking-tighter">84.2%</h3>
 <p class="text-[10px] text-primary mt-2 flex items-center gap-1">
 <span class="material-symbols-outlined text-xs" data-icon="star">star</span> Alta calidad editorial
@@ -445,5 +445,6 @@
     }, true);
   })();
 </script>
-<script src="../controllers/admin-layout.js"></script>
+<script src="controllers/admin-layout.js"></script>
 </body></html>
+

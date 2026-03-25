@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="dark" lang="es">
   <head>
     <script data-ui-preload>
@@ -11,7 +11,7 @@
     </style>
     <meta charset="UTF-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>NekoraList - CatÃ¡logo</title>
+    <title>NekoraList - CatÃƒÆ’¡logo</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link
     href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap"
@@ -270,7 +270,7 @@
       grid-column: 1 / -1;
     }
     </style>
-    <link rel="icon" href="../img/icon3.png" />
+    <link rel="icon" href="img/icon3.png" />
   </head>
   <body class="bg-background text-on-background font-body selection:bg-[#AC85DB]/30 selection:text-[#996AD2]">
     <div class="min-h-screen">
@@ -300,18 +300,18 @@
                   </div>
                 </div>
                 <div class="space-y-2">
-                  <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant">GÃ©NekoraLists</label>
-                  <!-- Dropdown de gÃ©NekoraLists renderizado por controllers/filters.js -->
+                  <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant">Géneros</label>
+                  <!-- Dropdown de gÃƒÆ’Ã‚Â©NekoraLists renderizado por controllers/filters.js -->
           </div>
           <div class="space-y-4">
             <div class="space-y-2">
               <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant" for="filter-year"
-              >AÃ±o</label
+              >Año</label
               >
               <select
               id="filter-year"
               class="w-full rounded-xl bg-surface-container-high px-4 py-3 text-on-surface"
-              aria-label="Filtrar por aÃ±o"
+              aria-label="Filtrar por año"
               >
               <option>Todos</option>
               <option>2026</option>
@@ -346,7 +346,7 @@
           aria-label="Filtrar por estado"
           >
           <option>Todos</option>
-          <option>En emisiÃ³n</option>
+          <option>En emisión</option>
           <option>Finalizado</option>
         </select>
       </div>
@@ -373,7 +373,7 @@
 </aside>
 
 <!-- Catalog Content -->
-<section class="lg:col-span-10" aria-label="Resultados de catÃ¡logo">
+<section class="lg:col-span-10" aria-label="Resultados de catálogo">
   <header class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
     <div>
       <h1 class="font-headline text-4xl font-extrabold text-on-surface">Descubrimiento</h1>
@@ -420,14 +420,14 @@
     <div class="hidden" data-state="empty">
       <div class="rounded-lg bg-surface-container-low p-10 text-center">
         <h2 class="text-2xl font-bold text-on-surface">Sin resultados</h2>
-        <p class="mt-2 text-on-surface-variant">Prueba otros filtros para ver mÃ¡s tÃ­tulos disponibles.</p>
+        <p class="mt-2 text-on-surface-variant">Prueba otros filtros para ver más títulos disponibles.</p>
       </div>
     </div>
 
     <div class="hidden" data-state="error">
       <div class="rounded-lg bg-error-container/30 p-10 text-center">
-        <h2 class="text-2xl font-bold text-on-error-container">OcurriÃ³ un error</h2>
-        <p class="mt-2 text-on-error-container/80">No pudimos cargar el catÃ¡logo. IntÃ©ntalo nuevamente</p>
+        <h2 class="text-2xl font-bold text-on-error-container">Ocurrió un error</h2>
+        <p class="mt-2 text-on-error-container/80">No pudimos cargar el catálogo. Inténtalo nuevamente</p>
         <button class="mt-6 rounded-full bg-primary px-6 py-3 text-sm font-bold text-on-primary" type="button">
           Reintentar
         </button>
@@ -437,7 +437,7 @@
 
   <!-- AnimeCard Component -->
   <section class="mt-[clamp(0.6rem,0.9vw,0.8rem)] grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6" aria-label="Grid de anime">
-    <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="your name" data-genres="romance,fantasia" data-year="2016" data-type="PelÃ­cula original" data-status="Finalizada">
+    <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="your name" data-genres="romance,fantasia" data-year="2016" data-type="Película original" data-status="Finalizada">
       <a class="block" href="detail\.php" aria-label="Your Name">
         <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
           <img alt="Your Name" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx21519-SUo3ZQuCbYhJ.png" loading="lazy"/>
@@ -463,7 +463,7 @@
       </a>
     </article>
 
-    <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="a silent voice" data-genres="drama,romance" data-year="2016" data-type="Precuela" data-status="PrÃ³ximamente" data-mal-id="28851">
+    <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="a silent voice" data-genres="drama,romance" data-year="2016" data-type="Precuela" data-status="Próximamente" data-mal-id="28851">
       <a class="block" href="detail\.php" aria-label="A Silent Voice" data-mal-id="28851">
         <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
           <img alt="A Silent Voice" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx20954-sYRfE5jQRtSB.jpg" loading="lazy"/>
@@ -697,10 +697,10 @@
       </a>
     </article>
 
-    <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="millennium actress" data-genres="drama,romance" data-year="2001" data-type="PelÃ­cula original" data-status="Finalizada">
+    <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="millennium actress" data-genres="drama,romance" data-year="2001" data-type="Película original" data-status="Finalizada">
       <a class="block" href="detail\.php" aria-label="Millennium Actress">
         <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
-          <img alt="Millennium Actress" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="../img/fondoanime.png" loading="lazy"/>
+          <img alt="Millennium Actress" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="img/fondoanime.png" loading="lazy"/>
           <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2001</span>
         </div>
         <div class="space-y-2 mt-2">
@@ -711,10 +711,10 @@
     </article>
 
 
-    <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="the tale of the princess kaguya" data-genres="drama,historico" data-year="2013" data-type="PelÃ­cula original" data-status="Finalizada">
+    <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="the tale of the princess kaguya" data-genres="drama,historico" data-year="2013" data-type="Película original" data-status="Finalizada">
       <a class="block" href="detail\.php" aria-label="The Tale of the Princess Kaguya">
         <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
-          <img alt="The Tale of the Princess Kaguya" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="../img/fondoanime.png" loading="lazy"/>
+          <img alt="The Tale of the Princess Kaguya" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="img/fondoanime.png" loading="lazy"/>
           <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2013</span>
         </div>
         <div class="space-y-2 mt-2">
@@ -729,10 +729,10 @@
   <button
     class="rounded-full border border-primary/30 bg-primary/10 px-8 py-4 text-sm font-bold text-primary transition-colors hover:bg-primary/20 inline-flex items-center gap-2"
     type="button"
-    aria-label="Cargar mÃ¡s resultados"
+    aria-label="Cargar más resultados"
     >
     <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">add_circle</span>
-    Cargar mÃ¡s
+    Cargar más
   </button>
 </div>
 </section>
@@ -741,25 +741,25 @@
 
 <!-- Footer Component -->
 <div data-layout="footer"></div>
-<script src="../controllers/layout.js"></script>
+<script src="controllers/layout.js"></script>
 </div>
 
-<script src="../controllers/i18n.js"></script>
-<script src="../controllers/title-images.js?v=9"></script>
-<script src="../controllers/search.js?v=2"></script>
-<script src="../controllers/filters.js?v=11"></script>
-<script src="../controllers/detail-links.js"></script>
-<script src="../controllers/load-more.js?v=2"></script>
+<script src="controllers/i18n.js"></script>
+<script src="controllers/title-images.js?v=9"></script>
+<script src="controllers/search.js?v=2"></script>
+<script src="controllers/filters.js?v=11"></script>
+<script src="controllers/detail-links.js"></script>
+<script src="controllers/load-more.js?v=2"></script>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
       // Fix mojibake and duplicated words in peliculas page text
       const fixMap = {
-        "PelÃ­culas": "PelÃ­culas",
-        "PelÃ­culas": "PelÃ­culas",
-        "FantasÃ­a": "FantasÃ­a",
-        "FantasÃ­a": "FantasÃ­a",
-        "AcciÃ³n": "AcciÃ³n",
-        "mÃ¡s": "mÃ¡s"
+        "Películas": "Películas",
+        "Películas": "Películas",
+        "Fantasía": "Fantasía",
+        "Fantasía": "Fantasía",
+        "Acción": "Acción",
+        "más": "más"
       };
       const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
       let node;
@@ -769,9 +769,9 @@
         Object.keys(fixMap).forEach((k) => {
           if (out.includes(k)) out = out.replaceAll(k, fixMap[k]);
         });
-        out = out.replace(/anime\s*peliculas/gi, "Anime y PelÃ­culas");
-        out = out.replace(/pel[?i]culas\s*pel[?i]culas/gi, "PelÃ­culas");
-        out = out.replace(/pel[i]culas+/gi, "PelÃ­culas");
+        out = out.replace(/anime\s*peliculas/gi, "Anime y Películas");
+        out = out.replace(/pel[?i]culas\s*pel[?i]culas/gi, "Películas");
+        out = out.replace(/pel[i]culas+/gi, "Películas");
         out = out.replace(/depeliculastacado/gi, "Destacado");
         if (out !== t) node.nodeValue = out;
       }
@@ -788,7 +788,7 @@
         if (window.AniDexFilters) window.AniDexFilters.init();
       }, 1100);
       if (window.AniDexDetailLinks) window.AniDexDetailLinks.init();
-      // En pagina de peliculas: mostrar el aÃ±o de publicaciÃ³n y abajo a la izquierda.
+      // En pagina de peliculas: mostrar el año de publicaciÃƒÆ’Ã‚Â³n y abajo a la izquierda.
       const applyYearBadges = () => {
         document.querySelectorAll("span.absolute.left-3").forEach((badge) => {
           const card = badge.closest("[data-year]");
@@ -807,6 +807,7 @@
 <script data-ui-unlock>document.documentElement.classList.remove("preload-ui");</script>
 </body>
 </html>
+
 
 
 

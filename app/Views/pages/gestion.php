@@ -1,7 +1,7 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 <html class="dark" lang="en"><head>
-<link rel="icon" href="../img/icon3.png" />
+<link rel="icon" href="img/icon3.png" />
 <title>NekoraList - Gestion de Animes</title>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
@@ -99,7 +99,7 @@
 <main class="flex-1 ml-64 min-h-screen relative overflow-x-hidden">
 <!-- TopAppBar Anchor -->
 <header class="fixed top-0 right-0 w-[calc(100%-16rem)] z-40 bg-[#0e0e0e]/70 backdrop-blur-xl flex justify-between items-center h-20 px-12">
-<link rel="icon" href="../img/icon3.png" />
+<link rel="icon" href="img/icon3.png" />
 <title>NekoraList</title>
 <div class="flex items-center">
 <h2 class="font-['Manrope'] font-semibold text-lg text-on-surface">Gestionar Catlogo</h2>
@@ -122,8 +122,8 @@
 <div class="flex gap-4">
 <button class="px-8 py-3 bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-semibold rounded-full border border-outline-variant/10 transition-all flex items-center gap-2" data-admin-filter-toggle><span class="material-symbols-outlined text-sm" data-icon="filter_list">filter_list</span>
                         Filtrar</button>
-<button class="px-8 py-3 bg-gradient-to-r from-primary to-primary-container text-on-primary font-bold rounded-full shadow-xl shadow-primary/20 hover:scale-105 transition-transform flex items-center gap-2" data-admin-link="aÃ±adir\.php"><span class="material-symbols-outlined" data-icon="add">add</span>
-                        Aadir Nuevo Anime</button>
+<button class="px-8 py-3 bg-gradient-to-r from-primary to-primary-container text-on-primary font-bold rounded-full shadow-xl shadow-primary/20 hover:scale-105 transition-transform flex items-center gap-2" data-admin-link="añadir\.php"><span class="material-symbols-outlined" data-icon="add">add</span>
+                        Añadir Nuevo Anime</button>
 </div>
 </div>
 <div class="hidden mb-8 rounded-2xl border border-outline-variant/10 bg-surface-container-low p-4" data-admin-filter-panel>
@@ -304,7 +304,7 @@
 <!-- Bento Stats Section -->
 <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-12">
 <div class="col-span-1 p-6 bg-surface-container-low rounded-lg border border-outline-variant/5">
-<p class="text-on-surface-variant text-[10px] uppercase font-bold tracking-widest mb-1">TTULOS TOTALES</p>
+<p class="text-on-surface-variant text-[10px] uppercase font-bold tracking-widest mb-1">TÍTULOS TOTALES</p>
 <h4 class="text-3xl font-extrabold text-on-surface font-['Manrope']">4</h4>
 <div class="mt-4 flex items-center gap-2 text-primary text-xs font-bold"><span class="material-symbols-outlined text-sm" data-icon="trending_up">trending_up</span>
                         +12% desde el mes pasado</div>
@@ -317,7 +317,7 @@
 <div class="relative z-10">
 <p class="text-primary text-[10px] uppercase font-bold tracking-widest mb-1">ESTADO DEL SISTEMA</p>
 <h4 class="text-xl font-bold text-on-surface font-['Manrope'] mb-2">Sincronizacin de Metadatos Activa</h4>
-<p class="text-sm text-on-surface-variant max-w-[240px]">La sincronizacin del catlogo global funciona con un 100% de eficiencia. Todos los nodos API operativos.</p>
+<p class="text-sm text-on-surface-variant max-w-[240px]">La sincronización del catálogo global funciona con un 100% de eficiencia. Todos los nodos API operativos.</p>
 </div>
 <span class="material-symbols-outlined absolute right-[-20px] bottom-[-20px] text-[120px] text-primary/5 rotate-12" data-icon="sync">sync</span>
 </div>
@@ -497,8 +497,9 @@
     }
   })();
 </script>
-<script src="../controllers/admin-layout.js"></script>
+<script src="controllers/admin-layout.js"></script>
 </body></html>
+
 
 
 

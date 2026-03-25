@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="dark" lang="es">
   <head>
     <script data-ui-preload>document.documentElement.classList.add("preload-ui");</script>
@@ -72,7 +72,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NekoraList - Usuario</title>
-    <link rel="icon" href="../img/icon3.png" />
+    <link rel="icon" href="img/icon3.png" />
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
@@ -228,7 +228,7 @@
       background: linear-gradient(90deg, rgba(52,211,153,0.95), rgba(16,185,129,0.7));
     }
     </style>
-    <link rel="icon" href="../img/icon3.png" />
+    <link rel="icon" href="img/icon3.png" />
 
 
   </head>
@@ -297,11 +297,11 @@
                     </div>
                   </div>
                   <div class="mt-3 flex w-full flex-wrap items-center justify-center gap-x-3 gap-y-2 translate-y-2" id="profile-actions">
-                <button id="request-title-btn" type="button" aria-label="Solicitar tÃ­tulo" class="hidden rounded-full border border-white/10 bg-gradient-to-r from-sky-400 to-violet-400 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-900 transition-all duration-200 hover:border-sky-200/60 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(56,189,248,0.25)]">
-                      Solicitar tÃ­tulo
+                <button id="request-title-btn" type="button" aria-label="Solicitar título" class="hidden rounded-full border border-white/10 bg-gradient-to-r from-sky-400 to-violet-400 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-900 transition-all duration-200 hover:border-sky-200/60 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(56,189,248,0.25)]">
+                      Solicitar título
                     </button>
-                <button id="logout-btn" type="button" aria-label="Cerrar sesiÃ³n" class="rounded-full border border-white/10 bg-gradient-to-r from-rose-400 to-orange-300 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-900 transition-all duration-200 hover:border-rose-200/60 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(248,113,113,0.25)] flex items-center justify-center group/logout">
-                  Cerrar sesiÃ³n
+                <button id="logout-btn" type="button" aria-label="Cerrar sesión" class="rounded-full border border-white/10 bg-gradient-to-r from-rose-400 to-orange-300 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-900 transition-all duration-200 hover:border-rose-200/60 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(248,113,113,0.25)] flex items-center justify-center group/logout">
+                  Cerrar sesión
                 </button>
                   </div>
                 </div>
@@ -351,7 +351,7 @@
           </div>
           <div class="mt-3 flex min-h-[180px] items-center justify-center overflow-visible">
             <div id="continue-empty" class="rounded-2xl border border-white/10 bg-white/5 px-4 py-8 text-center text-sm text-on-surface-variant">
-              AÃºn no tienes tÃ­tulos en progreso.
+              Aún no tienes títulos en progreso.
             </div>
             <div id="continue-grid" class="hidden w-full grid grid-cols-4 gap-4 overflow-visible pb-2 pt-3 px-4"></div>
           </div>
@@ -515,14 +515,14 @@
             <input id="profile-name-input" class="w-full rounded-xl bg-surface-container-low border border-outline-variant/60 px-4 py-3 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/40" type="text" placeholder="Tu nombre" />
           </div>
           <div class="space-y-2 soft-accent p-4 rounded-2xl">
-            <label class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">DescripciÃ³n</label>
-            <textarea id="profile-desc-input" maxlength="200" class="w-full rounded-xl bg-surface-container-low border border-outline-variant/60 px-4 py-3 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/40 min-h-[120px]" placeholder="Escribe una breve DescripciÃ³n (mÃ¡x. 200 caracteres)"></textarea>
+            <label class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Descripción</label>
+            <textarea id="profile-desc-input" maxlength="200" class="w-full rounded-xl bg-surface-container-low border border-outline-variant/60 px-4 py-3 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/40 min-h-[120px]" placeholder="Escribe una breve Descripción (máx. 200 caracteres)"></textarea>
             <div class="text-[11px] text-on-surface-variant text-right" id="profile-desc-count">0/200</div>
           </div>
           <div class="space-y-3 soft-accent p-4 rounded-2xl">
             <label class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Preferencias</label>
             <div id="preferences-picker" class="space-y-3"></div>
-            <p class="text-[11px] text-on-surface-variant">Selecciona varias opciones y se verÃ¡n reflejadas en tu perfil.</p>
+            <p class="text-[11px] text-on-surface-variant">Selecciona varias opciones y se verán reflejadas en tu perfil.</p>
           </div>
           <div class="space-y-2">
             <label class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Color del recuadro</label>
@@ -554,19 +554,19 @@
       <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" data-request-close></div>
       <div class="relative mx-auto mt-24 w-[84%] max-w-sm rounded-2xl border border-white/10 bg-surface-container-high p-5 shadow-[0_20px_50px_rgba(0,0,0,0.45)]">
         <div class="flex items-center justify-between mb-4">
-          <h3 class="font-headline text-lg font-bold">Solicitar tÃ­tulo</h3>
+          <h3 class="font-headline text-lg font-bold">Solicitar título</h3>
           <button class="rounded-full bg-surface-container-low w-8 h-8 flex items-center justify-center text-xs font-bold text-on-surface-variant hover:text-on-surface" type="button" data-request-close aria-label="Cerrar">x</button>
         </div>
         <form id="request-title-form" class="space-y-4">
           <div class="space-y-2">
-            <label class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Nombre del anime o pelÃ­cula</label>
+            <label class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Nombre del anime o película</label>
             <input id="request-title-input" type="text" class="w-full rounded-xl border border-white/10 bg-surface-container-low/70 px-4 py-2 text-sm text-on-surface outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20" placeholder="Ej: Fullmetal Alchemist: Brotherhood" />
           </div>
           <div class="space-y-2">
             <label class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Tipo</label>
             <select id="request-title-type" class="w-full rounded-xl border border-white/10 bg-surface-container-low/70 px-4 py-2 text-sm text-on-surface outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20">
               <option value="Anime">Anime</option>
-              <option value="PelÃ­cula">PelÃ­cula</option>
+              <option value="Película">Película</option>
             </select>
           </div>
           <div class="flex items-center justify-end gap-3 pt-2">
@@ -580,7 +580,7 @@
     <!-- Request Toast -->
     <div id="request-toast" class="fixed inset-0 z-[90] hidden items-center justify-center">
       <div class="rounded-full border border-white/10 bg-surface-container-high/90 px-6 py-3 text-sm font-semibold text-on-surface shadow-[0_18px_40px_rgba(0,0,0,0.45)]">
-        TÃ­tulo solicitado
+        Título solicitado
       </div>
     </div>
 
@@ -588,8 +588,8 @@
     <div id="logout-confirm" class="fixed inset-0 z-[90] hidden items-center justify-center">
       <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" data-logout-close></div>
       <div class="relative mx-auto w-[86%] max-w-xs rounded-2xl border border-white/10 bg-surface-container-high p-5 text-center shadow-[0_20px_50px_rgba(0,0,0,0.45)]">
-        <h3 class="font-headline text-lg font-bold">Â¿Seguro que quieres cerrar sesiÃ³n?</h3>
-        <p class="mt-2 text-sm text-on-surface-variant">Se perderÃ¡n tus cambios locales.</p>
+        <h3 class="font-headline text-lg font-bold">¿Seguro que quieres cerrar sesión?</h3>
+        <p class="mt-2 text-sm text-on-surface-variant">Se perderán tus cambios locales.</p>
         <div class="mt-4 flex items-center justify-center gap-3">
           <button type="button" data-logout-cancel class="rounded-full border border-white/10 bg-surface-container-low/70 px-4 py-2 text-xs font-bold uppercase tracking-widest text-on-surface-variant hover:text-on-surface transition-colors">
             cancelar
@@ -661,12 +661,12 @@
 
     <!-- Footer Component -->
     <div data-layout="footer"></div>
-    <script src="../controllers/layout.js"></script>
-    <script src="../controllers/i18n.js"></script>
-    <script src="../controllers/title-images.js?v=3"></script>
-    <script src="../controllers/search.js"></script>
-    <script src="../controllers/favorites.js"></script>
-    <script src="../controllers/detail-links.js"></script>
+    <script src="controllers/layout.js"></script>
+    <script src="controllers/i18n.js"></script>
+    <script src="controllers/title-images.js?v=3"></script>
+    <script src="controllers/search.js"></script>
+    <script src="controllers/favorites.js"></script>
+    <script src="controllers/detail-links.js"></script>
     <script>
   document.addEventListener("DOMContentLoaded", () => {
     if (window.AniDexI18n) window.AniDexI18n.init();
@@ -1558,6 +1558,7 @@
     <script data-ui-unlock>document.documentElement.classList.remove("preload-ui");</script>
   </body>
 </html>
+
 
 
 
