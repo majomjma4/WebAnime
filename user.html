@@ -214,21 +214,24 @@
     <!-- Navbar Component -->
     <div data-layout="header"></div>
 
-    <main class="relative pt-32 pb-20 px-6 max-w-7xl mx-auto space-y-10">
+    <main class="relative pt-32 pb-20 px-6 max-w-7xl mx-auto overflow-visible">
       <div class="pointer-events-none absolute -top-40 right-[-10%] h-72 w-72 rounded-full bg-violet-500/15 blur-3xl"></div>
       <div class="pointer-events-none absolute top-16 left-[-10%] h-72 w-72 rounded-full bg-sky-500/15 blur-3xl"></div>
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start overflow-visible">
       <section class="relative group lg:col-span-6">
-        <div id="profile-card" class="glass-panel rounded-3xl overflow-hidden border border-white/10 shadow-[0_30px_80px_rgba(0,0,0,0.45)]">
+        <div id="profile-card" class="glass-panel w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_30px_80px_rgba(0,0,0,0.45)] relative overflow-visible">
           <div class="h-1 w-full bg-gradient-to-r from-sky-400 via-violet-400 to-primary"></div>
-          <div class="p-8 md:p-10 space-y-8">
+            <div class="p-8 md:p-10 pb-0 space-y-8">
             <div class="flex flex-wrap items-start justify-between gap-4">
               <div>
                 <h2 class="font-headline text-2xl md:text-3xl font-black italic tracking-tight text-primary uppercase">IDENTIDAD OTAKU</h2>
                 <p class="text-on-surface-variant font-label text-[10px] tracking-widest">ID: NK-2489542</p>
               </div>
-              <div class="flex items-center gap-2">
-                <span class="bg-emerald-500/15 text-emerald-300 px-3 py-1 rounded-full font-label text-[10px] font-bold tracking-widest uppercase">Perfil activo</span>
+              <div class="flex items-center gap-2 -mr-4">
+                <span class="bg-emerald-500/15 text-emerald-300 px-3 py-1 rounded-full font-label text-[10px] font-bold tracking-widest uppercase inline-flex items-center gap-1.5" data-identity-badge>
+                  <span class="material-symbols-outlined text-[14px] leading-none" data-identity-icon>nightlight</span>
+                  <span data-identity-text>Modo Dream</span>
+                </span>
                 <button class="rounded-full bg-surface-container-low/70 border border-white/10 w-8 h-8 flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors -mt-1 -ml-1" type="button" id="profile-settings-btn" aria-label="Ajustes de perfil">
                   <span class="material-symbols-outlined text-[18px]">settings</span>
                 </button>
@@ -249,36 +252,42 @@
                 </div>
                 <p class="text-on-surface-variant font-medium whitespace-pre-line">Curando el mejor shonen desde 2018</p>
               </div>
-              <div class="lg:col-span-2">
-                <div class="grid w-full grid-cols-3 gap-2 text-left">
-                  <div class="rounded-2xl border border-white/10 bg-white/5 px-3 py-1.5 w-full">
-                    <div class="text-[10px] uppercase tracking-widest text-on-surface-variant">Miembro desde</div>
-                    <div class="mt-1 text-sm font-semibold text-on-surface">2018</div>
+                <div class="lg:col-span-2 space-y-3">
+                  <div class="grid w-full grid-cols-3 gap-2 text-left">
+                    <div class="rounded-2xl border border-white/10 bg-white/5 px-3 py-1.5 w-full">
+                      <div class="text-[10px] uppercase tracking-widest text-on-surface-variant">Miembro desde</div>
+                    <div class="mt-1 text-sm font-semibold text-on-surface" data-profile-member>2018</div>
                   </div>
                   <div class="rounded-2xl border border-white/10 bg-white/5 px-3 py-1.5 w-full">
                     <div class="text-[10px] uppercase tracking-widest text-on-surface-variant">&Uacute;ltimo acceso</div>
-                    <div class="mt-1 text-sm font-semibold text-on-surface">Hoy</div>
+                    <div class="mt-1 text-sm font-semibold text-on-surface" data-profile-last>Hoy</div>
                   </div>
                   <div class="rounded-2xl border border-white/10 bg-white/5 px-3 py-1.5 w-full">
                     <div class="text-[10px] uppercase tracking-widest text-on-surface-variant">Horas vistas</div>
-                    <div class="mt-1 text-sm font-semibold text-on-surface">128 h</div>
+                    <div class="mt-1 text-sm font-semibold text-on-surface" data-profile-hours>0 h</div>
                   </div>
                 </div>
-                <div class="mt-4 rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <div class="text-[10px] uppercase tracking-widest text-on-surface-variant">Preferencias</div>
-                  <div class="mt-2 grid grid-cols-4 gap-2 text-xs" data-pref-display>
-                    <span class="rounded-full border border-blue-400/70 bg-blue-500/45 text-white shadow-[0_0_10px_rgba(96,165,250,0.35)] drop-shadow-[0_0_6px_rgba(59,130,246,0.55)] px-3 py-1 text-center h-7 inline-flex items-center justify-center truncate">Sub. espa&ntilde;ol</span>
-                    <span class="rounded-full border border-violet-400/70 bg-violet-500/45 text-white shadow-[0_0_10px_rgba(167,139,250,0.35)] drop-shadow-[0_0_6px_rgba(139,92,246,0.55)] px-3 py-1 text-center h-7 inline-flex items-center justify-center truncate">Acci&oacute;n</span>
-                    <span class="rounded-full border border-violet-400/70 bg-violet-500/45 text-white shadow-[0_0_10px_rgba(167,139,250,0.35)] drop-shadow-[0_0_6px_rgba(139,92,246,0.55)] px-3 py-1 text-center h-7 inline-flex items-center justify-center truncate">Fant&aacute;sia</span>
+                  <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <div class="text-[10px] uppercase tracking-widest text-on-surface-variant">Preferencias</div>
+                    <div class="mt-2 grid grid-cols-4 gap-2 text-xs" data-pref-display>
+                      <span class="rounded-full border border-white/10 bg-white/10 inline-flex w-fit items-center justify-center px-3 py-1 text-xs text-center text-on-surface-variant h-7 truncate col-span-4 justify-self-center">Sin preferencias</span>
+                    </div>
+                  </div>
+                  <div class="mt-3 flex w-full flex-wrap items-center justify-center gap-x-3 gap-y-2 translate-y-2" id="profile-actions">
+                <button id="request-title-btn" type="button" aria-label="Solicitar título" class="hidden rounded-full border border-white/10 bg-gradient-to-r from-sky-400 to-violet-400 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-900 transition-all duration-200 hover:border-sky-200/60 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(56,189,248,0.25)]">
+                      Solicitar título
+                    </button>
+                <button id="logout-btn" type="button" aria-label="Cerrar sesión" class="rounded-full border border-white/10 bg-gradient-to-r from-rose-400 to-orange-300 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-900 transition-all duration-200 hover:border-rose-200/60 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(248,113,113,0.25)] flex items-center justify-center group/logout">
+                  Cerrar sesión
+                </button>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
         </div>
       </section>
 
-      <section class="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <section class="lg:col-span-6 lg:h-full grid grid-cols-1 sm:grid-cols-2 gap-5 mt-0 overflow-visible">
         <button type="button" data-open-list="my-list" class="group rounded-3xl border border-white/10 bg-surface-container-low/70 p-6 text-left shadow-[0_16px_40px_rgba(0,0,0,0.35)] transition-all hover:-translate-y-1 hover:border-violet-400/60 hover:shadow-[0_24px_60px_rgba(139,92,246,0.35)]">
           <div class="flex items-center justify-between">
             <div class="text-xs uppercase tracking-[0.2em] text-on-surface-variant">Mi lista</div>
@@ -311,15 +320,28 @@
           <div class="mt-4 text-4xl font-bold text-on-surface" data-count-completed>0</div>
           <p class="mt-2 text-sm text-on-surface-variant">Historias finalizadas con &eacute;xito.</p>
         </button>
-        <div class="sm:col-span-2 flex items-center justify-center pt-10 pb-2">
-          <a href="pago.html" class="rounded-full bg-gradient-to-br from-sky-500 to-violet-500 px-9 py-4 text-base font-bold tracking-wide text-white shadow-lg transition-transform hover:scale-105 active:scale-95 hover:ring-2 hover:ring-white/40 hover:shadow-[0_0_18px_rgba(129,140,248,0.5)] inline-flex items-center justify-center">
+          <section id="continue-section" class="sm:col-span-2 rounded-3xl border border-white/5 bg-surface-container-low/60 p-5 shadow-[0_18px_40px_rgba(0,0,0,0.35)] overflow-visible min-h-[260px]">
+          <div class="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <h2 class="font-headline text-2xl font-bold">Continuar viendo</h2>
+            </div>
+          </div>
+          <div class="mt-3 flex min-h-[180px] items-center justify-center overflow-visible">
+            <div id="continue-empty" class="rounded-2xl border border-white/10 bg-white/5 px-4 py-8 text-center text-sm text-on-surface-variant">
+              Aún no tienes títulos en progreso.
+            </div>
+            <div id="continue-grid" class="hidden w-full grid grid-cols-4 gap-4 overflow-visible pb-2 pt-3 px-4"></div>
+          </div>
+        </section>
+        <div class="sm:col-span-2 flex min-h-[120px] items-center justify-center py-0">
+          <a id="premium-access-btn" href="pago.html" class="rounded-full bg-gradient-to-br from-sky-500 to-violet-500 px-9 py-4 text-base font-bold tracking-wide text-white shadow-lg transition-transform hover:scale-105 active:scale-95 hover:ring-2 hover:ring-white/40 hover:shadow-[0_0_18px_rgba(129,140,248,0.5)] inline-flex items-center justify-center">
             Acceso Premium
           </a>
         </div>
       </section>
     </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div id="profile-lists" class="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-0">
         <div class="lg:col-span-8 space-y-8">
           <section class="space-y-6 rounded-3xl border border-white/5 bg-surface-container-low/60 p-6 shadow-[0_18px_40px_rgba(0,0,0,0.35)]">
             <div class="flex flex-wrap justify-between items-end gap-4">
@@ -501,6 +523,58 @@
         </div>
 
 
+      </div>
+    </div>
+
+    <!-- Request Title Modal -->
+    <div id="request-title-modal" class="fixed inset-0 z-[70] hidden">
+      <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" data-request-close></div>
+      <div class="relative mx-auto mt-24 w-[84%] max-w-sm rounded-2xl border border-white/10 bg-surface-container-high p-5 shadow-[0_20px_50px_rgba(0,0,0,0.45)]">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="font-headline text-lg font-bold">Solicitar título</h3>
+          <button class="rounded-full bg-surface-container-low w-8 h-8 flex items-center justify-center text-xs font-bold text-on-surface-variant hover:text-on-surface" type="button" data-request-close aria-label="Cerrar">x</button>
+        </div>
+        <form id="request-title-form" class="space-y-4">
+          <div class="space-y-2">
+            <label class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Nombre del anime o película</label>
+            <input id="request-title-input" type="text" class="w-full rounded-xl border border-white/10 bg-surface-container-low/70 px-4 py-2 text-sm text-on-surface outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20" placeholder="Ej: Fullmetal Alchemist: Brotherhood" />
+          </div>
+          <div class="space-y-2">
+            <label class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Tipo</label>
+            <select id="request-title-type" class="w-full rounded-xl border border-white/10 bg-surface-container-low/70 px-4 py-2 text-sm text-on-surface outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20">
+              <option value="Anime">Anime</option>
+              <option value="Película">Película</option>
+            </select>
+          </div>
+          <div class="flex items-center justify-end gap-3 pt-2">
+            <button type="button" data-request-close class="rounded-full border border-white/10 bg-surface-container-low/70 px-4 py-2 text-xs font-bold uppercase tracking-widest text-on-surface-variant hover:text-on-surface transition-colors">Cancelar</button>
+            <button type="submit" class="rounded-full border border-white/10 bg-gradient-to-r from-sky-400 to-violet-400 px-4 py-2 text-xs font-bold uppercase tracking-widest text-slate-900 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(56,189,248,0.25)]">Solicitar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Request Toast -->
+    <div id="request-toast" class="fixed inset-0 z-[90] hidden items-center justify-center">
+      <div class="rounded-full border border-white/10 bg-surface-container-high/90 px-6 py-3 text-sm font-semibold text-on-surface shadow-[0_18px_40px_rgba(0,0,0,0.45)]">
+        Título solicitado
+      </div>
+    </div>
+
+    <!-- Logout Confirm Modal -->
+    <div id="logout-confirm" class="fixed inset-0 z-[90] hidden items-center justify-center">
+      <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" data-logout-close></div>
+      <div class="relative mx-auto w-[86%] max-w-xs rounded-2xl border border-white/10 bg-surface-container-high p-5 text-center shadow-[0_20px_50px_rgba(0,0,0,0.45)]">
+        <h3 class="font-headline text-lg font-bold">¿Seguro que quieres cerrar sesión?</h3>
+        <p class="mt-2 text-sm text-on-surface-variant">Se perderán tus cambios locales.</p>
+        <div class="mt-4 flex items-center justify-center gap-3">
+          <button type="button" data-logout-cancel class="rounded-full border border-white/10 bg-surface-container-low/70 px-4 py-2 text-xs font-bold uppercase tracking-widest text-on-surface-variant hover:text-on-surface transition-colors">
+            cancelar
+          </button>
+          <button type="button" data-logout-confirm class="rounded-full border border-white/10 bg-gradient-to-r from-rose-400 to-orange-300 px-4 py-2 text-xs font-bold uppercase tracking-widest text-slate-900 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(248,113,113,0.25)]">
+            cerrar
+          </button>
+        </div>
       </div>
     </div>
 
@@ -824,6 +898,12 @@
     const settingsBtn = document.getElementById("profile-settings-btn");
     const modal = document.getElementById("profile-modal");
     const closeEls = modal ? modal.querySelectorAll("[data-profile-close]") : [];
+    const requestBtn = document.getElementById("request-title-btn");
+    const requestModal = document.getElementById("request-title-modal");
+    const requestForm = document.getElementById("request-title-form");
+    const requestInput = document.getElementById("request-title-input");
+    const requestToast = document.getElementById("request-toast");
+    const requestCloseEls = requestModal ? requestModal.querySelectorAll("[data-request-close]") : [];
     const nameInput = document.getElementById("profile-name-input");
     const descInput = document.getElementById("profile-desc-input");
     const saveBtn = document.getElementById("profile-save-btn");
@@ -831,6 +911,9 @@
     const nameEl = document.querySelector("h1.font-headline");
     const descEl = document.querySelector("p.text-on-surface-variant.font-medium");
     const cardEl = document.getElementById("profile-card");
+    const memberEl = document.querySelector("[data-profile-member]");
+    const lastEl = document.querySelector("[data-profile-last]");
+    const hoursEl = document.querySelector("[data-profile-hours]");
     const colorOptions = document.getElementById("profile-color-options");
     const prefsWrap = document.getElementById("preferences-picker");
     const prefsDisplay = document.querySelector("[data-pref-display]");
@@ -840,8 +923,8 @@
       "G\u00e9nero": ["Acci\u00f3n", "Fantas\u00eda", "Drama", "Comedia", "Romance", "Terror", "Sci-Fi"]
     };
     const PREF_DEFAULTS = {
-      "Idioma": ["Sub. espa\u00f1ol"],
-      "G\u00e9nero": ["Acci\u00f3n", "Fantas\u00eda"]
+      "Idioma": [],
+      "G\u00e9nero": []
     };
     const PREF_GROUP_STYLES = {
       "Idioma": {
@@ -849,16 +932,16 @@
         baseBg: "bg-blue-500/45",
         activeBorder: "border-blue-300/90",
         activeBg: "bg-blue-500/70",
-        hoverRing: "hover:ring-2 hover:ring-blue-300/60",
-        glow: "shadow-[0_0_10px_rgba(96,165,250,0.35)] drop-shadow-[0_0_6px_rgba(59,130,246,0.55)]"
+        hoverRing: "hover:ring-0",
+        glow: ""
       },
       "Género": {
         baseBorder: "border-violet-400/70",
         baseBg: "bg-violet-500/45",
         activeBorder: "border-violet-300/90",
         activeBg: "bg-violet-500/70",
-        hoverRing: "hover:ring-2 hover:ring-violet-300/60",
-        glow: "shadow-[0_0_10px_rgba(167,139,250,0.35)] drop-shadow-[0_0_6px_rgba(139,92,246,0.55)]"
+        hoverRing: "hover:ring-0",
+        glow: ""
       }
     };
     const prefStyleFor = (group, isActive) => {
@@ -991,6 +1074,8 @@
         const savedName = localStorage.getItem("anidex_profile_name");
         const savedDesc = localStorage.getItem("anidex_profile_desc");
         const savedColor = localStorage.getItem("anidex_profile_color");
+        const savedMember = localStorage.getItem("anidex_profile_member_since");
+        const savedHours = localStorage.getItem("anidex_profile_hours");
         const cleanedName = (savedName || "").trim();
         if (cleanedName && cleanedName.toLowerCase() !== "animefan99") {
           nameEl.textContent = cleanedName;
@@ -999,6 +1084,23 @@
           localStorage.setItem("anidex_profile_name", defaultName);
         }
         if (savedDesc) descEl.textContent = savedDesc;
+        const isPremium = localStorage.getItem("nekora_premium") === "true";
+        if (memberEl) {
+          const yearNow = new Date().getFullYear();
+          const memberYear = isPremium ? "2018" : (savedMember || String(yearNow));
+          memberEl.textContent = memberYear;
+          if (!savedMember) {
+            try { localStorage.setItem("anidex_profile_member_since", memberYear); } catch (e) {}
+          }
+        }
+        if (lastEl) lastEl.textContent = "Hoy";
+        if (hoursEl) {
+          const hoursVal = isPremium ? "128" : (savedHours && savedHours.trim() ? savedHours.trim() : "0");
+          hoursEl.textContent = `${hoursVal} h`;
+          if (!savedHours) {
+            try { localStorage.setItem("anidex_profile_hours", hoursVal); } catch (e) {}
+          }
+        }
         if (savedColor && cardEl) {
           colorClasses.forEach((c) => cardEl.classList.remove(c));
           savedColor.split(" ").forEach((c) => cardEl.classList.add(c));
@@ -1057,6 +1159,23 @@
     };
     const closeModal = () => {
       modal.classList.add("hidden");
+      document.body.style.overflow = "";
+    };
+
+    const openRequestModal = () => {
+      if (!requestModal) return;
+      requestModal.classList.remove("hidden");
+      requestToast?.classList.add("hidden");
+      requestToast?.classList.remove("flex");
+      document.body.style.overflow = "hidden";
+      if (requestInput) {
+        requestInput.classList.remove("border-rose-400");
+        requestInput.focus();
+      }
+    };
+    const closeRequestModal = () => {
+      if (!requestModal) return;
+      requestModal.classList.add("hidden");
       document.body.style.overflow = "";
     };
 
@@ -1125,6 +1244,30 @@
     if (editBtn) editBtn.addEventListener("click", openModal);
     if (settingsBtn) settingsBtn.addEventListener("click", openModal);
     closeEls.forEach((el) => el.addEventListener("click", closeModal));
+    if (requestBtn) requestBtn.addEventListener("click", openRequestModal);
+    requestCloseEls.forEach((el) => el.addEventListener("click", closeRequestModal));
+    if (requestForm) {
+      requestForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const name = (requestInput?.value || "").trim();
+        if (!name) {
+          requestInput?.classList.add("border-rose-400");
+          requestInput?.focus();
+          return;
+        }
+        requestInput?.classList.remove("border-rose-400");
+        closeRequestModal();
+        if (requestToast) {
+          requestToast.classList.remove("hidden");
+          requestToast.classList.add("flex");
+          setTimeout(() => {
+            requestToast.classList.add("hidden");
+            requestToast.classList.remove("flex");
+          }, 2200);
+        }
+        if (requestInput) requestInput.value = "";
+      });
+    }
     loadProfile();
   })();
     </script>
@@ -1133,6 +1276,14 @@
     const createBtn = document.getElementById("auth-create-btn");
     const loginBtn = document.getElementById("auth-login-btn");
     const logoutBtn = document.getElementById("logout-btn");
+    const profileActions = document.getElementById("profile-actions");
+    const profileLists = document.getElementById("profile-lists");
+    const requestTitleBtn = document.getElementById("request-title-btn");
+    const continueSection = document.getElementById("continue-section");
+    const logoutModal = document.getElementById("logout-confirm");
+    const logoutClose = logoutModal ? logoutModal.querySelectorAll("[data-logout-close]") : [];
+    const logoutCancel = logoutModal ? logoutModal.querySelector("[data-logout-cancel]") : null;
+    const logoutConfirm = logoutModal ? logoutModal.querySelector("[data-logout-confirm]") : null;
     const premiumAccessBtn = document.getElementById("premium-access-btn");
     const premiumCancelBtn = document.getElementById("premium-cancel-btn");
     const applyState = () => {
@@ -1140,18 +1291,82 @@
       if (createBtn) createBtn.classList.toggle("hidden", isLogged);
       if (loginBtn) loginBtn.classList.toggle("hidden", isLogged);
       if (logoutBtn) logoutBtn.classList.toggle("hidden", !isLogged);
-      const isPremium = localStorage.getItem("nekora_premium") === "true";
+      const isPremium = isLogged && localStorage.getItem("nekora_premium") === "true";
       if (premiumAccessBtn) premiumAccessBtn.classList.toggle("hidden", isPremium);
       if (premiumCancelBtn) premiumCancelBtn.classList.toggle("hidden", !isPremium);
+      if (continueSection) continueSection.classList.toggle("hidden", !isPremium);
+      if (requestTitleBtn) requestTitleBtn.classList.toggle("hidden", !isPremium);
+      if (profileLists) {
+        profileLists.style.marginTop = isPremium ? "-6rem" : "1.5rem";
+      }
+      if (profileActions) {
+        const alignLeft = isLogged && !isPremium;
+        profileActions.classList.toggle("justify-start", alignLeft);
+        profileActions.classList.toggle("pl-2", alignLeft);
+        profileActions.classList.toggle("justify-center", !alignLeft);
+        profileActions.classList.toggle("pl-0", !alignLeft);
+      }
+      const badge = document.querySelector("[data-identity-badge]");
+      const badgeIcon = document.querySelector("[data-identity-icon]");
+      const badgeText = document.querySelector("[data-identity-text]");
+      if (badge && badgeIcon && badgeText) {
+        if (isPremium) {
+          badge.className = "bg-orange-500/15 text-orange-200 px-3 py-1 rounded-full font-label text-[10px] font-bold tracking-widest uppercase inline-flex items-center gap-1.5";
+          badgeIcon.textContent = "local_fire_department";
+          badgeIcon.className = "material-symbols-outlined text-[14px] leading-none text-orange-300";
+          badgeText.textContent = "Modo Limit Break";
+        } else {
+          badge.className = "bg-emerald-500/15 text-emerald-300 px-3 py-1 rounded-full font-label text-[10px] font-bold tracking-widest uppercase inline-flex items-center gap-1.5";
+          badgeIcon.textContent = "nightlight";
+          badgeIcon.className = "material-symbols-outlined text-[14px] leading-none";
+          badgeText.textContent = "Modo Dream";
+        }
+      }
+    };
+    const doLogout = () => {
+      localStorage.removeItem("nekora_logged_in");
+      localStorage.removeItem("nekora_user");
+      localStorage.removeItem("nekora_premium");
+      [
+        "anidex_my_list_v1",
+        "anidex_favorites_v1",
+        "anidex_status_v1",
+        "anidex_profile_prefs",
+        "anidex_profile_desc",
+        "anidex_profile_color",
+        "anidex_profile_avatar",
+        "anidex_profile_member_since",
+        "anidex_profile_hours",
+        "anidex_profile_name",
+        "anidex_user_id",
+        "anidex_user_suffix"
+      ].forEach((key) => localStorage.removeItem(key));
+      applyState();
+      window.location.href = "index.html";
+    };
+    const openLogoutModal = () => {
+      if (!logoutModal) return;
+      logoutModal.classList.remove("hidden");
+      logoutModal.classList.add("flex");
+      document.body.style.overflow = "hidden";
+    };
+    const closeLogoutModal = () => {
+      if (!logoutModal) return;
+      logoutModal.classList.add("hidden");
+      logoutModal.classList.remove("flex");
+      document.body.style.overflow = "";
     };
     if (logoutBtn) {
       logoutBtn.addEventListener("click", () => {
-        localStorage.removeItem("nekora_logged_in");
-        localStorage.removeItem("nekora_user");
-        localStorage.removeItem("nekora_premium");
-        applyState();
+        openLogoutModal();
       });
     }
+    logoutClose.forEach((el) => el.addEventListener("click", closeLogoutModal));
+    if (logoutCancel) logoutCancel.addEventListener("click", closeLogoutModal);
+    if (logoutConfirm) logoutConfirm.addEventListener("click", () => {
+      closeLogoutModal();
+      doLogout();
+    });
     if (premiumCancelBtn) {
       premiumCancelBtn.addEventListener("click", () => {
         localStorage.removeItem("nekora_premium");
@@ -1159,6 +1374,134 @@
       });
     }
     applyState();
+  })();
+    </script>
+    <script>
+  (async function () {
+    const grid = document.getElementById("continue-grid");
+    const empty = document.getElementById("continue-empty");
+    if (!grid || !empty) return;
+    let items = [];
+    try {
+      items = JSON.parse(localStorage.getItem("anidex_continue_v1") || "[]");
+    } catch {
+      items = [];
+    }
+    const norm = (v) =>
+      (v || "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^\w\s]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    let titleMap = {};
+    try {
+      titleMap = JSON.parse(localStorage.getItem("anidex_title_id_map_v1") || "{}");
+    } catch {
+      titleMap = {};
+    }
+    items = (items || [])
+      .filter((it) => it && (it.title || it.query))
+      .sort((a, b) => (b.lastSeen || 0) - (a.lastSeen || 0))
+      .slice(0, 4);
+    const resolveMissingIds = async () => {
+      const needs = items.filter((it) => !it.malId);
+      if (!needs.length) return;
+      for (const item of needs) {
+        const title = item.title || item.query || "";
+        if (!title) continue;
+        try {
+          const res = await fetch(
+            `https://api.jikan.moe/v4/anime?q=${encodeURIComponent(title)}&limit=1&order_by=popularity&sort=asc`
+          );
+          if (!res.ok) continue;
+          const data = await res.json();
+          const found = data?.data?.[0];
+          if (found?.mal_id) {
+            item.malId = found.mal_id;
+            titleMap[norm(title)] = found.mal_id;
+            item.detailUrl = `detail.html?mal_id=${encodeURIComponent(found.mal_id)}`;
+          }
+        } catch {}
+      }
+      try {
+        localStorage.setItem("anidex_title_id_map_v1", JSON.stringify(titleMap));
+      } catch {}
+    };
+    if (!items.length) {
+      empty.classList.remove("hidden");
+      grid.classList.add("hidden");
+      return;
+    }
+    await resolveMissingIds();
+    items.forEach((item) => {
+      const title = item.title || item.query || "";
+      const knownId = item.malId || item.sourceId || null;
+      if (knownId && title) {
+        titleMap[norm(title)] = knownId;
+      }
+      if (!item.detailUrl) {
+        if (knownId) {
+          item.detailUrl = `detail.html?mal_id=${encodeURIComponent(knownId)}`;
+        } else if (title) {
+          item.detailUrl = `detail.html?q=${encodeURIComponent(title)}`;
+        }
+      }
+    });
+    try {
+      localStorage.setItem("anidex_continue_v1", JSON.stringify(items));
+    } catch {}
+    empty.classList.add("hidden");
+    grid.classList.remove("hidden");
+    grid.innerHTML = items.map((item) => {
+      const title = item.title || item.query || "Anime";
+      const fallbackId = titleMap[norm(title)] || titleMap[norm(item.query)] || null;
+      if (!item.malId && fallbackId) {
+        item.malId = fallbackId;
+      }
+      const ep = item.episode || 1;
+      const epTitle = item.episodeTitle || `Episodio ${ep}`;
+      const cover = item.cover || "https://via.placeholder.com/160x220?text=Anime";
+      const href = `detail.html?q=${encodeURIComponent(title)}`;
+      return `
+        <a href="${href}" data-title="${title.replace(/"/g, "&quot;")}" class="group relative w-full rounded-2xl border border-white/10 bg-surface-container-low/70 p-3 shadow-[0_12px_26px_rgba(0,0,0,0.3)] transition-all hover:-translate-y-1 z-0 hover:z-20 overflow-visible">
+          <span class="pointer-events-none absolute -inset-2 rounded-2xl border border-violet-400/0 opacity-0 transition-all duration-200 group-hover:opacity-100 group-hover:border-violet-400/60"></span>
+          <div class="relative aspect-square rounded-none overflow-hidden bg-surface-container-high">
+            <img src="${cover}" alt="${title}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.06] rounded-none" />
+            <span class="absolute bottom-2 left-2 rounded-full bg-black/70 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-white">EP ${ep}</span>
+          </div>
+          <div class="mt-3">
+            <p class="text-[11px] text-on-surface-variant truncate">${title}</p>
+          </div>
+        </a>
+      `;
+    }).join("");
+
+    grid.addEventListener("click", async (e) => {
+      const link = e.target.closest("a[data-title]");
+      if (!link) return;
+      e.preventDefault();
+      const title = link.getAttribute("data-title") || "";
+      if (!title) {
+        window.location.href = link.getAttribute("href");
+        return;
+      }
+      try {
+        const res = await fetch(
+          `https://api.jikan.moe/v4/anime?q=${encodeURIComponent(title)}&limit=1&order_by=popularity&sort=asc`
+        );
+        if (res.ok) {
+          const data = await res.json();
+          const found = data?.data?.[0];
+          if (found?.mal_id) {
+            window.location.href = `detail.html?mal_id=${encodeURIComponent(found.mal_id)}`;
+            return;
+          }
+        }
+      } catch {}
+      window.location.href = link.getAttribute("href");
+    });
   })();
     </script>
     <script data-ui-unlock>document.documentElement.classList.remove("preload-ui");</script>
