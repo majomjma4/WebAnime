@@ -506,6 +506,8 @@
     const ratingValue = document.getElementById("rating-value");
     const submitBtn = document.getElementById("comment-submit");
     const isLogged = localStorage.getItem("nekora_logged_in") === "true";
+    const isPremium = localStorage.getItem("nekora_premium") === "true";
+    const canComment = isLogged && isPremium;
     if (!form || !textarea || !list || !total || !ratingValue) return;
 
     let rating = 0;
@@ -514,20 +516,21 @@
     let visibleCount = 3;
     let filterRating = 0;
     let reportTargetButton = null;
-    if (!isLogged) {
+    if (!canComment) {
+      const lockText = "Activa el modo premium para comentar";
       form.classList.add("relative", "overflow-hidden");
       form.insertAdjacentHTML(
         "afterbegin",
         `<div class="absolute inset-0 bg-black/55 backdrop-blur-[1px] flex items-center justify-center z-10">
-          <button type="button" class="flex items-center gap-2 rounded-full bg-surface-container-high/80 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-on-surface hover:bg-surface-container-high transition-colors" data-comment-login>
+          <button type="button" class="flex flex-col items-center gap-2 rounded-full bg-surface-container-high/80 px-4 py-3 text-xs font-semibold uppercase tracking-widest text-on-surface hover:bg-surface-container-high transition-colors text-center" data-comment-login>
             <span class="material-symbols-outlined text-base">lock</span>
-            Inicia sesión para comentar
+            <span>${lockText}</span>
           </button>
         </div>`
       );
       const loginBtn = form.querySelector("[data-comment-login]");
       const overlay = form.querySelector(".absolute.inset-0");
-      const goRegister = () => { window.location.href = "registro.html"; };
+      const goRegister = () => { window.location.href = isLogged ? "pago.html" : "registro.html"; };
       if (loginBtn) loginBtn.addEventListener("click", goRegister);
       if (overlay) overlay.addEventListener("click", goRegister);
       textarea.setAttribute("disabled", "true");
@@ -764,7 +767,7 @@
               </div>
               <div class="flex items-center gap-2">
                 <span class="text-xs text-on-surface-variant">${item.date}</span>
-                ${isLogged ? `<button type="button" class="text-xs text-sky-200 hover:text-sky-100" data-comment-report data-comment-author="${author}" data-comment-text="${String(item.text || "").slice(0, 120).replace(/\"/g, "&quot;")}">${reportLabel}</button>` : ""}
+                ${canComment ? `<button type="button" class="text-xs text-sky-200 hover:text-sky-100" data-comment-report data-comment-author="${author}" data-comment-text="${String(item.text || "").slice(0, 120).replace(/\"/g, "&quot;")}">${reportLabel}</button>` : ""}
                 ${canDelete ? `<button type="button" class="text-xs text-rose-300 hover:text-rose-200" data-comment-delete="${item.localIndex}">Eliminar</button>` : ""}
               </div>
             </div>

@@ -255,6 +255,16 @@
       try {
         localStorage.setItem("nekora_logged_in", "true");
         localStorage.setItem("nekora_user", name || "Usuario");
+        if (name) {
+          localStorage.setItem("anidex_profile_name", name);
+        }
+        const yearNow = String(new Date().getFullYear());
+        localStorage.setItem("anidex_profile_member_since", yearNow);
+        localStorage.setItem("anidex_profile_hours", "0");
+        localStorage.setItem(
+          "anidex_profile_prefs",
+          JSON.stringify({ "Idioma": [], "G\u00e9nero": [] })
+        );
       } catch (e) {}
       if (modal) modal.classList.remove("hidden");
     });

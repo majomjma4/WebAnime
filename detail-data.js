@@ -231,6 +231,8 @@ const AniDexDetailDataBoot = () => {
 
   const init = async () => {
     const isLogged = localStorage.getItem("nekora_logged_in") === "true";
+    const isPremium = localStorage.getItem("nekora_premium") === "true";
+    const canWatchEpisodes = isLogged && isPremium;
     const params = new URLSearchParams(location.search);
     const query = params.get("q") || document.querySelector("h1")?.textContent?.trim() || "Solo Leveling";
     const malIdParam = params.get("mal_id");
@@ -251,6 +253,21 @@ const AniDexDetailDataBoot = () => {
       full = await byId(selectedId, "full");
     }
     if (!full) return;
+    try {
+      const mapKey = "anidex_title_id_map_v1";
+      const mapRaw = localStorage.getItem(mapKey);
+      const map = mapRaw ? JSON.parse(mapRaw) : {};
+      const addMap = (val) => {
+        const key = norm(val || "");
+        if (key) map[key] = selectedId;
+      };
+      addMap(full.title);
+      addMap(full.title_english);
+      addMap(full.title_japanese);
+      addMap(query);
+      addMap(preTitle);
+      localStorage.setItem(mapKey, JSON.stringify(map));
+    } catch {}
     const chars = (await byId(selectedId, "characters")) || [];
     const vids = (await byId(selectedId, "videos")) || {};
     const pics = (await byId(selectedId, "pictures")) || [];
@@ -641,10 +658,108 @@ const AniDexDetailDataBoot = () => {
         return { epNumber, epCode, epTitle, epSynopsis, linkUrl };
       });
 
+      const seenKey = selectedId
+        ? `anidex_seen_eps_${selectedId}`
+        : `anidex_seen_eps_${norm(preferredTitle || query || "anime")}`;
+      const continueKey = "anidex_continue_v1";
+      const loadSeen = () => {
+        try {
+          const raw = localStorage.getItem(seenKey);
+          return raw ? JSON.parse(raw) : {};
+        } catch {
+          return {};
+        }
+      };
+      const saveSeen = (map) => {
+        try { localStorage.setItem(seenKey, JSON.stringify(map)); } catch {}
+      };
+      let seenMap = loadSeen();
+      const loadContinue = () => {
+        try {
+          const raw = localStorage.getItem(continueKey);
+          const arr = raw ? JSON.parse(raw) : [];
+          const map = {};
+          (arr || []).forEach((it) => {
+            if (!it) return;
+            const key = `${it.malId || norm(it.title || "")}-${it.episode}`;
+            if (key && it.episode) map[key] = it;
+          });
+          return map;
+        } catch {
+          return {};
+        }
+      };
+      const saveContinue = (map) => {
+        try { localStorage.setItem(continueKey, JSON.stringify(Object.values(map))); } catch {}
+      };
+      let continueMap = loadContinue();
+      const isSeen = (ep) => Boolean(seenMap[String(ep)]);
+      const setSeen = (ep, seen) => {
+        if (seen) seenMap[String(ep)] = true;
+        else delete seenMap[String(ep)];
+        saveSeen(seenMap);
+      };
+      const upsertContinue = (card) => {
+        const ep = card?.getAttribute("data-episode");
+        if (!ep) return;
+        const epTitle =
+          card.getAttribute("data-episode-title") ||
+          card.querySelector("h3")?.textContent?.trim() ||
+          `Episodio ${ep}`;
+        const detailUrl = selectedId
+          ? `detail.html?mal_id=${encodeURIComponent(selectedId)}`
+          : `detail.html?q=${encodeURIComponent(preferredTitle || query || "")}`;
+        const key = `${selectedId || norm(preferredTitle || "")}-${ep}`;
+        continueMap[key] = {
+          sourceId: selectedId || null,
+          malId: selectedId || null,
+          title: preferredTitle,
+          query: preferredTitle || query || "",
+          episode: Number(ep),
+          episodeTitle: epTitle,
+          cover: cover || "",
+          detailUrl,
+          lastSeen: Date.now()
+        };
+        saveContinue(continueMap);
+      };
+      const removeContinue = (card) => {
+        const ep = card?.getAttribute("data-episode");
+        if (!ep) return;
+        const key = `${selectedId || norm(preferredTitle || "")}-${ep}`;
+        if (continueMap[key]) {
+          delete continueMap[key];
+          saveContinue(continueMap);
+        }
+      };
+      const updateSeenUI = (card, seen) => {
+        card.classList.toggle("border-emerald-400/60", seen);
+        card.classList.toggle("bg-emerald-500/10", seen);
+        card.classList.toggle("shadow-[0_0_18px_rgba(16,185,129,0.25)]", seen);
+        const btn = card.querySelector("[data-episode-seen]");
+        if (btn) {
+          btn.setAttribute("aria-pressed", seen ? "true" : "false");
+          btn.classList.toggle("text-emerald-300", seen);
+          btn.classList.toggle("border-emerald-300/40", seen);
+          btn.classList.toggle("bg-emerald-500/15", seen);
+          btn.classList.toggle("text-white/60", !seen);
+          btn.classList.toggle("border-white/10", !seen);
+          btn.classList.toggle("bg-white/5", !seen);
+        }
+      };
+      const markSeenByCard = (card) => {
+        const ep = card?.getAttribute("data-episode");
+        if (!ep) return;
+        setSeen(ep, true);
+        upsertContinue(card);
+        updateSeenUI(card, true);
+      };
+
       const renderEpisodeCard = (item) => {
         const episodeAttrs = item.linkUrl
           ? `data-episode-link="${item.linkUrl}" data-episode-embed="${toEmbed(item.linkUrl)}"`
           : `data-episode-image="${cover}" data-episode-title="${item.epTitle}"`;
+        const seenBtnClass = canWatchEpisodes ? "" : "hidden";
         return `
           <div class="episode-card flex gap-6 items-center rounded-2xl border border-white/5 bg-surface-container-low/70 p-4 transition-all duration-300 hover:border-violet-400/70 hover:shadow-[0_0_18px_rgba(139,92,246,0.35)] hover:-translate-y-0.5 cursor-pointer" data-episode="${item.epNumber}" ${episodeAttrs}>
             <div class="flex items-center gap-4 flex-shrink-0">
@@ -656,6 +771,11 @@ const AniDexDetailDataBoot = () => {
             <div class="min-w-0 ml-2 flex flex-col justify-center">
               <h3 class="font-semibold text-white text-base">${item.epTitle}</h3>
               <p class="text-on-surface-variant text-sm mt-2">${item.epSynopsis}</p>
+            </div>
+            <div class="ml-auto flex items-center justify-center">
+              <button type="button" class="episode-seen-btn ${seenBtnClass} w-12 h-12 rounded-full border border-white/10 bg-white/5 text-white/60 flex items-center justify-center transition-all duration-200 hover:text-emerald-200 hover:border-emerald-300/50 hover:bg-emerald-500/10" data-episode-seen aria-pressed="false" title="Marcar como visto">
+                <span class="material-symbols-outlined text-[28px]">visibility</span>
+              </button>
             </div>
           </div>
         `;
@@ -680,9 +800,15 @@ const AniDexDetailDataBoot = () => {
       const pageSize = 10;
       let bindEpisodeCards = null;
       const lockEpisodes = () => {
+        const lockText = isLogged
+          ? "Activa el modo premium para ver los episodios"
+          : "Inicia Sesion y accede al modo premium para ver los episodios";
+        const goPremium = () => {
+          window.location.href = isLogged ? "pago.html" : "registro.html";
+        };
         const cards = Array.from(episodesSection.querySelectorAll(".episode-card"));
         cards.forEach((card) => {
-          if (card.hasAttribute("data-episode-video")) return;
+          if (!isLogged && card.hasAttribute("data-episode-video")) return;
           if (card.dataset.locked) return;
           card.dataset.locked = "1";
           card.classList.add("relative", "overflow-hidden", "cursor-not-allowed", "transition-transform", "duration-300", "hover:-translate-y-1", "hover:shadow-[0_10px_26px_rgba(0,0,0,0.4)]");
@@ -691,7 +817,7 @@ const AniDexDetailDataBoot = () => {
             `<div class="absolute inset-0 bg-black/60 backdrop-blur-[1px] flex flex-col items-center justify-center gap-2 text-center px-4">
               <span class="material-symbols-outlined text-[28px] text-white">lock</span>
               <button type="button" class="text-xs font-semibold uppercase tracking-widest text-on-surface hover:text-white transition-colors" data-episode-login>
-                Inicia Sesion y accede al modo premium para ver los episodios
+                ${lockText}
               </button>
             </div>`
           );
@@ -699,7 +825,7 @@ const AniDexDetailDataBoot = () => {
           const overlay = card.querySelector(".absolute.inset-0");
           const goRegister = (e) => {
             e.stopPropagation();
-            window.location.href = "registro.html";
+            goPremium();
           };
           if (loginBtn) loginBtn.addEventListener("click", goRegister);
           if (overlay) overlay.addEventListener("click", goRegister);
@@ -737,10 +863,26 @@ const AniDexDetailDataBoot = () => {
         } else {
           moreBtn?.classList.remove("hidden");
         }
-        if (!isLogged) {
+        if (!isLogged || !isPremium) {
           lockEpisodes();
           return;
         }
+        const freshCards = Array.from(episodesSection.querySelectorAll(".episode-card"));
+        freshCards.forEach((card) => updateSeenUI(card, isSeen(card.getAttribute("data-episode"))));
+        freshCards.forEach((card) => {
+          const btn = card.querySelector("[data-episode-seen]");
+          if (!btn || btn.dataset.bound) return;
+          btn.dataset.bound = "1";
+          btn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const ep = card.getAttribute("data-episode");
+            const next = !isSeen(ep);
+            setSeen(ep, next);
+            if (next) upsertContinue(card);
+            else removeContinue(card);
+            updateSeenUI(card, next);
+          });
+        });
         if (typeof bindEpisodeCards === "function") {
           bindEpisodeCards();
         }
@@ -828,6 +970,7 @@ const AniDexDetailDataBoot = () => {
         const openLink = (card) => {
           const link = card.getAttribute("data-episode-embed") || card.getAttribute("data-episode-link");
           if (!link || !linkFrame) return;
+          markSeenByCard(card);
           linkFrame.src = link;
           linkModal.classList.remove("hidden");
         };
@@ -842,6 +985,7 @@ const AniDexDetailDataBoot = () => {
           const src = card.getAttribute("data-episode-image");
           const title = card.getAttribute("data-episode-title") || "Portada episodio";
           if (!src || !imageFrame) return;
+          markSeenByCard(card);
           imageFrame.src = src;
           imageFrame.alt = title;
           imageModal.classList.remove("hidden");
@@ -888,16 +1032,17 @@ const AniDexDetailDataBoot = () => {
         }
       };
 
-      if (isLogged) {
+      if (canWatchEpisodes) {
         bindEpisodeCards();
       }
-      if (videoCard && episodeModal) {
+      if (videoCard && episodeModal && (canWatchEpisodes || !isLogged)) {
         const player = episodeModal.querySelector("[data-episode-video-player]");
         const source = episodeModal.querySelector("[data-episode-video-source]");
         const closeBtn = episodeModal.querySelector("[data-episode-close]");
         const backdrop = episodeModal.firstElementChild;
         const openEpisode = () => {
           if (!player || !source) return;
+          markSeenByCard(videoCard);
           source.src = videoCard.getAttribute("data-episode-video") || "";
           player.load();
           player.currentTime = 0;
