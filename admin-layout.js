@@ -35,7 +35,7 @@
   }
 
   function initAdminButtons() {
-    if (document.getElementById('admin-toast')) return;
+    if (document.querySelector('[data-admin-pagination-script]')) return;
 
     const toast = document.createElement('div');
     toast.id = 'admin-toast';
@@ -69,8 +69,9 @@
       }, 1400);
     };
 
+    const externalPagination = document.querySelector('[data-admin-pagination-script]');
     const rows = Array.from(document.querySelectorAll('[data-admin-request-row]'));
-    if (rows.length > 0) {
+    if (rows.length > 0 && !externalPagination) {
       const targetTotal = 24;
       const template = rows[0].cloneNode(true);
       while (rows.length < targetTotal) {
@@ -112,9 +113,9 @@
       const badgeColors = ['text-primary','text-tertiary-dim','text-on-surface-variant','text-primary','text-on-surface','text-tertiary-dim'];
 
       rows.forEach((row, idx) => {
-        const name = names[idx % names.length];
+        const name = `${names[idx % names.length]} #${idx + 1}`;
         const role = roles[idx % roles.length];
-        const title = titles[idx % titles.length];
+        const title = `${titles[idx % titles.length]} · Req ${idx + 1}`;
         const source = sources[idx % sources.length];
         const date = dates[idx % dates.length];
 
@@ -140,6 +141,10 @@
     let currentPage = 1;
     const pageSize = 4;
     const updatePagination = () => {
+      const tableBody = document.querySelector('tbody');
+      if (tableBody) {
+        tableBody.insertAdjacentHTML('beforeend', '');
+      }
       const allRows = Array.from(document.querySelectorAll('[data-admin-request-row]'));
       const total = allRows.length;
       const maxPage = Math.max(1, Math.ceil(total / pageSize));
@@ -147,7 +152,12 @@
       const start = (currentPage - 1) * pageSize;
       const end = start + pageSize;
       allRows.forEach((row, idx) => {
-        row.style.display = idx >= start && idx < end ? 'table-row' : 'none';
+        const isVisible = idx >= start && idx < end;
+        if (isVisible) {
+          row.classList.add('admin-visible');
+        } else {
+          row.classList.remove('admin-visible');
+        }
       });
       const countEl = document.querySelector('[data-admin-pending-count]');
       const textEl = document.querySelector('[data-admin-pending-text]');
@@ -162,8 +172,13 @@
       if (nextBtn) nextBtn.disabled = currentPage >= maxPage;
     };
     updatePagination();
+    requestAnimationFrame(updatePagination);
+    setTimeout(updatePagination, 30);
 
     document.addEventListener('click', (event) => {
+      if (document.querySelector('[data-admin-pagination-script]')) {
+        return;
+      }
       const prevBtn = event.target.closest('[data-admin-page-prev]');
       if (prevBtn) {
         event.preventDefault();
@@ -280,3 +295,6 @@
     loadAdminSidebar();
   }
 })();
+
+
+
