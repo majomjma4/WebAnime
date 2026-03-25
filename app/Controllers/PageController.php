@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace Controllers;
 
 class PageController
@@ -11,8 +11,8 @@ class PageController
             echo 'Vista no encontrada: ' . htmlspecialchars($view);
             return;
         }
-        // Make $data variables available to the view
         extract($data, EXTR_SKIP);
         require $viewPath;
     }
 }
+
