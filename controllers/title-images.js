@@ -1,7 +1,7 @@
-(() => {
+﻿(() => {
   const API_BASE = "https://api.jikan.moe/v4/top/anime";
   const cache = {};
-  const YEAR_BADGE_PAGES = /series\.html|peliculas\.html/i.test(window.location.pathname || "");
+  const YEAR_BADGE_PAGES = /series\\.php|peliculas\\.php/i.test(window.location.pathname || "");
   const DEFAULT_FALLBACK = "img/fondoanime.png";
   const INDEX_TITLE_ALIASES = {
     "Frieren: Ms all del final del viaje": "Frieren: Beyond Journey's End",
@@ -393,7 +393,7 @@
     card.setAttribute("data-year", year);
     const yearEl = card.querySelector("[data-card-year]");
     if (yearEl && year) yearEl.textContent = year;
-    card.setAttribute("data-type", type === "movie" ? "Película" : "Anime");
+    card.setAttribute("data-type", type === "movie" ? "PelÃ­cula" : "Anime");
     card.setAttribute("data-status", "Finalizado");
   }
 
@@ -621,4 +621,5 @@
     }
   };
 })();
+
 

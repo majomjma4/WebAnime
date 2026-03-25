@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html class="dark" lang="en"><head>
 <meta charset="utf-8"/>
@@ -338,7 +338,7 @@
     <p class="text-white/80 text-sm leading-relaxed mt-4">
   Tu acceso a NekoraList se ha activado. Disfruta de tu experiencia premium<br/>
   y explora todo el contenido exclusivo que hemos preparado para ti.<br/>
-  ¡Bienvenido a la comunidad de NekoraList!
+  Â¡Bienvenido a la comunidad de NekoraList!
 </p>
   </div>
 </div>
@@ -610,7 +610,7 @@
 
     if (successClose) {
       successClose.addEventListener("click", () => {
-        window.location.href = "index.html";
+        window.location.href = "index\.php";
       });
     }
 
@@ -623,6 +623,7 @@
 <script src="../controllers/i18n.js"></script>
 <script src="../controllers/search.js"></script>
 </body></html>
+
 
 
 

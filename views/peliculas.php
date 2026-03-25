@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html class="dark" lang="es">
   <head>
     <script data-ui-preload>
@@ -11,7 +11,7 @@
     </style>
     <meta charset="UTF-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>NekoraList - Catálogo</title>
+    <title>NekoraList - CatÃ¡logo</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link
     href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap"
@@ -300,18 +300,18 @@
                   </div>
                 </div>
                 <div class="space-y-2">
-                  <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant">GéNekoraLists</label>
-                  <!-- Dropdown de géNekoraLists renderizado por controllers/filters.js -->
+                  <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant">GÃ©NekoraLists</label>
+                  <!-- Dropdown de gÃ©NekoraLists renderizado por controllers/filters.js -->
           </div>
           <div class="space-y-4">
             <div class="space-y-2">
               <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant" for="filter-year"
-              >Año</label
+              >AÃ±o</label
               >
               <select
               id="filter-year"
               class="w-full rounded-xl bg-surface-container-high px-4 py-3 text-on-surface"
-              aria-label="Filtrar por año"
+              aria-label="Filtrar por aÃ±o"
               >
               <option>Todos</option>
               <option>2026</option>
@@ -346,7 +346,7 @@
           aria-label="Filtrar por estado"
           >
           <option>Todos</option>
-          <option>En emisión</option>
+          <option>En emisiÃ³n</option>
           <option>Finalizado</option>
         </select>
       </div>
@@ -364,7 +364,7 @@
 <section class="mt-6 rounded-lg bg-surface-container-low p-4" aria-label="Ranking">
   <div class="mb-3 flex items-center justify-between gap-3">
     <h3 class="text-sm font-bold uppercase tracking-widest text-on-surface-variant">Top 5 Ranking</h3>
-    <a class="text-xs font-semibold text-primary hover:text-primary-dim" href="ranking.html">Ver ranking</a>
+    <a class="text-xs font-semibold text-primary hover:text-primary-dim" href="ranking\.php">Ver ranking</a>
   </div>
   <div id="sidebar-ranking" data-sidebar-ranking data-ranking-type="movie" class="space-y-3">
     <div class="text-xs text-on-surface-variant">Cargando ranking...</div>
@@ -373,7 +373,7 @@
 </aside>
 
 <!-- Catalog Content -->
-<section class="lg:col-span-10" aria-label="Resultados de catálogo">
+<section class="lg:col-span-10" aria-label="Resultados de catÃ¡logo">
   <header class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
     <div>
       <h1 class="font-headline text-4xl font-extrabold text-on-surface">Descubrimiento</h1>
@@ -420,14 +420,14 @@
     <div class="hidden" data-state="empty">
       <div class="rounded-lg bg-surface-container-low p-10 text-center">
         <h2 class="text-2xl font-bold text-on-surface">Sin resultados</h2>
-        <p class="mt-2 text-on-surface-variant">Prueba otros filtros para ver más títulos disponibles.</p>
+        <p class="mt-2 text-on-surface-variant">Prueba otros filtros para ver mÃ¡s tÃ­tulos disponibles.</p>
       </div>
     </div>
 
     <div class="hidden" data-state="error">
       <div class="rounded-lg bg-error-container/30 p-10 text-center">
-        <h2 class="text-2xl font-bold text-on-error-container">Ocurrió un error</h2>
-        <p class="mt-2 text-on-error-container/80">No pudimos cargar el catálogo. Inténtalo nuevamente</p>
+        <h2 class="text-2xl font-bold text-on-error-container">OcurriÃ³ un error</h2>
+        <p class="mt-2 text-on-error-container/80">No pudimos cargar el catÃ¡logo. IntÃ©ntalo nuevamente</p>
         <button class="mt-6 rounded-full bg-primary px-6 py-3 text-sm font-bold text-on-primary" type="button">
           Reintentar
         </button>
@@ -437,8 +437,8 @@
 
   <!-- AnimeCard Component -->
   <section class="mt-[clamp(0.6rem,0.9vw,0.8rem)] grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6" aria-label="Grid de anime">
-    <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="your name" data-genres="romance,fantasia" data-year="2016" data-type="Película original" data-status="Finalizada">
-      <a class="block" href="detail.html" aria-label="Your Name">
+    <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="your name" data-genres="romance,fantasia" data-year="2016" data-type="PelÃ­cula original" data-status="Finalizada">
+      <a class="block" href="detail\.php" aria-label="Your Name">
         <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
           <img alt="Your Name" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx21519-SUo3ZQuCbYhJ.png" loading="lazy"/>
           <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2016</span>
@@ -451,7 +451,7 @@
     </article>
 
     <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="spirited away" data-genres="fantasia,aventura" data-year="2001" data-type="Recopilatoria" data-status="En cartelera">
-      <a class="block" href="detail.html" aria-label="Spirited Away">
+      <a class="block" href="detail\.php" aria-label="Spirited Away">
         <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
           <img alt="Spirited Away" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx199-sWefXJvXkDOb.jpg" loading="lazy"/>
           <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2001</span>
@@ -463,8 +463,8 @@
       </a>
     </article>
 
-    <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="a silent voice" data-genres="drama,romance" data-year="2016" data-type="Precuela" data-status="Próximamente" data-mal-id="28851">
-      <a class="block" href="detail.html" aria-label="A Silent Voice" data-mal-id="28851">
+    <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="a silent voice" data-genres="drama,romance" data-year="2016" data-type="Precuela" data-status="PrÃ³ximamente" data-mal-id="28851">
+      <a class="block" href="detail\.php" aria-label="A Silent Voice" data-mal-id="28851">
         <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
           <img alt="A Silent Voice" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx20954-sYRfE5jQRtSB.jpg" loading="lazy"/>
           <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2016</span>
@@ -477,7 +477,7 @@
     </article>
 
     <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="weathering with you" data-genres="romance,fantasia" data-year="2019" data-type="Secuela" data-status="Retrasada">
-      <a class="block" href="detail.html" aria-label="Weathering With You">
+      <a class="block" href="detail\.php" aria-label="Weathering With You">
         <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
           <img alt="Weathering With You" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx106286-5COcpd0J9VbL.png" loading="lazy"/>
           <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2019</span>
@@ -490,7 +490,7 @@
     </article>
 
     <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="princess mononoke" data-genres="accion,aventura" data-year="1997" data-type="Spin-off" data-status="Cancelada">
-      <a class="block" href="detail.html" aria-label="Princess Mononoke">
+      <a class="block" href="detail\.php" aria-label="Princess Mononoke">
         <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
           <img alt="Princess Mononoke" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx164-ySuGzCWVw2cL.jpg" loading="lazy"/>
           <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">1997</span>
@@ -503,7 +503,7 @@
     </article>
 
     <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="demon slayer: mugen train" data-genres="accion,fantasia" data-year="2020" data-type="Basada en serie" data-status="Finalizada">
-      <a class="block" href="detail.html" aria-label="Demon Slayer: Mugen Train">
+      <a class="block" href="detail\.php" aria-label="Demon Slayer: Mugen Train">
         <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
           <img alt="Demon Slayer: Mugen Train" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx112151-1qlQwPB1RrJe.png" loading="lazy"/>
           <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2020</span>
@@ -516,7 +516,7 @@
     </article>
 
     <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="akira" data-genres="accion,sci-fi" data-year="1988" data-type="" data-status="Finalizado">
-      <a class="block" href="detail.html" aria-label="Akira">
+      <a class="block" href="detail\.php" aria-label="Akira">
         <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
           <img alt="Akira" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx47-4CR68arv452h.jpg" loading="lazy"/>
           <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">1988</span>
@@ -529,7 +529,7 @@
     </article>
 
     <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="perfect blue" data-genres="thriller,drama" data-year="1997" data-type="" data-status="Finalizado">
-      <a class="block" href="detail.html" aria-label="Perfect Blue">
+      <a class="block" href="detail\.php" aria-label="Perfect Blue">
         <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
           <img alt="Perfect Blue" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx437-69NMlXKFeuse.jpg" loading="lazy"/>
           <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">1997</span>
@@ -542,7 +542,7 @@
     </article>
 
     <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="howl's moving castle" data-genres="fantasia,romance" data-year="2004" data-type="" data-status="Finalizado">
-      <a class="block" href="detail.html" aria-label="Howl's Moving Castle">
+      <a class="block" href="detail\.php" aria-label="Howl's Moving Castle">
         <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
           <img alt="Howl's Moving Castle" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx431-o8Lj3XkjHm2k.jpg" loading="lazy"/>
           <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2004</span>
@@ -555,7 +555,7 @@
     </article>
 
     <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="castle in the sky" data-genres="aventura,fantasia" data-year="1986" data-type="" data-status="Finalizado">
-      <a class="block" href="detail.html" aria-label="Castle in the Sky">
+      <a class="block" href="detail\.php" aria-label="Castle in the Sky">
         <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
           <img alt="Castle in the Sky" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx513-yM7Dlt65N4Rl.jpg" loading="lazy"/>
           <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">1986</span>
@@ -568,7 +568,7 @@
     </article>
 
     <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="the girl who leapt through time" data-genres="sci-fi,romance" data-year="2006" data-type="" data-status="Finalizado">
-      <a class="block" href="detail.html" aria-label="The Girl Who Leapt Through Time">
+      <a class="block" href="detail\.php" aria-label="The Girl Who Leapt Through Time">
         <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
           <img alt="The Girl Who Leapt Through Time" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx2236-tH5fWFkHyVGg.png" loading="lazy"/>
           <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2006</span>
@@ -581,7 +581,7 @@
     </article>
 
     <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="wolf children" data-genres="drama,fantasia" data-year="2012" data-type="" data-status="Finalizado">
-      <a class="block" href="detail.html" aria-label="Wolf Children">
+      <a class="block" href="detail\.php" aria-label="Wolf Children">
         <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
           <img alt="Wolf Children" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx12355-wNsvhEsXEgrH.png" loading="lazy"/>
           <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2012</span>
@@ -594,7 +594,7 @@
     </article>
 
     <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="the boy and the heron" data-genres="fantasia,drama" data-year="2023" data-type="" data-status="Finalizado">
-      <a class="block" href="detail.html" aria-label="The Boy and the Heron">
+      <a class="block" href="detail\.php" aria-label="The Boy and the Heron">
         <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
           <img alt="The Boy and the Heron" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx109979-BRHXpBkCw4oc.jpg" loading="lazy"/>
           <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2023</span>
@@ -607,7 +607,7 @@
     </article>
 
     <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="paprika" data-genres="sci-fi,thriller" data-year="2006" data-type="" data-status="Finalizado">
-      <a class="block" href="detail.html" aria-label="Paprika">
+      <a class="block" href="detail\.php" aria-label="Paprika">
         <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
           <img alt="Paprika" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/b1943-jMCEYL1Ixmgc.png" loading="lazy"/>
           <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2006</span>
@@ -620,7 +620,7 @@
     </article>
 
     <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="tokyo godfathers" data-genres="drama,comedia" data-year="2003" data-type="" data-status="Finalizado">
-      <a class="block" href="detail.html" aria-label="Tokyo Godfathers">
+      <a class="block" href="detail\.php" aria-label="Tokyo Godfathers">
         <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
           <img alt="Tokyo Godfathers" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx759-XSKBju6xutdR.jpg" loading="lazy"/>
           <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2003</span>
@@ -633,7 +633,7 @@
     </article>
 
     <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="promare" data-genres="accion,sci-fi" data-year="2019" data-type="" data-status="Finalizado">
-      <a class="block" href="detail.html" aria-label="Promare">
+      <a class="block" href="detail\.php" aria-label="Promare">
         <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
           <img alt="Promare" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx99425-CQ500X23zp4i.png" loading="lazy"/>
           <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2019</span>
@@ -646,7 +646,7 @@
     </article>
 
     <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="redline" data-genres="accion,sci-fi" data-year="2009" data-type="" data-status="Finalizado">
-      <a class="block" href="detail.html" aria-label="Redline">
+      <a class="block" href="detail\.php" aria-label="Redline">
         <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
           <img alt="Redline" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx6675-NF4tFzAxSjkj.png" loading="lazy"/>
           <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2009</span>
@@ -659,7 +659,7 @@
     </article>
 
     <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="kiki's delivery service" data-genres="fantasia,comedia" data-year="1989" data-type="" data-status="Finalizado">
-      <a class="block" href="detail.html" aria-label="Kiki's Delivery Service">
+      <a class="block" href="detail\.php" aria-label="Kiki's Delivery Service">
         <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
           <img alt="Kiki's Delivery Service" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx512-UwP8X4BR8YoM.png" loading="lazy"/>
           <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">1989</span>
@@ -672,7 +672,7 @@
     </article>
 
     <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="the wind rises" data-genres="drama,historico" data-year="2013" data-type="" data-status="Finalizado">
-      <a class="block" href="detail.html" aria-label="The Wind Rises">
+      <a class="block" href="detail\.php" aria-label="The Wind Rises">
         <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
           <img alt="The Wind Rises" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx16662-HUI8irtoTdOJ.jpg" loading="lazy"/>
           <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2013</span>
@@ -685,7 +685,7 @@
     </article>
 
     <article data-poster-fixed="1" class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="5 centimeters per second" data-genres="romance,drama" data-year="2007" data-type="" data-status="Finalizado">
-      <a class="block" href="detail.html" aria-label="5 Centimeters per Second">
+      <a class="block" href="detail\.php" aria-label="5 Centimeters per Second">
         <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
           <img alt="5 Centimeters per Second" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx1689-rJKhjLEjQHSy.jpg" loading="lazy"/>
           <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2007</span>
@@ -697,8 +697,8 @@
       </a>
     </article>
 
-    <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="millennium actress" data-genres="drama,romance" data-year="2001" data-type="Película original" data-status="Finalizada">
-      <a class="block" href="detail.html" aria-label="Millennium Actress">
+    <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="millennium actress" data-genres="drama,romance" data-year="2001" data-type="PelÃ­cula original" data-status="Finalizada">
+      <a class="block" href="detail\.php" aria-label="Millennium Actress">
         <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
           <img alt="Millennium Actress" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="../img/fondoanime.png" loading="lazy"/>
           <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2001</span>
@@ -711,8 +711,8 @@
     </article>
 
 
-    <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="the tale of the princess kaguya" data-genres="drama,historico" data-year="2013" data-type="Película original" data-status="Finalizada">
-      <a class="block" href="detail.html" aria-label="The Tale of the Princess Kaguya">
+    <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="the tale of the princess kaguya" data-genres="drama,historico" data-year="2013" data-type="PelÃ­cula original" data-status="Finalizada">
+      <a class="block" href="detail\.php" aria-label="The Tale of the Princess Kaguya">
         <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
           <img alt="The Tale of the Princess Kaguya" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="../img/fondoanime.png" loading="lazy"/>
           <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2013</span>
@@ -729,10 +729,10 @@
   <button
     class="rounded-full border border-primary/30 bg-primary/10 px-8 py-4 text-sm font-bold text-primary transition-colors hover:bg-primary/20 inline-flex items-center gap-2"
     type="button"
-    aria-label="Cargar más resultados"
+    aria-label="Cargar mÃ¡s resultados"
     >
     <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">add_circle</span>
-    Cargar más
+    Cargar mÃ¡s
   </button>
 </div>
 </section>
@@ -754,12 +754,12 @@
     document.addEventListener("DOMContentLoaded", () => {
       // Fix mojibake and duplicated words in peliculas page text
       const fixMap = {
-        "Películas": "Películas",
-        "Películas": "Películas",
-        "Fantasía": "Fantasía",
-        "Fantasía": "Fantasía",
-        "Acción": "Acción",
-        "más": "más"
+        "PelÃ­culas": "PelÃ­culas",
+        "PelÃ­culas": "PelÃ­culas",
+        "FantasÃ­a": "FantasÃ­a",
+        "FantasÃ­a": "FantasÃ­a",
+        "AcciÃ³n": "AcciÃ³n",
+        "mÃ¡s": "mÃ¡s"
       };
       const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
       let node;
@@ -769,9 +769,9 @@
         Object.keys(fixMap).forEach((k) => {
           if (out.includes(k)) out = out.replaceAll(k, fixMap[k]);
         });
-        out = out.replace(/anime\s*peliculas/gi, "Anime y Películas");
-        out = out.replace(/pel[?i]culas\s*pel[?i]culas/gi, "Películas");
-        out = out.replace(/pel[i]culas+/gi, "Películas");
+        out = out.replace(/anime\s*peliculas/gi, "Anime y PelÃ­culas");
+        out = out.replace(/pel[?i]culas\s*pel[?i]culas/gi, "PelÃ­culas");
+        out = out.replace(/pel[i]culas+/gi, "PelÃ­culas");
         out = out.replace(/depeliculastacado/gi, "Destacado");
         if (out !== t) node.nodeValue = out;
       }
@@ -788,7 +788,7 @@
         if (window.AniDexFilters) window.AniDexFilters.init();
       }, 1100);
       if (window.AniDexDetailLinks) window.AniDexDetailLinks.init();
-      // En pagina de peliculas: mostrar el año de publicación y abajo a la izquierda.
+      // En pagina de peliculas: mostrar el aÃ±o de publicaciÃ³n y abajo a la izquierda.
       const applyYearBadges = () => {
         document.querySelectorAll("span.absolute.left-3").forEach((badge) => {
           const card = badge.closest("[data-year]");
@@ -807,6 +807,7 @@
 <script data-ui-unlock>document.documentElement.classList.remove("preload-ui");</script>
 </body>
 </html>
+
 
 
 

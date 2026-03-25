@@ -1,4 +1,4 @@
-(function () {
+﻿(function () {
   const API_BASE = "https://api.jikan.moe/v4/anime";
   const path = window.location.pathname.toLowerCase();
   const isCatalog = path.includes("peliculas");
@@ -259,9 +259,9 @@
       "anime";
     const title = String(rawTitle || "anime").trim();
     if (malId) {
-      return `detail.html?mal_id=${encodeURIComponent(String(malId))}&q=${encodeURIComponent(title)}`;
+      return `detail\.php?mal_id=${encodeURIComponent(String(malId))}&q=${encodeURIComponent(title)}`;
     }
-    return `detail.html?q=${encodeURIComponent(title)}`;
+    return `detail\.php?q=${encodeURIComponent(title)}`;
   }
 
   let previewModal = null;
@@ -672,3 +672,4 @@
     }
   };
 })();
+

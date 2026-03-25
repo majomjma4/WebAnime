@@ -1,4 +1,4 @@
-(() => {
+﻿(() => {
   const API_BASE = "https://api.jikan.moe/v4/anime";
   const suggestCache = new Map();
   const hasJapaneseChars = (v) => /[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff]/.test(v || "");
@@ -63,7 +63,7 @@
     "jujutsu kaisen 0 movie": 2021,
     "jujutsu kaisen 0": 2021
   };
-  const HIDE_CARD_YEARS = /series\.html|peliculas\.html/i.test(window.location.pathname || "");
+  const HIDE_CARD_YEARS = /series\\.php|peliculas\\.php/i.test(window.location.pathname || "");
   const HIDE_CARD_GENRES = HIDE_CARD_YEARS;
 
   const SUGGEST_LIMIT = 6;
@@ -72,7 +72,7 @@
   const fetchRelatedByQuery = async (term, mediaType) => {
     const q = (term || "").trim();
     if (!q) return [];
-    const wantMovie = pageForType(mediaType) === "peliculas.html";
+    const wantMovie = pageForType(mediaType) === "peliculas\.php";
     try {
       const url = `${API_BASE}?q=${encodeURIComponent(q)}&limit=25&order_by=popularity&sort=asc`;
       const res = await fetch(url);
@@ -124,12 +124,12 @@
         if (genres && !HIDE_CARD_GENRES) p.textContent = `Gneros: ${genres}`;
         const y = card.dataset.year || "";
         if (y && !HIDE_CARD_YEARS && !/(19|20)\\d{2}/.test(p.textContent || "")) {
-          const sep = pageForType(mediaType) === "peliculas.html" ? "  " : " ";
+          const sep = pageForType(mediaType) === "peliculas\.php" ? "  " : " ";
           p.textContent = `${p.textContent}${sep}${y}`.trim();
         }
       }
       card.setAttribute("data-title", (item?.title || "").toLowerCase());
-      card.setAttribute("data-type", pageForType(mediaType) === "peliculas.html" ? "Película" : "Anime");
+      card.setAttribute("data-type", pageForType(mediaType) === "peliculas\.php" ? "PelÃ­cula" : "Anime");
       const key = normalize(item?.title || item?.title_english || "");
       const year = YEAR_OVERRIDES[key] || item?.year || item?.aired?.prop?.from?.year || "";
       if (year) {
@@ -160,14 +160,14 @@
     return true;
   };
 
-  const goToSearchPage = (term, page = "series.html") => {
+  const goToSearchPage = (term, page = "series\.php") => {
     const q = encodeURIComponent(term.trim());
     window.location.href = `${page}?q=${q}`;
   };
   const pageForType = (mediaType) => {
     const t = normalize(mediaType);
-    if (t.includes("movie") || t.includes("película")) return "peliculas.html";
-    return "series.html";
+    if (t.includes("movie") || t.includes("pelÃ­cula")) return "peliculas\.php";
+    return "series\.php";
   };
 
   const bindInput = (input) => {
@@ -333,7 +333,7 @@
     };
 
     const resolveSuggestPage = (items) => {
-      if (!items.length) return "series.html";
+      if (!items.length) return "series\.php";
       let movieCount = 0;
       let tvCount = 0;
       items.forEach((it) => {
@@ -341,7 +341,7 @@
         if (t.includes("movie") || t.includes("pelicula") || t.includes("pelcula")) movieCount += 1;
         else tvCount += 1;
       });
-      return movieCount > tvCount ? "peliculas.html" : "series.html";
+      return movieCount > tvCount ? "peliculas\.php" : "series\.php";
     };
 
     const renderSuggestions = (items, term) => {
@@ -480,5 +480,6 @@
 
   window.AniDexSearch = { init };
 })();
+
 
 

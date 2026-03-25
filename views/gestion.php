@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html class="dark" lang="en"><head>
 <link rel="icon" href="../img/icon3.png" />
@@ -122,7 +122,7 @@
 <div class="flex gap-4">
 <button class="px-8 py-3 bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-semibold rounded-full border border-outline-variant/10 transition-all flex items-center gap-2" data-admin-filter-toggle><span class="material-symbols-outlined text-sm" data-icon="filter_list">filter_list</span>
                         Filtrar</button>
-<button class="px-8 py-3 bg-gradient-to-r from-primary to-primary-container text-on-primary font-bold rounded-full shadow-xl shadow-primary/20 hover:scale-105 transition-transform flex items-center gap-2" data-admin-link="añadir.html"><span class="material-symbols-outlined" data-icon="add">add</span>
+<button class="px-8 py-3 bg-gradient-to-r from-primary to-primary-container text-on-primary font-bold rounded-full shadow-xl shadow-primary/20 hover:scale-105 transition-transform flex items-center gap-2" data-admin-link="aÃ±adir\.php"><span class="material-symbols-outlined" data-icon="add">add</span>
                         Aadir Nuevo Anime</button>
 </div>
 </div>
@@ -499,5 +499,6 @@
 </script>
 <script src="../controllers/admin-layout.js"></script>
 </body></html>
+
 
 

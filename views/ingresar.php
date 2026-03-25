@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html class="dark" lang="es">
   <head>
     <meta charset="UTF-8" />
@@ -135,11 +135,11 @@
   </head>
   <body class="bg-background text-on-background font-body min-h-screen flex flex-col auth-page">
     <div class="fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-6 py-6 pointer-events-none">
-      <a href="user.html" class="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-sky-500/90 px-5 py-3 text-sm font-bold uppercase tracking-widest text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)] shadow-lg shadow-sky-500/35 hover:bg-sky-400/95 transition-all" data-auth-back>
+      <a href="user\.php" class="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-sky-500/90 px-5 py-3 text-sm font-bold uppercase tracking-widest text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)] shadow-lg shadow-sky-500/35 hover:bg-sky-400/95 transition-all" data-auth-back>
         <span class="material-symbols-outlined text-base leading-none">arrow_back</span>
         Regresar
       </a>
-      <a href="registro.html" class="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-gradient-to-br from-primary to-primary-container text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)] px-6 py-3 text-sm font-bold uppercase tracking-widest shadow-lg shadow-primary/25 hover:scale-[1.02] active:scale-95 transition-all">
+      <a href="registro\.php" class="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-gradient-to-br from-primary to-primary-container text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)] px-6 py-3 text-sm font-bold uppercase tracking-widest shadow-lg shadow-primary/25 hover:scale-[1.02] active:scale-95 transition-all">
         Crear cuenta
       </a>
     </div>
@@ -149,7 +149,7 @@
           <h1 class="font-headline font-extrabold text-[clamp(1.5rem,3.6vw,2.8rem)] tracking-tight leading-tight whitespace-nowrap">
             Bienvenido a <span class="inline-flex whitespace-nowrap"><span class="text-white">Nekora</span><span class="text-violet-400">List</span></span>
           </h1>
-          <p class="text-on-surface-variant">Accede a tu perfil para guardar y organizar tus títulos.</p>
+          <p class="text-on-surface-variant">Accede a tu perfil para guardar y organizar tus tÃ­tulos.</p>
         </div>
 
         <form id="login-form" class="mt-8 flex flex-col gap-6" autocomplete="off">
@@ -161,22 +161,22 @@
             </div>
           </div>
           <div class="flex flex-col gap-2">
-            <label class="text-xs font-semibold uppercase tracking-widest text-on-surface-variant ml-1" for="login-pass">Contraseña</label>
+            <label class="text-xs font-semibold uppercase tracking-widest text-on-surface-variant ml-1" for="login-pass">ContraseÃ±a</label>
             <div class="relative group">
               <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary">lock</span>
-              <input id="login-pass" name="login-pass" class="w-full bg-surface-container-lowest border-none rounded-xl py-4 pl-12 pr-4 text-on-surface placeholder:text-on-surface-variant/60 focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="••••••••" type="password" required autocomplete="new-password" />
+              <input id="login-pass" name="login-pass" class="w-full bg-surface-container-lowest border-none rounded-xl py-4 pl-12 pr-4 text-on-surface placeholder:text-on-surface-variant/60 focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" type="password" required autocomplete="new-password" />
             </div>
             <div class="flex justify-end">
-              <a class="text-xs text-primary-dim hover:text-primary transition-colors" href="#">¿Olvidaste tu contraseña?</a>
+              <a class="text-xs text-primary-dim hover:text-primary transition-colors" href="#">Â¿Olvidaste tu contraseÃ±a?</a>
             </div>
           </div>
           <button class="w-full bg-gradient-to-br from-primary to-primary-container text-on-primary py-4 rounded-full font-headline font-bold text-lg hover:scale-[1.02] active:scale-95 transition-all duration-300 shadow-lg shadow-primary/20" type="submit">
-            Iniciar sesión
+            Iniciar sesiÃ³n
           </button>
         </form>
 
         <p class="mt-6 text-center text-sm text-on-surface-variant">
-          ¿No tienes cuenta? <a class="text-primary-dim font-bold hover:underline" href="registro.html">Regístrate ahora</a>
+          Â¿No tienes cuenta? <a class="text-primary-dim font-bold hover:underline" href="registro\.php">RegÃ­strate ahora</a>
         </p>
       </section>
     </main>
@@ -185,11 +185,11 @@
         const logged = localStorage.getItem("nekora_logged_in") === "true";
         const backBtn = document.querySelector("[data-auth-back]");
         if (!logged) {
-          if (backBtn) backBtn.href = "index.html";
+          if (backBtn) backBtn.href = "index\.php";
           try {
             history.pushState({ guest: true }, "", location.href);
             window.addEventListener("popstate", () => {
-              window.location.href = "index.html";
+              window.location.href = "index\.php";
             });
           } catch {}
         }
@@ -205,10 +205,10 @@
         <button type="button" id="login-close" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant hover:text-on-surface flex items-center justify-center">x</button>
         <img src="../img/doraemon.gif" alt="Doraemon feliz" class="w-20 h-20 mx-auto mb-4 rounded-full" />
         <h3 id="login-title" class="font-headline text-2xl font-extrabold text-violet-400">
-          ¡Bienvenido de nuevo, <span id="login-name">Usuario</span>!
+          Â¡Bienvenido de nuevo, <span id="login-name">Usuario</span>!
         </h3>
         <p id="login-subtitle" class="text-white/80 text-sm leading-relaxed mt-4">
-          Tu colección de animes te estaba esperando. ⭐
+          Tu colecciÃ³n de animes te estaba esperando. â­
         </p>
       </div>
     </div>
@@ -236,11 +236,11 @@
       const isAdmin = name === "Admin99" && pass === "1221";
       if (nameEl) nameEl.textContent = name;
       if (isAdmin) {
-        if (titleEl) titleEl.textContent = "Bienvenido, administrador 👑";
+        if (titleEl) titleEl.textContent = "Bienvenido, administrador ðŸ‘‘";
         if (subtitleEl) subtitleEl.textContent = "Tienes el control total de NekoraList";
       } else {
-        if (titleEl) titleEl.innerHTML = `¡Bienvenido de nuevo, <span id="login-name">${name || "Usuario"}</span>!`;
-        if (subtitleEl) subtitleEl.textContent = "Tu colección de animes te estaba esperando. ⭐";
+        if (titleEl) titleEl.innerHTML = `Â¡Bienvenido de nuevo, <span id="login-name">${name || "Usuario"}</span>!`;
+        if (subtitleEl) subtitleEl.textContent = "Tu colecciÃ³n de animes te estaba esperando. â­";
       }
       try {
         localStorage.setItem("nekora_logged_in", "true");
@@ -272,7 +272,7 @@
     });
     if (closeBtn) {
       closeBtn.addEventListener("click", () => {
-        window.location.href = "index.html";
+        window.location.href = "index\.php";
       });
     }
   })();
@@ -285,3 +285,4 @@
     </script>
   </body>
 </html>
+

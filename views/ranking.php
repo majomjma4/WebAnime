@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html class="dark" lang="es">
   <head>
     <meta charset="UTF-8" />
@@ -239,7 +239,7 @@
         <div class="mb-8 flex items-center justify-between gap-4">
           <div>
             <h1 class="font-['Manrope'] text-3xl md:text-4xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-violet-300 to-blue-300 drop-shadow-[0_6px_18px_rgba(251,191,36,0.3)]">Ranking Top 50</h1>
-            <p class="text-zinc-400 mt-2">Los 50 animes y películas mejor posicionados.</p>
+            <p class="text-zinc-400 mt-2">Los 50 animes y pelÃ­culas mejor posicionados.</p>
           </div>
         </div>
 
@@ -249,7 +249,7 @@
           </div>
         </section>
       <div class="mt-12 flex justify-center gap-4" id="ranking-actions">
-        <a id="ranking-back-home" href="index.html" class="rounded-full bg-violet-500/90 px-8 py-4 text-sm font-bold text-white hover:bg-violet-500 transition-colors">Volver al inicio</a>
+        <a id="ranking-back-home" href="index\.php" class="rounded-full bg-violet-500/90 px-8 py-4 text-sm font-bold text-white hover:bg-violet-500 transition-colors">Volver al inicio</a>
         <button id="ranking-reload" type="button" class="hidden rounded-full bg-sky-500/90 px-8 py-4 text-sm font-bold text-white hover:bg-sky-500 transition-colors">Volver a cargar</button>
       </div>
       </main>
@@ -291,7 +291,7 @@
         if (!badge) {
           badge = document.createElement('div');
           badge.className = 'anidex-score-badge absolute top-3 right-3 bg-black/70 px-2 py-1 rounded text-xs font-bold text-white flex items-center gap-1';
-        badge.innerHTML = '<span class="text-[16px] leading-none">★</span><span>--</span>';
+        badge.innerHTML = '<span class="text-[16px] leading-none">â˜…</span><span>--</span>';
           media.appendChild(badge);
         }
         if (highlight) {
@@ -303,7 +303,7 @@
 
       function formatGenres(list) {
         var items = (list || []).map(function (g) { return g && g.name; }).filter(Boolean).slice(0, 2);
-        return items.length ? items.join(', ') : 'Sin categorías';
+        return items.length ? items.join(', ') : 'Sin categorÃ­as';
       }
 
       function renderCard(it, idx) {
@@ -323,7 +323,7 @@
         article.setAttribute('data-anime-card', '1');
         article.setAttribute('data-type', type);
         article.onclick = function () {
-          var url = 'detail.html';
+          var url = 'detail\.php';
           if (it && it.mal_id) {
             url += '?mal_id=' + encodeURIComponent(String(it.mal_id));
             if (title) url += '&q=' + encodeURIComponent(title);
@@ -369,7 +369,7 @@
 
         var typeBadge = document.createElement('span');
         typeBadge.className = 'absolute bottom-3 left-3 rounded-full bg-violet-500 border border-violet-400 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]';
-        typeBadge.textContent = (type && type.toLowerCase().includes('movie')) ? 'Película' : 'Anime';
+        typeBadge.textContent = (type && type.toLowerCase().includes('movie')) ? 'PelÃ­cula' : 'Anime';
 
         media.appendChild(imgWrap);
         media.appendChild(rank);
@@ -390,7 +390,7 @@
         spanType.textContent = 'Tipo: ' + type;
         var spanYear = document.createElement('span');
         spanYear.className = 'rounded-full bg-zinc-800/80 px-3 py-1';
-        spanYear.textContent = 'Año: ' + year;
+        spanYear.textContent = 'AÃ±o: ' + year;
         meta.appendChild(spanType);
         meta.appendChild(spanYear);
 
@@ -447,3 +447,4 @@
     </script>
   </body>
 </html>
+

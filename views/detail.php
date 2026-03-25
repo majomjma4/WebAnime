@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html class="dark" lang="en"><head>
     <script data-ui-preload>document.documentElement.classList.add("preload-ui");</script>
@@ -207,10 +207,10 @@
         </div>
         <!-- Content Container -->
         <div id="detail-hero-content" class="relative z-20 max-w-7xl mx-auto h-full px-8 flex items-end pb-12 gap-12 transition-all duration-500 blur-0 opacity-100 pointer-events-none">
-          <!-- Large Póster Card -->
+          <!-- Large PÃ³ster Card -->
           <div class="hidden md:block w-72 lg:w-80 shrink-0 transform -translate-y-4 pointer-events-auto">
             <div class="relative aspect-[2/3] rounded-lg overflow-hidden shadow-[0px_30px_60px_rgba(0,0,0,0.6)] bg-surface-container-high">
-              <img alt="Solo Leveling Póster" class="w-full h-full object-cover" data-alt="Anime protagonist character art vertical poster" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXTXqdDIpKJHKrJNqlN-s7KMfzwFvt6rOtGu823T9YwAdyi6UEeanLdk9bqVlZ8ho5vTFT7MDZ6vzPK4KY7BJP13NbLY_vk_gooV2eHcmjbyP9weV8jSsNAnMZ_QJT54fqop6etgY343bdhrCO--xxETu162oetRJCyr0HpWKNw2NpQCSK024fF7PvE7RiypLSPQDTXxOG-TO4cAplVg_TuTwzEooVYnPehX57TkY2_pMDoTFuAYFkM9vyCyuQz0AljMmSIz1r-XDr"/>
+              <img alt="Solo Leveling PÃ³ster" class="w-full h-full object-cover" data-alt="Anime protagonist character art vertical poster" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXTXqdDIpKJHKrJNqlN-s7KMfzwFvt6rOtGu823T9YwAdyi6UEeanLdk9bqVlZ8ho5vTFT7MDZ6vzPK4KY7BJP13NbLY_vk_gooV2eHcmjbyP9weV8jSsNAnMZ_QJT54fqop6etgY343bdhrCO--xxETu162oetRJCyr0HpWKNw2NpQCSK024fF7PvE7RiypLSPQDTXxOG-TO4cAplVg_TuTwzEooVYnPehX57TkY2_pMDoTFuAYFkM9vyCyuQz0AljMmSIz1r-XDr"/>
 </div>
           </div>
           <!-- Info Block -->
@@ -221,25 +221,25 @@
                 <span class="flex items-center gap-1 text-primary-dim">
                   <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
                   <span class="font-bold text-lg">8.7</span>
-                  <span class="text-on-surface-variant text-sm font-normal ml-1">Puntuación</span>
+                  <span class="text-on-surface-variant text-sm font-normal ml-1">PuntuaciÃ³n</span>
                 </span>
               </div>
               <h1 class="font-headline text-5xl lg:text-7xl font-extrabold tracking-tighter text-on-surface">Solo Leveling</h1>
               <p id="detail-status-meta" class="text-on-surface-variant font-medium flex gap-4 text-sm lg:text-base">
-                <span>Estado: En emisión</span>
+                <span>Estado: En emisiÃ³n</span>
                 <span class="text-outline-variant">&gt;&lt;</span>
                 <span>Episodios: 12/24</span>
                 <span class="text-outline-variant">&gt;&lt;</span>
-                <span>Duración: 24m</span>
+                <span>DuraciÃ³n: 24m</span>
               </p>
             </div>
             <div class="flex flex-wrap gap-2">
-              <span class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant text-sm rounded-full border border-outline-variant/10">Acción</span>
-              <span class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant text-sm rounded-full border border-outline-variant/10">Fantasía</span>
+              <span class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant text-sm rounded-full border border-outline-variant/10">AcciÃ³n</span>
+              <span class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant text-sm rounded-full border border-outline-variant/10">FantasÃ­a</span>
               <span class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant text-sm rounded-full border border-outline-variant/10">Aventura</span>
             </div>
             <div class="flex flex-wrap gap-4 pt-2 items-center">
-              <a data-add-my-list class="px-8 py-3.5 bg-transparent border border-sky-400/40 text-on-surface font-bold rounded-full hover:border-sky-400/70 hover:bg-surface-container-high transition-all flex items-center gap-2 shadow-[0_0_14px_rgba(56,189,248,0.25)] hover:shadow-[0_0_22px_rgba(56,189,248,0.45)]" href="user.html"><span class="material-symbols-outlined">add</span><span data-add-label>Añadir a Mi Lista</span></a>
+              <a data-add-my-list class="px-8 py-3.5 bg-transparent border border-sky-400/40 text-on-surface font-bold rounded-full hover:border-sky-400/70 hover:bg-surface-container-high transition-all flex items-center gap-2 shadow-[0_0_14px_rgba(56,189,248,0.25)] hover:shadow-[0_0_22px_rgba(56,189,248,0.45)]" href="user\.php"><span class="material-symbols-outlined">add</span><span data-add-label>AÃ±adir a Mi Lista</span></a>
               <button data-add-favorite class="group w-12 h-12 p-0 bg-transparent border border-rose-400/40 text-on-surface-variant rounded-full hover:border-rose-400/70 hover:bg-surface-container-high transition-all flex items-center justify-center relative shadow-[0_0_14px_rgba(244,63,94,0.3)] hover:shadow-[0_0_22px_rgba(244,63,94,0.55)]" type="button"><span class="material-symbols-outlined text-[20px]">favorite</span><span data-fav-label class="pointer-events-none absolute left-1/2 top-full mt-2 -translate-x-1/2 whitespace-nowrap rounded-full bg-surface-container-high px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-on-surface opacity-0 transition-opacity duration-200 group-hover:opacity-100">Agregar a Favoritos</span></button>
               <button data-detail-status="completed" class="group w-12 h-12 p-0 bg-transparent border border-emerald-400/40 text-on-surface-variant rounded-full hover:border-emerald-400/70 hover:bg-surface-container-high transition-all flex items-center justify-center relative shadow-[0_0_14px_rgba(16,185,129,0.3)] hover:shadow-[0_0_22px_rgba(16,185,129,0.55)]" type="button">
                 <span class="material-symbols-outlined text-[20px]">check_circle</span>
@@ -255,7 +255,7 @@
       </section>
       <!-- Detailed Content Area -->
       <section class="max-w-7xl mx-auto px-8 py-20 grid grid-cols-1 lg:grid-cols-3 gap-16">
-        <!-- Left Column: Sinopsis, Galería y Personajes -->
+        <!-- Left Column: Sinopsis, GalerÃ­a y Personajes -->
         <div class="lg:col-span-2 space-y-12 detail-left-col">
           <!-- Synopsis -->
           <div class="space-y-6">
@@ -267,10 +267,10 @@
             </p>
           </div>
         </div>
-        <!-- Right Column: Información -->
+        <!-- Right Column: InformaciÃ³n -->
         <div class="space-y-10">
           <div class="bg-surface-container-low rounded-lg p-8 border border-outline-variant/5 space-y-8">
-            <h3 class="font-headline text-xl font-bold border-b border-outline-variant/10 pb-4">Información</h3>
+            <h3 class="font-headline text-xl font-bold border-b border-outline-variant/10 pb-4">InformaciÃ³n</h3>
             <div class="space-y-6">
               <div class="flex flex-col gap-1">
                 <span class="text-xs text-on-surface-variant uppercase tracking-widest font-bold">Native Title</span>
@@ -352,20 +352,20 @@
         <div class="flex items-end justify-between">
           <div>
             <h2 class="font-headline text-4xl font-extrabold tracking-tight">Recomendado para Ti</h2>
-            <p class="text-on-surface-variant mt-2">Otros títulos que te pueden interesar</p>
+            <p class="text-on-surface-variant mt-2">Otros tÃ­tulos que te pueden interesar</p>
           </div>
         </div>
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
           <!-- Card 1 -->
-          <a class="group cursor-pointer" href="detail.html"><div class="poster-fade-left relative aspect-[2/3] rounded-lg overflow-hidden bg-surface-container-high relative mb-4 transition-transform duration-500 ease-[cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.04]"><img alt="Tower of God" class="w-full h-full object-cover" data-alt="Anime fantasy poster vertical" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtqxKcGTcymR4IJol4SxeiIj-BJNATnZcsnFB2ZMYRTa74Vr0wv3vAZ6CEWT1rbGPSDGJrUxs1F6uIcQHQ8iKXtmZIvFLACNlD4UPMFWExAc8CUG2cd_tFeTP0tpM1N_eQ0OkRniEpPz16OEyZjUhmIpXAREqccEnQwbppVkAmyIwXrZjM_7S4FmDqxkG50F5ZTWxzmiWTlDi8zorXn_C5j-ZqIId_lDc6EU00FED-4xW5ht_oYkS0j8kh05o0Kt6g_KJgoKmdrqvi"/><div class="absolute top-3 right-3 bg-neutral-950/80 backdrop-blur-md px-2 py-1 rounded-md flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span> <span class="text-xs font-bold">8.1</span></div></div><h4 class="font-bold text-on-surface group-hover:text-primary transition-colors truncate">Tower of God</h4><p class="text-xs text-on-surface-variant mt-1">Adventure, Mystery</p></a>
+          <a class="group cursor-pointer" href="detail\.php"><div class="poster-fade-left relative aspect-[2/3] rounded-lg overflow-hidden bg-surface-container-high relative mb-4 transition-transform duration-500 ease-[cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.04]"><img alt="Tower of God" class="w-full h-full object-cover" data-alt="Anime fantasy poster vertical" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtqxKcGTcymR4IJol4SxeiIj-BJNATnZcsnFB2ZMYRTa74Vr0wv3vAZ6CEWT1rbGPSDGJrUxs1F6uIcQHQ8iKXtmZIvFLACNlD4UPMFWExAc8CUG2cd_tFeTP0tpM1N_eQ0OkRniEpPz16OEyZjUhmIpXAREqccEnQwbppVkAmyIwXrZjM_7S4FmDqxkG50F5ZTWxzmiWTlDi8zorXn_C5j-ZqIId_lDc6EU00FED-4xW5ht_oYkS0j8kh05o0Kt6g_KJgoKmdrqvi"/><div class="absolute top-3 right-3 bg-neutral-950/80 backdrop-blur-md px-2 py-1 rounded-md flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span> <span class="text-xs font-bold">8.1</span></div></div><h4 class="font-bold text-on-surface group-hover:text-primary transition-colors truncate">Tower of God</h4><p class="text-xs text-on-surface-variant mt-1">Adventure, Mystery</p></a>
           <!-- Card 2 -->
-          <a class="group cursor-pointer" href="detail.html"><div class="poster-fade-left relative aspect-[2/3] rounded-lg overflow-hidden bg-surface-container-high relative mb-4 transition-transform duration-500 ease-[cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.04]"><img alt="Tower of God" class="w-full h-full object-cover" data-alt="Anime fantasy poster vertical" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtqxKcGTcymR4IJol4SxeiIj-BJNATnZcsnFB2ZMYRTa74Vr0wv3vAZ6CEWT1rbGPSDGJrUxs1F6uIcQHQ8iKXtmZIvFLACNlD4UPMFWExAc8CUG2cd_tFeTP0tpM1N_eQ0OkRniEpPz16OEyZjUhmIpXAREqccEnQwbppVkAmyIwXrZjM_7S4FmDqxkG50F5ZTWxzmiWTlDi8zorXn_C5j-ZqIId_lDc6EU00FED-4xW5ht_oYkS0j8kh05o0Kt6g_KJgoKmdrqvi"/><div class="absolute top-3 right-3 bg-neutral-950/80 backdrop-blur-md px-2 py-1 rounded-md flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span> <span class="text-xs font-bold">8.1</span></div></div><h4 class="font-bold text-on-surface group-hover:text-primary transition-colors truncate">Tower of God</h4><p class="text-xs text-on-surface-variant mt-1">Adventure, Mystery</p></a>
+          <a class="group cursor-pointer" href="detail\.php"><div class="poster-fade-left relative aspect-[2/3] rounded-lg overflow-hidden bg-surface-container-high relative mb-4 transition-transform duration-500 ease-[cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.04]"><img alt="Tower of God" class="w-full h-full object-cover" data-alt="Anime fantasy poster vertical" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtqxKcGTcymR4IJol4SxeiIj-BJNATnZcsnFB2ZMYRTa74Vr0wv3vAZ6CEWT1rbGPSDGJrUxs1F6uIcQHQ8iKXtmZIvFLACNlD4UPMFWExAc8CUG2cd_tFeTP0tpM1N_eQ0OkRniEpPz16OEyZjUhmIpXAREqccEnQwbppVkAmyIwXrZjM_7S4FmDqxkG50F5ZTWxzmiWTlDi8zorXn_C5j-ZqIId_lDc6EU00FED-4xW5ht_oYkS0j8kh05o0Kt6g_KJgoKmdrqvi"/><div class="absolute top-3 right-3 bg-neutral-950/80 backdrop-blur-md px-2 py-1 rounded-md flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span> <span class="text-xs font-bold">8.1</span></div></div><h4 class="font-bold text-on-surface group-hover:text-primary transition-colors truncate">Tower of God</h4><p class="text-xs text-on-surface-variant mt-1">Adventure, Mystery</p></a>
           <!-- Card 3 -->
-          <a class="group cursor-pointer" href="detail.html"><div class="poster-fade-left relative aspect-[2/3] rounded-lg overflow-hidden bg-surface-container-high relative mb-4 transition-transform duration-500 ease-[cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.04]"><img alt="Tower of God" class="w-full h-full object-cover" data-alt="Anime fantasy poster vertical" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtqxKcGTcymR4IJol4SxeiIj-BJNATnZcsnFB2ZMYRTa74Vr0wv3vAZ6CEWT1rbGPSDGJrUxs1F6uIcQHQ8iKXtmZIvFLACNlD4UPMFWExAc8CUG2cd_tFeTP0tpM1N_eQ0OkRniEpPz16OEyZjUhmIpXAREqccEnQwbppVkAmyIwXrZjM_7S4FmDqxkG50F5ZTWxzmiWTlDi8zorXn_C5j-ZqIId_lDc6EU00FED-4xW5ht_oYkS0j8kh05o0Kt6g_KJgoKmdrqvi"/><div class="absolute top-3 right-3 bg-neutral-950/80 backdrop-blur-md px-2 py-1 rounded-md flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span> <span class="text-xs font-bold">8.1</span></div></div><h4 class="font-bold text-on-surface group-hover:text-primary transition-colors truncate">Tower of God</h4><p class="text-xs text-on-surface-variant mt-1">Adventure, Mystery</p></a>
+          <a class="group cursor-pointer" href="detail\.php"><div class="poster-fade-left relative aspect-[2/3] rounded-lg overflow-hidden bg-surface-container-high relative mb-4 transition-transform duration-500 ease-[cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.04]"><img alt="Tower of God" class="w-full h-full object-cover" data-alt="Anime fantasy poster vertical" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtqxKcGTcymR4IJol4SxeiIj-BJNATnZcsnFB2ZMYRTa74Vr0wv3vAZ6CEWT1rbGPSDGJrUxs1F6uIcQHQ8iKXtmZIvFLACNlD4UPMFWExAc8CUG2cd_tFeTP0tpM1N_eQ0OkRniEpPz16OEyZjUhmIpXAREqccEnQwbppVkAmyIwXrZjM_7S4FmDqxkG50F5ZTWxzmiWTlDi8zorXn_C5j-ZqIId_lDc6EU00FED-4xW5ht_oYkS0j8kh05o0Kt6g_KJgoKmdrqvi"/><div class="absolute top-3 right-3 bg-neutral-950/80 backdrop-blur-md px-2 py-1 rounded-md flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span> <span class="text-xs font-bold">8.1</span></div></div><h4 class="font-bold text-on-surface group-hover:text-primary transition-colors truncate">Tower of God</h4><p class="text-xs text-on-surface-variant mt-1">Adventure, Mystery</p></a>
           <!-- Card 4 -->
-          <a class="group cursor-pointer" href="detail.html"><div class="poster-fade-left relative aspect-[2/3] rounded-lg overflow-hidden bg-surface-container-high relative mb-4 transition-transform duration-500 ease-[cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.04]"><img alt="Tower of God" class="w-full h-full object-cover" data-alt="Anime fantasy poster vertical" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtqxKcGTcymR4IJol4SxeiIj-BJNATnZcsnFB2ZMYRTa74Vr0wv3vAZ6CEWT1rbGPSDGJrUxs1F6uIcQHQ8iKXtmZIvFLACNlD4UPMFWExAc8CUG2cd_tFeTP0tpM1N_eQ0OkRniEpPz16OEyZjUhmIpXAREqccEnQwbppVkAmyIwXrZjM_7S4FmDqxkG50F5ZTWxzmiWTlDi8zorXn_C5j-ZqIId_lDc6EU00FED-4xW5ht_oYkS0j8kh05o0Kt6g_KJgoKmdrqvi"/><div class="absolute top-3 right-3 bg-neutral-950/80 backdrop-blur-md px-2 py-1 rounded-md flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span> <span class="text-xs font-bold">8.1</span></div></div><h4 class="font-bold text-on-surface group-hover:text-primary transition-colors truncate">Tower of God</h4><p class="text-xs text-on-surface-variant mt-1">Adventure, Mystery</p></a>
+          <a class="group cursor-pointer" href="detail\.php"><div class="poster-fade-left relative aspect-[2/3] rounded-lg overflow-hidden bg-surface-container-high relative mb-4 transition-transform duration-500 ease-[cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.04]"><img alt="Tower of God" class="w-full h-full object-cover" data-alt="Anime fantasy poster vertical" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtqxKcGTcymR4IJol4SxeiIj-BJNATnZcsnFB2ZMYRTa74Vr0wv3vAZ6CEWT1rbGPSDGJrUxs1F6uIcQHQ8iKXtmZIvFLACNlD4UPMFWExAc8CUG2cd_tFeTP0tpM1N_eQ0OkRniEpPz16OEyZjUhmIpXAREqccEnQwbppVkAmyIwXrZjM_7S4FmDqxkG50F5ZTWxzmiWTlDi8zorXn_C5j-ZqIId_lDc6EU00FED-4xW5ht_oYkS0j8kh05o0Kt6g_KJgoKmdrqvi"/><div class="absolute top-3 right-3 bg-neutral-950/80 backdrop-blur-md px-2 py-1 rounded-md flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span> <span class="text-xs font-bold">8.1</span></div></div><h4 class="font-bold text-on-surface group-hover:text-primary transition-colors truncate">Tower of God</h4><p class="text-xs text-on-surface-variant mt-1">Adventure, Mystery</p></a>
           <!-- Card 5 -->
-          <a class="group cursor-pointer" href="detail.html"><div class="poster-fade-left relative aspect-[2/3] rounded-lg overflow-hidden bg-surface-container-high relative mb-4 transition-transform duration-500 ease-[cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.04]"><img alt="Tower of God" class="w-full h-full object-cover" data-alt="Anime fantasy poster vertical" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtqxKcGTcymR4IJol4SxeiIj-BJNATnZcsnFB2ZMYRTa74Vr0wv3vAZ6CEWT1rbGPSDGJrUxs1F6uIcQHQ8iKXtmZIvFLACNlD4UPMFWExAc8CUG2cd_tFeTP0tpM1N_eQ0OkRniEpPz16OEyZjUhmIpXAREqccEnQwbppVkAmyIwXrZjM_7S4FmDqxkG50F5ZTWxzmiWTlDi8zorXn_C5j-ZqIId_lDc6EU00FED-4xW5ht_oYkS0j8kh05o0Kt6g_KJgoKmdrqvi"/><div class="absolute top-3 right-3 bg-neutral-950/80 backdrop-blur-md px-2 py-1 rounded-md flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span> <span class="text-xs font-bold">8.1</span></div></div><h4 class="font-bold text-on-surface group-hover:text-primary transition-colors truncate">Tower of God</h4><p class="text-xs text-on-surface-variant mt-1">Adventure, Mystery</p></a>
+          <a class="group cursor-pointer" href="detail\.php"><div class="poster-fade-left relative aspect-[2/3] rounded-lg overflow-hidden bg-surface-container-high relative mb-4 transition-transform duration-500 ease-[cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.04]"><img alt="Tower of God" class="w-full h-full object-cover" data-alt="Anime fantasy poster vertical" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtqxKcGTcymR4IJol4SxeiIj-BJNATnZcsnFB2ZMYRTa74Vr0wv3vAZ6CEWT1rbGPSDGJrUxs1F6uIcQHQ8iKXtmZIvFLACNlD4UPMFWExAc8CUG2cd_tFeTP0tpM1N_eQ0OkRniEpPz16OEyZjUhmIpXAREqccEnQwbppVkAmyIwXrZjM_7S4FmDqxkG50F5ZTWxzmiWTlDi8zorXn_C5j-ZqIId_lDc6EU00FED-4xW5ht_oYkS0j8kh05o0Kt6g_KJgoKmdrqvi"/><div class="absolute top-3 right-3 bg-neutral-950/80 backdrop-blur-md px-2 py-1 rounded-md flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span> <span class="text-xs font-bold">8.1</span></div></div><h4 class="font-bold text-on-surface group-hover:text-primary transition-colors truncate">Tower of God</h4><p class="text-xs text-on-surface-variant mt-1">Adventure, Mystery</p></a>
         </div>
       </section>
       <!-- Comments Section -->
@@ -373,18 +373,18 @@
         <div class="flex flex-wrap items-end justify-between gap-4">
           <div>
             <h2 class="font-headline text-4xl font-extrabold tracking-tight">Comentarios</h2>
-            <p class="text-on-surface-variant mt-2">Comparte tu opinión y califica el título con estrellitas.</p>
+            <p class="text-on-surface-variant mt-2">Comparte tu opiniÃ³n y califica el tÃ­tulo con estrellitas.</p>
           </div>
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-[1.1fr,0.9fr] gap-8">
           <form id="comment-form" class="rounded-3xl border border-white/10 bg-surface-container-low/60 p-6 md:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.4)] space-y-6">
             <div>
               <h3 class="font-headline text-2xl font-bold">Deja tu comentario</h3>
-              <p class="text-sm text-on-surface-variant mt-1">Sé breve, claro y respetuoso.</p>
+              <p class="text-sm text-on-surface-variant mt-1">SÃ© breve, claro y respetuoso.</p>
             </div>
             <div class="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-3">
               <div class="flex items-center justify-between gap-3">
-                <span class="text-xs uppercase tracking-[0.3em] text-on-surface-variant">Puntuación</span>
+                <span class="text-xs uppercase tracking-[0.3em] text-on-surface-variant">PuntuaciÃ³n</span>
                 <span id="rating-value" class="text-sm font-semibold text-on-surface">0/5</span>
               </div>
               <div class="flex items-center gap-2" id="rating-stars">
@@ -404,19 +404,19 @@
                   <span class="material-symbols-outlined text-[24px] transition-transform duration-200" style="font-variation-settings: 'FILL' 1;">star</span>
                 </button>
               </div>
-              <p id="rating-help" class="text-xs text-on-surface-variant">Selecciona tu calificación antes de comentar.</p>
+              <p id="rating-help" class="text-xs text-on-surface-variant">Selecciona tu calificaciÃ³n antes de comentar.</p>
             </div>
             <div class="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-2">
               <label for="comment-text" class="text-xs uppercase tracking-[0.3em] text-on-surface-variant">Tu comentario</label>
               <textarea id="comment-text" rows="4" maxlength="400" class="w-full bg-transparent border border-white/10 rounded-2xl px-4 py-3 text-sm text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:ring-2 focus:ring-primary/40" placeholder="Escribe algo que ayude a otros fans..."></textarea>
               <div class="flex items-center justify-between text-xs text-on-surface-variant">
-                <span id="comment-error" class="hidden text-rose-300">Agrega una puntuación y un comentario.</span>
+                <span id="comment-error" class="hidden text-rose-300">Agrega una puntuaciÃ³n y un comentario.</span>
                 <span id="comment-count">0/400</span>
               </div>
             </div>
             <div class="flex flex-wrap items-center gap-4">
               <button type="submit" id="comment-submit" class="rounded-full bg-gradient-to-br from-sky-500 to-violet-500 px-6 py-3 text-sm font-bold uppercase tracking-widest text-white shadow-lg hover:scale-105 active:scale-95 transition-transform">Publicar</button>
-              <span class="text-xs text-on-surface-variant">Tu opinión ayuda a la comunidad.</span>
+              <span class="text-xs text-on-surface-variant">Tu opiniÃ³n ayuda a la comunidad.</span>
             </div>
           </form>
           <div class="rounded-3xl border border-white/10 bg-surface-container-low/60 p-6 md:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.4)] space-y-4">
@@ -439,7 +439,7 @@
             </div>
             <div id="comments-list" class="space-y-4"></div>
             <div id="comments-more-wrap" class="hidden pt-2 flex justify-center">
-              <button id="comments-more" type="button" class="rounded-full border border-white/10 bg-white/5 px-5 py-2 text-xs font-semibold uppercase tracking-widest text-on-surface-variant hover:border-primary/50 hover:text-primary transition-all">Ver más comentarios</button>
+              <button id="comments-more" type="button" class="rounded-full border border-white/10 bg-white/5 px-5 py-2 text-xs font-semibold uppercase tracking-widest text-on-surface-variant hover:border-primary/50 hover:text-primary transition-all">Ver mÃ¡s comentarios</button>
             </div>
           </div>
           <div id="report-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 px-6">
@@ -530,7 +530,7 @@
       );
       const loginBtn = form.querySelector("[data-comment-login]");
       const overlay = form.querySelector(".absolute.inset-0");
-      const goRegister = () => { window.location.href = isLogged ? "pago.html" : "registro.html"; };
+      const goRegister = () => { window.location.href = isLogged ? "pago\.php" : "registro\.php"; };
       if (loginBtn) loginBtn.addEventListener("click", goRegister);
       if (overlay) overlay.addEventListener("click", goRegister);
       textarea.setAttribute("disabled", "true");
@@ -546,10 +546,10 @@
     const statusBtns = document.querySelectorAll("[data-detail-status]");
     if (!isLogged) {
       if (myListBtn) {
-        myListBtn.setAttribute("href", "registro.html");
+        myListBtn.setAttribute("href", "registro\.php");
         myListBtn.addEventListener("click", (e) => {
           e.preventDefault();
-          window.location.href = "registro.html";
+          window.location.href = "registro\.php";
         });
       }
       if (favoriteBtn) favoriteBtn.classList.add("hidden");
@@ -658,7 +658,7 @@
     };
     const isLikelySpanish = (text) => {
       const lower = String(text || "").toLowerCase();
-      if (/[áéíóúñÁÉÍÓÚÑ]/.test(lower)) return true;
+      if (/[Ã¡Ã©Ã­Ã³ÃºÃ±ÃÃ‰ÃÃ“ÃšÃ‘]/.test(lower)) return true;
       const hits = [" el ", " la ", " de ", " que ", " y ", " en ", " los ", " las ", " un ", " una ", " para ", " con ", " por ", " como "];
       let count = 0;
       hits.forEach((word) => {
@@ -711,11 +711,11 @@
         });
         for (const item of mapped) {
           if (!item.text) {
-            item.text = "Comentario no disponible en español.";
+            item.text = "Comentario no disponible en espaÃ±ol.";
             continue;
           }
           const translated = await translateToSpanish(item.text);
-          item.text = translated ? truncate(translated) : "Comentario no disponible en español.";
+          item.text = translated ? truncate(translated) : "Comentario no disponible en espaÃ±ol.";
         }
         return mapped;
       } catch {
@@ -918,5 +918,6 @@
     </script>
     <script data-ui-unlock>document.documentElement.classList.remove("preload-ui");</script>
   </body></html>
+
 
 

@@ -1,4 +1,4 @@
-(function () {
+﻿(function () {
   const GENRE_OPTIONS = [
     "Acci\u00f3n",
     "Aventura",
@@ -609,7 +609,7 @@
 
     if (isMoviesPage) {
 
-      // Move duration badge to bottom-left and remove "Película" label.
+      // Move duration badge to bottom-left and remove "PelÃ­cula" label.
 
       cards.forEach((card) => {
 
@@ -825,7 +825,7 @@
 
     };
 
-    const hideCardYears = /series\.html|peliculas\.html/i.test(window.location.pathname || "");
+    const hideCardYears = /series\\.php|peliculas\\.php/i.test(window.location.pathname || "");
 
     const grid = cards[0]?.parentElement || null;
 
@@ -1622,7 +1622,7 @@
         row.addEventListener("click", () => {
           const q = encodeURIComponent(title);
           const id = item && item.mal_id ? encodeURIComponent(String(item.mal_id)) : "";
-          window.location.href = id ? `detail.html?mal_id=${id}&q=${q}` : `detail.html?q=${q}`;
+          window.location.href = id ? `detail\.php?mal_id=${id}&q=${q}` : `detail\.php?q=${q}`;
         });
         host.appendChild(row);
       });
@@ -1709,8 +1709,8 @@
       const genres = (item.genres || []).map((g) => g && g.name).filter(Boolean);
       const dataGenres = genres.map((g) => normalize(g)).join(",");
       const hrefId = item.mal_id
-        ? `detail.html?mal_id=${encodeURIComponent(String(item.mal_id))}&q=${encodeURIComponent(title)}`
-        : `detail.html?q=${encodeURIComponent(title)}`;
+        ? `detail\.php?mal_id=${encodeURIComponent(String(item.mal_id))}&q=${encodeURIComponent(title)}`
+        : `detail\.php?q=${encodeURIComponent(title)}`;
 
       const article = document.createElement("article");
       article.className =
@@ -1784,6 +1784,7 @@
 
 
 })();
+
 
 
 

@@ -1,11 +1,11 @@
-(() => {
+﻿(() => {
   const KEY_MY_LIST = "anidex_my_list_v1";
   const KEY_FAVORITES = "anidex_favorites_v1";
   const KEY_STATUS = "anidex_status_v1";
   const norm = (v) => (v || "").toLowerCase().trim();
   const pathName = window.location.pathname.toLowerCase();
   const isDetailPage = pathName.includes("detail");
-  const isIndexPage = pathName.endsWith("/index.html") || pathName.endsWith("index.html") || pathName === "/" || pathName === "";
+  const isIndexPage = pathName.endsWith("/index\.php") || pathName.endsWith("index\.php") || pathName === "/" || pathName === "";
   const isLoggedIn = localStorage.getItem("nekora_logged_in") === "true";
 
   const readKey = (k) => {
@@ -318,7 +318,7 @@
         setMyListDefaultState(btn);
         btn.addEventListener("click", (e) => {
           e.preventDefault();
-          window.location.href = "registro.html";
+          window.location.href = "registro\.php";
         });
         return;
       }
@@ -441,7 +441,7 @@
         if (e.target.closest("button")) return;
         const title = card.getAttribute("data-detail-title") || "";
         const id = card.getAttribute("data-detail-id") || "";
-        let url = "detail.html";
+        let url = "detail\.php";
         if (id) {
           url += `?mal_id=${encodeURIComponent(id)}`;
           if (title) url += `&q=${encodeURIComponent(title)}`;
@@ -568,7 +568,7 @@
         if (e.target.closest("button")) return;
         const title = card.getAttribute("data-detail-title") || "";
         const id = card.getAttribute("data-detail-id") || "";
-        let url = "detail.html";
+        let url = "detail\.php";
         if (id) {
           url += `?mal_id=${encodeURIComponent(id)}`;
           if (title) url += `&q=${encodeURIComponent(title)}`;
@@ -660,7 +660,7 @@
         if (e.target.closest("button")) return;
         const title = card.getAttribute("data-detail-title") || "";
         const id = card.getAttribute("data-detail-id") || "";
-        let url = "detail.html";
+        let url = "detail\.php";
         if (id) {
           url += `?mal_id=${encodeURIComponent(id)}`;
           if (title) url += `&q=${encodeURIComponent(title)}`;
@@ -702,3 +702,4 @@
     }
   };
 })();
+

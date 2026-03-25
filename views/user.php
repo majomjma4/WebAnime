@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html class="dark" lang="es">
   <head>
     <script data-ui-preload>document.documentElement.classList.add("preload-ui");</script>
@@ -297,11 +297,11 @@
                     </div>
                   </div>
                   <div class="mt-3 flex w-full flex-wrap items-center justify-center gap-x-3 gap-y-2 translate-y-2" id="profile-actions">
-                <button id="request-title-btn" type="button" aria-label="Solicitar título" class="hidden rounded-full border border-white/10 bg-gradient-to-r from-sky-400 to-violet-400 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-900 transition-all duration-200 hover:border-sky-200/60 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(56,189,248,0.25)]">
-                      Solicitar título
+                <button id="request-title-btn" type="button" aria-label="Solicitar tÃ­tulo" class="hidden rounded-full border border-white/10 bg-gradient-to-r from-sky-400 to-violet-400 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-900 transition-all duration-200 hover:border-sky-200/60 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(56,189,248,0.25)]">
+                      Solicitar tÃ­tulo
                     </button>
-                <button id="logout-btn" type="button" aria-label="Cerrar sesión" class="rounded-full border border-white/10 bg-gradient-to-r from-rose-400 to-orange-300 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-900 transition-all duration-200 hover:border-rose-200/60 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(248,113,113,0.25)] flex items-center justify-center group/logout">
-                  Cerrar sesión
+                <button id="logout-btn" type="button" aria-label="Cerrar sesiÃ³n" class="rounded-full border border-white/10 bg-gradient-to-r from-rose-400 to-orange-300 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-900 transition-all duration-200 hover:border-rose-200/60 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(248,113,113,0.25)] flex items-center justify-center group/logout">
+                  Cerrar sesiÃ³n
                 </button>
                   </div>
                 </div>
@@ -351,13 +351,13 @@
           </div>
           <div class="mt-3 flex min-h-[180px] items-center justify-center overflow-visible">
             <div id="continue-empty" class="rounded-2xl border border-white/10 bg-white/5 px-4 py-8 text-center text-sm text-on-surface-variant">
-              Aún no tienes títulos en progreso.
+              AÃºn no tienes tÃ­tulos en progreso.
             </div>
             <div id="continue-grid" class="hidden w-full grid grid-cols-4 gap-4 overflow-visible pb-2 pt-3 px-4"></div>
           </div>
         </section>
         <div class="sm:col-span-2 flex min-h-[120px] items-center justify-center py-0">
-          <a id="premium-access-btn" href="pago.html" class="rounded-full bg-gradient-to-br from-sky-500 to-violet-500 px-9 py-4 text-base font-bold tracking-wide text-white shadow-lg transition-transform hover:scale-105 active:scale-95 hover:ring-2 hover:ring-white/40 hover:shadow-[0_0_18px_rgba(129,140,248,0.5)] inline-flex items-center justify-center">
+          <a id="premium-access-btn" href="pago\.php" class="rounded-full bg-gradient-to-br from-sky-500 to-violet-500 px-9 py-4 text-base font-bold tracking-wide text-white shadow-lg transition-transform hover:scale-105 active:scale-95 hover:ring-2 hover:ring-white/40 hover:shadow-[0_0_18px_rgba(129,140,248,0.5)] inline-flex items-center justify-center">
             Acceso Premium
           </a>
         </div>
@@ -421,7 +421,7 @@
               <h2 class="font-headline text-xl font-bold">Recomendados</h2>
             </div>
             <div class="space-y-3">
-              <button class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-3 flex items-center gap-3 border border-white/5 hover:border-violet-400/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="5114" data-title="Fullmetal Alchemist: Brotherhood" onclick="window.location.href='detail.html?mal_id=5114&q=Fullmetal%20Alchemist%3A%20Brotherhood'">
+              <button class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-3 flex items-center gap-3 border border-white/5 hover:border-violet-400/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="5114" data-title="Fullmetal Alchemist: Brotherhood" onclick="window.location.href='detail\.php?mal_id=5114&q=Fullmetal%20Alchemist%3A%20Brotherhood'">
                 <span class="absolute top-2 right-2 rounded-full bg-violet-500/90 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-white">Anime</span>
                 <img src="https://cdn.myanimelist.net/images/anime/1223/96541.jpg" alt="Fullmetal Alchemist: Brotherhood" class="w-12 h-16 object-cover rounded-md" />
                 <div class="text-left">
@@ -429,7 +429,7 @@
                   <p class="text-xs text-on-surface-variant">Acci&oacute;n - Aventura</p>
                 </div>
               </button>
-              <button class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-3 flex items-center gap-3 border border-white/5 hover:border-violet-400/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="9253" data-title="Steins;Gate" onclick="window.location.href='detail.html?mal_id=9253&q=Steins%3BGate'">
+              <button class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-3 flex items-center gap-3 border border-white/5 hover:border-violet-400/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="9253" data-title="Steins;Gate" onclick="window.location.href='detail\.php?mal_id=9253&q=Steins%3BGate'">
                 <span class="absolute top-2 right-2 rounded-full bg-violet-500/90 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-white">Anime</span>
                 <img src="https://cdn.myanimelist.net/images/anime/5/73199.jpg" alt="Steins;Gate" class="w-12 h-16 object-cover rounded-md" />
                 <div class="text-left">
@@ -437,7 +437,7 @@
                   <p class="text-xs text-on-surface-variant">Sci-Fi - Suspenso</p>
                 </div>
               </button>
-              <button class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-3 flex items-center gap-3 border border-white/5 hover:border-violet-400/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="32281" data-title="Kimi no Na wa." onclick="window.location.href='detail.html?mal_id=32281&q=Kimi%20no%20Na%20wa.'">
+              <button class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-3 flex items-center gap-3 border border-white/5 hover:border-violet-400/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="32281" data-title="Kimi no Na wa." onclick="window.location.href='detail\.php?mal_id=32281&q=Kimi%20no%20Na%20wa.'">
                 <span class="absolute top-2 right-2 rounded-full bg-fuchsia-500/90 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-white">Pel&iacute;cula</span>
                 <img src="https://cdn.myanimelist.net/images/anime/5/87048.jpg" alt="Kimi no Na wa." class="w-12 h-16 object-cover rounded-md" />
                 <div class="text-left">
@@ -445,7 +445,7 @@
                   <p class="text-xs text-on-surface-variant">Romance - Fantas&iacute;a</p>
                 </div>
               </button>
-              <button class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-3 flex items-center gap-3 border border-white/5 hover:border-violet-400/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="16498" data-title="Shingeki no Kyojin" onclick="window.location.href='detail.html?mal_id=16498&q=Shingeki%20no%20Kyojin'">
+              <button class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-3 flex items-center gap-3 border border-white/5 hover:border-violet-400/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="16498" data-title="Shingeki no Kyojin" onclick="window.location.href='detail\.php?mal_id=16498&q=Shingeki%20no%20Kyojin'">
                 <span class="absolute top-2 right-2 rounded-full bg-violet-500/90 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-white">Anime</span>
                 <img src="https://cdn.myanimelist.net/images/anime/10/47347.jpg" alt="Shingeki no Kyojin" class="w-12 h-16 object-cover rounded-md" />
                 <div class="text-left">
@@ -453,7 +453,7 @@
                   <p class="text-xs text-on-surface-variant">Acci&oacute;n - Drama</p>
                 </div>
               </button>
-              <button class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-3 flex items-center gap-3 border border-white/5 hover:border-violet-400/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="12355" data-title="Ookami Kodomo no Ame to Yuki" onclick="window.location.href='detail.html?mal_id=12355&q=Ookami%20Kodomo%20no%20Ame%20to%20Yuki'">
+              <button class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-3 flex items-center gap-3 border border-white/5 hover:border-violet-400/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="12355" data-title="Ookami Kodomo no Ame to Yuki" onclick="window.location.href='detail\.php?mal_id=12355&q=Ookami%20Kodomo%20no%20Ame%20to%20Yuki'">
                 <span class="absolute top-2 right-2 rounded-full bg-fuchsia-500/90 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-white">Pel&iacute;cula</span>
                 <img src="https://cdn.myanimelist.net/images/anime/9/35721.jpg" alt="Wolf Children" class="w-12 h-16 object-cover rounded-md" />
                 <div class="text-left">
@@ -461,7 +461,7 @@
                   <p class="text-xs text-on-surface-variant">Drama - Fantas&iacute;a</p>
                 </div>
               </button>
-              <button class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-3 flex items-center gap-3 border border-white/5 hover:border-violet-400/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="40591" data-title="Kaguya-sama: Love is War" onclick="window.location.href='detail.html?mal_id=40591&q=Kaguya-sama%3A%20Love%20is%20War'">
+              <button class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-3 flex items-center gap-3 border border-white/5 hover:border-violet-400/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="40591" data-title="Kaguya-sama: Love is War" onclick="window.location.href='detail\.php?mal_id=40591&q=Kaguya-sama%3A%20Love%20is%20War'">
                 <span class="absolute top-2 right-2 rounded-full bg-violet-500/90 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-white">Anime</span>
                 <img src="https://cdn.myanimelist.net/images/anime/1295/106551.jpg" alt="Kaguya-sama: Love is War" class="w-12 h-16 object-cover rounded-md" />
                 <div class="text-left">
@@ -470,7 +470,7 @@
                 </div>
               </button>
             </div>
-            <a class="mt-4 inline-flex w-full items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-600 px-4 py-2 text-xs font-bold uppercase tracking-widest text-white shadow-lg hover:scale-105 active:scale-95 transition-transform" href="destacados.html">Ver m&aacute;s</a>
+            <a class="mt-4 inline-flex w-full items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-600 px-4 py-2 text-xs font-bold uppercase tracking-widest text-white shadow-lg hover:scale-105 active:scale-95 transition-transform" href="destacados\.php">Ver m&aacute;s</a>
           </div>
         </aside>
       </div>
@@ -515,14 +515,14 @@
             <input id="profile-name-input" class="w-full rounded-xl bg-surface-container-low border border-outline-variant/60 px-4 py-3 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/40" type="text" placeholder="Tu nombre" />
           </div>
           <div class="space-y-2 soft-accent p-4 rounded-2xl">
-            <label class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Descripción</label>
-            <textarea id="profile-desc-input" maxlength="200" class="w-full rounded-xl bg-surface-container-low border border-outline-variant/60 px-4 py-3 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/40 min-h-[120px]" placeholder="Escribe una breve Descripción (máx. 200 caracteres)"></textarea>
+            <label class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">DescripciÃ³n</label>
+            <textarea id="profile-desc-input" maxlength="200" class="w-full rounded-xl bg-surface-container-low border border-outline-variant/60 px-4 py-3 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/40 min-h-[120px]" placeholder="Escribe una breve DescripciÃ³n (mÃ¡x. 200 caracteres)"></textarea>
             <div class="text-[11px] text-on-surface-variant text-right" id="profile-desc-count">0/200</div>
           </div>
           <div class="space-y-3 soft-accent p-4 rounded-2xl">
             <label class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Preferencias</label>
             <div id="preferences-picker" class="space-y-3"></div>
-            <p class="text-[11px] text-on-surface-variant">Selecciona varias opciones y se verán reflejadas en tu perfil.</p>
+            <p class="text-[11px] text-on-surface-variant">Selecciona varias opciones y se verÃ¡n reflejadas en tu perfil.</p>
           </div>
           <div class="space-y-2">
             <label class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Color del recuadro</label>
@@ -554,19 +554,19 @@
       <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" data-request-close></div>
       <div class="relative mx-auto mt-24 w-[84%] max-w-sm rounded-2xl border border-white/10 bg-surface-container-high p-5 shadow-[0_20px_50px_rgba(0,0,0,0.45)]">
         <div class="flex items-center justify-between mb-4">
-          <h3 class="font-headline text-lg font-bold">Solicitar título</h3>
+          <h3 class="font-headline text-lg font-bold">Solicitar tÃ­tulo</h3>
           <button class="rounded-full bg-surface-container-low w-8 h-8 flex items-center justify-center text-xs font-bold text-on-surface-variant hover:text-on-surface" type="button" data-request-close aria-label="Cerrar">x</button>
         </div>
         <form id="request-title-form" class="space-y-4">
           <div class="space-y-2">
-            <label class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Nombre del anime o película</label>
+            <label class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Nombre del anime o pelÃ­cula</label>
             <input id="request-title-input" type="text" class="w-full rounded-xl border border-white/10 bg-surface-container-low/70 px-4 py-2 text-sm text-on-surface outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20" placeholder="Ej: Fullmetal Alchemist: Brotherhood" />
           </div>
           <div class="space-y-2">
             <label class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Tipo</label>
             <select id="request-title-type" class="w-full rounded-xl border border-white/10 bg-surface-container-low/70 px-4 py-2 text-sm text-on-surface outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20">
               <option value="Anime">Anime</option>
-              <option value="Película">Película</option>
+              <option value="PelÃ­cula">PelÃ­cula</option>
             </select>
           </div>
           <div class="flex items-center justify-end gap-3 pt-2">
@@ -580,7 +580,7 @@
     <!-- Request Toast -->
     <div id="request-toast" class="fixed inset-0 z-[90] hidden items-center justify-center">
       <div class="rounded-full border border-white/10 bg-surface-container-high/90 px-6 py-3 text-sm font-semibold text-on-surface shadow-[0_18px_40px_rgba(0,0,0,0.45)]">
-        Título solicitado
+        TÃ­tulo solicitado
       </div>
     </div>
 
@@ -588,8 +588,8 @@
     <div id="logout-confirm" class="fixed inset-0 z-[90] hidden items-center justify-center">
       <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" data-logout-close></div>
       <div class="relative mx-auto w-[86%] max-w-xs rounded-2xl border border-white/10 bg-surface-container-high p-5 text-center shadow-[0_20px_50px_rgba(0,0,0,0.45)]">
-        <h3 class="font-headline text-lg font-bold">¿Seguro que quieres cerrar sesión?</h3>
-        <p class="mt-2 text-sm text-on-surface-variant">Se perderán tus cambios locales.</p>
+        <h3 class="font-headline text-lg font-bold">Â¿Seguro que quieres cerrar sesiÃ³n?</h3>
+        <p class="mt-2 text-sm text-on-surface-variant">Se perderÃ¡n tus cambios locales.</p>
         <div class="mt-4 flex items-center justify-center gap-3">
           <button type="button" data-logout-cancel class="rounded-full border border-white/10 bg-surface-container-low/70 px-4 py-2 text-xs font-bold uppercase tracking-widest text-on-surface-variant hover:text-on-surface transition-colors">
             cancelar
@@ -1391,7 +1391,7 @@
         "anidex_user_suffix"
       ].forEach((key) => localStorage.removeItem(key));
       applyState();
-      window.location.href = "index.html";
+      window.location.href = "index\.php";
     };
     const openLogoutModal = () => {
       if (!logoutModal) return;
@@ -1472,7 +1472,7 @@
           if (found?.mal_id) {
             item.malId = found.mal_id;
             titleMap[norm(title)] = found.mal_id;
-            item.detailUrl = `detail.html?mal_id=${encodeURIComponent(found.mal_id)}`;
+            item.detailUrl = `detail\.php?mal_id=${encodeURIComponent(found.mal_id)}`;
           }
         } catch {}
       }
@@ -1494,9 +1494,9 @@
       }
       if (!item.detailUrl) {
         if (knownId) {
-          item.detailUrl = `detail.html?mal_id=${encodeURIComponent(knownId)}`;
+          item.detailUrl = `detail\.php?mal_id=${encodeURIComponent(knownId)}`;
         } else if (title) {
-          item.detailUrl = `detail.html?q=${encodeURIComponent(title)}`;
+          item.detailUrl = `detail\.php?q=${encodeURIComponent(title)}`;
         }
       }
     });
@@ -1514,7 +1514,7 @@
       const ep = item.episode || 1;
       const epTitle = item.episodeTitle || `Episodio ${ep}`;
       const cover = item.cover || "https://via.placeholder.com/160x220?text=Anime";
-      const href = `detail.html?q=${encodeURIComponent(title)}`;
+      const href = `detail\.php?q=${encodeURIComponent(title)}`;
       return `
         <a href="${href}" data-title="${title.replace(/"/g, "&quot;")}" class="group relative w-full rounded-2xl border border-white/10 bg-surface-container-low/70 p-3 shadow-[0_12px_26px_rgba(0,0,0,0.3)] transition-all hover:-translate-y-1 z-0 hover:z-20 overflow-visible">
           <span class="pointer-events-none absolute -inset-2 rounded-2xl border border-violet-400/0 opacity-0 transition-all duration-200 group-hover:opacity-100 group-hover:border-violet-400/60"></span>
@@ -1546,7 +1546,7 @@
           const data = await res.json();
           const found = data?.data?.[0];
           if (found?.mal_id) {
-            window.location.href = `detail.html?mal_id=${encodeURIComponent(found.mal_id)}`;
+            window.location.href = `detail\.php?mal_id=${encodeURIComponent(found.mal_id)}`;
             return;
           }
         }
@@ -1558,6 +1558,7 @@
     <script data-ui-unlock>document.documentElement.classList.remove("preload-ui");</script>
   </body>
 </html>
+
 
 
 

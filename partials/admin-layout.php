@@ -1,4 +1,4 @@
-<template id="admin-sidebar">
+﻿<template id="admin-sidebar">
   <style data-admin-logo>
     @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&display=swap");
     .logo-badge {
@@ -64,7 +64,7 @@
   <aside class="h-screen w-64 fixed left-0 top-0 flex flex-col bg-[#0e0e0e] bg-[#131313] border-r border-[#484848]/20 shadow-[20px_0px_40px_rgba(0,0,0,0.4)] z-50">
     <div class="flex flex-col h-full py-8 gap-y-6">
       <div class="px-8 mb-4">
-        <a class="logo-badge logo-badge--admin" href="index.html" aria-label="NekoraList">
+        <a class="logo-badge logo-badge--admin" href="index\.php" aria-label="NekoraList">
           <img src="../img/icon3.png" alt="NekoraList" class="logo-icon" />
           <span class="logo-text">NekoraList</span>
         </a>
@@ -72,32 +72,32 @@
       <nav class="flex-1 px-0">
         <ul class="space-y-1">
           <li>
-            <a data-admin-item="requests" class="flex items-center gap-4 text-[#acabaa] hover:text-[#e7e5e4] hover:bg-[#131313] hover:scale-[1.02] py-4 px-6 mb-2 transition-all duration-200 font-headline font-bold tracking-tight text-sm uppercase" href="admin.html">
+            <a data-admin-item="requests" class="flex items-center gap-4 text-[#acabaa] hover:text-[#e7e5e4] hover:bg-[#131313] hover:scale-[1.02] py-4 px-6 mb-2 transition-all duration-200 font-headline font-bold tracking-tight text-sm uppercase" href="admin\.php">
               <span class="material-symbols-outlined" data-icon="pending_actions">pending_actions</span>
               <span>SOLICITUDES</span>
             </a>
           </li>
           <li>
-            <a data-admin-item="manage" class="flex items-center gap-4 text-[#acabaa] hover:text-[#e7e5e4] hover:bg-[#131313] hover:scale-[1.02] py-4 px-6 mb-2 transition-all duration-200 font-headline font-bold tracking-tight text-sm uppercase" href="gestion.html">
+            <a data-admin-item="manage" class="flex items-center gap-4 text-[#acabaa] hover:text-[#e7e5e4] hover:bg-[#131313] hover:scale-[1.02] py-4 px-6 mb-2 transition-all duration-200 font-headline font-bold tracking-tight text-sm uppercase" href="gestion\.php">
               <span class="material-symbols-outlined" data-icon="movie_filter">movie_filter</span>
               <span>GESTIONAR ANIME</span>
             </a>
           </li>
           <li>
-            <a data-admin-item="users" class="flex items-center gap-4 text-[#acabaa] hover:text-[#e7e5e4] hover:bg-[#131313] hover:scale-[1.02] py-4 px-6 mb-2 transition-all duration-200 font-headline font-bold tracking-tight text-sm uppercase" href="gesUs.html">
+            <a data-admin-item="users" class="flex items-center gap-4 text-[#acabaa] hover:text-[#e7e5e4] hover:bg-[#131313] hover:scale-[1.02] py-4 px-6 mb-2 transition-all duration-200 font-headline font-bold tracking-tight text-sm uppercase" href="gesUs\.php">
               <span class="material-symbols-outlined" data-icon="group">group</span>
               <span>USUARIOS</span>
             </a>
           </li>
           <li>
-            <a data-admin-item="comments" class="flex items-center gap-4 text-[#acabaa] hover:text-[#e7e5e4] hover:bg-[#131313] hover:scale-[1.02] py-4 px-6 mb-2 transition-all duration-200 font-headline font-bold tracking-tight text-sm uppercase" href="gesCom.html">
+            <a data-admin-item="comments" class="flex items-center gap-4 text-[#acabaa] hover:text-[#e7e5e4] hover:bg-[#131313] hover:scale-[1.02] py-4 px-6 mb-2 transition-all duration-200 font-headline font-bold tracking-tight text-sm uppercase" href="gesCom\.php">
               <span class="material-symbols-outlined" data-icon="forum">forum</span>
               <span>COMENTARIOS</span>
             </a>
           </li>
         </ul>
         <div class="px-6 mt-10">
-          <a href="añadir.html" class="w-full py-4 bg-gradient-to-br from-primary to-primary-container text-on-primary font-headline font-extrabold text-xs uppercase tracking-widest rounded-full shadow-lg shadow-primary-container/20 active:scale-95 transition-all inline-flex items-center justify-center">AÑADIR NUEVO ANIME</a>
+          <a href="aÃ±adir\.php" class="w-full py-4 bg-gradient-to-br from-primary to-primary-container text-on-primary font-headline font-extrabold text-xs uppercase tracking-widest rounded-full shadow-lg shadow-primary-container/20 active:scale-95 transition-all inline-flex items-center justify-center">AÃ‘ADIR NUEVO ANIME</a>
         </div>
       </nav>
       <div class="px-6 pt-4 border-t border-outline-variant/10">
@@ -109,6 +109,7 @@
     </div>
   </aside>
 </template>
+
 
 
 
