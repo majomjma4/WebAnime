@@ -204,10 +204,10 @@
         <span class="pointer-events-none absolute -bottom-24 -left-16 h-44 w-44 rounded-full bg-fuchsia-500/20 blur-3xl"></span>
         <button type="button" id="login-close" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant hover:text-on-surface flex items-center justify-center">x</button>
         <img src="img/doraemon.gif" alt="Doraemon feliz" class="w-20 h-20 mx-auto mb-4 rounded-full" />
-        <h3 class="font-headline text-2xl font-extrabold text-violet-400">
+        <h3 id="login-title" class="font-headline text-2xl font-extrabold text-violet-400">
           ¡Bienvenido de nuevo, <span id="login-name">Usuario</span>!
         </h3>
-        <p class="text-white/80 text-sm leading-relaxed mt-4">
+        <p id="login-subtitle" class="text-white/80 text-sm leading-relaxed mt-4">
           Tu colección de animes te estaba esperando. ★
         </p>
       </div>
@@ -218,6 +218,9 @@
     const modal = document.getElementById("login-success");
     const nameEl = document.getElementById("login-name");
     const nameInput = document.getElementById("login-user");
+    const titleEl = document.getElementById("login-title");
+    const subtitleEl = document.getElementById("login-subtitle");
+    const passInput = document.getElementById("login-pass");
     const closeBtn = document.getElementById("login-close");
     if (!form) return;
     form.addEventListener("submit", (e) => {
@@ -229,10 +232,25 @@
         return;
       }
       const name = (nameInput && nameInput.value.trim()) || "";
+      const pass = (passInput && passInput.value.trim()) || "";
+      const isAdmin = name === "Admin99" && pass === "1221";
       if (nameEl) nameEl.textContent = name;
+      if (isAdmin) {
+        if (titleEl) titleEl.textContent = "Bienvenido, administrador 👑";
+        if (subtitleEl) subtitleEl.textContent = "Tienes el control total de NekoraList";
+      } else {
+        if (titleEl) titleEl.innerHTML = `¡Bienvenido de nuevo, <span id="login-name">${name || "Usuario"}</span>!`;
+        if (subtitleEl) subtitleEl.textContent = "Tu colección de animes te estaba esperando. ★";
+      }
       try {
         localStorage.setItem("nekora_logged_in", "true");
         localStorage.setItem("nekora_user", name || "Usuario");
+        if (isAdmin) {
+          localStorage.setItem("nekora_admin", "true");
+          localStorage.setItem("nekora_premium", "true");
+        } else {
+          localStorage.removeItem("nekora_admin");
+        }
         if (name) {
           localStorage.setItem("anidex_profile_name", name);
         }

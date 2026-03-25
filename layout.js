@@ -121,6 +121,13 @@
     return localStorage.getItem("nekora_logged_in") === "true";
   }
 
+  function isAdmin() {
+    return (
+      localStorage.getItem("nekora_admin") === "true" &&
+      localStorage.getItem("nekora_user") === "Admin99"
+    );
+  }
+
   function setupGuestMenu() {
     const favLink = document.querySelector("[data-favorites-link]");
     const profileBtn = document.querySelector("[data-profile-trigger]");
@@ -193,6 +200,18 @@
 
   function finalizeLayout() {
     setActiveMenu();
+    const adminBtn = document.getElementById("admin-mode-btn");
+    if (!isLoggedIn() || localStorage.getItem("nekora_user") !== "Admin99") {
+      try { localStorage.removeItem("nekora_admin"); } catch {}
+    }
+    if (isLoggedIn() && isAdmin()) {
+      try { localStorage.setItem("nekora_premium", "true"); } catch {}
+    }
+    if (adminBtn) {
+      const showAdmin = isLoggedIn() && isAdmin();
+      adminBtn.classList.toggle("hidden", !showAdmin);
+      adminBtn.style.display = showAdmin ? "inline-flex" : "none";
+    }
     try {
       const savedAvatar = localStorage.getItem("anidex_profile_avatar");
       if (savedAvatar) {

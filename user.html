@@ -1291,7 +1291,10 @@
       if (createBtn) createBtn.classList.toggle("hidden", isLogged);
       if (loginBtn) loginBtn.classList.toggle("hidden", isLogged);
       if (logoutBtn) logoutBtn.classList.toggle("hidden", !isLogged);
-      const isPremium = isLogged && localStorage.getItem("nekora_premium") === "true";
+      const isPremium =
+        isLogged &&
+        (localStorage.getItem("nekora_premium") === "true" ||
+          localStorage.getItem("nekora_admin") === "true");
       if (premiumAccessBtn) premiumAccessBtn.classList.toggle("hidden", isPremium);
       if (premiumCancelBtn) premiumCancelBtn.classList.toggle("hidden", !isPremium);
       if (continueSection) continueSection.classList.toggle("hidden", !isPremium);
@@ -1311,10 +1314,10 @@
       const badgeText = document.querySelector("[data-identity-text]");
       if (badge && badgeIcon && badgeText) {
         if (isPremium) {
-          badge.className = "bg-orange-500/15 text-orange-200 px-3 py-1 rounded-full font-label text-[10px] font-bold tracking-widest uppercase inline-flex items-center gap-1.5";
-          badgeIcon.textContent = "local_fire_department";
-          badgeIcon.className = "material-symbols-outlined text-[14px] leading-none text-orange-300";
-          badgeText.textContent = "Modo Limit Break";
+            badge.className = "bg-amber-400/20 text-amber-100 px-3 py-1 rounded-full font-label text-[10px] font-bold tracking-widest uppercase inline-flex items-center gap-1.5 shadow-[0_0_14px_rgba(251,191,36,0.4)] border border-amber-300/50";
+            badgeIcon.textContent = "crown";
+            badgeIcon.className = "material-symbols-outlined text-[14px] leading-none text-amber-200";
+            badgeText.textContent = "Modo super blue";
         } else {
           badge.className = "bg-emerald-500/15 text-emerald-300 px-3 py-1 rounded-full font-label text-[10px] font-bold tracking-widest uppercase inline-flex items-center gap-1.5";
           badgeIcon.textContent = "nightlight";
@@ -1327,11 +1330,12 @@
       localStorage.removeItem("nekora_logged_in");
       localStorage.removeItem("nekora_user");
       localStorage.removeItem("nekora_premium");
-      [
-        "anidex_my_list_v1",
-        "anidex_favorites_v1",
-        "anidex_status_v1",
-        "anidex_profile_prefs",
+        [
+          "anidex_my_list_v1",
+          "anidex_favorites_v1",
+          "anidex_status_v1",
+          "nekora_admin",
+          "anidex_profile_prefs",
         "anidex_profile_desc",
         "anidex_profile_color",
         "anidex_profile_avatar",
