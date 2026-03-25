@@ -1298,12 +1298,14 @@
       if (premiumAccessBtn) premiumAccessBtn.classList.toggle("hidden", isPremium);
       if (premiumCancelBtn) premiumCancelBtn.classList.toggle("hidden", !isPremium);
       if (continueSection) continueSection.classList.toggle("hidden", !isPremium);
-      if (requestTitleBtn) requestTitleBtn.classList.toggle("hidden", !isPremium);
+      const isAdmin = localStorage.getItem("nekora_admin") === "true";
+      if (requestTitleBtn) requestTitleBtn.classList.toggle("hidden", !isPremium || isAdmin);
       if (profileLists) {
         profileLists.style.marginTop = isPremium ? "-6rem" : "1.5rem";
       }
       if (profileActions) {
-        const alignLeft = isLogged && !isPremium;
+        const isAdmin = localStorage.getItem("nekora_admin") === "true";
+        const alignLeft = (isLogged && !isPremium) || isAdmin;
         profileActions.classList.toggle("justify-start", alignLeft);
         profileActions.classList.toggle("pl-2", alignLeft);
         profileActions.classList.toggle("justify-center", !alignLeft);
