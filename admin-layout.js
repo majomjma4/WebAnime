@@ -69,7 +69,172 @@
       }, 1400);
     };
 
+    const rows = Array.from(document.querySelectorAll('[data-admin-request-row]'));
+    if (rows.length > 0) {
+      const targetTotal = 24;
+      const template = rows[0].cloneNode(true);
+      while (rows.length < targetTotal) {
+        const clone = template.cloneNode(true);
+        clone.removeAttribute('style');
+        rows[0].parentElement.appendChild(clone);
+        rows.push(clone);
+      }
+      rows.forEach((row, idx) => {
+        row.dataset.adminRowIndex = String(idx);
+      });
+
+      const names = [
+        'Elias Kael','Mio Naruse','S. Ryuzaki','T. Vercetti','Lina Kuroi','Akira Ren','Valen Sato','Noa Ishikawa',
+        'Mika Arai','Ryo Tan','Ivy Rojas','Ken Sora','Nadia Bloom','Haruto Jin','Sora Vale','Kira Ames',
+        'Maya Rin','Theo Cruz','Yuna Mori','Kai Lotus','Ari Vega','Suzu Hane','Taro Wisp','Luca Frost'
+      ];
+      const roles = [
+        'Curador Nivel 4','Nuevo Miembro','Colaborador Premium','Curador Nivel 2','Editor Invitado','Moderador',
+        'Curador Senior','Curador Nivel 3','Beta Tester','Staff Temporal','Curador Nivel 1','Curador Elite'
+      ];
+      const titles = [
+        'Cyberpunk: Edgerunners (Season 2)','Solo Leveling: Arise OVA','Blue Lock - Episode Nagi','Monster: Special Edition (Remaster)',
+        'Frieren: Beyond Journey’s End - OVA','Jujutsu Kaisen: Culling Game','Oshi no Ko: Side Story','Hell’s Paradise: Rebirth',
+        'Pluto: Director’s Cut','Vinland Saga: North Arc','Haikyuu!! Final Serve','Spy x Family: Code White',
+        'Chainsaw Man: School Arc','Berserk: Eclipse Remake','Mob Psycho 100: Encore','Attack on Titan: Aftermath',
+        'Death Note: Legacy Files','Demon Slayer: Infinity Path','Your Name: Recut','A Silent Voice: Reprise',
+        'Steins;Gate: Chrono Shift','Fullmetal Alchemist: Redux','Hunter x Hunter: Lost Pages','Naruto: New Dawn'
+      ];
+      const sources = [
+        'Studio Trigger / Netflix','A-1 Pictures','Eight Bit','Madhouse','CloverWorks','MAPPA','WIT Studio',
+        'Bones','Production I.G','Ufotable','Kyoto Animation','OLM'
+      ];
+      const dates = [
+        'Oct 24, 2023 · 09:12 AM','Oct 23, 2023 · 04:45 PM','Oct 22, 2023 · 11:20 AM','Oct 21, 2023 · 10:00 PM',
+        'Oct 20, 2023 · 08:05 AM','Oct 19, 2023 · 06:18 PM','Oct 18, 2023 · 01:33 PM','Oct 17, 2023 · 09:49 AM'
+      ];
+      const initials = (name) => name.split(' ').map((p) => p[0]).slice(0,2).join('').toUpperCase();
+      const badgeColors = ['text-primary','text-tertiary-dim','text-on-surface-variant','text-primary','text-on-surface','text-tertiary-dim'];
+
+      rows.forEach((row, idx) => {
+        const name = names[idx % names.length];
+        const role = roles[idx % roles.length];
+        const title = titles[idx % titles.length];
+        const source = sources[idx % sources.length];
+        const date = dates[idx % dates.length];
+
+        const nameEl = row.querySelector('p.text-sm.font-semibold');
+        if (nameEl) nameEl.textContent = name;
+        const roleEl = row.querySelector('p.text-[10px]');
+        if (roleEl) roleEl.textContent = role;
+        const titleEl = row.querySelector('p.text-base.font-bold');
+        if (titleEl) titleEl.textContent = title;
+        const sourceEl = row.querySelector('p.text-xs.text-on-surface-variant.italic');
+        if (sourceEl) sourceEl.textContent = `Source: ${source}`;
+        const dateEl = row.querySelector('p.text-xs.text-on-surface-variant.font-body');
+        if (dateEl) dateEl.textContent = date;
+
+        const initialBadge = row.querySelector('.w-8.h-8');
+        if (initialBadge) {
+          initialBadge.textContent = initials(name);
+          initialBadge.className = `w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-[10px] font-bold ${badgeColors[idx % badgeColors.length]}`;
+        }
+      });
+    }
+
+    let currentPage = 1;
+    const pageSize = 4;
+    const updatePagination = () => {
+      const allRows = Array.from(document.querySelectorAll('[data-admin-request-row]'));
+      const total = allRows.length;
+      const maxPage = Math.max(1, Math.ceil(total / pageSize));
+      if (currentPage > maxPage) currentPage = maxPage;
+      const start = (currentPage - 1) * pageSize;
+      const end = start + pageSize;
+      allRows.forEach((row, idx) => {
+        row.style.display = idx >= start && idx < end ? 'table-row' : 'none';
+      });
+      const countEl = document.querySelector('[data-admin-pending-count]');
+      const textEl = document.querySelector('[data-admin-pending-text]');
+      const footerEl = document.querySelector('[data-admin-pending-footer]');
+      if (countEl) countEl.textContent = String(total);
+      if (textEl) textEl.textContent = `${total} solicitudes pendientes`;
+      if (footerEl) footerEl.textContent = `Mostrando ${Math.min(end, total)} de ${total} solicitudes pendientes`;
+
+      const prevBtn = document.querySelector('[data-admin-page-prev]');
+      const nextBtn = document.querySelector('[data-admin-page-next]');
+      if (prevBtn) prevBtn.disabled = currentPage <= 1;
+      if (nextBtn) nextBtn.disabled = currentPage >= maxPage;
+    };
+    updatePagination();
+
     document.addEventListener('click', (event) => {
+      const prevBtn = event.target.closest('[data-admin-page-prev]');
+      if (prevBtn) {
+        event.preventDefault();
+        if (currentPage > 1) currentPage -= 1;
+        updatePagination();
+        return;
+      }
+      const nextBtn = event.target.closest('[data-admin-page-next]');
+      if (nextBtn) {
+        event.preventDefault();
+        currentPage += 1;
+        updatePagination();
+        return;
+      }
+
+      const rejectBtn = event.target.closest('[data-admin-reject]');
+      if (rejectBtn) {
+        event.preventDefault();
+        const row = rejectBtn.closest('[data-admin-request-row]');
+        const approve = row ? row.querySelector('[data-admin-approve]') : null;
+
+        if (rejectBtn.dataset.rejectState === 'on') {
+          rejectBtn.dataset.rejectState = 'off';
+          if (rejectBtn.dataset.origClass) rejectBtn.className = rejectBtn.dataset.origClass;
+          if (rejectBtn.dataset.origHtml) rejectBtn.innerHTML = rejectBtn.dataset.origHtml;
+          if (approve) {
+            approve.disabled = false;
+            if (approve.dataset.origClass) approve.className = approve.dataset.origClass;
+            if (approve.dataset.origHtml) approve.innerHTML = approve.dataset.origHtml;
+          }
+          if (row) row.classList.remove('opacity-60');
+          return;
+        }
+
+        if (!rejectBtn.dataset.origClass) rejectBtn.dataset.origClass = rejectBtn.className;
+        if (!rejectBtn.dataset.origHtml) rejectBtn.dataset.origHtml = rejectBtn.innerHTML;
+        if (approve) {
+          if (!approve.dataset.origClass) approve.dataset.origClass = approve.className;
+          if (!approve.dataset.origHtml) approve.dataset.origHtml = approve.innerHTML;
+          approve.disabled = true;
+          approve.className = 'px-5 py-2 rounded-full bg-surface-container-highest text-on-surface-variant font-headline font-bold text-xs uppercase tracking-tight flex items-center gap-2 opacity-50 cursor-not-allowed';
+        }
+
+        rejectBtn.dataset.rejectState = 'on';
+        rejectBtn.className = 'px-5 py-2 rounded-full bg-error/15 text-error font-headline font-bold text-xs uppercase tracking-tight flex items-center gap-2';
+        rejectBtn.innerHTML = '<span class="material-symbols-outlined text-[18px]" data-icon="cancel">cancel</span> NO APROBADO';
+        if (row) row.classList.add('opacity-60');
+        return;
+      }
+
+      const quick = event.target.closest('[data-admin-quick-action]');
+      if (quick) {
+        const countEl = document.querySelector('[data-admin-pending-count]');
+        const textEl = document.querySelector('[data-admin-pending-text]');
+        const footerEl = document.querySelector('[data-admin-pending-footer]');
+        if (countEl) countEl.textContent = '0';
+        if (textEl) textEl.textContent = '0 solicitudes pendientes';
+        if (footerEl) footerEl.textContent = 'Mostrando 0 de 0 solicitudes pendientes';
+
+        document.querySelectorAll('[data-admin-request-row]').forEach((row) => {
+          row.classList.add('opacity-70');
+          const approve = row.querySelector('[data-admin-approve]');
+          if (approve) {
+            approve.disabled = true;
+            approve.className = 'px-5 py-2 rounded-full bg-emerald-500/15 text-emerald-300 font-headline font-bold text-xs uppercase tracking-tight flex items-center gap-2';
+            approve.innerHTML = '<span class=\"material-symbols-outlined text-[18px]\" data-icon=\"check_circle\">check_circle</span> APROBADO';
+          }
+        });
+        return;
+      }
+
       const button = event.target.closest('button');
       if (!button) return;
       if (!document.body.dataset.adminPage) return;
@@ -81,6 +246,32 @@
       }
       showToast();
     });
+
+    const searchInput = document.querySelector('[data-admin-search]');
+    if (searchInput) {
+      searchInput.addEventListener('input', () => {
+        const term = searchInput.value.trim().toLowerCase();
+        const rows = Array.from(document.querySelectorAll('[data-admin-request-row]'));
+        if (!term) {
+          updatePagination();
+          return;
+        }
+        let visibleCount = 0;
+        rows.forEach((row) => {
+          const text = row.textContent.toLowerCase();
+          const match = !term || text.includes(term);
+          row.style.display = match ? '' : 'none';
+          if (match) visibleCount += 1;
+        });
+
+        const countEl = document.querySelector('[data-admin-pending-count]');
+        const textEl = document.querySelector('[data-admin-pending-text]');
+        const footerEl = document.querySelector('[data-admin-pending-footer]');
+        if (countEl) countEl.textContent = String(visibleCount);
+        if (textEl) textEl.textContent = `${visibleCount} solicitudes pendientes`;
+        if (footerEl) footerEl.textContent = `Mostrando ${visibleCount} de ${visibleCount} solicitudes pendientes`;
+      });
+    }
   }
 
   if (document.readyState === 'loading') {
