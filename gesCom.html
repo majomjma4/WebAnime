@@ -88,6 +88,21 @@
         .hide-scrollbar::-webkit-scrollbar {
             display: none;
         }
+        .comment-hidden { display: none !important; }
+        [data-admin-comment-delete] {
+            pointer-events: auto !important;
+            position: relative;
+            z-index: 5;
+        }
+        [data-admin-comments-table] {
+            position: relative;
+            z-index: 10;
+        }
+        .admin-comments-action {
+            pointer-events: auto !important;
+            position: relative;
+            z-index: 20;
+        }
     </style>
 </head>
 <body class="bg-background text-on-background selection:bg-primary-container selection:text-on-primary-container" data-admin-page="comments">
@@ -98,41 +113,37 @@
 <div class="grid grid-cols-4 gap-6 mb-12">
 <div class="bg-surface-container-low p-6 rounded-lg border-l-4 border-primary shadow-lg">
 <p class="text-on-surface-variant text-xs uppercase font-bold tracking-widest mb-1">TOTAL COMENTARIOS</p>
-<h3 class="text-3xl font-headline font-extrabold tracking-tighter">48,291</h3>
+<h3 class="text-3xl font-headline font-extrabold tracking-tighter">10</h3>
 <p class="text-[10px] text-primary mt-2 flex items-center gap-1">
 <span class="material-symbols-outlined text-xs" data-icon="trending_up">trending_up</span> 
-                    12% increase this month
+                    10 comentarios totales
                 </p>
 </div>
 <div class="bg-surface-container-low p-6 rounded-lg border-l-4 border-error shadow-lg">
 <p class="text-on-surface-variant text-xs uppercase font-bold tracking-widest mb-1">CONTENIDO REPORTADO</p>
-<h3 class="text-3xl font-headline font-extrabold tracking-tighter text-error">124</h3>
-<p class="text-[10px] text-on-surface-variant mt-2 italic">Requires immediate review</p>
+<h3 class="text-3xl font-headline font-extrabold tracking-tighter text-error">1</h3>
+<p class="text-[10px] text-on-surface-variant mt-2 italic">Requiere revision</p>
 </div>
 <div class="bg-surface-container-low p-6 rounded-lg border-l-4 border-on-tertiary-fixed-variant shadow-lg">
 <p class="text-on-surface-variant text-xs uppercase font-bold tracking-widest mb-1">HILOS ACTIVOS</p>
-<h3 class="text-3xl font-headline font-extrabold tracking-tighter">1,842</h3>
-<p class="text-[10px] text-on-surface-variant mt-2 italic">Ongoing discussions</p>
+<h3 class="text-3xl font-headline font-extrabold tracking-tighter">10</h3>
+<p class="text-[10px] text-on-surface-variant mt-2 italic">Hilos activos</p>
 </div>
 <div class="bg-surface-container-low p-6 rounded-lg border-l-4 border-primary-container shadow-lg">
 <p class="text-on-surface-variant text-xs uppercase font-bold tracking-widest mb-1">TASA DE INTERACCIÓN</p>
 <h3 class="text-3xl font-headline font-extrabold tracking-tighter">84.2%</h3>
 <p class="text-[10px] text-primary mt-2 flex items-center gap-1">
-<span class="material-symbols-outlined text-xs" data-icon="star">star</span> High editorial quality
+<span class="material-symbols-outlined text-xs" data-icon="star">star</span> Alta calidad editorial
                 </p>
 </div>
 </div>
 <!-- Table Container -->
-<section class="bg-surface-container-low rounded-lg overflow-hidden shadow-2xl">
+<section class="bg-surface-container-low rounded-lg overflow-hidden shadow-2xl" data-admin-comments-table>
 <!-- Table Header/Filters -->
 <div class="px-8 py-6 flex justify-between items-center border-b border-outline-variant/10">
 <h2 class="font-headline font-bold text-xl tracking-tight">Interacciones Recientes</h2>
 <div class="flex gap-4">
-<button class="bg-surface-container-high px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-2 hover:bg-surface-container-highest transition-colors">
-<span class="material-symbols-outlined text-sm" data-icon="filter_list">filter_list</span>
-                        Filter
-                    </button>
-<button class="bg-surface-container-high px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-2 hover:bg-surface-container-highest transition-colors">
+<button class="bg-surface-container-high px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-2 hover:bg-surface-container-highest transition-colors" data-admin-comments-sort>
 <span class="material-symbols-outlined text-sm" data-icon="sort">sort</span>
                         Latest First
                     </button>
@@ -174,10 +185,7 @@
 </td>
 <td class="px-8 py-6 text-right whitespace-nowrap">
 <div class="flex justify-end gap-2">
-<button class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container hover:bg-primary-container hover:text-white transition-all duration-300 text-on-surface-variant" title="Hide Comment">
-<span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span>
-</button>
-<button class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container hover:bg-error-container hover:text-white transition-all duration-300 text-on-surface-variant" title="Delete Comment">
+<button class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container hover:bg-error-container hover:text-white transition-all duration-300 text-on-surface-variant admin-comments-action" title="Eliminar comentario" data-admin-comment-delete onclick="window.__gesComDelete(this)">
 <span class="material-symbols-outlined text-lg" data-icon="delete">delete</span>
 </button>
 </div>
@@ -206,10 +214,7 @@
 </td>
 <td class="px-8 py-6 text-right whitespace-nowrap">
 <div class="flex justify-end gap-2">
-<button class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container hover:bg-primary-container hover:text-white transition-all duration-300 text-on-surface-variant" title="Hide Comment">
-<span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span>
-</button>
-<button class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container hover:bg-error-container hover:text-white transition-all duration-300 text-on-surface-variant" title="Delete Comment">
+<button class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container hover:bg-error-container hover:text-white transition-all duration-300 text-on-surface-variant" title="Eliminar comentario" data-admin-comment-delete onclick="window.__gesComDelete(this)">
 <span class="material-symbols-outlined text-lg" data-icon="delete">delete</span>
 </button>
 </div>
@@ -238,10 +243,7 @@
 </td>
 <td class="px-8 py-6 text-right whitespace-nowrap">
 <div class="flex justify-end gap-2">
-<button class="w-10 h-10 rounded-full flex items-center justify-center bg-error/20 text-error hover:bg-error hover:text-white transition-all duration-300" title="Hide Comment">
-<span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span>
-</button>
-<button class="w-10 h-10 rounded-full flex items-center justify-center bg-error text-white hover:scale-110 transition-all duration-300" title="Permanent Delete">
+<button class="w-10 h-10 rounded-full flex items-center justify-center bg-error text-white hover:scale-110 transition-all duration-300 admin-comments-action" title="Eliminar comentario" data-admin-comment-delete onclick="window.__gesComDelete(this)">
 <span class="material-symbols-outlined text-lg" data-icon="delete_forever" style="font-variation-settings: 'FILL' 1;">delete_forever</span>
 </button>
 </div>
@@ -270,10 +272,7 @@
 </td>
 <td class="px-8 py-6 text-right whitespace-nowrap">
 <div class="flex justify-end gap-2">
-<button class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container hover:bg-primary-container hover:text-white transition-all duration-300 text-on-surface-variant" title="Hide Comment">
-<span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span>
-</button>
-<button class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container hover:bg-error-container hover:text-white transition-all duration-300 text-on-surface-variant" title="Delete Comment">
+<button class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container hover:bg-error-container hover:text-white transition-all duration-300 text-on-surface-variant" title="Eliminar comentario" data-admin-comment-delete onclick="window.__gesComDelete(this)">
 <span class="material-symbols-outlined text-lg" data-icon="delete">delete</span>
 </button>
 </div>
@@ -284,43 +283,166 @@
 </div>
 <!-- Table Footer / Pagination -->
 <div class="px-8 py-6 flex justify-between items-center bg-surface-container/50 border-t border-outline-variant/10">
-<p class="text-xs text-on-surface-variant">Showing <span class="text-on-surface font-bold">1-15</span> of 24,930 comments</p>
-<div class="flex gap-2">
-<button class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center hover:bg-surface-container-highest transition-colors">
-<span class="material-symbols-outlined text-sm" data-icon="chevron_left">chevron_left</span>
-</button>
-<button class="w-8 h-8 rounded-lg bg-primary text-on-primary flex items-center justify-center text-xs font-bold">1</button>
-<button class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-xs font-bold hover:bg-surface-container-highest transition-colors">2</button>
-<button class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-xs font-bold hover:bg-surface-container-highest transition-colors">3</button>
-<button class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center hover:bg-surface-container-highest transition-colors">
-<span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
-</button>
+<p class="text-xs text-on-surface-variant" data-admin-comments-footer>Mostrando <span class="text-on-surface font-bold">10</span> de <span class="text-on-surface font-bold">10</span> comentarios</p>
+<div class="flex gap-2" data-admin-comments-pagination>
+<button class="w-8 h-8 rounded-lg bg-primary text-on-primary flex items-center justify-center text-xs font-bold" data-admin-comments-page="1">1</button>
 </div>
 </div>
 </section>
-<!-- Asymmetric Footer Layout -->
-<footer class="mt-16 grid grid-cols-12 gap-12 border-t border-outline-variant/10 pt-12">
-<div class="col-span-4">
-<span class="text-xl font-headline font-extrabold italic text-on-surface-variant">CinemaCurator</span>
-<p class="text-sm text-outline mt-4 leading-relaxed">Advanced editorial control systems for the modern anime archivist. Ensuring quality discussions through sophisticated moderation tools.</p>
-</div>
-<div class="col-span-2 col-start-7">
-<h4 class="text-xs font-bold uppercase tracking-widest text-on-surface mb-6">SOPORTE</h4>
-<ul class="space-y-4 text-sm text-outline font-medium">
-<li><a class="hover:text-primary transition-colors" href="#">Eliminar en masa</a></li>
-<li><a class="hover:text-primary transition-colors" href="#">Lista negra de palabras</a></li>
-<li><a class="hover:text-primary transition-colors" href="#">Registros de moderación</a></li>
-</ul>
-</div>
-<div class="col-span-2">
-<h4 class="text-xs font-bold uppercase tracking-widest text-on-surface mb-6">SOPORTE</h4>
-<ul class="space-y-4 text-sm text-outline font-medium">
-<li><a class="hover:text-primary transition-colors" href="#">Documentación</a></li>
-<li><a class="hover:text-primary transition-colors" href="#">Acceso API</a></li>
-<li><a class="hover:text-primary transition-colors" href="#">Estado del sistema</a></li>
-</ul>
-</div>
-</footer>
+
 </main>
+<script>
+  window.__gesComDelete = function (btn) {
+    const row = btn.closest('tr');
+    if (row) row.remove();
+    const footer = document.querySelector('[data-admin-comments-footer]');
+    if (footer) footer.innerHTML = 'Mostrando <span class="text-on-surface font-bold">1-10</span> de <span class="text-on-surface font-bold">10</span> comentarios';
+  };
+</script>
+<script>
+  (function () {
+    const filterToggle = document.querySelector('[data-admin-comments-filter-toggle]');
+    const filterPanel = document.querySelector('[data-admin-comments-filter-panel]');
+    const sortBtn = document.querySelector('[data-admin-comments-sort]');
+    let activeFilter = 'ALL';
+    if (sortBtn) {
+      sortBtn.addEventListener('click', () => {
+        const body = document.querySelector('tbody');
+        const rows = Array.from(document.querySelectorAll('tbody tr'));
+        rows.reverse().forEach((r) => body.appendChild(r));
+      });
+    }
+
+    const getRows = () => Array.from(document.querySelectorAll('tbody tr'));
+    const rows = getRows();
+    const desiredTotal = 10;
+    if (rows.length < desiredTotal) {
+      const template = rows[0]?.cloneNode(true);
+      for (let i = rows.length; i < desiredTotal && template; i += 1) {
+        const clone = template.cloneNode(true);
+        rows[0].parentElement.appendChild(clone);
+        rows.push(clone);
+      }
+    }
+
+    const users = [
+      { user: '@LuffyFan99', tag: 'MIEMBRO VETERANO', anime: 'Neon Genesis Evangelion', ep: 'Episode 24: The Final Messenger', msg: '"The direction in this episode is absolutely masterclass..."', date: 'Hoy, 2:45 PM' },
+      { user: '@Sakura_Dreams', tag: 'NUEVO CURADOR', anime: 'Chainsaw Man', ep: 'Series Overall Review', msg: '"MAPPA really outdid themselves with the cinematography..."', date: 'Hoy, 11:12 AM' },
+      { user: '@Joker_99', tag: 'BANEADO', anime: 'One Piece', ep: 'General Discussion', msg: '[AUTO-FLAGGED] Inappropriate language detected...', date: 'Ayer, 9:30 PM' },
+      { user: '@ZoroKing', tag: 'COLABORADOR TOP', anime: 'Cowboy Bebop', ep: 'Soundtrack Discussion', msg: '"You can’t talk about Bebop without mentioning Yoko Kanno..."', date: 'Jan 12, 4:20 PM' },
+      { user: '@Misa_R', tag: 'REGULAR', anime: 'Death Note', ep: 'Episode 2: Confrontation', msg: '"The tension between Light and L is unreal..."', date: 'Jan 11, 7:05 PM' },
+      { user: '@Aria_Stella', tag: 'PREMIUM', anime: 'Frieren', ep: 'Episode 8: Memories', msg: '"The quiet moments hit harder than the fights."', date: 'Jan 10, 6:10 PM' },
+      { user: '@Kai_Zero', tag: 'REGULAR', anime: 'Jujutsu Kaisen', ep: 'Episode 5: Cursed Womb', msg: '"Gojo’s presence just steals the scene every time."', date: 'Jan 09, 5:02 PM' },
+      { user: '@Nami_Wave', tag: 'REGULAR', anime: 'Naruto', ep: 'Episode 19: The Forest of Death', msg: '"Classic arc, still gives me chills."', date: 'Jan 08, 3:22 PM' },
+      { user: '@Aoi_Rain', tag: 'REGULAR', anime: 'Attack on Titan', ep: 'Episode 12: Wound', msg: '"The pacing here is perfect. No wasted moments."', date: 'Jan 07, 9:30 AM' },
+      { user: '@Yuna_Sky', tag: 'PREMIUM', anime: 'Steins;Gate', ep: 'Episode 9: Chaos Theory', msg: '"The buildup is slow but pays off beautifully."', date: 'Jan 06, 8:40 PM' }
+    ];
+
+    rows.slice(0, desiredTotal).forEach((row, idx) => {
+      const u = users[idx % users.length];
+      const userEl = row.querySelector('td:nth-child(1) p.text-sm');
+      const tagEl = row.querySelector('td:nth-child(1) p');
+      const animeEl = row.querySelector('td:nth-child(2) p.text-sm');
+      const epEl = row.querySelector('td:nth-child(2) p.text-[10px]');
+      const msgEl = row.querySelector('td:nth-child(3) p.text-sm');
+      const dateEl = row.querySelector('td:nth-child(4) p.text-xs');
+      if (userEl) userEl.textContent = u.user;
+      if (tagEl) tagEl.textContent = u.tag;
+      row.dataset.commentTag = (u.tag || '').toUpperCase();
+      if (animeEl) animeEl.textContent = u.anime;
+      if (epEl) epEl.textContent = u.ep;
+      if (msgEl) msgEl.textContent = u.msg;
+      if (dateEl) dateEl.textContent = u.date;
+
+      const viewBtn = row.querySelector('button[title="Ver comentario"]');
+      const delBtn = row.querySelector('button[title="Eliminar comentario"]');
+      if (viewBtn) {
+        viewBtn.onclick = () => openModal(row);
+      }
+      if (delBtn) {
+        delBtn.onclick = () => {
+          row.remove();
+          updatePagination();
+        };
+      }
+    });
+
+    document.querySelectorAll('button[title="Eliminar comentario"]').forEach((btn) => {
+      btn.setAttribute('data-admin-comment-delete', '');
+      btn.setAttribute('onclick', 'window.__gesComDelete(this)');
+    });
+
+    const footer = document.querySelector('[data-admin-comments-footer]');
+    // Expone handlers globales para onclick directo
+    window.__gesComDelete = (btn) => {
+      const row = btn.closest('tr');
+      if (row) row.remove();
+      updatePagination();
+    };
+
+    document.querySelectorAll('[data-admin-comment-delete]').forEach((btn) => {
+      btn.setAttribute('onclick', 'window.__gesComDelete(this)');
+    });
+    const pageBtns = Array.from(document.querySelectorAll('[data-admin-comments-page]'));
+    const pageSize = 10;
+    let currentPage = 1;
+    const maxPage = Math.max(1, Math.ceil(desiredTotal / pageSize));
+
+    const updatePagination = () => {
+      const start = (currentPage - 1) * pageSize;
+      const end = start + pageSize;
+      const allRows = getRows();
+      const filteredRows = allRows;
+      filteredRows.forEach((row, idx) => {
+        const visible = idx >= start && idx < end;
+        row.hidden = !visible;
+        row.classList.toggle('comment-hidden', !visible);
+        if (!visible) row.style.display = 'none';
+        if (visible) row.style.display = '';
+      });
+      if (footer) {
+        const totalCount = filteredRows.length;
+        const startLabel = totalCount === 0 ? 0 : start + 1;
+        const endLabel = Math.min(end, totalCount);
+        footer.innerHTML = `Mostrando <span class="text-on-surface font-bold">${startLabel}-${endLabel}</span> de <span class="text-on-surface font-bold">${totalCount}</span> comentarios`;
+      }
+      pageBtns.forEach((btn) => {
+        const isActive = Number(btn.getAttribute('data-admin-comments-page')) === currentPage;
+        btn.className = isActive
+          ? 'w-8 h-8 rounded-lg bg-primary text-on-primary flex items-center justify-center text-xs font-bold'
+          : 'w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-xs font-bold hover:bg-surface-container-highest transition-colors';
+      });
+    };
+
+    pageBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const page = Number(btn.getAttribute('data-admin-comments-page'));
+        if (!Number.isNaN(page)) { currentPage = page; updatePagination(); }
+      });
+    });
+    updatePagination();
+    window.addEventListener('load', updatePagination);
+    setTimeout(updatePagination, 50);
+    const body = document.querySelector('tbody');
+    if (body) {
+      const obs = new MutationObserver(() => updatePagination());
+      obs.observe(body, { childList: true, subtree: true });
+    }
+
+    // Captura global para asegurar funcionamiento
+    document.addEventListener('click', (e) => {
+      const delBtn = e.target.closest('[data-admin-comment-delete]');
+      if (!delBtn) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      if (delBtn) {
+        const row = delBtn.closest('tr');
+        if (row) row.remove();
+        updatePagination();
+        return;
+      }
+    }, true);
+  })();
+</script>
 <script src="admin-layout.js"></script>
 </body></html>

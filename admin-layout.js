@@ -259,6 +259,10 @@
         window.location.href = link;
         return;
       }
+      const pageKey = document.body.dataset.adminPage || '';
+      if (pageKey === 'comments' || pageKey === 'users' || pageKey === 'manage') {
+        return;
+      }
       showToast();
     });
 
@@ -295,6 +299,5 @@
     loadAdminSidebar();
   }
 })();
-
 
 

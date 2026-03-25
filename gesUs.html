@@ -96,14 +96,14 @@
 <header class="fixed top-0 right-0 w-[calc(100%-16rem)] z-40 bg-[#0e0e0e]/70 backdrop-blur-xl flex justify-between items-center h-20 px-12">
 <div class="flex items-center gap-4">
 <h2 class="font-['Manrope'] font-semibold text-lg text-on-surface">Gestionar Usuarios</h2>
-<span class="px-3 py-1 bg-surface-container-high text-primary text-xs font-bold rounded-full">1.248 en Total</span>
+<span class="px-3 py-1 bg-surface-container-high text-primary text-xs font-bold rounded-full" data-admin-users-total>10 en Total</span>
 </div>
 <div class="flex items-center gap-6">
 <div class="relative group">
 <span class="absolute inset-y-0 left-3 flex items-center text-on-surface-variant">
 <span class="material-symbols-outlined text-xl" data-icon="search">search</span>
 </span>
-<input class="bg-surface-container-lowest border-none rounded-full py-2 pl-10 pr-4 text-sm w-64 focus:ring-1 ring-primary/20 transition-all placeholder:text-outline" placeholder="Buscar usuarios..." type="text"/>
+<input class="bg-surface-container-lowest border-none rounded-full py-2 pl-10 pr-4 text-sm w-64 focus:ring-1 ring-primary/20 transition-all placeholder:text-outline" placeholder="Buscar usuarios..." type="text" data-admin-users-search/>
 </div>
 </div>
 </header>
@@ -119,8 +119,8 @@
 <span class="text-xs font-bold text-emerald-400">+12%</span>
 </div>
 <h3 class="text-on-surface-variant text-sm font-medium">Nuevos Registros</h3>
-<p class="text-2xl font-bold font-headline mt-1">142</p>
-<p class="text-xs text-outline mt-2 italic">Past 7 days</p>
+<p class="text-2xl font-bold font-headline mt-1">2</p>
+<p class="text-xs text-outline mt-2 italic">Ultimos 7 dias</p>
 </div>
 <div class="bg-surface-container-low p-6 rounded-lg border-none shadow-sm hover:bg-surface-container-high transition-colors group">
 <div class="flex justify-between items-start mb-4">
@@ -130,8 +130,8 @@
 <span class="text-xs font-bold text-on-surface-variant">88%</span>
 </div>
 <h3 class="text-on-surface-variant text-sm font-medium">Activos Ahora</h3>
-<p class="text-2xl font-bold font-headline mt-1">892</p>
-<p class="text-xs text-outline mt-2 italic">Live interaction</p>
+<p class="text-2xl font-bold font-headline mt-1">7</p>
+<p class="text-xs text-outline mt-2 italic">Actividad en vivo</p>
 </div>
 <div class="bg-surface-container-low p-6 rounded-lg border-none shadow-sm hover:bg-surface-container-high transition-colors group">
 <div class="flex justify-between items-start mb-4">
@@ -141,8 +141,8 @@
 <span class="text-xs font-bold text-error-dim">-2%</span>
 </div>
 <h3 class="text-on-surface-variant text-sm font-medium">Restringidos</h3>
-<p class="text-2xl font-bold font-headline mt-1">24</p>
-<p class="text-xs text-outline mt-2 italic">Policy violations</p>
+<p class="text-2xl font-bold font-headline mt-1">1</p>
+<p class="text-xs text-outline mt-2 italic">Violaciones de politica</p>
 </div>
 <div class="bg-surface-container-low p-6 rounded-lg border-none shadow-sm hover:bg-surface-container-high transition-colors group">
 <div class="flex justify-between items-start mb-4">
@@ -152,21 +152,29 @@
 <span class="text-xs font-bold text-primary">Premium</span>
 </div>
 <h3 class="text-on-surface-variant text-sm font-medium">Miembros Premium</h3>
-<p class="text-2xl font-bold font-headline mt-1">315</p>
-<p class="text-xs text-outline mt-2 italic">Active subscriptions</p>
+<p class="text-2xl font-bold font-headline mt-1">3</p>
+<p class="text-xs text-outline mt-2 italic">Suscripciones activas</p>
 </div>
 </div>
 <!-- Main Table Section -->
 <div class="bg-surface-container-low rounded-lg overflow-hidden border-none shadow-2xl">
 <div class="p-8 border-b border-outline-variant/10 flex justify-between items-center">
 <div>
-<h3 class="text-xl font-headline font-bold">Directorio de Usuarios</h3>
-<p class="text-sm text-on-surface-variant mt-1">Gestiona el registro y los permisos para el equipo editorial y los espectadores.</p>
+<h3 class="text-xl font-headline font-bold">Información de Usuarios</h3>
+<p class="text-sm text-on-surface-variant mt-1">Administra los usuarios registrados, revisa su actividad y gestiona sus permisos.</p>
 </div>
 <div class="flex gap-3">
-<button class="px-4 py-2 bg-surface-container-highest text-on-surface text-sm font-bold rounded-full hover:bg-surface-bright transition-colors flex items-center gap-2"><span class="material-symbols-outlined text-sm" data-icon="filter_list">filter_list</span> Filtros</button>
-<button class="px-4 py-2 bg-surface-container-highest text-on-surface text-sm font-bold rounded-full hover:bg-surface-bright transition-colors flex items-center gap-2"><span class="material-symbols-outlined text-sm" data-icon="download">download</span> Exportar</button>
+<button class="px-4 py-2 bg-surface-container-highest text-on-surface text-sm font-bold rounded-full hover:bg-surface-bright transition-colors flex items-center gap-2" data-admin-users-filter-toggle><span class="material-symbols-outlined text-sm" data-icon="filter_list">filter_list</span> Filtros</button>
 </div>
+</div>
+<div class="hidden px-8 pb-6" data-admin-users-filter-panel>
+  <div class="rounded-2xl border border-outline-variant/10 bg-surface-container-high/40 p-4 flex flex-wrap items-center gap-3">
+    <span class="text-[10px] uppercase tracking-[0.3em] text-on-surface-variant">Filtro rapido</span>
+    <button class="px-3 py-1 rounded-full border border-outline-variant/20 text-xs text-on-surface-variant" data-admin-users-filter="ALL">Todos</button>
+    <button class="px-3 py-1 rounded-full border border-outline-variant/20 text-xs text-on-surface-variant" data-admin-users-filter="ACTIVO">Activos</button>
+    <button class="px-3 py-1 rounded-full border border-outline-variant/20 text-xs text-on-surface-variant" data-admin-users-filter="BANNED">Bloqueados</button>
+    <button class="ml-auto px-3 py-1 rounded-full border border-outline-variant/20 text-xs text-on-surface-variant" data-admin-users-filter-clear>Limpiar</button>
+  </div>
 </div>
 <div class="overflow-x-auto">
 <table class="w-full text-left border-collapse">
@@ -200,13 +208,13 @@
 </td>
 <td class="px-8 py-5 text-right">
 <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-<button class="p-2 hover:bg-surface-container-highest rounded-full text-on-surface-variant hover:text-primary transition-colors" title="View Profile">
+<button class="p-2 hover:bg-surface-container-highest rounded-full text-on-surface-variant hover:text-primary transition-colors" title="View Profile" data-admin-user-view>
 <span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span>
 </button>
-<button class="p-2 hover:bg-surface-container-highest rounded-full text-on-surface-variant hover:text-primary transition-colors" title="Block User">
+<button class="p-2 hover:bg-surface-container-highest rounded-full text-on-surface-variant hover:text-primary transition-colors" title="Block User" data-admin-user-block>
 <span class="material-symbols-outlined text-lg" data-icon="block">block</span>
 </button>
-<button class="p-2 hover:bg-error/10 rounded-full text-on-surface-variant hover:text-error transition-colors" title="Delete User">
+<button class="p-2 hover:bg-error/10 rounded-full text-on-surface-variant hover:text-error transition-colors" title="Delete User" data-admin-user-delete>
 <span class="material-symbols-outlined text-lg" data-icon="delete">delete</span>
 </button>
 </div>
@@ -232,13 +240,13 @@
 </td>
 <td class="px-8 py-5 text-right">
 <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-<button class="p-2 hover:bg-surface-container-highest rounded-full text-on-surface-variant hover:text-primary transition-colors" title="View Profile">
+<button class="p-2 hover:bg-surface-container-highest rounded-full text-on-surface-variant hover:text-primary transition-colors" title="View Profile" data-admin-user-view>
 <span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span>
 </button>
-<button class="p-2 hover:bg-surface-container-highest rounded-full text-on-surface-variant hover:text-primary transition-colors" title="Block User">
+<button class="p-2 hover:bg-surface-container-highest rounded-full text-on-surface-variant hover:text-primary transition-colors" title="Block User" data-admin-user-block>
 <span class="material-symbols-outlined text-lg" data-icon="block">block</span>
 </button>
-<button class="p-2 hover:bg-error/10 rounded-full text-on-surface-variant hover:text-error transition-colors" title="Delete User">
+<button class="p-2 hover:bg-error/10 rounded-full text-on-surface-variant hover:text-error transition-colors" title="Delete User" data-admin-user-delete>
 <span class="material-symbols-outlined text-lg" data-icon="delete">delete</span>
 </button>
 </div>
@@ -264,10 +272,10 @@
 </td>
 <td class="px-8 py-5 text-right">
 <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-<button class="p-2 hover:bg-surface-container-highest rounded-full text-on-surface-variant hover:text-primary transition-colors" title="View Profile">
+<button class="p-2 hover:bg-surface-container-highest rounded-full text-on-surface-variant hover:text-primary transition-colors" title="View Profile" data-admin-user-view>
 <span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span>
 </button>
-<button class="p-2 hover:bg-emerald-500/10 rounded-full text-emerald-400 transition-colors" title="Unblock User">
+<button class="p-2 hover:bg-emerald-500/10 rounded-full text-emerald-400 transition-colors" title="Unblock User" data-admin-user-block>
 <span class="material-symbols-outlined text-lg" data-icon="lock_open">lock_open</span>
 </button>
 <button class="p-2 hover:bg-error/10 rounded-full text-error transition-colors" title="Delete User">
@@ -299,10 +307,10 @@
 <button class="p-2 hover:bg-surface-container-highest rounded-full text-on-surface-variant hover:text-primary transition-colors" title="View Profile">
 <span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span>
 </button>
-<button class="p-2 hover:bg-surface-container-highest rounded-full text-on-surface-variant hover:text-primary transition-colors" title="Block User">
+<button class="p-2 hover:bg-surface-container-highest rounded-full text-on-surface-variant hover:text-primary transition-colors" title="Block User" data-admin-user-block>
 <span class="material-symbols-outlined text-lg" data-icon="block">block</span>
 </button>
-<button class="p-2 hover:bg-error/10 rounded-full text-on-surface-variant hover:text-error transition-colors" title="Delete User">
+<button class="p-2 hover:bg-error/10 rounded-full text-on-surface-variant hover:text-error transition-colors" title="Delete User" data-admin-user-delete>
 <span class="material-symbols-outlined text-lg" data-icon="delete">delete</span>
 </button>
 </div>
@@ -312,15 +320,15 @@
 </table>
 </div>
 <div class="p-8 border-t border-outline-variant/10 flex items-center justify-between">
-<p class="text-xs text-outline">Mostrando <span class="text-on-surface font-bold">1-4</span> de <span class="text-on-surface font-bold">1.248</span> usuarios</p>
-<div class="flex gap-2">
-<button class="h-10 w-10 flex items-center justify-center rounded-full bg-surface-container-highest text-on-surface-variant cursor-not-allowed">
+<p class="text-xs text-outline" data-admin-users-footer>Mostrando <span class="text-on-surface font-bold">4</span> de <span class="text-on-surface font-bold">10</span> usuarios</p>
+<div class="flex gap-2" data-admin-users-pagination>
+<button class="h-10 w-10 flex items-center justify-center rounded-full bg-surface-container-highest text-on-surface-variant" data-admin-users-prev>
 <span class="material-symbols-outlined">chevron_left</span>
 </button>
-<button class="h-10 w-10 flex items-center justify-center rounded-full bg-primary text-on-primary font-bold">1</button>
-<button class="h-10 w-10 flex items-center justify-center rounded-full bg-surface-container-highest text-on-surface-variant hover:text-on-surface transition-colors">2</button>
-<button class="h-10 w-10 flex items-center justify-center rounded-full bg-surface-container-highest text-on-surface-variant hover:text-on-surface transition-colors">3</button>
-<button class="h-10 w-10 flex items-center justify-center rounded-full bg-surface-container-highest text-on-surface-variant hover:text-on-surface transition-colors">
+<button class="h-10 w-10 flex items-center justify-center rounded-full bg-primary text-on-primary font-bold" data-admin-users-page="1">1</button>
+<button class="h-10 w-10 flex items-center justify-center rounded-full bg-surface-container-highest text-on-surface-variant hover:text-on-surface transition-colors" data-admin-users-page="2">2</button>
+<button class="h-10 w-10 flex items-center justify-center rounded-full bg-surface-container-highest text-on-surface-variant hover:text-on-surface transition-colors" data-admin-users-page="3">3</button>
+<button class="h-10 w-10 flex items-center justify-center rounded-full bg-surface-container-highest text-on-surface-variant hover:text-on-surface transition-colors" data-admin-users-next>
 <span class="material-symbols-outlined">chevron_right</span>
 </button>
 </div>
@@ -366,15 +374,231 @@
 </div>
 </section>
 </main>
-<!-- Floating UI Decoration -->
-<div class="fixed bottom-8 right-8 z-50">
-<button class="h-16 w-16 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all group">
-<span class="material-symbols-outlined text-3xl" data-icon="person_add">person_add</span>
-<span class="absolute right-full mr-4 bg-surface-container-high px-4 py-2 rounded-xl text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-xl">Registro Manual</span>
-</button>
+<div class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/60 backdrop-blur-sm" data-admin-users-modal>
+  <div class="w-[min(560px,92vw)] rounded-2xl border border-outline-variant/20 bg-surface-container-low p-6 shadow-2xl">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-[10px] uppercase tracking-[0.3em] text-on-surface-variant">Perfil</p>
+        <h3 class="text-2xl font-headline font-bold text-on-surface" data-admin-users-modal-name>Usuario</h3>
+      </div>
+      <button class="w-9 h-9 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant hover:text-on-surface" data-admin-users-modal-close>
+        <span class="material-symbols-outlined text-lg">close</span>
+      </button>
+    </div>
+    <div class="mt-6 grid grid-cols-1 gap-3 text-sm text-on-surface-variant">
+      <div><span class="text-on-surface">Correo:</span> <span data-admin-users-modal-email></span></div>
+      <div><span class="text-on-surface">Rol:</span> <span data-admin-users-modal-role></span></div>
+      <div><span class="text-on-surface">Estado:</span> <span data-admin-users-modal-status></span></div>
+      <div><span class="text-on-surface">Fecha de union:</span> <span data-admin-users-modal-date></span></div>
+    </div>
+  </div>
 </div>
+<script>
+  (function () {
+    const searchInput = document.querySelector('[data-admin-users-search]');
+    const rows = Array.from(document.querySelectorAll('tbody tr'));
+    const desiredTotal = 10;
+    if (rows.length < desiredTotal) {
+      const template = rows[0]?.cloneNode(true);
+      for (let i = rows.length; i < desiredTotal && template; i += 1) {
+        const clone = template.cloneNode(true);
+        clone.className = template.className.replace('bg-error/5', '');
+        rows[0].parentElement.appendChild(clone);
+        rows.push(clone);
+      }
+    }
+
+    const users = [
+      { name: 'SpikeSpiegel', role: 'Curator', email: 'spike@bebop.com', date: 'Oct 24, 2023', status: 'ACTIVO' },
+      { name: 'Motoko_K', role: 'Regular', email: 'major@section9.jp', date: 'Nov 12, 2023', status: 'ACTIVO' },
+      { name: 'Genz0_W', role: 'Banned', email: 'g.walker@spam.net', date: 'Dec 01, 2023', status: 'BLOQUEADO' },
+      { name: 'Lain_Wire', role: 'Regular', email: 'lain@wired.com', date: 'Jan 05, 2024', status: 'ACTIVO' },
+      { name: 'Yoru_Ai', role: 'Premium', email: 'yoru@nekora.io', date: 'Jan 18, 2024', status: 'ACTIVO' },
+      { name: 'Haru_88', role: 'Regular', email: 'haru@nekora.io', date: 'Feb 01, 2024', status: 'ACTIVO' },
+      { name: 'Kira_L', role: 'Curator', email: 'kira@nekora.io', date: 'Feb 14, 2024', status: 'ACTIVO' },
+      { name: 'Sora_N', role: 'Regular', email: 'sora@nekora.io', date: 'Mar 03, 2024', status: 'ACTIVO' },
+      { name: 'Aki_77', role: 'Premium', email: 'aki@nekora.io', date: 'Mar 09, 2024', status: 'ACTIVO' },
+      { name: 'Ren_Z', role: 'Regular', email: 'ren@nekora.io', date: 'Mar 20, 2024', status: 'ACTIVO' }
+    ];
+
+    rows.slice(0, desiredTotal).forEach((row, idx) => {
+      const u = users[idx % users.length];
+      const nameEl = row.querySelector('td:nth-child(1) p.font-bold');
+      const roleEl = row.querySelector('td:nth-child(1) p.text-xs');
+      const emailEl = row.querySelector('td:nth-child(2)');
+      const dateEl = row.querySelector('td:nth-child(3)');
+      const statusEl = row.querySelector('td:nth-child(4) span');
+      if (nameEl) nameEl.textContent = u.name;
+      if (roleEl) roleEl.textContent = u.role;
+      if (emailEl) emailEl.textContent = u.email;
+      if (dateEl) dateEl.textContent = u.date;
+      if (statusEl) {
+        if (u.status === 'BLOQUEADO') {
+          statusEl.textContent = 'BLOQUEADO';
+          statusEl.className = 'px-3 py-1 bg-error/10 text-error text-[10px] font-bold uppercase tracking-widest rounded-full border border-error/20';
+          row.classList.add('bg-error/5');
+        } else {
+          statusEl.textContent = 'ACTIVO';
+          statusEl.className = 'px-3 py-1 bg-emerald-500/10 text-emerald-400 text-[10px] font-bold uppercase tracking-widest rounded-full border border-emerald-500/20';
+          row.classList.remove('bg-error/5');
+        }
+      }
+    });
+
+    const totalBadge = document.querySelector('[data-admin-users-total]');
+    if (totalBadge) totalBadge.textContent = `${desiredTotal} en Total`;
+    if (searchInput) {
+      searchInput.addEventListener('input', () => {
+        const term = searchInput.value.trim().toLowerCase();
+        rows.forEach((row) => {
+          const text = row.textContent.toLowerCase();
+          row.style.display = !term || text.includes(term) ? '' : 'none';
+        });
+      });
+    }
+
+    const filterToggle = document.querySelector('[data-admin-users-filter-toggle]');
+    const filterPanel = document.querySelector('[data-admin-users-filter-panel]');
+    if (filterToggle && filterPanel) {
+      filterToggle.addEventListener('click', () => {
+        filterPanel.classList.toggle('hidden');
+      });
+      filterPanel.querySelectorAll('[data-admin-users-filter]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const val = btn.getAttribute('data-admin-users-filter');
+          rows.forEach((row) => {
+            const statusEl = row.querySelector('td:nth-child(4) span');
+            const status = statusEl ? statusEl.textContent.trim().toUpperCase() : '';
+            if (val === 'ALL') {
+              row.style.display = '';
+            } else if (val === 'ACTIVO') {
+              row.style.display = status === 'ACTIVO' ? '' : 'none';
+            } else {
+              row.style.display = (status === 'BANNED' || status === 'BLOQUEADO') ? '' : 'none';
+            }
+          });
+        });
+      });
+      const clearBtn = filterPanel.querySelector('[data-admin-users-filter-clear]');
+      if (clearBtn) {
+        clearBtn.addEventListener('click', () => rows.forEach((row) => { row.style.display = ''; }));
+      }
+    }
+
+    const footer = document.querySelector('[data-admin-users-footer]');
+    const prevBtn = document.querySelector('[data-admin-users-prev]');
+    const nextBtn = document.querySelector('[data-admin-users-next]');
+    const pageBtns = Array.from(document.querySelectorAll('[data-admin-users-page]'));
+    const pageSize = 4;
+    let currentPage = 1;
+    const maxPage = Math.max(1, Math.ceil(desiredTotal / pageSize));
+
+    const updatePagination = () => {
+      const start = (currentPage - 1) * pageSize;
+      const end = start + pageSize;
+      rows.forEach((row, idx) => {
+        row.style.display = idx >= start && idx < end ? '' : 'none';
+      });
+      if (footer) footer.innerHTML = `Mostrando <span class="text-on-surface font-bold">${start + 1}-${Math.min(end, desiredTotal)}</span> de <span class="text-on-surface font-bold">${desiredTotal}</span> usuarios`;
+      if (prevBtn) prevBtn.disabled = currentPage <= 1;
+      if (nextBtn) nextBtn.disabled = currentPage >= maxPage;
+      pageBtns.forEach((btn) => {
+        const isActive = Number(btn.getAttribute('data-admin-users-page')) === currentPage;
+        btn.className = isActive
+          ? 'h-10 w-10 flex items-center justify-center rounded-full bg-primary text-on-primary font-bold'
+          : 'h-10 w-10 flex items-center justify-center rounded-full bg-surface-container-highest text-on-surface-variant hover:text-on-surface transition-colors';
+      });
+    };
+
+    if (prevBtn) prevBtn.addEventListener('click', () => { if (currentPage > 1) { currentPage -= 1; updatePagination(); } });
+    if (nextBtn) nextBtn.addEventListener('click', () => { if (currentPage < maxPage) { currentPage += 1; updatePagination(); } });
+    pageBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const page = Number(btn.getAttribute('data-admin-users-page'));
+        if (!Number.isNaN(page)) { currentPage = page; updatePagination(); }
+      });
+    });
+    updatePagination();
+
+    const modal = document.querySelector('[data-admin-users-modal]');
+    const closeModal = () => modal && modal.classList.add('hidden');
+    if (modal) {
+      modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+      const closeBtn = modal.querySelector('[data-admin-users-modal-close]');
+      if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    }
+
+    document.addEventListener('click', (e) => {
+      const viewBtn = e.target.closest('[data-admin-user-view]');
+      const blockBtn = e.target.closest('[data-admin-user-block]');
+      const delBtn = e.target.closest('[data-admin-user-delete]');
+
+      if (delBtn) {
+        const row = delBtn.closest('tr');
+        if (row) row.remove();
+        return;
+      }
+      if (blockBtn) {
+        const row = blockBtn.closest('tr');
+        if (!row) return;
+        const statusEl = row.querySelector('td:nth-child(4) span');
+        const roleEl = row.querySelector('td:nth-child(1) p.text-xs');
+        if (statusEl) {
+          const currentStatus = statusEl.textContent.trim().toUpperCase();
+          const isActive = currentStatus === 'ACTIVO';
+          if (isActive) {
+            statusEl.textContent = 'BLOQUEADO';
+            statusEl.className = 'px-3 py-1 bg-error/10 text-error text-[10px] font-bold uppercase tracking-widest rounded-full border border-error/20';
+            row.classList.add('bg-error/5');
+            if (roleEl) roleEl.textContent = 'Banned';
+          } else {
+            statusEl.textContent = 'ACTIVO';
+            statusEl.className = 'px-3 py-1 bg-emerald-500/10 text-emerald-400 text-[10px] font-bold uppercase tracking-widest rounded-full border border-emerald-500/20';
+            row.classList.remove('bg-error/5');
+            if (roleEl) roleEl.textContent = 'Regular';
+          }
+        }
+        return;
+      }
+      if (viewBtn) {
+        const row = viewBtn.closest('tr');
+        if (!row || !modal) return;
+        const name = row.querySelector('td:nth-child(1) p.font-bold')?.textContent.trim() || 'Usuario';
+        const role = row.querySelector('td:nth-child(1) p.text-xs')?.textContent.trim() || '-';
+        const email = row.querySelector('td:nth-child(2)')?.textContent.trim() || '-';
+        const date = row.querySelector('td:nth-child(3)')?.textContent.trim() || '-';
+        const status = row.querySelector('td:nth-child(4) span')?.textContent.trim() || '-';
+        modal.querySelector('[data-admin-users-modal-name]').textContent = name;
+        modal.querySelector('[data-admin-users-modal-email]').textContent = email;
+        modal.querySelector('[data-admin-users-modal-role]').textContent = role;
+        modal.querySelector('[data-admin-users-modal-status]').textContent = status;
+        modal.querySelector('[data-admin-users-modal-date]').textContent = date;
+        modal.classList.remove('hidden');
+      }
+    });
+
+    const exportBtn = document.querySelector('[data-admin-users-export]');
+    if (exportBtn) {
+      exportBtn.addEventListener('click', () => {
+        const visibleRows = rows.filter((r) => r.style.display !== 'none');
+        const lines = ['Usuario,Correo,Fecha,Estado'];
+        visibleRows.forEach((row) => {
+          const name = row.querySelector('td:nth-child(1) p.font-bold')?.textContent.trim() || '';
+          const email = row.querySelector('td:nth-child(2)')?.textContent.trim() || '';
+          const date = row.querySelector('td:nth-child(3)')?.textContent.trim() || '';
+          const status = row.querySelector('td:nth-child(4) span')?.textContent.trim() || '';
+          lines.push([name,email,date,status].map((v) => `"${v.replace(/"/g,'""')}"`).join(','));
+        });
+        const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'usuarios.csv';
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+    }
+  })();
+</script>
 <script src="admin-layout.js"></script>
 </body></html>
-
-
-
