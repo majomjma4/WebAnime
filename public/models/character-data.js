@@ -23,12 +23,12 @@
     const info = document.getElementById("char-info");
     if (title) title.textContent = c.name || "Personaje";
     if (img) img.src = c?.images?.jpg?.image_url || "";
-    if (about) about.textContent = c.about || "Sin descripcin disponible.";
+    if (about) about.textContent = c.about || "Sin descripción disponible.";
     if (info) {
       info.innerHTML = `
-        <p><strong>Doblaje japons:</strong> ${jp}</p>
+        <p><strong>Doblaje japonés:</strong> ${jp}</p>
         <p><strong>Doblaje ingls:</strong> ${en}</p>
-        <p><strong>Doblaje espaol:</strong> ${es}</p>
+        <p><strong>Doblaje español:</strong> ${es}</p>
         <p><strong>Creador:</strong> N/A (no disponible en endpoint)</p>
       `;
     }

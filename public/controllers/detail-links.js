@@ -1,4 +1,4 @@
-﻿(() => {
+(() => {
   const pickTitleFromCard = (el) => {
     if (!el) return "";
     const card = el.closest("[data-anime-card], .group, article, a, div") || el;
@@ -13,12 +13,12 @@
     return textual || "";
   };
 
-  const toDetailUrl = (title) => `detail\.php?q=${encodeURIComponent((title || "").trim())}`;
+  const toDetailUrl = (title) => `detail.php?q=${encodeURIComponent((title || "").trim())}`;
   const toDetailById = (id, title = "") =>
-    `detail\.php?mal_id=${encodeURIComponent(String(id))}${title ? `&q=${encodeURIComponent(title)}` : ""}`;
+    `detail.php?mal_id=${encodeURIComponent(String(id))}${title ? `&q=${encodeURIComponent(title)}` : ""}`;
 
   const wireLinks = () => {
-    document.querySelectorAll('a[href="detail\.php"]').forEach((a) => {
+    document.querySelectorAll('a[href="detail.php"]').forEach((a) => {
       const malId = a.getAttribute("data-mal-id") || a.closest("[data-mal-id]")?.getAttribute("data-mal-id");
       const t = pickTitleFromCard(a);
       if (malId) {
@@ -28,7 +28,7 @@
       }
     });
 
-    document.querySelectorAll("[onclick*='detail\.php']").forEach((node) => {
+    document.querySelectorAll("[onclick*='detail.php']").forEach((node) => {
       const malId = node.getAttribute("data-mal-id") || node.closest("[data-mal-id]")?.getAttribute("data-mal-id");
       const t = pickTitleFromCard(node);
       node.onclick = () => {
@@ -44,7 +44,7 @@
         const a = e.target.closest("a");
         if (a) {
           const href = a.getAttribute("href") || "";
-          if (href.includes("detail\.php")) {
+          if (href.includes("detail.php")) {
             e.preventDefault();
             const malId = a.getAttribute("data-mal-id") || a.closest("[data-mal-id]")?.getAttribute("data-mal-id");
             const title = pickTitleFromCard(a);
@@ -53,7 +53,7 @@
             return;
           }
         }
-        const node = e.target.closest("[onclick*='detail\.php']");
+        const node = e.target.closest("[onclick*='detail.php']");
         if (node) {
           e.preventDefault();
           e.stopPropagation();

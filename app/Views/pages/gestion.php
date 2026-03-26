@@ -122,7 +122,7 @@
 <div class="flex gap-4">
 <button class="px-8 py-3 bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-semibold rounded-full border border-outline-variant/10 transition-all flex items-center gap-2" data-admin-filter-toggle><span class="material-symbols-outlined text-sm" data-icon="filter_list">filter_list</span>
                         Filtrar</button>
-<button class="px-8 py-3 bg-gradient-to-r from-primary to-primary-container text-on-primary font-bold rounded-full shadow-xl shadow-primary/20 hover:scale-105 transition-transform flex items-center gap-2" data-admin-link="añadir\.php"><span class="material-symbols-outlined" data-icon="add">add</span>
+<button class="px-8 py-3 bg-gradient-to-r from-primary to-primary-container text-on-primary font-bold rounded-full shadow-xl shadow-primary/20 hover:scale-105 transition-transform flex items-center gap-2" data-admin-link="añadir.php"><span class="material-symbols-outlined" data-icon="add">add</span>
                         Añadir Nuevo Anime</button>
 </div>
 </div>
@@ -155,28 +155,32 @@
 </thead>
 <tbody class="divide-y divide-outline-variant/10">
 <!-- Row 1 -->
+<?php
+require_once __DIR__ . '/../../../Models/Database.php';
+$dbConn = (new \Models\Database())->getConnection();
+$stmt = $dbConn->query("SELECT * FROM anime ORDER BY id DESC LIMIT 50");
+$animes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+foreach ($animes as $a):
+    $statusColor = ($a['estado'] === 'En emision' || strtolower($a['estado']) === 'currently airing') ? 'bg-primary/10 text-primary' : 'bg-on-surface-variant/10 text-on-surface-variant';
+    $statusLabel = strtoupper($a['estado'] ?: 'Desconocido');
+?>
 <tr class="hover:bg-surface-container-high/30 transition-colors group">
-<td class="py-6 px-8 font-mono text-xs text-primary/60">#AE-0842</td>
+<td class="py-6 px-8 font-mono text-xs text-primary/60">#AE-<?= str_pad($a['id'], 4, "0", STR_PAD_LEFT) ?></td>
 <td class="py-6 px-8">
 <div class="flex items-center gap-4">
 <div class="w-12 h-16 rounded-md overflow-hidden flex-shrink-0 bg-surface-container-highest">
-<img alt="Anime Art" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="vibrant neon anime character illustration with futuristic city backdrop and dramatic purple lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3rcj7hRUrshz8lpDUVsTJ4swB3bFgjQThTXJ3MZlq17_W0uSf6IHPXD2Y7eWEJS3z_kyZLSLM5I_zWLB4wf0VdvHJAq_1w9edVn3NNp6pCMh6wtwxMgCRpvguPbjzYkwde3JVSjPn6ACZjMprmae8X9HTO_AzKMsr2xd2jWV62RWNq4G5cs0Wptx-kWN67x4onAdY7TvR-VXRRNvy4QcpFGzg09v7fQQn2vkH8LBv2PQ8kf7GTDFpRfX84uMjE3UcOrxNg8Lk3RII"/>
+<img alt="<?= htmlspecialchars($a['titulo']) ?>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="<?= htmlspecialchars($a['imagen_url']) ?>"/>
 </div>
 <div>
-<p class="font-bold text-on-surface">Neon Genesis: Reborn</p>
-<p class="text-xs text-on-surface-variant">Sci-Fi, Mecha</p>
+<p class="font-bold text-on-surface"><?= htmlspecialchars($a['titulo']) ?></p>
+<p class="text-xs text-on-surface-variant"><?= htmlspecialchars($a['tipo']) ?></p>
 </div>
 </div>
 </td>
-<td class="py-6 px-8">
-<span class="text-on-surface-variant text-sm">Studio Mappa</span>
-</td>
-<td class="py-6 px-8">
-<span class="text-on-surface-variant text-sm">Oct 12, 2023</span>
-</td>
-<td class="py-6 px-8">
-<span class="px-3 py-1 bg-primary/10 text-primary text-[10px] font-bold uppercase rounded-full">EN EMISIN</span>
-</td>
+<td class="py-6 px-8"><span class="text-on-surface-variant text-sm">System</span></td>
+<td class="py-6 px-8"><span class="text-on-surface-variant text-sm"><?= htmlspecialchars($a['anio'] ?? 'N/A') ?></span></td>
+<td class="py-6 px-8"><span class="px-3 py-1 <?= $statusColor ?> text-[10px] font-bold uppercase rounded-full"><?= $statusLabel ?></span></td>
 <td class="py-6 px-8 text-right">
 <div class="flex justify-end gap-3">
 <button class="w-9 h-9 flex items-center justify-center rounded-full bg-surface-container-high hover:bg-primary/20 hover:text-primary transition-all" data-admin-edit>
@@ -188,114 +192,13 @@
 </div>
 </td>
 </tr>
-<!-- Row 2 -->
-<tr class="hover:bg-surface-container-high/30 transition-colors group">
-<td class="py-6 px-8 font-mono text-xs text-primary/60">#AE-0911</td>
-<td class="py-6 px-8">
-<div class="flex items-center gap-4">
-<div class="w-12 h-16 rounded-md overflow-hidden flex-shrink-0 bg-surface-container-highest">
-<img alt="Anime Art" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="cinematic anime landscape with a floating castle in a twilight sky with stars and soft purple clouds" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAuN5ApG35ffBZFHNkOkk-EBexHSLBiHL7rueCUh7-S8vWZtRhG6V2vrMBWSHYZWgYJQBydCq5taeTAefkcD6r0X47Yam9EE_CG4EED4l1bvtyjIARAWfrGDxx4CWvJxbGoC4HgK9hsJFLcR7ZEWeDlNXiaeflIkJX58Q0MMoni4my1MfEsuzGjKlhnuUIZSW4GCVPDOctc-yqARXMvntc3UO2UKdf9lsE-U8_Yu3NB8vwfTNZ4v98NPpw7JL4_73zSWOwY8klporsS"/>
-</div>
-<div>
-<p class="font-bold text-on-surface">Celestial Voyage</p>
-<p class="text-xs text-on-surface-variant">Fantasy, Adventure</p>
-</div>
-</div>
-</td>
-<td class="py-6 px-8">
-<span class="text-on-surface-variant text-sm">Ufotable</span>
-</td>
-<td class="py-6 px-8">
-<span class="text-on-surface-variant text-sm">Mar 05, 2023</span>
-</td>
-<td class="py-6 px-8">
-<span class="px-3 py-1 bg-on-surface-variant/10 text-on-surface-variant text-[10px] font-bold uppercase rounded-full">FINALIZADO</span>
-</td>
-<td class="py-6 px-8 text-right">
-<div class="flex justify-end gap-3">
-<button class="w-9 h-9 flex items-center justify-center rounded-full bg-surface-container-high hover:bg-primary/20 hover:text-primary transition-all" data-admin-edit>
-<span class="material-symbols-outlined text-lg" data-icon="edit">edit</span>
-</button>
-<button class="w-9 h-9 flex items-center justify-center rounded-full bg-surface-container-high hover:bg-error/20 hover:text-error transition-all" data-admin-delete>
-<span class="material-symbols-outlined text-lg" data-icon="delete">delete</span>
-</button>
-</div>
-</td>
-</tr>
-<!-- Row 3 -->
-<tr class="hover:bg-surface-container-high/30 transition-colors group">
-<td class="py-6 px-8 font-mono text-xs text-primary/60">#AE-1025</td>
-<td class="py-6 px-8">
-<div class="flex items-center gap-4">
-<div class="w-12 h-16 rounded-md overflow-hidden flex-shrink-0 bg-surface-container-highest">
-<img alt="Anime Art" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="close-up of a stylish anime character wearing tech-wear with glowing purple accents in a rainy cyberpunk alley" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0KbCjdsW5uqCdj5nguWeWeaoDchYZYUpKOu-Knd745uH9WbHlWkMfgZCGFBlqCPk_J4SRCvzUQezXc1Uzm4lyqjjw9ucGHouoAQiFeY45hmGSCdwPApXgBiYQqjV53i7VM5HKprNL8XhjI1uWlGxkXZBdpGn7VNdbZ6y5avDx7FtMoubdDL_ZanVoqU2gYumzSjQs1xxdDrUh7oM_e5aysyfxex6QVq316mgC7aFhtpYqNobzPgZ0VHYyRhlxKl55SCxSHdGQm2iH"/>
-</div>
-<div>
-<p class="font-bold text-on-surface">Midnight Protocol</p>
-<p class="text-xs text-on-surface-variant">Cyberpunk, Thriller</p>
-</div>
-</div>
-</td>
-<td class="py-6 px-8">
-<span class="text-on-surface-variant text-sm">Wit Studio</span>
-</td>
-<td class="py-6 px-8">
-<span class="text-on-surface-variant text-sm">Jan 18, 2024</span>
-</td>
-<td class="py-6 px-8">
-<span class="px-3 py-1 bg-primary/10 text-primary text-[10px] font-bold uppercase rounded-full">EN EMISIN</span>
-</td>
-<td class="py-6 px-8 text-right">
-<div class="flex justify-end gap-3">
-<button class="w-9 h-9 flex items-center justify-center rounded-full bg-surface-container-high hover:bg-primary/20 hover:text-primary transition-all" data-admin-edit>
-<span class="material-symbols-outlined text-lg" data-icon="edit">edit</span>
-</button>
-<button class="w-9 h-9 flex items-center justify-center rounded-full bg-surface-container-high hover:bg-error/20 hover:text-error transition-all" data-admin-delete>
-<span class="material-symbols-outlined text-lg" data-icon="delete">delete</span>
-</button>
-</div>
-</td>
-</tr>
-<!-- Row 4 -->
-<tr class="hover:bg-surface-container-high/30 transition-colors group">
-<td class="py-6 px-8 font-mono text-xs text-primary/60">#AE-0754</td>
-<td class="py-6 px-8">
-<div class="flex items-center gap-4">
-<div class="w-12 h-16 rounded-md overflow-hidden flex-shrink-0 bg-surface-container-highest">
-<img alt="Anime Art" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="ethereal anime art featuring a girl standing in a field of glowing purple lilies under a massive full moon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCw5sS0sRxhh77PxyLTXAOMvk8ncKN6UKwMNfYO35vwu2jIwkllrJBczmwtEYFjU8pLTMAeeyQ6YaleUhFZLxuqCVOpSVdnLKBrNOARxYwFkxg02YNS5VftqTW57hW8nB0fIB0hgYHjY_1Wh4BKzRtkqXllduq0MMy8IxiCjKJWXwlKrfLm220OPDpEUVszrb9h_F_ceclyI8H5TJlkCA4xC_RdNsBLhvBYRcOARMrLgyBw9x8X-D2rZ8Y1YP2IFw7yZEm_Ktz-U6t9"/>
-</div>
-<div>
-<p class="font-bold text-on-surface">Shadow of Lilies</p>
-<p class="text-xs text-on-surface-variant">Drama, Supernatural</p>
-</div>
-</div>
-</td>
-<td class="py-6 px-8">
-<span class="text-on-surface-variant text-sm">Bones</span>
-</td>
-<td class="py-6 px-8">
-<span class="text-on-surface-variant text-sm">Nov 30, 2022</span>
-</td>
-<td class="py-6 px-8">
-<span class="px-3 py-1 bg-on-surface-variant/10 text-on-surface-variant text-[10px] font-bold uppercase rounded-full">FINALIZADO</span>
-</td>
-<td class="py-6 px-8 text-right">
-<div class="flex justify-end gap-3">
-<button class="w-9 h-9 flex items-center justify-center rounded-full bg-surface-container-high hover:bg-primary/20 hover:text-primary transition-all" data-admin-edit>
-<span class="material-symbols-outlined text-lg" data-icon="edit">edit</span>
-</button>
-<button class="w-9 h-9 flex items-center justify-center rounded-full bg-surface-container-high hover:bg-error/20 hover:text-error transition-all" data-admin-delete>
-<span class="material-symbols-outlined text-lg" data-icon="delete">delete</span>
-</button>
-</div>
-</td>
-</tr>
+<?php endforeach; ?>
 </tbody>
 </table>
 </div>
 <!-- Pagination/Footer -->
 <div class="py-6 px-8 bg-surface-container-high/20 flex justify-between items-center border-t border-outline-variant/10">
-<p class="text-xs text-on-surface-variant">Mostrando <span class="text-on-surface font-bold">4</span> de <span class="text-on-surface font-bold">4</span> ttulos</p>
+<p class="text-xs text-on-surface-variant">Mostrando <span class="text-on-surface font-bold">4</span> de <span class="text-on-surface font-bold">4</span> títulos</p>
 <div class="flex gap-2">
 <button class="w-10 h-10 flex items-center justify-center rounded-full bg-primary text-on-primary font-bold text-xs">1</button>
 </div>

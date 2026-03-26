@@ -1,10 +1,10 @@
-﻿(() => {
+(() => {
   const basePath = window.location.pathname.includes('/views/') ? '../' : '';
   async function loadAdminSidebar() {
     const host = document.querySelector('[data-admin-sidebar]');
     if (!host) return;
     try {
-      const res = await fetch(basePath + "partials/admin-layout\.php", { cache: 'no-store' });
+      const res = await fetch(basePath + "partials/admin-layout.php", { cache: 'no-store' });
       if (!res.ok) return;
       const html = await res.text();
       const container = document.createElement('div');
@@ -25,7 +25,7 @@
       if (logout) {
         logout.addEventListener('click', (event) => {
           event.preventDefault();
-          window.location.href = 'index\.php';
+          window.location.href = 'index.php';
         });
       }
 

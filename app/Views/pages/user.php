@@ -357,7 +357,7 @@
           </div>
         </section>
         <div class="sm:col-span-2 flex min-h-[120px] items-center justify-center py-0">
-          <a id="premium-access-btn" href="pago\.php" class="rounded-full bg-gradient-to-br from-sky-500 to-violet-500 px-9 py-4 text-base font-bold tracking-wide text-white shadow-lg transition-transform hover:scale-105 active:scale-95 hover:ring-2 hover:ring-white/40 hover:shadow-[0_0_18px_rgba(129,140,248,0.5)] inline-flex items-center justify-center">
+          <a id="premium-access-btn" href="pago.php" class="rounded-full bg-gradient-to-br from-sky-500 to-violet-500 px-9 py-4 text-base font-bold tracking-wide text-white shadow-lg transition-transform hover:scale-105 active:scale-95 hover:ring-2 hover:ring-white/40 hover:shadow-[0_0_18px_rgba(129,140,248,0.5)] inline-flex items-center justify-center">
             Acceso Premium
           </a>
         </div>
@@ -421,7 +421,7 @@
               <h2 class="font-headline text-xl font-bold">Recomendados</h2>
             </div>
             <div class="space-y-3">
-              <button class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-3 flex items-center gap-3 border border-white/5 hover:border-violet-400/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="5114" data-title="Fullmetal Alchemist: Brotherhood" onclick="window.location.href='detail\.php?mal_id=5114&q=Fullmetal%20Alchemist%3A%20Brotherhood'">
+              <button class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-3 flex items-center gap-3 border border-white/5 hover:border-violet-400/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="5114" data-title="Fullmetal Alchemist: Brotherhood" onclick="window.location.href='detail.php?mal_id=5114&q=Fullmetal%20Alchemist%3A%20Brotherhood'">
                 <span class="absolute top-2 right-2 rounded-full bg-violet-500/90 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-white">Anime</span>
                 <img src="https://cdn.myanimelist.net/images/anime/1223/96541.jpg" alt="Fullmetal Alchemist: Brotherhood" class="w-12 h-16 object-cover rounded-md" />
                 <div class="text-left">
@@ -429,7 +429,7 @@
                   <p class="text-xs text-on-surface-variant">Acci&oacute;n - Aventura</p>
                 </div>
               </button>
-              <button class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-3 flex items-center gap-3 border border-white/5 hover:border-violet-400/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="9253" data-title="Steins;Gate" onclick="window.location.href='detail\.php?mal_id=9253&q=Steins%3BGate'">
+              <button class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-3 flex items-center gap-3 border border-white/5 hover:border-violet-400/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="9253" data-title="Steins;Gate" onclick="window.location.href='detail.php?mal_id=9253&q=Steins%3BGate'">
                 <span class="absolute top-2 right-2 rounded-full bg-violet-500/90 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-white">Anime</span>
                 <img src="https://cdn.myanimelist.net/images/anime/5/73199.jpg" alt="Steins;Gate" class="w-12 h-16 object-cover rounded-md" />
                 <div class="text-left">
@@ -437,7 +437,7 @@
                   <p class="text-xs text-on-surface-variant">Sci-Fi - Suspenso</p>
                 </div>
               </button>
-              <button class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-3 flex items-center gap-3 border border-white/5 hover:border-violet-400/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="32281" data-title="Kimi no Na wa." onclick="window.location.href='detail\.php?mal_id=32281&q=Kimi%20no%20Na%20wa.'">
+              <button class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-3 flex items-center gap-3 border border-white/5 hover:border-violet-400/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="32281" data-title="Kimi no Na wa." onclick="window.location.href='detail.php?mal_id=32281&q=Kimi%20no%20Na%20wa.'">
                 <span class="absolute top-2 right-2 rounded-full bg-fuchsia-500/90 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-white">Pel&iacute;cula</span>
                 <img src="https://cdn.myanimelist.net/images/anime/5/87048.jpg" alt="Kimi no Na wa." class="w-12 h-16 object-cover rounded-md" />
                 <div class="text-left">
@@ -445,7 +445,7 @@
                   <p class="text-xs text-on-surface-variant">Romance - Fantas&iacute;a</p>
                 </div>
               </button>
-              <button class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-3 flex items-center gap-3 border border-white/5 hover:border-violet-400/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="16498" data-title="Shingeki no Kyojin" onclick="window.location.href='detail\.php?mal_id=16498&q=Shingeki%20no%20Kyojin'">
+              <button class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-3 flex items-center gap-3 border border-white/5 hover:border-violet-400/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="16498" data-title="Shingeki no Kyojin" onclick="window.location.href='detail.php?mal_id=16498&q=Shingeki%20no%20Kyojin'">
                 <span class="absolute top-2 right-2 rounded-full bg-violet-500/90 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-white">Anime</span>
                 <img src="https://cdn.myanimelist.net/images/anime/10/47347.jpg" alt="Shingeki no Kyojin" class="w-12 h-16 object-cover rounded-md" />
                 <div class="text-left">
@@ -453,7 +453,7 @@
                   <p class="text-xs text-on-surface-variant">Acci&oacute;n - Drama</p>
                 </div>
               </button>
-              <button class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-3 flex items-center gap-3 border border-white/5 hover:border-violet-400/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="12355" data-title="Ookami Kodomo no Ame to Yuki" onclick="window.location.href='detail\.php?mal_id=12355&q=Ookami%20Kodomo%20no%20Ame%20to%20Yuki'">
+              <button class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-3 flex items-center gap-3 border border-white/5 hover:border-violet-400/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="12355" data-title="Ookami Kodomo no Ame to Yuki" onclick="window.location.href='detail.php?mal_id=12355&q=Ookami%20Kodomo%20no%20Ame%20to%20Yuki'">
                 <span class="absolute top-2 right-2 rounded-full bg-fuchsia-500/90 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-white">Pel&iacute;cula</span>
                 <img src="https://cdn.myanimelist.net/images/anime/9/35721.jpg" alt="Wolf Children" class="w-12 h-16 object-cover rounded-md" />
                 <div class="text-left">
@@ -461,7 +461,7 @@
                   <p class="text-xs text-on-surface-variant">Drama - Fantas&iacute;a</p>
                 </div>
               </button>
-              <button class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-3 flex items-center gap-3 border border-white/5 hover:border-violet-400/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="40591" data-title="Kaguya-sama: Love is War" onclick="window.location.href='detail\.php?mal_id=40591&q=Kaguya-sama%3A%20Love%20is%20War'">
+              <button class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-3 flex items-center gap-3 border border-white/5 hover:border-violet-400/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.35)] hover:scale-[1.02] transition-all cursor-pointer relative" data-mal-id="40591" data-title="Kaguya-sama: Love is War" onclick="window.location.href='detail.php?mal_id=40591&q=Kaguya-sama%3A%20Love%20is%20War'">
                 <span class="absolute top-2 right-2 rounded-full bg-violet-500/90 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-white">Anime</span>
                 <img src="https://cdn.myanimelist.net/images/anime/1295/106551.jpg" alt="Kaguya-sama: Love is War" class="w-12 h-16 object-cover rounded-md" />
                 <div class="text-left">
@@ -470,7 +470,7 @@
                 </div>
               </button>
             </div>
-            <a class="mt-4 inline-flex w-full items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-600 px-4 py-2 text-xs font-bold uppercase tracking-widest text-white shadow-lg hover:scale-105 active:scale-95 transition-transform" href="destacados\.php">Ver m&aacute;s</a>
+            <a class="mt-4 inline-flex w-full items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-600 px-4 py-2 text-xs font-bold uppercase tracking-widest text-white shadow-lg hover:scale-105 active:scale-95 transition-transform" href="destacados.php">Ver m&aacute;s</a>
           </div>
         </aside>
       </div>
@@ -1391,7 +1391,7 @@
         "anidex_user_suffix"
       ].forEach((key) => localStorage.removeItem(key));
       applyState();
-      window.location.href = "index\.php";
+      window.location.href = "index.php";
     };
     const openLogoutModal = () => {
       if (!logoutModal) return;
@@ -1472,7 +1472,7 @@
           if (found?.mal_id) {
             item.malId = found.mal_id;
             titleMap[norm(title)] = found.mal_id;
-            item.detailUrl = `detail\.php?mal_id=${encodeURIComponent(found.mal_id)}`;
+            item.detailUrl = `detail.php?mal_id=${encodeURIComponent(found.mal_id)}`;
           }
         } catch {}
       }
@@ -1494,9 +1494,9 @@
       }
       if (!item.detailUrl) {
         if (knownId) {
-          item.detailUrl = `detail\.php?mal_id=${encodeURIComponent(knownId)}`;
+          item.detailUrl = `detail.php?mal_id=${encodeURIComponent(knownId)}`;
         } else if (title) {
-          item.detailUrl = `detail\.php?q=${encodeURIComponent(title)}`;
+          item.detailUrl = `detail.php?q=${encodeURIComponent(title)}`;
         }
       }
     });
@@ -1514,7 +1514,7 @@
       const ep = item.episode || 1;
       const epTitle = item.episodeTitle || `Episodio ${ep}`;
       const cover = item.cover || "https://via.placeholder.com/160x220?text=Anime";
-      const href = `detail\.php?q=${encodeURIComponent(title)}`;
+      const href = `detail.php?q=${encodeURIComponent(title)}`;
       return `
         <a href="${href}" data-title="${title.replace(/"/g, "&quot;")}" class="group relative w-full rounded-2xl border border-white/10 bg-surface-container-low/70 p-3 shadow-[0_12px_26px_rgba(0,0,0,0.3)] transition-all hover:-translate-y-1 z-0 hover:z-20 overflow-visible">
           <span class="pointer-events-none absolute -inset-2 rounded-2xl border border-violet-400/0 opacity-0 transition-all duration-200 group-hover:opacity-100 group-hover:border-violet-400/60"></span>
@@ -1546,7 +1546,7 @@
           const data = await res.json();
           const found = data?.data?.[0];
           if (found?.mal_id) {
-            window.location.href = `detail\.php?mal_id=${encodeURIComponent(found.mal_id)}`;
+            window.location.href = `detail.php?mal_id=${encodeURIComponent(found.mal_id)}`;
             return;
           }
         }

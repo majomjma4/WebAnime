@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
   const API_BASE = "https://api.jikan.moe/v4/anime";
   const path = window.location.pathname.toLowerCase();
   const isCatalog = path.includes("peliculas");
@@ -68,12 +68,12 @@
 
   function translateGenre(label) {
     const map = {
-      "Action": "Accin",
+      "Action": "Acción",
       "Adventure": "Aventura",
       "Comedy": "Comedia",
       "Drama": "Drama",
-      "Fantasy": "Fantasa",
-      "Sci-Fi": "Ciencia ficcin",
+      "Fantasy": "Fantasía",
+      "Sci-Fi": "Ciencia ficción",
       "Slice of Life": "Recuentos de la vida",
       "Supernatural": "Sobrenatural",
       "Romance": "Romance",
@@ -259,9 +259,9 @@
       "anime";
     const title = String(rawTitle || "anime").trim();
     if (malId) {
-      return `detail\.php?mal_id=${encodeURIComponent(String(malId))}&q=${encodeURIComponent(title)}`;
+      return `detail.php?mal_id=${encodeURIComponent(String(malId))}&q=${encodeURIComponent(title)}`;
     }
-    return `detail\.php?q=${encodeURIComponent(title)}`;
+    return `detail.php?q=${encodeURIComponent(title)}`;
   }
 
   let previewModal = null;
@@ -345,7 +345,7 @@
     const isMovieCard =
       typeLabel.includes("movie") ||
       typeLabel.includes("pelicula") ||
-      typeLabel.includes("pelcula") ||
+      typeLabel.includes("película") ||
       card?.dataset?.featuredType === "movie";
     const showDuration = isMovieCard && data.duration;
     const showEpisodes = !isMovieCard && data.episodes;

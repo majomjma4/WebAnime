@@ -505,7 +505,7 @@
 <template id="layout-header">
   <nav class="fixed top-0 w-full z-50 bg-neutral-950/70 backdrop-blur-xl shadow-[0px_20px_40px_rgba(0,0,0,0.4)] transition-all duration-300">
     <div class="flex items-center justify-between px-5 h-20 w-full font-['Manrope'] antialiased">
-      <a class="logo-badge" href="index\.php" aria-label="NekoraList">
+      <a class="logo-badge" href="index.php" aria-label="NekoraList">
         <img src="img/icon3.png" alt="NekoraList" class="logo-icon" />
         <span class="logo-text-stack">
           <span class="logo-text">NekoraList</span>
@@ -514,7 +514,7 @@
       </a>
 
       <div class="hidden md:flex items-center gap-8" id="main-menu"></div>
-      <a id="admin-mode-btn" href="admin\.php" class="hidden md:inline-flex items-center gap-2 rounded-full border border-amber-400/40 bg-amber-500/10 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-amber-200 hover:bg-amber-500/20 hover:border-amber-300/70 transition-colors" style="display:none;">
+      <a id="admin-mode-btn" href="admin.php" class="hidden md:inline-flex items-center gap-2 rounded-full border border-amber-400/40 bg-amber-500/10 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-amber-200 hover:bg-amber-500/20 hover:border-amber-300/70 transition-colors" style="display:none;">
         <span class="material-symbols-outlined text-[16px]">shield_person</span>
         Modo Admin
       </a>
@@ -600,8 +600,8 @@
                 </div>
               </div>
               <div class="mt-4 flex flex-col gap-2">
-                <a href="registro\.php" class="rounded-full bg-primary/20 text-primary px-4 py-2 text-xs font-semibold uppercase tracking-widest text-center hover:bg-primary/30">Crear cuenta</a>
-                <a href="ingresar\.php" class="rounded-full border border-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-center text-on-surface-variant hover:text-on-surface hover:border-primary/40">Ingresar</a>
+                <a href="registro.php" class="rounded-full bg-primary/20 text-primary px-4 py-2 text-xs font-semibold uppercase tracking-widest text-center hover:bg-primary/30">Crear cuenta</a>
+                <a href="ingresar.php" class="rounded-full border border-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-center text-on-surface-variant hover:text-on-surface hover:border-primary/40">Ingresar</a>
               </div>
             </div>
           </div>
@@ -643,16 +643,16 @@
       </div> 
 <div class="footer-center flex flex-col items-center text-center gap-6">
         <div class="footer-brand-stack flex flex-col items-center gap-2">
-          <a class="footer-brand inline-flex items-center gap-3" href="index\.php" aria-label="NekoraList">
+          <a class="footer-brand inline-flex items-center gap-3" href="index.php" aria-label="NekoraList">
             <img src="img/icon3.png" alt="NekoraList" class="footer-logo" />
             <span class="footer-name">NekoraList</span>
           </a>
           <div class="footer-tagline">Tu portal a infinitas historias de anime</div>
         </div>
         <nav class="footer-nav footer-links flex flex-wrap justify-center gap-6 text-sm font-semibold">
-          <a href="index\.php">Inicio</a>
-          <a href="destacados\.php">Destacados</a>
-          <a href="ranking\.php">Ranking</a>
+          <a href="index.php">Inicio</a>
+          <a href="destacados.php">Destacados</a>
+          <a href="ranking.php">Ranking</a>
         </nav>
         <div class="footer-copy">@ 2026 NekoraList - Todos los derechos reservados</div>
       </div>

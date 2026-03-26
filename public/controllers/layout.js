@@ -1,4 +1,4 @@
-﻿(() => {
+(() => {
   if ("scrollRestoration" in history) {
     history.scrollRestoration = "manual";
   }
@@ -12,11 +12,11 @@
   };
 
   const menuItems = [
-    { name: "Inicio", href: "index\.php", icon: "home" },
-    { name: "Animes", href: "series\.php", icon: "live_tv" },
-    { name: "PelÃ­culas", href: "peliculas\.php", icon: "movie" },
-    { name: "Destacados", href: "destacados\.php", icon: "star" },
-    { name: "Ranking", href: "ranking\.php", icon: "leaderboard" }
+    { name: "Inicio", href: "index.php", icon: "home" },
+    { name: "Animes", href: "series.php", icon: "live_tv" },
+    { name: "Películas", href: "peliculas.php", icon: "movie" },
+    { name: "Destacados", href: "destacados.php", icon: "star" },
+    { name: "Ranking", href: "ranking.php", icon: "leaderboard" }
   ];
 
   const readyCallbacks = [];
@@ -47,9 +47,9 @@
     if (!headerTargets.length && !footerTargets.length) return;
 
     const basePath = window.location.pathname.includes("/views/") ? "../" : "";
-    const res = await fetch(`${basePath}partials/layout\.php`, { cache: "no-store" });
+    const res = await fetch(`${basePath}partials/layout.php`, { cache: "no-store" });
     if (!res.ok) {
-      throw new Error("No se pudo cargar partials/layout\.php");
+      throw new Error("No se pudo cargar partials/layout.php");
     }
     const html = await res.text();
 
@@ -144,7 +144,7 @@
       profileBtn.dataset.bound = "1";
       profileBtn.addEventListener("click", (e) => {
         if (isLoggedIn()) {
-          window.location.href = "user\.php";
+          window.location.href = "user.php";
           return;
         }
         e.preventDefault();

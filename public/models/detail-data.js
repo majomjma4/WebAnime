@@ -1,26 +1,26 @@
 const AniDexDetailDataBoot = () => {
-  const API = "https://api.jikan.moe/v4";
+  const API = "api/jikan_proxy.php";
   const DETAIL_OVERRIDES = {
     57658: {
       episodes: 12,
       synopsis:
-        "Tras las masacres de Shibuya, Itadori, cargado de culpa y preocupado por el interes de Sukuna en Fushiguro, decide no volver a la Preparatoria de Hechiceria. Se une a Choso para exorcizar los espiritus liberados por Noritoshi Kamo. En medio del caos, la cupula jujutsu reactiva la ejecucion de Itadori y asigna a Yuta Okkotsu como su verdugo. Hechiceros modernos y antiguos, ahora jugadores del Juego de la Exterminacion, chocan con motivos opuestos y empujan al mundo hacia una nueva era dominada por la hechiceria."
+        "Tras las masacres de Shibuya, Itadori, cargado de culpa y preocupado por el interes de Sukuna en Fushiguro, decide no volver a la Preparatoria de Hechicería. Se une a Choso para exorcizar los espiritus liberados por Noritoshi Kamo. En medio del caos, la cupula jujutsu reactiva la ejecucion de Itadori y asigna a Yuta Okkotsu como su verdugo. Hechiceros modernos y antiguos, ahora jugadores del Juego de la Exterminación, chocan con motivos opuestos y empujan al mundo hacia una nueva era dominada por la hechicería."
     },
     60058: {
       title: "Oshi no Ko Season 3"
     }
   };
   const GENRE_ES = {
-    Action: "Accin",
+    Action: "Acción",
     Adventure: "Aventura",
     Comedy: "Comedia",
     Drama: "Drama",
-    Fantasy: "Fantasa",
+    Fantasy: "Fantasía",
     Romance: "Romance",
     Suspense: "Suspenso",
     Mystery: "Misterio",
-    SciFi: "Ciencia ficcin",
-    "Sci-Fi": "Ciencia ficcin",
+    SciFi: "Ciencia ficción",
+    "Sci-Fi": "Ciencia ficción",
     Horror: "Terror",
     Sports: "Deportes",
     "Slice of Life": "Recuentos de la vida",
@@ -49,8 +49,12 @@ const AniDexDetailDataBoot = () => {
     return Math.round((overlap / Math.max(at.length, bt.length)) * 70);
   };
 
-  const pickTitle = async (query) => {
-    const r = await fetch(`${API}/anime?q=${encodeURIComponent(query)}&limit=10&order_by=popularity&sort=asc`);
+  const pickTitle = async (query, retries = 2) => {
+    const r = await fetch(`${API}?endpoint=${encodeURIComponent('anime?q=' + encodeURIComponent(query) + '&limit=10&order_by=popularity&sort=asc')}`);
+    if (r.status === 429 && retries > 0) {
+      await delay(1000);
+      return pickTitle(query, retries - 1);
+    }
     if (!r.ok) return null;
     const j = await r.json();
     const list = j?.data || [];
@@ -63,16 +67,30 @@ const AniDexDetailDataBoot = () => {
     return best?.it || list[0] || null;
   };
 
-  const byId = async (id, suffix = "full") => {
-    const r = await fetch(`${API}/anime/${id}/${suffix}`);
-    if (!r.ok) return null;
-    const j = await r.json();
-    return j?.data || null;
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  const byId = async (id, suffix = "full", retries = 2) => {
+    try {
+      const r = await fetch(`${API}?endpoint=${encodeURIComponent('anime/' + id + '/' + suffix)}`);
+      if (r.status === 429 && retries > 0) {
+        await delay(1000);
+        return byId(id, suffix, retries - 1);
+      }
+      if (!r.ok) return null;
+      const j = await r.json();
+      return j?.data || null;
+    } catch {
+      return null;
+    }
   };
 
-  const fetchTopByType = async (type, limit = 10) => {
+  const fetchTopByType = async (type, limit = 10, retries = 2) => {
     try {
-      const r = await fetch(`${API}/top/anime?filter=bypopularity&type=${encodeURIComponent(type)}&limit=${limit}`);
+      const r = await fetch(`${API}?endpoint=${encodeURIComponent('top/anime?filter=bypopularity&type=' + encodeURIComponent(type) + '&limit=' + limit)}`);
+      if (r.status === 429 && retries > 0) {
+        await delay(1000);
+        return fetchTopByType(type, limit, retries - 1);
+      }
       if (!r.ok) return [];
       const j = await r.json();
       return j?.data || [];
@@ -90,8 +108,8 @@ const AniDexDetailDataBoot = () => {
   const toSpanishStatus = (value) => {
     const v = (value || "").toLowerCase();
     if (v.includes("finished")) return "Finalizado";
-    if (v.includes("currently")) return "En emisin";
-    if (v.includes("not yet")) return "Prximamente";
+    if (v.includes("currently")) return "En emisión";
+    if (v.includes("not yet")) return "Próximamente";
     return value || "N/A";
   };
 
@@ -100,14 +118,14 @@ const AniDexDetailDataBoot = () => {
     if (v === "winter") return "invierno";
     if (v === "spring") return "primavera";
     if (v === "summer") return "verano";
-    if (v === "fall") return "otoo";
+    if (v === "fall") return "otoño";
     return value || "";
   };
 
   const toSpanishType = (value) => {
     const v = (value || "").toLowerCase();
     if (v === "tv") return "Anime";
-    if (v === "movie") return "Pelcula";
+    if (v === "movie") return "Película";
     if (v === "ova") return "OVA";
     if (v === "special") return "Especial";
     return value || "N/A";
@@ -120,9 +138,9 @@ const AniDexDetailDataBoot = () => {
   const toSpanishRating = (value) => {
     const v = value || "";
     return v
-      .replace("R - 17+ (violence & profanity)", "R - 17+ (violencia y lenguaje explcito)")
-      .replace("PG-13 - Teens 13 or older", "PG-13 - Mayores de 13 aos")
-      .replace("PG - Children", "PG - Pblico general")
+      .replace("R - 17+ (violence & profanity)", "R - 17+ (violencia y lenguaje explícito)")
+      .replace("PG-13 - Teens 13 or older", "PG-13 - Mayores de 13 años")
+      .replace("PG - Children", "PG - Público general")
       .replace("G - All Ages", "G - Todas las edades")
       .replace("Rx - Hentai", "Rx - Adultos");
   };
@@ -229,6 +247,20 @@ const AniDexDetailDataBoot = () => {
     return section;
   };
 
+  const fetchLocalAnime = async (id, title) => {
+    let url = "api/anime_data.php?";
+    if (id) url += `mal_id=${encodeURIComponent(id)}&`;
+    if (title) url += `q=${encodeURIComponent(title)}`;
+    try {
+      const res = await fetch(url.replace(/&$/, ""));
+      if (!res.ok) return null;
+      const json = await res.json();
+      return json.success ? json.data : null;
+    } catch {
+      return null;
+    }
+  };
+
   const init = async () => {
     const isLogged = localStorage.getItem("nekora_logged_in") === "true";
     const isPremium = localStorage.getItem("nekora_premium") === "true";
@@ -242,15 +274,24 @@ const AniDexDetailDataBoot = () => {
     }
     let full = null;
     let selectedId = null;
-    if (malIdParam) {
-      selectedId = Number(malIdParam);
-      if (selectedId) full = await byId(selectedId, "full");
-    }
-    if (!full) {
-      const found = await pickTitle(query);
-      if (!found?.mal_id) return;
-      selectedId = found.mal_id;
-      full = await byId(selectedId, "full");
+    let isLocal = false;
+
+    const localData = await fetchLocalAnime(malIdParam, query);
+    if (localData) {
+      full = localData;
+      selectedId = full.mal_id;
+      isLocal = true;
+    } else {
+      if (malIdParam) {
+        selectedId = Number(malIdParam);
+        if (selectedId) full = await byId(selectedId, "full");
+      }
+      if (!full) {
+        const found = await pickTitle(query);
+        if (!found?.mal_id) return;
+        selectedId = found.mal_id;
+        full = await byId(selectedId, "full");
+      }
     }
     if (!full) return;
     try {
@@ -268,9 +309,9 @@ const AniDexDetailDataBoot = () => {
       addMap(preTitle);
       localStorage.setItem(mapKey, JSON.stringify(map));
     } catch {}
-    const chars = (await byId(selectedId, "characters")) || [];
-    const vids = (await byId(selectedId, "videos")) || {};
-    const pics = (await byId(selectedId, "pictures")) || [];
+    const chars = isLocal ? [] : ((await byId(selectedId, "characters")) || []);
+    const vids = isLocal ? {} : ((await byId(selectedId, "videos")) || {});
+    const pics = isLocal ? [] : ((await byId(selectedId, "pictures")) || []);
     const forceTitles = [
       "Jujutsu Kaisen: Shimetsu Kaiyuu - Zenpen"
     ];
@@ -314,7 +355,7 @@ const AniDexDetailDataBoot = () => {
         sub.className = "text-sm text-on-surface-variant font-medium mt-1";
         titleMain.insertAdjacentElement("afterend", sub);
       }
-      sub.textContent = `Ttulo original: ${originalTitle}`;
+      sub.textContent = `Título original: ${originalTitle}`;
     }
     document.title = `${preferredTitle} | AniDex`;
 
@@ -325,7 +366,7 @@ const AniDexDetailDataBoot = () => {
     if (bg && src) bg.src = src;
     document.body.dataset.detailTitle = preferredTitle;
     document.body.dataset.detailImage = src || "";
-    document.body.dataset.detailType = full?.type === "Movie" ? "Pelcula" : "Anime";
+    document.body.dataset.detailType = full?.type === "Movie" ? "Película" : "Anime";
     const isMovie = (full.type || "").toLowerCase() === "movie";
     const badge = document.getElementById("detail-badge");
     if (badge) {
@@ -707,8 +748,8 @@ const AniDexDetailDataBoot = () => {
           card.querySelector("h3")?.textContent?.trim() ||
           `Episodio ${ep}`;
         const detailUrl = selectedId
-          ? `detail.html?mal_id=${encodeURIComponent(selectedId)}`
-          : `detail.html?q=${encodeURIComponent(preferredTitle || query || "")}`;
+          ? `detail.php?mal_id=${encodeURIComponent(selectedId)}`
+          : `detail.php?q=${encodeURIComponent(preferredTitle || query || "")}`;
         const key = `${selectedId || norm(preferredTitle || "")}-${ep}`;
         continueMap[key] = {
           sourceId: selectedId || null,
@@ -804,7 +845,7 @@ const AniDexDetailDataBoot = () => {
           ? "Activa el modo premium para ver los episodios"
           : "Inicia Sesion y accede al modo premium para ver los episodios";
         const goPremium = () => {
-          window.location.href = isLogged ? "pago.html" : "registro.html";
+          window.location.href = isLogged ? "pago.php" : "registro.php";
         };
         const cards = Array.from(episodesSection.querySelectorAll(".episode-card"));
         cards.forEach((card) => {
@@ -1079,7 +1120,7 @@ const AniDexDetailDataBoot = () => {
       const episodesValue = full.episodes || "";
       statusLine.className = "text-on-surface-variant font-medium space-y-2 text-sm lg:text-base";
       const yearBlock = (!isMovie || yearValue)
-        ? `<span class="flex flex-col"><span class="text-primary-dim text-xs uppercase tracking-wider">Ao</span><span>${yearValue || "N/A"}</span></span>`
+        ? `<span class="flex flex-col"><span class="text-primary-dim text-xs uppercase tracking-wider">Año</span><span>${yearValue || "N/A"}</span></span>`
         : "";
       const episodesBlock = !isMovie
         ? `<div><span class="flex flex-col"><span class="text-primary-dim text-xs uppercase tracking-wider">Episodios</span><span>${episodesValue || "N/A"}</span></span></div>`
@@ -1106,9 +1147,9 @@ const AniDexDetailDataBoot = () => {
     const infoList = infoBox?.parentElement?.querySelector(".space-y-6");
     if (infoList) {
       infoList.innerHTML = "";
-      renderMetaBlock(infoList, "Ttulo (EN)", full.title_english || "N/A");
-      renderMetaBlock(infoList, "Ttulo (JP)", full.title_japanese || "N/A");
-      renderMetaBlock(infoList, "Duracin", toSpanishDuration(full.duration) || "N/A");
+      renderMetaBlock(infoList, "Título (EN)", full.title_english || "N/A");
+      renderMetaBlock(infoList, "Título (JP)", full.title_japanese || "N/A");
+      renderMetaBlock(infoList, "Duración", toSpanishDuration(full.duration) || "N/A");
       renderMetaBlock(infoList, "Clasificacin", toSpanishRating(full.rating) || "N/A");
       renderMetaBlock(infoList, "Ranking", full.rank ? `# ${full.rank}` : "N/A");
       renderMetaBlock(infoList, "Estudio", full.studios?.[0]?.name || "N/A");
@@ -1306,7 +1347,7 @@ const AniDexDetailDataBoot = () => {
                   </div>
                   <div class="h-px w-16 bg-violet-400/40"></div>
                   <div>
-                    <h4 class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Descripcin</h4>
+                    <h4 class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Descripción</h4>
                     <p data-char-info class="text-sm text-on-surface-variant leading-relaxed mt-2">Cargando informacin del personaje...</p>
                   </div>
                   <div class="h-px w-16 bg-violet-400/40"></div>
@@ -1372,14 +1413,14 @@ const AniDexDetailDataBoot = () => {
           if (infoEl && cached.miniSummary) infoEl.textContent = cached.miniSummary;
         }
         try {
-          const res = await fetch(`${API}/characters/${charId}/full`);
+          const res = await fetch(`${API}?endpoint=${encodeURIComponent('characters/' + charId + '/full')}`);
           if (!res.ok) throw new Error("fetch failed");
           const json = await res.json();
           const data = json?.data || {};
           const aboutRaw = (data?.about || "").trim();
           const aboutClean = aboutRaw ? aboutRaw.replace(/\s+/g, " ").trim() : "";
           const fieldMap = {
-            "Birthday": "Cumpleaos",
+            "Birthday": "Cumpleaños",
             "Height": "Altura"
           };
           const fields = [];
@@ -1402,7 +1443,7 @@ const AniDexDetailDataBoot = () => {
             if (fields.some((f) => f.label === label)) return;
             fields.push({ label, value: clean });
           };
-          addField("Cumpleaos", data?.birthday);
+          addField("Cumpleaños", data?.birthday);
           addField("Altura", data?.height);
           if (typeof data?.favorites === "number") {
             addField("Popularidad", ` ${data.favorites} favoritos`);
@@ -1415,9 +1456,9 @@ const AniDexDetailDataBoot = () => {
               .filter(Boolean)
               .join(" ");
           const voiceJp = voiceNames("japanese");
-          const voiceEs = voiceNames("spanish") || voiceNames("espaol");
-          addField("Doblaje japons", voiceJp);
-          addField("Doblaje espaol", voiceEs);
+          const voiceEs = voiceNames("spanish") || voiceNames("español");
+          addField("Doblaje japonés", voiceJp);
+          addField("Doblaje español", voiceEs);
           let aboutStripped = aboutClean;
           Object.keys(fieldMap).forEach((key) => {
             const re = new RegExp(`${key}\\s*:\\s*([^\\.\\n]+)`, "i");
@@ -1435,7 +1476,7 @@ const AniDexDetailDataBoot = () => {
               '"': "&quot;",
               "'": "&#39;"
             }[ch]));
-          const noTranslateLabels = new Set(["Doblaje japons", "Doblaje espaol"]);
+          const noTranslateLabels = new Set(["Doblaje japonés", "Doblaje español"]);
           const translateValue = async (label, value) => {
             if (!value) return value;
             if (noTranslateLabels.has(label)) return value;
@@ -1580,7 +1621,7 @@ const AniDexDetailDataBoot = () => {
     document.body.dataset.detailType = (full.type || "").toLowerCase() === "movie" ? "Película" : "Anime";
     if (window.AniDexFavorites) window.AniDexFavorites.refresh();
 
-    // Recomendados: si es pelcula, mostrar pelculas; si no, series.
+    // Recomendados: si es película, mostrar películas; si no, series.
     const recCards = Array.from(document.querySelectorAll("section a.group.cursor-pointer"));
     if (recCards.length) {
       const recType = (full.type || "").toLowerCase() === "movie" ? "movie" : "tv";
@@ -1597,7 +1638,7 @@ const AniDexDetailDataBoot = () => {
         if (p) p.textContent = (it.genres || []).map((g) => g.name).slice(0, 2).join(", ");
         if (scoreEl && typeof it.score === "number") scoreEl.textContent = it.score.toFixed(1);
         if (it?.mal_id) a.setAttribute("data-mal-id", String(it.mal_id));
-        a.href = `detail.html?mal_id=${encodeURIComponent(String(it.mal_id || ""))}&q=${encodeURIComponent(it.title || "")}`;
+        a.href = `detail.php?mal_id=${encodeURIComponent(String(it.mal_id || ""))}&q=${encodeURIComponent(it.title || "")}`;
       });
     }
 

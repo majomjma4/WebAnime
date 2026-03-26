@@ -1,7 +1,7 @@
-﻿(() => {
-  const API_BASE = "https://api.jikan.moe/v4/top/anime";
+(() => {
+  const API_BASE = "api/jikan_proxy.php";
   const cache = {};
-  const YEAR_BADGE_PAGES = /series\\.php|peliculas\\.php/i.test(window.location.pathname || "");
+  const YEAR_BADGE_PAGES = /series\.php|peliculas\.php/i.test(window.location.pathname || "");
   const DEFAULT_FALLBACK = "img/fondoanime.png";
   const INDEX_TITLE_ALIASES = {
     "Frieren: Ms all del final del viaje": "Frieren: Beyond Journey's End",
@@ -109,9 +109,9 @@
     if (!title) return null;
     try {
       const url =
-        "https://api.jikan.moe/v4/anime?q=" +
+        "api/jikan_proxy.php?endpoint=" + encodeURIComponent("anime?q=" +
         encodeURIComponent(title) +
-        "&limit=10&order_by=popularity&sort=asc";
+        "&limit=10&order_by=popularity&sort=asc");
       const res = await fetch(url);
       if (!res.ok) return null;
       const json = await res.json();
@@ -162,9 +162,9 @@
     if (movieSearchCache.has(key)) return movieSearchCache.get(key);
     try {
       const url =
-        "https://api.jikan.moe/v4/anime?q=" +
+        "api/jikan_proxy.php?endpoint=" + encodeURIComponent("anime?q=" +
         encodeURIComponent(query) +
-        "&type=movie&limit=10&order_by=popularity&sort=desc";
+        "&type=movie&limit=10&order_by=popularity&sort=desc");
       let res = await fetch(url);
       if (res.status === 429) {
         await new Promise((r) => setTimeout(r, 700));
@@ -213,9 +213,9 @@
 
     try {
       const url =
-        "https://api.jikan.moe/v4/anime?q=" +
+        "api/jikan_proxy.php?endpoint=" + encodeURIComponent("anime?q=" +
         encodeURIComponent(query) +
-        "&limit=10&order_by=popularity&sort=asc";
+        "&limit=10&order_by=popularity&sort=asc");
       const res = await fetch(url);
       if (!res.ok) return base;
       const json = await res.json();
@@ -235,7 +235,7 @@
     const key = `id:${id}`;
     if (cache[key]) return cache[key];
     try {
-      const res = await fetch(`https://api.jikan.moe/v4/anime/${id}/full`);
+      const res = await fetch(`api/jikan_proxy.php?endpoint=${encodeURIComponent("anime/" + id + "/full")}`);
       if (!res.ok) return null;
       const json = await res.json();
       const item = json?.data || null;
@@ -287,7 +287,7 @@
     let page = 1;
     while (out.length < needed && page <= 5) {
       const url =
-        `${API_BASE}?filter=bypopularity&type=${encodeURIComponent(type)}&limit=25&page=${page}`;
+        `${API_BASE}?endpoint=${encodeURIComponent('top/anime?filter=bypopularity&type=' + encodeURIComponent(type) + '&limit=25&page=' + page)}`;
       let res = await fetch(url);
       if (res.status === 429) {
         await new Promise((r) => setTimeout(r, 900));
@@ -393,7 +393,7 @@
     card.setAttribute("data-year", year);
     const yearEl = card.querySelector("[data-card-year]");
     if (yearEl && year) yearEl.textContent = year;
-    card.setAttribute("data-type", type === "movie" ? "PelÃ­cula" : "Anime");
+    card.setAttribute("data-type", type === "movie" ? "Película" : "Anime");
     card.setAttribute("data-status", "Finalizado");
   }
 

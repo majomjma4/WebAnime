@@ -249,7 +249,7 @@
           </div>
         </section>
       <div class="mt-12 flex justify-center gap-4" id="ranking-actions">
-        <a id="ranking-back-home" href="index\.php" class="rounded-full bg-violet-500/90 px-8 py-4 text-sm font-bold text-white hover:bg-violet-500 transition-colors">Volver al inicio</a>
+        <a id="ranking-back-home" href="index.php" class="rounded-full bg-violet-500/90 px-8 py-4 text-sm font-bold text-white hover:bg-violet-500 transition-colors">Volver al inicio</a>
         <button id="ranking-reload" type="button" class="hidden rounded-full bg-sky-500/90 px-8 py-4 text-sm font-bold text-white hover:bg-sky-500 transition-colors">Volver a cargar</button>
       </div>
       </main>
@@ -323,7 +323,7 @@
         article.setAttribute('data-anime-card', '1');
         article.setAttribute('data-type', type);
         article.onclick = function () {
-          var url = 'detail\.php';
+          var url = 'detail.php';
           if (it && it.mal_id) {
             url += '?mal_id=' + encodeURIComponent(String(it.mal_id));
             if (title) url += '&q=' + encodeURIComponent(title);

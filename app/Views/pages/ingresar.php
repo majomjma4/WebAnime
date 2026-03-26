@@ -135,11 +135,11 @@
   </head>
   <body class="bg-background text-on-background font-body min-h-screen flex flex-col auth-page">
     <div class="fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-6 py-6 pointer-events-none">
-      <a href="user\.php" class="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-sky-500/90 px-5 py-3 text-sm font-bold uppercase tracking-widest text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)] shadow-lg shadow-sky-500/35 hover:bg-sky-400/95 transition-all" data-auth-back>
+      <a href="user.php" class="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-sky-500/90 px-5 py-3 text-sm font-bold uppercase tracking-widest text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)] shadow-lg shadow-sky-500/35 hover:bg-sky-400/95 transition-all" data-auth-back>
         <span class="material-symbols-outlined text-base leading-none">arrow_back</span>
         Regresar
       </a>
-      <a href="registro\.php" class="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-gradient-to-br from-primary to-primary-container text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)] px-6 py-3 text-sm font-bold uppercase tracking-widest shadow-lg shadow-primary/25 hover:scale-[1.02] active:scale-95 transition-all">
+      <a href="registro.php" class="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-gradient-to-br from-primary to-primary-container text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)] px-6 py-3 text-sm font-bold uppercase tracking-widest shadow-lg shadow-primary/25 hover:scale-[1.02] active:scale-95 transition-all">
         Crear cuenta
       </a>
     </div>
@@ -176,7 +176,7 @@
         </form>
 
         <p class="mt-6 text-center text-sm text-on-surface-variant">
-          ¿No tienes cuenta? <a class="text-primary-dim font-bold hover:underline" href="registro\.php">Regístrate ahora</a>
+          ¿No tienes cuenta? <a class="text-primary-dim font-bold hover:underline" href="registro.php">Regístrate ahora</a>
         </p>
       </section>
     </main>
@@ -185,11 +185,11 @@
         const logged = localStorage.getItem("nekora_logged_in") === "true";
         const backBtn = document.querySelector("[data-auth-back]");
         if (!logged) {
-          if (backBtn) backBtn.href = "index\.php";
+          if (backBtn) backBtn.href = "index.php";
           try {
             history.pushState({ guest: true }, "", location.href);
             window.addEventListener("popstate", () => {
-              window.location.href = "index\.php";
+              window.location.href = "index.php";
             });
           } catch {}
         }
@@ -209,11 +209,7 @@
         </h3>
         <p id="login-subtitle" class="text-white/80 text-sm leading-relaxed mt-4">
           Tu colección de animes te estaba esperando. ÃƒÂ¢Ã‚Â­Ã‚Â
-        </p>
-      </div>
-    </div>
-    <script>
-  (function () {
+        </p  (function () {
     const form = document.getElementById("login-form");
     const modal = document.getElementById("login-success");
     const nameEl = document.getElementById("login-name");
@@ -222,57 +218,76 @@
     const subtitleEl = document.getElementById("login-subtitle");
     const passInput = document.getElementById("login-pass");
     const closeBtn = document.getElementById("login-close");
+    
     if (!form) return;
-    form.addEventListener("submit", (e) => {
+    
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const requiredFields = form.querySelectorAll("input[required]");
-      const allFilled = Array.from(requiredFields).every((input) => input.value.trim().length);
-      if (!allFilled) {
-        alert("Completa todos los campos para continuar.");
-        return;
-      }
-      const name = (nameInput && nameInput.value.trim()) || "";
+      
+      const btn = form.querySelector('[type="submit"]');
+      const textOrig = btn.innerText;
+      btn.innerText = 'Verificando...';
+      btn.disabled = true;
+
+      const userOrEmail = (nameInput && nameInput.value.trim()) || "";
       const pass = (passInput && passInput.value.trim()) || "";
-      const isAdmin = name === "Admin99" && pass === "1221";
-      if (nameEl) nameEl.textContent = name;
-      if (isAdmin) {
-        if (titleEl) titleEl.textContent = "Bienvenido, administrador 👑";
-        if (subtitleEl) subtitleEl.textContent = "Tienes el control total de NekoraList";
-      } else {
-        if (titleEl) titleEl.innerHTML = `¡Bienvenido de nuevo, <span id="login-name">${name || "Usuario"}</span>!`;
-        if (subtitleEl) subtitleEl.textContent = "Tu colección de animes te estaba esperando. ÃƒÂ¢Ã‚Â­Ã‚Â";
-      }
+      
       try {
-        localStorage.setItem("nekora_logged_in", "true");
-        localStorage.setItem("nekora_user", name || "Usuario");
-        if (isAdmin) {
-          localStorage.setItem("nekora_admin", "true");
-          localStorage.setItem("nekora_premium", "true");
+        const res = await fetch('api/auth.php?action=login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userOrEmail: userOrEmail, password: pass })
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+            const isAdmin = data.isAdmin === true;
+            const name = data.username;
+            
+            if (nameEl) nameEl.textContent = name;
+            if (isAdmin) {
+                if (titleEl) titleEl.textContent = "Bienvenido, administrador 👑";
+                if (subtitleEl) subtitleEl.textContent = "Tienes el control total de NekoraList";
+            } else {
+                if (titleEl) titleEl.innerHTML = `¡Bienvenido de nuevo, <span id="login-name">${name}</span>!`;
+                if (subtitleEl) subtitleEl.textContent = "Tu colección de animes te estaba esperando. 🌟";
+            }
+            
+            try {
+                localStorage.setItem("nekora_logged_in", "true");
+                localStorage.setItem("nekora_user", name);
+                if (isAdmin) {
+                    localStorage.setItem("nekora_admin", "true");
+                    localStorage.setItem("nekora_premium", "true");
+                } else {
+                    localStorage.removeItem("nekora_admin");
+                }
+                localStorage.setItem("anidex_profile_name", name);
+                
+                const yearNow = String(new Date().getFullYear());
+                if (!localStorage.getItem("anidex_profile_member_since")) {
+                    localStorage.setItem("anidex_profile_member_since", yearNow);
+                }
+            } catch (e) {}
+            
+            if (modal) modal.classList.remove("hidden");
         } else {
-          localStorage.removeItem("nekora_admin");
+            alert('Error: ' + data.error);
         }
-        if (name) {
-          localStorage.setItem("anidex_profile_name", name);
-        }
-        const yearNow = String(new Date().getFullYear());
-        if (!localStorage.getItem("anidex_profile_member_since")) {
-          localStorage.setItem("anidex_profile_member_since", yearNow);
-        }
-        if (!localStorage.getItem("anidex_profile_hours")) {
-          localStorage.setItem("anidex_profile_hours", "0");
-        }
-        if (!localStorage.getItem("anidex_profile_prefs")) {
-          localStorage.setItem(
-            "anidex_profile_prefs",
-            JSON.stringify({ "Idioma": [], "G\u00e9nero": [] })
-          );
-        }
-      } catch (e) {}
-      if (modal) modal.classList.remove("hidden");
+      } catch (err) {
+        alert('Error de red u error interno del servidor.');
+      } finally {
+        btn.innerText = textOrig;
+        btn.disabled = false;
+      }
     });
+
     if (closeBtn) {
       closeBtn.addEventListener("click", () => {
-        window.location.href = "index\.php";
+        window.location.href = "index.php";
+      });
+    }
+  })();indow.location.href = "index.php";
       });
     }
   })();

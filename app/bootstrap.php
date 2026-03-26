@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // Basic bootstrap (autoload + helpers)
 
 // Simple autoload for app classes

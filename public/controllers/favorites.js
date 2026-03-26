@@ -1,11 +1,11 @@
-﻿(() => {
+(() => {
   const KEY_MY_LIST = "anidex_my_list_v1";
   const KEY_FAVORITES = "anidex_favorites_v1";
   const KEY_STATUS = "anidex_status_v1";
   const norm = (v) => (v || "").toLowerCase().trim();
   const pathName = window.location.pathname.toLowerCase();
   const isDetailPage = pathName.includes("detail");
-  const isIndexPage = pathName.endsWith("/index\.php") || pathName.endsWith("index\.php") || pathName === "/" || pathName === "";
+  const isIndexPage = pathName.endsWith("/index.php") || pathName.endsWith("index.php") || pathName === "/" || pathName === "";
   const isLoggedIn = localStorage.getItem("nekora_logged_in") === "true";
 
   const readKey = (k) => {
@@ -318,7 +318,7 @@
         setMyListDefaultState(btn);
         btn.addEventListener("click", (e) => {
           e.preventDefault();
-          window.location.href = "registro\.php";
+          window.location.href = "registro.php";
         });
         return;
       }
@@ -393,7 +393,7 @@
           <div class="absolute inset-0 rounded-lg overflow-hidden bg-surface-container-high z-0 pointer-events-none">
             <img alt="${it.title}" class="w-full h-full object-cover" src="${it.image || ""}"/>
           </div>
-          <span class="absolute top-2 left-2 rounded-full bg-violet-500/90 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-white z-30">${(it.type || "Anime").toLowerCase().includes("pel") ? "Pelcula" : "Anime"}</span>
+          <span class="absolute top-2 left-2 rounded-full bg-violet-500/90 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-white z-30">${(it.type || "Anime").toLowerCase().includes("pel") ? "Película" : "Anime"}</span>
           <button type="button" data-remove-my-list data-title="${it.title}" class="absolute top-2 right-2 p-1.5 glass-effect bg-black/40 rounded-full group/remove z-30">
             <span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">checklist</span>
             <span class="pointer-events-none absolute left-1/2 top-full mt-2 -translate-x-1/2 whitespace-nowrap rounded-md bg-black/90 px-2 py-1 text-[10px] font-semibold uppercase tracking-widest text-white opacity-0 transition-opacity duration-150 group-hover/remove:opacity-100 z-50">${removeTip}</span>
@@ -441,7 +441,7 @@
         if (e.target.closest("button")) return;
         const title = card.getAttribute("data-detail-title") || "";
         const id = card.getAttribute("data-detail-id") || "";
-        let url = "detail\.php";
+        let url = "detail.php";
         if (id) {
           url += `?mal_id=${encodeURIComponent(id)}`;
           if (title) url += `&q=${encodeURIComponent(title)}`;
@@ -520,7 +520,7 @@
           <div class="absolute inset-0 rounded-lg overflow-hidden bg-surface-container-high z-0 pointer-events-none">
             <img alt="${it.title}" class="w-full h-full object-cover" src="${it.image || ""}"/>
           </div>
-          <span class="absolute top-2 left-2 rounded-full bg-violet-500/90 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-white z-30">${(it.type || "Anime").toLowerCase().includes("pel") ? "Pelcula" : "Anime"}</span>
+          <span class="absolute top-2 left-2 rounded-full bg-violet-500/90 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-white z-30">${(it.type || "Anime").toLowerCase().includes("pel") ? "Película" : "Anime"}</span>
           <button type="button" data-remove-favorite data-title="${it.title}" class="absolute top-2 right-2 p-1.5 glass-effect bg-black/40 rounded-full group/heart z-30">
             <span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">favorite</span>
             <span class="pointer-events-none absolute left-1/2 top-full mt-2 -translate-x-1/2 whitespace-nowrap rounded-md bg-black/90 px-2 py-1 text-[10px] font-semibold uppercase tracking-widest text-white opacity-0 transition-opacity duration-150 group-hover/heart:opacity-100 z-50">${removeTip}</span>
@@ -568,7 +568,7 @@
         if (e.target.closest("button")) return;
         const title = card.getAttribute("data-detail-title") || "";
         const id = card.getAttribute("data-detail-id") || "";
-        let url = "detail\.php";
+        let url = "detail.php";
         if (id) {
           url += `?mal_id=${encodeURIComponent(id)}`;
           if (title) url += `&q=${encodeURIComponent(title)}`;
@@ -628,7 +628,7 @@
           <div class="absolute inset-0 rounded-lg overflow-hidden bg-surface-container-high z-0 pointer-events-none">
             <img alt="${it.title}" class="w-full h-full object-cover" src="${it.image || ""}"/>
           </div>
-          <span class="absolute top-2 left-2 rounded-full bg-violet-500/90 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-white z-30">${(it.type || "Anime").toLowerCase().includes("pel") ? "Pelcula" : "Anime"}</span>
+          <span class="absolute top-2 left-2 rounded-full bg-violet-500/90 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-white z-30">${(it.type || "Anime").toLowerCase().includes("pel") ? "Película" : "Anime"}</span>
           <button type="button" data-remove-status data-title="${it.title}" class="absolute top-2 right-2 p-1.5 glass-effect bg-black/40 rounded-full group/remove z-30">
             <span class="material-symbols-outlined text-primary text-sm">delete</span>
             <span class="pointer-events-none absolute left-1/2 top-full mt-2 -translate-x-1/2 whitespace-nowrap rounded-md bg-black/90 px-2 py-1 text-[10px] font-semibold uppercase tracking-widest text-white opacity-0 transition-opacity duration-150 group-hover/remove:opacity-100 z-50">${statusFilter === "completed" ? "Eliminar de Completados" : "Eliminar de Pendientes"}</span>
@@ -660,7 +660,7 @@
         if (e.target.closest("button")) return;
         const title = card.getAttribute("data-detail-title") || "";
         const id = card.getAttribute("data-detail-id") || "";
-        let url = "detail\.php";
+        let url = "detail.php";
         if (id) {
           url += `?mal_id=${encodeURIComponent(id)}`;
           if (title) url += `&q=${encodeURIComponent(title)}`;
