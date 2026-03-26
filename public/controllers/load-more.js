@@ -1,5 +1,5 @@
 (function () {
-  const API_BASE = "https://api.jikan.moe/v4/anime";
+  const API_BASE = "api/jikan_proxy.php";
   const path = window.location.pathname.toLowerCase();
   const isCatalog = path.includes("peliculas");
   const hideCardYears = path.includes("series") || path.includes("peliculas");
@@ -145,14 +145,14 @@
 
   async function fetchById(id) {
     if (!id) return null;
-    const json = await fetchJson(`${API_BASE}/${id}`);
+    const json = await fetchJson(`${API_BASE}?endpoint=${encodeURIComponent('anime/' + id + '/full')}`);
     return json?.data || null;
   }
 
   async function searchByTitle(title, yearHint) {
     if (!title) return null;
     const type = isCatalog ? "movie" : "tv";
-    const url = `${API_BASE}?q=${encodeURIComponent(title)}&type=${type}&limit=5&order_by=popularity&sort=asc`;
+    const url = `${API_BASE}?endpoint=${encodeURIComponent("anime?q=" + title + "&type=" + type + "&limit=5&order_by=popularity&sort=asc")}`;
     const json = await fetchJson(url);
     const list = json?.data || [];
     if (!list.length) return null;
@@ -493,7 +493,12 @@
     if (!year) return;
     card.setAttribute("data-year", String(year));
     const posterBadge = card.querySelector(".relative span");
-    if (posterBadge) posterBadge.textContent = String(year);
+    if (posterBadge) {
+      posterBadge.textContent = String(year);
+      if (window.location.pathname.toLowerCase().includes("peliculas")) {
+        posterBadge.className = "absolute left-3 bottom-3 rounded-full bg-surface/80 px-4 py-1.5 text-sm font-bold text-on-surface";
+      }
+    }
     if (hideCardYears) {
       card.querySelectorAll("[data-card-year]").forEach((el) => el.remove());
       return;
@@ -528,10 +533,13 @@
     let badge = media.querySelector(".anidex-score-badge");
     if (!badge) {
       badge = document.createElement("span");
+      const isMovie = window.location.pathname.toLowerCase().includes("peliculas");
       badge.className =
-        "anidex-score-badge absolute top-3 right-3 bg-surface-container-lowest/80 backdrop-blur px-2 py-1 rounded text-xs font-bold text-primary flex items-center gap-1";
+        "anidex-score-badge absolute top-3 right-3 bg-surface-container-lowest/80 backdrop-blur " + 
+        (isMovie ? "px-2.5 py-1.5 rounded-lg text-sm" : "px-2 py-1 rounded text-xs") + 
+        " font-bold text-primary flex items-center gap-1.5 shadow-lg";
       badge.innerHTML =
-        "<span class=\"material-symbols-outlined text-[10px]\" style=\"font-variation-settings: 'FILL' 1;\">star</span><span></span>";
+        `<span class="material-symbols-outlined text-[${isMovie ? '14px' : '10px'}]" style="font-variation-settings: 'FILL' 1;">star</span><span></span>`;
       media.appendChild(badge);
     }
     const valueEl = badge.querySelector("span:last-child");
@@ -583,7 +591,7 @@
   async function fetchMore() {
     const type = isCatalog ? "movie" : "tv";
     page += 1;
-    const url = `${API_BASE}?type=${type}&page=${page}&limit=${batchSize}&order_by=popularity&sort=asc`;
+    const url = `${API_BASE}?endpoint=${encodeURIComponent("anime?type=" + type + "&page=" + page + "&limit=" + batchSize + "&order_by=popularity&sort=asc")}`;
     const res = await fetch(url);
     if (!res.ok) return [];
     const json = await res.json();
@@ -657,8 +665,8 @@
     loadBtn.addEventListener("click", onLoadMore);
     // Hide when filters/search are active (set by filters.js)
     window.AniDexLoadMore = {
-      hide: () => { if (loadBtn) loadBtn.style.display = "none"; },
-      show: () => { if (loadBtn) loadBtn.style.display = ""; }
+      hide: () => { if (typeof loadBtn !== 'undefined' && loadBtn) loadBtn.style.display = "none"; },
+      show: () => { if (typeof loadBtn !== 'undefined' && loadBtn) loadBtn.style.display = ""; }
     };
     bindHoverPreviewFor(grid);
     if (!isSeriesPage) warmPreviewCache(grid);

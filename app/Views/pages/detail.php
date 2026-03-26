@@ -473,7 +473,7 @@
     <script src="controllers/search.js"></script>
     <script src="controllers/favorites.js"></script>
     <script src="controllers/detail-links.js"></script>
-    <script src="models/detail-data.js?v=13"></script>
+    <script src="models/detail-data.js?v=25"></script>
     <script>
   document.addEventListener("DOMContentLoaded", () => {
     if (window.AniDexI18n) window.AniDexI18n.init();

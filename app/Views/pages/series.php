@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+?<!DOCTYPE html>
 <html class="dark" lang="es">
   <head>
     <script data-ui-preload>document.documentElement.classList.add("preload-ui");</script>
@@ -299,7 +299,7 @@
                 </div>
                 <div class="space-y-2">
                   <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant">Géneros</label>
-                  <!-- Dropdown de géNekoraLists renderizado por controllers/filters.js -->
+                  <!-- Dropdown de géneros renderizado por controllers/filters.js -->
                 </div>
                 <div class="space-y-4">
                   <div class="space-y-2">
@@ -338,7 +338,7 @@
             <section class="mt-6 rounded-lg bg-surface-container-low p-4" aria-label="Ranking">
               <div class="mb-3 flex items-center justify-between gap-3">
                 <h3 class="text-sm font-bold uppercase tracking-widest text-on-surface-variant">Top 5 Ranking</h3>
-                <a class="text-xs font-semibold text-primary hover:text-primary-dim" href="ranking.php">Ver ranking</a>
+                <a class="text-xs font-semibold text-primary hover:text-primary-dim" href="ranking\.php">Ver ranking</a>
               </div>
               <div id="sidebar-ranking" data-sidebar-ranking data-ranking-type="anime" class="space-y-3">
                 <div class="text-xs text-on-surface-variant">Cargando ranking...</div>
@@ -409,304 +409,59 @@
 
             <!-- AnimeCard Component -->
             <section class="mt-[clamp(0.6rem,0.9vw,0.8rem)] grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6" aria-label="Grid de anime">
-              <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="jujutsu kaisen" data-genres="accion,fantasia" data-year="2020" data-type="Serie de TV" data-status="En emisión">
-                <a class="block" href="detail.php" aria-label="Jujutsu Kaisen">
-                  <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
-                    <img alt="Jujutsu Kaisen" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAf_5yu8ItByDxj1mtS86M1c4L-O9mK0YowNyDHJw9W3iBVZ8FyDg-EqWFT6-8OHsq_coAIAP0l958Z_MmlAFEJw4WhJphbR4l9vrMyWi2j3WVvXgYbjrEmsF1lNw_pei3FsECFfbJAjngFTubB3gifJd8ggZOoo0o4uF2DMo2NTvstvfpwoVeh2cIGu3izqmnqcGUvtn3bfztDQjI_3f_PqRWRxgPC6iAsoNpidsC32rJsZNIfPPYMhlo5KeRXtnq6jjUFrMUTk0d4" loading="lazy"/>
-                    <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2020</span>
-                  </div>
-                  <div class="space-y-2 mt-2">
-                    
-                    <h3 class="font-headline text-lg font-bold text-on-surface">Jujutsu Kaisen</h3>
-                  </div>
-                </a>
-              </article>
+              <?php
+              $dbConn = (new \Models\Database())->getConnection();
+              if ($dbConn) {
+                  // Fetch dynamic genres excluding +18 for the filter UI
+                  $genreStmt = $dbConn->prepare("SELECT nombre FROM generos WHERE nombre NOT IN ('Hentai', 'Erotica', 'Ecchi', 'Yaoi', 'Yuri', 'Gore', 'Harem', 'Reverse Harem', 'Rx', 'Girls Love', 'Boys Love') ORDER BY nombre ASC");
+                  $genreStmt->execute();
+                  $dbGenres = $genreStmt->fetchAll(PDO::FETCH_COLUMN);
+                  echo "<script>window.DB_GENRES = " . json_encode($dbGenres) . ";</script>";
 
-              <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="monster" data-genres="thriller,drama" data-year="2004" data-type="OVA" data-status="Finalizado">
-                <a class="block" href="detail.php" aria-label="Monster">
-                  <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
-                    <img alt="Monster" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAG7j1khN7oa42GFgVO0GGKUGrbVAHUi69ljVSoVZw2JzGhXLGZPmMJVg-fuQthZ2BjRmQPHtiljA6oG5wD0e2QgsOauHs8rHo6CfVW_-qbdDPyc6WFV6NSVCR2bXYGfJANdbVZu3JCvQHDHUgQb-65j6hS6Sxh3KsQpp8TrqHwC-smxyfYY2kHVMRaba4VaaF-d0mASZkln-xJrLjreN-5Eryk7As7G1yYpz_0v5C6rK-TlGmV91TVOYBi2hNx43byaOojLl2FHhT9" loading="lazy"/>
-                    <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2004</span>
-                  </div>
-                  <div class="space-y-2 mt-2">
-                    
-                    <h3 class="font-headline text-lg font-bold text-on-surface">Monster</h3>
-                  </div>
-                </a>
-              </article>
+                  $stmt = $dbConn->prepare("SELECT * FROM anime WHERE tipo != 'Movie' AND id NOT IN (SELECT anime_id FROM anime_generos WHERE genero_id IN (SELECT id FROM generos WHERE nombre IN ('Hentai', 'Erotica', 'Ecchi', 'Yaoi', 'Yuri', 'Girls Love', 'Boys Love'))) ORDER BY puntuacion DESC LIMIT 60");
+                  $stmt->execute();
+                  $animes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-              <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="cyberpunk: edgerunners" data-genres="accion,sci-fi" data-year="2022" data-type="ONA" data-status="Pausado">
-                <a class="block" href="detail.php" aria-label="Cyberpunk: Edgerunners">
+                  if (count($animes) > 0) {
+                      foreach ($animes as $a) {
+                          $gStmt = $dbConn->prepare("SELECT g.nombre FROM generos g JOIN anime_generos ag ON g.id = ag.genero_id WHERE ag.anime_id = ?");
+                          $gStmt->execute([$a['id']]);
+                          $generos_arr = $gStmt->fetchAll(PDO::FETCH_COLUMN);
+                          $generos_str = implode(',', array_map('strtolower', $generos_arr));
+              ?>
+              <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" 
+                       data-anime-card 
+                       data-title="<?= htmlspecialchars(strtolower($a['titulo'])) ?>" 
+                       data-genres="<?= htmlspecialchars($generos_str) ?>" 
+                       data-year="<?= htmlspecialchars($a['anio'] ?? '') ?>" 
+                       data-type="<?= htmlspecialchars($a['tipo']) ?>" 
+                       data-status="<?= htmlspecialchars($a['estado'] ?? 'Desconocido') ?>"
+                       data-mal-id="<?= htmlspecialchars($a['mal_id'] ?? '') ?>">
+                <a class="block" href="detail.php?id=<?= $a['id'] ?>" aria-label="<?= htmlspecialchars($a['titulo']) ?>">
                   <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
-                    <img alt="Cyberpunk: Edgerunners" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWK6GEmMfgg6EfbuobMqKnAGEoBR-JDGiUg00ci-kmNlIZtDkYI6Kn2Ke0sXVPIgNQCXFd-IsHB0kiCe8S2Zky7Vx8s8Yv0q9tzs5HYMvwxzBr6cc0oZ2o_86dXwOsGkjr4PDjv3ULdj9hX4Eanz5BPS7V2PEEqNSKPjrv61ZaMxz7RmFHx1Ah01hoqVReWKva7mpYkiw9VwRTTlov4AGu-uJhSG3Bln2hIug_IIGpsqGQXkCpk6x8T2qTeXcy2R7y7otUdEHtPV9T" loading="lazy"/>
-                    <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2022</span>
+                    <img alt="<?= htmlspecialchars($a['titulo']) ?>" 
+                         class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" 
+                         src="<?= htmlspecialchars($a['imagen_url'] ?? 'img/fondoanime.png') ?>" loading="lazy" referrerpolicy="no-referrer"/>
+                    <span class="absolute left-3 top-3 rounded-full bg-surface/90 px-4 py-1.5 text-sm font-bold text-on-surface shadow-lg"><?= htmlspecialchars($a['anio'] ?? '') ?></span>
+                    <?php if (!empty($a['puntuacion'])) { ?>
+                    <span class="anidex-score-badge absolute top-3 right-3 bg-surface-container-lowest/80 backdrop-blur px-2 py-1 rounded text-xs font-bold text-primary flex items-center gap-1">
+                       <span class="material-symbols-outlined text-[10px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                       <span><?= number_format((float)$a['puntuacion'], 1) ?></span>
+                    </span>
+                    <?php } ?>
                   </div>
                   <div class="space-y-2 mt-2">
-                    
-                    <h3 class="font-headline text-lg font-bold text-on-surface">Cyberpunk: Edgerunners</h3>
+                    <h3 class="font-headline text-lg font-bold text-on-surface" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($a['titulo']) ?></h3>
                   </div>
                 </a>
               </article>
-
-              <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="demon slayer" data-genres="accion,fantasia" data-year="2019" data-type="Especiales" data-status="Próximamente">
-                <a class="block" href="detail.php" aria-label="Demon Slayer">
-                  <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
-                    <img alt="Demon Slayer" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAR9x5iy6NpAOvezWnwzK2vesTKLBp29cvFNXUtwXht6dD1l_D5gxqns-j0rTWWHrKxrDe_gNz2hRv_bp72i7d3-B1XfbVcKL9UOdKUyxhkn7PVkTFK6gvR6FYot0OR1ZFv5kxq0aRiZ5uP-MPaYLYP3NbHMNLEF22YktmuRvb3820xC4ub0dVEhj3jZVy7-ZDMJBIgRaWhSUwsjWpaA_FPrQNkZspeF-urqaKWFj1HOZJbRz951KKRSdvfM9UeaS3zgtT822TzJSbT" loading="lazy"/>
-                    <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2019</span>
-                  </div>
-                  <div class="space-y-2 mt-2">
-                    
-                    <h3 class="font-headline text-lg font-bold text-on-surface">Demon Slayer</h3>
-                  </div>
-                </a>
-              </article>
-
-              <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="mushishi" data-genres="fantasia,sobrenatural" data-year="2005" data-type="Cortos" data-status="Cancelado">
-                <a class="block" href="detail.php" aria-label="Mushishi">
-                  <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
-                    <img alt="Mushishi" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCje1xHJ1WUA4g9yIIDEH_pR92E2kB6X1s837gGJD9UFj8E0mQUkxMN_rTpbmtI9LLd4eZnx3hIvb-U8EcBBpfSmNGAKWLzD_Eb1ppR87UR5wnTD3fPpOlY74X-I4P4p5J0Wpv-HTIa4kWox8n8dlfB6caMiMRLPuYkHJD_0lxfUZz4aT79i5VovpVuKkPEe3n5WiMUARuk4BRWUvsDr1xczcOQelSreIiJtPyQWQfnq0GKXptfgVdrHAE1Wxb4YsMhAapniXWKOFfH" loading="lazy"/>
-                    <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2005</span>
-                  </div>
-                  <div class="space-y-2 mt-2">
-                    
-                    <h3 class="font-headline text-lg font-bold text-on-surface">Mushishi</h3>
-                  </div>
-                </a>
-              </article>
-
-              <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="solo leveling" data-genres="accion,fantasia" data-year="2026" data-type="Serie" data-status="En emision">
-                <a class="block" href="detail.php" aria-label="Solo Leveling">
-                  <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
-                    <img alt="Solo Leveling" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfEs1IvGWNIZxiSWnnh8wCUr59ea4njuZckziZXqicnQPNvJkan5uFN_-BmFdNvpNSE7c6Gy-mHlJOyMU4hG1QNd2nk5WYUB4_uFh5jJL-K6arAlskDJ_8qihvbrLMvZNDOsSiBXcBUPHNcfenZNrmyKDhpAa0TRP_9gxyxTMIHLtWKcJBfTyyYK2OT7w8mggHKLEv6KE0h3MMHguW46V5ghR79auKbPcZFbiWP4qDRaPBSBDdTGBjWbacwEx2LnRwcBnZnp4l3j-4" loading="lazy"/>
-                    <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2026</span>
-                  </div>
-                  <div class="space-y-2 mt-2">
-                    
-                    <h3 class="font-headline text-lg font-bold text-on-surface">Solo Leveling</h3>
-                  </div>
-                </a>
-              </article>
-
-              <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="the apothecary diaries" data-genres="drama,misterio" data-year="2023" data-type="Serie" data-status="En emision">
-                <a class="block" href="detail.php" aria-label="The Apothecary Diaries">
-                  <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
-                    <img alt="The Apothecary Diaries" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2q_skNN7IEXINa_mQLWLtLooGZISRCJFcyFjR3-NhCFoQIV4rVukiI28cqzl7NwA1WRT10f9y_sBVA5KkJuprPzW2QkHsxVtQR7BFHYdKPirCvmU9EAQOC4weVwBfy07uTKoRhP1y13VRDG3hA9igt5f2qH88HGxQ7HJ0NF_FJ80hss_-Tj-Z198bRHpqi85zQe-swEt4fP6Cj4nJcWzWyRxEPOSaQv6kswMt5oDI9hJkaV25CtItXBgjs9EUI-R4wQ4uD4lO2a_z" loading="lazy"/>
-                    <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2023</span>
-                  </div>
-                  <div class="space-y-2 mt-2">
-                    
-                    <h3 class="font-headline text-lg font-bold text-on-surface">The Apothecary Diaries</h3>
-                  </div>
-                </a>
-              </article>
-
-              <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="undead unluck" data-genres="accion,comedia" data-year="2023" data-type="Serie" data-status="En emision">
-                <a class="block" href="detail.php" aria-label="Undead Unluck">
-                  <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
-                    <img alt="Undead Unluck" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZs4Vw9PZ84i6Ys2r4zaN7qIUjHi2HdaV26z-79Pfi17ztATEPT0KLGu0_DQz9awHO680k4vEkXKbI8fxecyDrissO8rGhpL9NVVqM2kiBD6Y4ZYyACz-yNaK6doyItKZ2PQsrFzUyZWrJh3CH-YMfrUN5_z_9cxUYzO2Ndk-hV9TENhD2MlVYucSYbhM9xyGBr5aq1t2I2_h9llA0wSZqupDhEcmjfJccvzCwcKaeyEkRrAXEW_p7QMs_pt5XwUfXBAlV0As10pqp" loading="lazy"/>
-                    <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2023</span>
-                  </div>
-                  <div class="space-y-2 mt-2">
-                    
-                    <h3 class="font-headline text-lg font-bold text-on-surface">Undead Unluck</h3>
-                  </div>
-                </a>
-              </article>
-
-              <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="attack on titan" data-genres="accion,drama" data-year="2013" data-type="Serie" data-status="Finalizado">
-                <a class="block" href="detail.php" aria-label="Attack on Titan">
-                  <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
-                    <img alt="Attack on Titan" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcIQtxOd6qOsXx7ByE8oZn1oCXSPjEJzsUOHQIOSQYhHH0OYYB_eJlZhZNz3w4BHdnldRu7iEiS9w18kbo_Z0hKzmIiXP7aiQNfz2tM80qkstdNDxLa6JqFEVe0MaL19MslgUay1G49G96_nr3avtPuZ1bsDRBHEMkYXwbJXR78yArKNKgPuo_FS84akJ8xyLqb9-VO67Md2PDUJJhpFC-KvDBlFjJ6jb60bCEeVK3KhKkAeDGb_sY6HuC9kf3yivDQCPx_K043ssp" loading="lazy"/>
-                    <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2013</span>
-                  </div>
-                  <div class="space-y-2 mt-2">
-                    
-                    <h3 class="font-headline text-lg font-bold text-on-surface">Attack on Titan</h3>
-                  </div>
-                </a>
-              </article>
-
-              <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="frieren: beyond journey's end" data-genres="fantasia,aventura" data-year="2023" data-type="Serie" data-status="En emision">
-                <a class="block" href="detail.php" aria-label="Frieren: Beyond Journey's End">
-                  <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
-                    <img alt="Frieren: Beyond Journey's End" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJ6Ah-IV3lUQiVO02y1I0SuB8bLgACNC8qwVPEgr-NhJFTPAD2A_LQeg_h72ejiI56UKVnMh_Puk_E_i5W-zvO3byCKKRI_lYcmJvyZdFj6aX-w5fJQ2gDPxJdfbeYCsHOjPjaGO45hE1NcsL9FuhwWH2aaPbXfZfhrHmRYPEvNATzTxZIDy21c9Y27vxZmKoI6Z2oG5CWH7305d55-BRLe0KJwbYM5drbE-215zNLDf1nAWDi87ubZTX2HHsCJ-JVUzNOTOTlUsge" loading="lazy"/>
-                    <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2023</span>
-                  </div>
-                  <div class="space-y-2 mt-2">
-                    
-                    <h3 class="font-headline text-lg font-bold text-on-surface">Frieren: Beyond Journey's End</h3>
-                  </div>
-                </a>
-              </article>
-
-              <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="chainsaw man" data-genres="accion,terror" data-year="2022" data-type="Serie" data-status="Finalizado">
-                <a class="block" href="detail.php" aria-label="Chainsaw Man">
-                  <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
-                    <img alt="Chainsaw Man" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzVx7iJLr4Mfgd79RK6X6Km0uzNQjGsPP7jCamqWRwpAQFl-8CsoExOcyJkVD1eheVat1utCOZKROorocz3XsKQLFaGETmOawxeNH-136-XG_1PQcn5MXZ7g81t7Z55330se4DwC5s7SvRCtzVQRcFbfElkSuvdNfwK4HjUiJ6db3EX8fcQGB_DheO4xIpT2CNTuwAmeZane81aKqI2y5RC4gXhsupCBLUOUFf0ECvO-ti-ewKZAF-T3Q2aVq3uYDQwlzBrv3s4Cah" loading="lazy"/>
-                    <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2022</span>
-                  </div>
-                  <div class="space-y-2 mt-2">
-                    
-                    <h3 class="font-headline text-lg font-bold text-on-surface">Chainsaw Man</h3>
-                  </div>
-                </a>
-              </article>
-
-              <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="spy x family" data-genres="comedia,accion" data-year="2022" data-type="Serie" data-status="En emision">
-                <a class="block" href="detail.php" aria-label="Spy x Family">
-                  <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
-                    <img alt="Spy x Family" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAf_5yu8ItByDxj1mtS86M1c4L-O9mK0YowNyDHJw9W3iBVZ8FyDg-EqWFT6-8OHsq_coAIAP0l958Z_MmlAFEJw4WhJphbR4l9vrMyWi2j3WVvXgYbjrEmsF1lNw_pei3FsECFfbJAjngFTubB3gifJd8ggZOoo0o4uF2DMo2NTvstvfpwoVeh2cIGu3izqmnqcGUvtn3bfztDQjI_3f_PqRWRxgPC6iAsoNpidsC32rJsZNIfPPYMhlo5KeRXtnq6jjUFrMUTk0d4" loading="lazy"/>
-                    <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2022</span>
-                  </div>
-                  <div class="space-y-2 mt-2">
-                    
-                    <h3 class="font-headline text-lg font-bold text-on-surface">Spy x Family</h3>
-                  </div>
-                </a>
-              </article>
-
-              <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="fullmetal alchemist: brotherhood" data-genres="accion,aventura" data-year="2009" data-type="Serie" data-status="Finalizado">
-                <a class="block" href="detail.php" aria-label="Fullmetal Alchemist: Brotherhood">
-                  <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
-                    <img alt="Fullmetal Alchemist: Brotherhood" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAG7j1khN7oa42GFgVO0GGKUGrbVAHUi69ljVSoVZw2JzGhXLGZPmMJVg-fuQthZ2BjRmQPHtiljA6oG5wD0e2QgsOauHs8rHo6CfVW_-qbdDPyc6WFV6NSVCR2bXYGfJANdbVZu3JCvQHDHUgQb-65j6hS6Sxh3KsQpp8TrqHwC-smxyfYY2kHVMRaba4VaaF-d0mASZkln-xJrLjreN-5Eryk7As7G1yYpz_0v5C6rK-TlGmV91TVOYBi2hNx43byaOojLl2FHhT9" loading="lazy"/>
-                    <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2009</span>
-                  </div>
-                  <div class="space-y-2 mt-2">
-                    
-                    <h3 class="font-headline text-lg font-bold text-on-surface">Fullmetal Alchemist: Brotherhood</h3>
-                  </div>
-                </a>
-              </article>
-
-              <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="my hero academia" data-genres="accion,shonen" data-year="2016" data-type="Serie" data-status="En emision">
-                <a class="block" href="detail.php" aria-label="My Hero Academia">
-                  <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
-                    <img alt="My Hero Academia" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWK6GEmMfgg6EfbuobMqKnAGEoBR-JDGiUg00ci-kmNlIZtDkYI6Kn2Ke0sXVPIgNQCXFd-IsHB0kiCe8S2Zky7Vx8s8Yv0q9tzs5HYMvwxzBr6cc0oZ2o_86dXwOsGkjr4PDjv3ULdj9hX4Eanz5BPS7V2PEEqNSKPjrv61ZaMxz7RmFHx1Ah01hoqVReWKva7mpYkiw9VwRTTlov4AGu-uJhSG3Bln2hIug_IIGpsqGQXkCpk6x8T2qTeXcy2R7y7otUdEHtPV9T" loading="lazy"/>
-                    <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2016</span>
-                  </div>
-                  <div class="space-y-2 mt-2">
-                    
-                    <h3 class="font-headline text-lg font-bold text-on-surface">My Hero Academia</h3>
-                  </div>
-                </a>
-              </article>
-
-              <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="one piece" data-genres="aventura,accion" data-year="1999" data-type="Serie" data-status="En emision">
-                <a class="block" href="detail.php" aria-label="One Piece">
-                  <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
-                    <img alt="One Piece" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAR9x5iy6NpAOvezWnwzK2vesTKLBp29cvFNXUtwXht6dD1l_D5gxqns-j0rTWWHrKxrDe_gNz2hRv_bp72i7d3-B1XfbVcKL9UOdKUyxhkn7PVkTFK6gvR6FYot0OR1ZFv5kxq0aRiZ5uP-MPaYLYP3NbHMNLEF22YktmuRvb3820xC4ub0dVEhj3jZVy7-ZDMJBIgRaWhSUwsjWpaA_FPrQNkZspeF-urqaKWFj1HOZJbRz951KKRSdvfM9UeaS3zgtT822TzJSbT" loading="lazy"/>
-                    <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">1999</span>
-                  </div>
-                  <div class="space-y-2 mt-2">
-                    
-                    <h3 class="font-headline text-lg font-bold text-on-surface">One Piece</h3>
-                  </div>
-                </a>
-              </article>
-
-              <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="vinland saga" data-genres="accion,drama" data-year="2019" data-type="Serie" data-status="En emision">
-                <a class="block" href="detail.php" aria-label="Vinland Saga">
-                  <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
-                    <img alt="Vinland Saga" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCje1xHJ1WUA4g9yIIDEH_pR92E2kB6X1s837gGJD9UFj8E0mQUkxMN_rTpbmtI9LLd4eZnx3hIvb-U8EcBBpfSmNGAKWLzD_Eb1ppR87UR5wnTD3fPpOlY74X-I4P4p5J0Wpv-HTIa4kWox8n8dlfB6caMiMRLPuYkHJD_0lxfUZz4aT79i5VovpVuKkPEe3n5WiMUARuk4BRWUvsDr1xczcOQelSreIiJtPyQWQfnq0GKXptfgVdrHAE1Wxb4YsMhAapniXWKOFfH" loading="lazy"/>
-                    <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2019</span>
-                  </div>
-                  <div class="space-y-2 mt-2">
-                    
-                    <h3 class="font-headline text-lg font-bold text-on-surface">Vinland Saga</h3>
-                  </div>
-                </a>
-              </article>
-
-              <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="haikyuu!!" data-genres="deporte,comedia" data-year="2014" data-type="Serie" data-status="En emision">
-                <a class="block" href="detail.php" aria-label="Haikyuu!!">
-                  <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
-                    <img alt="Haikyuu!!" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfEs1IvGWNIZxiSWnnh8wCUr59ea4njuZckziZXqicnQPNvJkan5uFN_-BmFdNvpNSE7c6Gy-mHlJOyMU4hG1QNd2nk5WYUB4_uFh5jJL-K6arAlskDJ_8qihvbrLMvZNDOsSiBXcBUPHNcfenZNrmyKDhpAa0TRP_9gxyxTMIHLtWKcJBfTyyYK2OT7w8mggHKLEv6KE0h3MMHguW46V5ghR79auKbPcZFbiWP4qDRaPBSBDdTGBjWbacwEx2LnRwcBnZnp4l3j-4" loading="lazy"/>
-                    <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2014</span>
-                  </div>
-                  <div class="space-y-2 mt-2">
-                    
-                    <h3 class="font-headline text-lg font-bold text-on-surface">Haikyuu!!</h3>
-                  </div>
-                </a>
-              </article>
-
-              <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="naruto shippuden" data-genres="accion,aventura" data-year="2007" data-type="Serie" data-status="Finalizado">
-                <a class="block" href="detail.php" aria-label="Naruto Shippuden">
-                  <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
-                    <img alt="Naruto Shippuden" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2q_skNN7IEXINa_mQLWLtLooGZISRCJFcyFjR3-NhCFoQIV4rVukiI28cqzl7NwA1WRT10f9y_sBVA5KkJuprPzW2QkHsxVtQR7BFHYdKPirCvmU9EAQOC4weVwBfy07uTKoRhP1y13VRDG3hA9igt5f2qH88HGxQ7HJ0NF_FJ80hss_-Tj-Z198bRHpqi85zQe-swEt4fP6Cj4nJcWzWyRxEPOSaQv6kswMt5oDI9hJkaV25CtItXBgjs9EUI-R4wQ4uD4lO2a_z" loading="lazy"/>
-                    <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2007</span>
-                  </div>
-                  <div class="space-y-2 mt-2">
-                    
-                    <h3 class="font-headline text-lg font-bold text-on-surface">Naruto Shippuden</h3>
-                  </div>
-                </a>
-              </article>
-
-              <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="bleach" data-genres="accion,sobrenatural" data-year="2004" data-type="Serie" data-status="En emision">
-                <a class="block" href="detail.php" aria-label="Bleach">
-                  <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
-                    <img alt="Bleach" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZs4Vw9PZ84i6Ys2r4zaN7qIUjHi2HdaV26z-79Pfi17ztATEPT0KLGu0_DQz9awHO680k4vEkXKbI8fxecyDrissO8rGhpL9NVVqM2kiBD6Y4ZYyACz-yNaK6doyItKZ2PQsrFzUyZWrJh3CH-YMfrUN5_z_9cxUYzO2Ndk-hV9TENhD2MlVYucSYbhM9xyGBr5aq1t2I2_h9llA0wSZqupDhEcmjfJccvzCwcKaeyEkRrAXEW_p7QMs_pt5XwUfXBAlV0As10pqp" loading="lazy"/>
-                    <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2004</span>
-                  </div>
-                  <div class="space-y-2 mt-2">
-                    
-                    <h3 class="font-headline text-lg font-bold text-on-surface">Bleach</h3>
-                  </div>
-                </a>
-              </article>
-
-              <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="steins;gate" data-genres="sci-fi,thriller" data-year="2011" data-type="Serie de TV" data-status="Finalizado">
-                <a class="block" href="detail.php" aria-label="Steins;Gate">
-                  <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
-                    <img alt="Steins;Gate" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="img/fondoanime.png" loading="lazy"/>
-                    <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2011</span>
-                  </div>
-                  <div class="space-y-2 mt-2">
-                    
-                    <h3 class="font-headline text-lg font-bold text-on-surface">Steins;Gate</h3>
-                  </div>
-                </a>
-              </article>
-
-              <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="one punch man" data-genres="accion,comedia" data-year="2015" data-type="Serie de TV" data-status="Finalizado">
-                <a class="block" href="detail.php" aria-label="One Punch Man">
-                  <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
-                    <img alt="One Punch Man" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="img/fondoanime.png" loading="lazy"/>
-                    <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2015</span>
-                  </div>
-                  <div class="space-y-2 mt-2">
-                    
-                    <h3 class="font-headline text-lg font-bold text-on-surface">One Punch Man</h3>
-                  </div>
-                </a>
-              </article>
-
-              <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="hunter x hunter" data-genres="accion,aventura" data-year="2011" data-type="Serie de TV" data-status="Finalizado">
-                <a class="block" href="detail.php" aria-label="Hunter x Hunter">
-                  <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
-                    <img alt="Hunter x Hunter" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="img/fondoanime.png" loading="lazy"/>
-                    <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2011</span>
-                  </div>
-                  <div class="space-y-2 mt-2">
-                    
-                    <h3 class="font-headline text-lg font-bold text-on-surface">Hunter x Hunter</h3>
-                  </div>
-                </a>
-              </article>
-
-              <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" data-anime-card data-title="death note" data-genres="thriller,sobrenatural" data-year="2006" data-type="Serie" data-status="Finalizado">
-                <a class="block" href="detail.php" aria-label="Death Note">
-                  <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
-                    <img alt="Death Note" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcIQtxOd6qOsXx7ByE8oZn1oCXSPjEJzsUOHQIOSQYhHH0OYYB_eJlZhZNz3w4BHdnldRu7iEiS9w18kbo_Z0hKzmIiXP7aiQNfz2tM80qkstdNDxLa6JqFEVe0MaL19MslgUay1G49G96_nr3avtPuZ1bsDRBHEMkYXwbJXR78yArKNKgPuo_FS84akJ8xyLqb9-VO67Md2PDUJJhpFC-KvDBlFjJ6jb60bCEeVK3KhKkAeDGb_sY6HuC9kf3yivDQCPx_K043ssp" loading="lazy"/>
-                    <span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">2006</span>
-                  </div>
-                  <div class="space-y-2 mt-2">
-                    
-                    <h3 class="font-headline text-lg font-bold text-on-surface">Death Note</h3>
-                  </div>
-                </a>
-              </article>
+              <?php 
+                      }
+                  } else {
+                      echo "<p class='col-span-full text-center text-on-surface-variant'>No hay series disponibles.</p>";
+                  }
+              }
+              ?>
             </section>
 
             <div class="mt-12 flex justify-center">
@@ -724,11 +479,11 @@
       <script src="controllers/layout.js"></script>
     </div>
     <script src="controllers/i18n.js"></script>
-    <script src="controllers/title-images.js?v=3"></script>
+    <script src="controllers/title-images.js?v=1774473995,33386"></script>
     <script src="controllers/search.js"></script>
-    <script src="controllers/filters.js?v=11"></script>
+    <script src="controllers/filters.js?v=1774473995,33386"></script>
     <script src="controllers/detail-links.js"></script>
-    <script src="controllers/load-more.js?v=2"></script>
+    <script src="controllers/load-more.js?v=1774473995,33386"></script>
     <script>
   document.addEventListener("DOMContentLoaded", () => {
     // Ajuste global de etiquetas: Series -> Animes, Serie -> Anime
@@ -751,7 +506,7 @@
         ["Tambien", "También"],
         ["tambien", "también"],
         ["Géneros", "Géneros"],
-        ["Información", "Información"],
+        ["Informacion", "Información"],
         ["Duracion", "Duración"],
         ["Anio", "Año"]
       ];

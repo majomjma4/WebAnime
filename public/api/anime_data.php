@@ -31,7 +31,7 @@ if (!$animeItem) {
 }
 
 $jikanData = [
-    'mal_id' => $animeItem['id'],
+    'mal_id' => $animeItem['mal_id'] ?: $animeItem['id'],
     'title' => $animeItem['titulo'],
     'title_english' => $animeItem['titulo'],
     'title_japanese' => $animeItem['titulo'],
@@ -61,6 +61,45 @@ $genreStmt = $dbConn->prepare("
 $genreStmt->execute([$animeItem['id']]);
 while ($g = $genreStmt->fetch(PDO::FETCH_ASSOC)) {
     $jikanData['genres'][] = ['name' => $g['nombre']];
+}
+
+// Characters
+$charStmt = $dbConn->prepare("SELECT * FROM anime_characters WHERE anime_id = ?");
+$charStmt->execute([$animeItem['id']]);
+$jikanData['characters'] = [];
+while ($c = $charStmt->fetch(PDO::FETCH_ASSOC)) {
+    $jikanData['characters'][] = [
+        'character' => [
+            'mal_id' => $c['mal_id'],
+            'name' => $c['name'],
+            'images' => ['jpg' => ['image_url' => $c['image_url']]]
+        ],
+        'role' => $c['role']
+    ];
+}
+
+// Pictures
+$picStmt = $dbConn->prepare("SELECT * FROM anime_pictures WHERE anime_id = ?");
+$picStmt->execute([$animeItem['id']]);
+$jikanData['pictures'] = [];
+while ($p = $picStmt->fetch(PDO::FETCH_ASSOC)) {
+    $jikanData['pictures'][] = [
+        'jpg' => ['image_url' => $p['image_url'], 'large_image_url' => $p['image_url']]
+    ];
+}
+
+// Videos
+$vidStmt = $dbConn->prepare("SELECT * FROM anime_videos WHERE anime_id = ?");
+$vidStmt->execute([$animeItem['id']]);
+$jikanData['videos'] = ['promo' => []];
+while ($v = $vidStmt->fetch(PDO::FETCH_ASSOC)) {
+    $jikanData['videos']['promo'][] = [
+        'trailer' => [
+            'youtube_id' => $v['youtube_id'],
+            'url' => $v['url'],
+            'images' => ['maximum_image_url' => $v['image_url'], 'large_image_url' => $v['image_url']]
+        ]
+    ];
 }
 
 echo json_encode(['success' => true, 'data' => $jikanData]);

@@ -236,7 +236,7 @@
   const grid = document.getElementById("featured-grid");
   if (!grid) return;
 
-  const API = "https://api.jikan.moe/v4/top/anime";
+  const API = "api/jikan_proxy.php";
   const norm = (v) => (v || "").toString().toLowerCase().replace(/\s+/g, " ").trim();
   const fixText = (s) => {
     return (s || "")
@@ -317,8 +317,8 @@
     grid.innerHTML = "<p class=\"text-zinc-400\">Cargando destacados...</p>";
     try {
       const [resAnime, resMovie] = await Promise.all([
-        fetch(`${API}?filter=bypopularity&limit=20`),
-        fetch(`${API}?filter=bypopularity&type=movie&limit=20`)
+        fetch(`${API}?endpoint=${encodeURIComponent('top/anime?filter=bypopularity&limit=20')}`),
+        fetch(`${API}?endpoint=${encodeURIComponent('top/anime?filter=bypopularity&type=movie&limit=20')}`)
       ]);
       if (!resAnime.ok || !resMovie.ok) {
         grid.innerHTML = "<p class=\"text-red-400\">No se pudieron cargar destacados.</p>";

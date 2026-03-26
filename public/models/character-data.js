@@ -1,12 +1,12 @@
 (() => {
-  const API = "https://api.jikan.moe/v4";
+  const API = "api/jikan_proxy.php";
   const qp = new URLSearchParams(location.search);
   const animeId = qp.get("anime_id");
   const charId = qp.get("char_id");
 
   const init = async () => {
     if (!animeId || !charId) return;
-    const res = await fetch(`${API}/anime/${animeId}/characters`);
+    const res = await fetch(`${API}?endpoint=${encodeURIComponent('anime/' + animeId + '/characters')}`);
     if (!res.ok) return;
     const json = await res.json();
     const ch = (json?.data || []).find((x) => String(x?.character?.mal_id) === String(charId));

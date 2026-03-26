@@ -3,6 +3,8 @@
   const suggestCache = new Map();
   const hasJapaneseChars = (v) => /[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff]/.test(v || "");
 
+  let originalTitleText = "";
+
   const normalize = (value) =>
     (value || "")
       .toString()
@@ -39,17 +41,79 @@
     return h ? h.textContent : "";
   };
 
+  const saveOriginalCardState = (card) => {
+    if (card.dataset.stateSaved === "1") return;
+    card.dataset.stateSaved = "1";
+    const img = card.querySelector("img");
+    if (img) card.dataset.originalSrc = img.src;
+    const titleEl = card.querySelector("h3,h4,h5");
+    if (titleEl) card.dataset.originalTitle = titleEl.textContent;
+    const link = card.closest("a") || card.querySelector("a");
+    if (link) card.dataset.originalHref = link.href;
+    card.dataset.originalMalId = card.getAttribute("data-mal-id") || "";
+  };
+
+  const restoreOriginalCardState = (card) => {
+    if (card.dataset.stateSaved !== "1") return;
+    const img = card.querySelector("img");
+    if (img && card.dataset.originalSrc) img.src = card.dataset.originalSrc;
+    const titleEl = card.querySelector("h3,h4,h5");
+    if (titleEl && card.dataset.originalTitle) titleEl.textContent = card.dataset.originalTitle;
+    const link = card.closest("a") || card.querySelector("a");
+    if (link && card.dataset.originalHref) link.href = card.dataset.originalHref;
+    if (card.dataset.originalMalId) {
+      card.setAttribute("data-mal-id", card.dataset.originalMalId);
+    } else {
+      card.removeAttribute("data-mal-id");
+    }
+  };
+
+  const updateUrl = (term) => {
+    const url = new URL(window.location.href);
+    if (term.trim()) {
+      url.searchParams.set("q", term.trim());
+    } else {
+      url.searchParams.delete("q");
+    }
+    window.history.replaceState({}, "", url);
+  };
+
   const applyFilter = (term) => {
     const cards = Array.from(document.querySelectorAll("[data-anime-card]"));
     if (!cards.length) return false;
     const q = normalize(term);
     let shown = 0;
+
+    const isSearching = !!term.trim();
+    if (window.AniDexLoadMore) {
+      if (isSearching) window.AniDexLoadMore.hide();
+      else window.AniDexLoadMore.show();
+    }
+    updateUrl(term);
+
     cards.forEach((card) => {
-      const title = normalize(getCardTitle(card));
-      const match = !q || title.includes(q);
-      card.style.display = match ? "" : "none";
-      if (match) shown += 1;
+      saveOriginalCardState(card);
+      if (!isSearching) {
+        restoreOriginalCardState(card);
+        card.style.display = "";
+        shown += 1;
+      } else {
+        const title = normalize(getCardTitle(card));
+        const match = title.includes(q);
+        card.style.display = match ? "" : "none";
+        if (match) shown += 1;
+      }
     });
+
+    const target = document.querySelector("h1, h2");
+    if (target) {
+      if (!term.trim()) {
+        if (originalTitleText) target.textContent = originalTitleText;
+      } else {
+        target.textContent = `Resultados para: ${term}`;
+      }
+    }
+
     return shown > 0;
   };
 
@@ -105,6 +169,7 @@
     const cards = Array.from(document.querySelectorAll("[data-anime-card]"));
     if (!cards.length || !items.length) return false;
     cards.forEach((card, idx) => {
+      saveOriginalCardState(card);
       const item = items[idx];
       if (!item) {
         card.style.display = "none";
@@ -139,6 +204,12 @@
         card.removeAttribute("data-year");
         card.removeAttribute("data-year-original");
       }
+
+      // FIX: Actualizar el enlace para redireccionar correctamente
+      const cardLink = card.closest("a") || card.querySelector("a") || (card.tagName === "A" ? card : null);
+      if (cardLink && item?.mal_id) {
+        cardLink.href = `detail.php?mal_id=${item.mal_id}`;
+      }
       const yearEl = card.querySelector("[data-card-year]");
       if (HIDE_CARD_YEARS) {
         if (yearEl) yearEl.remove();
@@ -153,9 +224,13 @@
         p.insertAdjacentElement("afterend", span);
       }
     });
-    if (query) {
-      const target = document.querySelector("h1, h2");
-      if (target) target.textContent = `Resultados para: ${query}`;
+    const target = document.querySelector("h1, h2");
+    if (target) {
+      if (query) {
+        target.textContent = `Resultados para: ${query}`;
+      } else if (originalTitleText) {
+        target.textContent = originalTitleText;
+      }
     }
     return true;
   };
@@ -239,7 +314,8 @@
           image: img,
           titleEn: "",
           titleJp: "",
-          mediaType: card.getAttribute("data-type") || "Anime"
+          mediaType: card.getAttribute("data-type") || "Anime",
+          malId: card.getAttribute("data-mal-id") || null
         });
       });
       return out.slice(0, API_SUGGEST_LIMIT);
@@ -265,6 +341,7 @@
             titleEn: english,
             titleJp: "",
             mediaType: item?.type || "",
+            malId: item?.mal_id || null,
             image:
               item?.images?.webp?.image_url ||
               item?.images?.jpg?.image_url ||
@@ -306,7 +383,8 @@
       const api = (await fetchApiSuggestions(query)).map((x) => ({
         title: x.title,
         aliases: [x.title, x.titleEn].filter(Boolean),
-        mediaType: x.mediaType || ""
+        mediaType: x.mediaType || "",
+        malId: x.malId || null
       }));
 
       const pool = [...local, ...api];
@@ -328,7 +406,8 @@
 
       return {
         title: bestScore >= 55 ? bestTitle : query,
-        mediaType: bestType
+        mediaType: bestType,
+        malId: bestScore >= 55 ? (pool.find(p => p.title === bestTitle)?.malId || null) : null
       };
     };
 
@@ -372,7 +451,11 @@
         btn.addEventListener("click", () => {
           input.value = it.title;
           closeBox();
-          goToSearchPage(it.title, pageForType(it.mediaType));
+          if (it.malId) {
+            window.location.href = `detail.php?mal_id=${it.malId}`;
+          } else {
+            goToSearchPage(it.title, pageForType(it.mediaType));
+          }
         });
         b.appendChild(btn);
       });
@@ -441,10 +524,18 @@
       if (hasCards) {
         const ok = applyFilter(resolvedTerm);
         if (!ok) {
-          goToSearchPage(resolvedTerm, pageForType(resolved.mediaType));
+          if (resolved.malId) {
+            window.location.href = `detail.php?mal_id=${resolved.malId}`;
+          } else {
+            goToSearchPage(resolvedTerm, pageForType(resolved.mediaType));
+          }
         }
       } else {
-        goToSearchPage(resolvedTerm, pageForType(resolved.mediaType));
+        if (resolved.malId) {
+          window.location.href = `detail.php?mal_id=${resolved.malId}`;
+        } else {
+          goToSearchPage(resolvedTerm, pageForType(resolved.mediaType));
+        }
       }
     });
   };
@@ -455,9 +546,22 @@
     navInputs.forEach(bindInput);
 
     const filterInput = document.getElementById("filter-search");
+    const target = document.querySelector("h1, h2");
+    if (target && !originalTitleText) {
+      const current = target.textContent.trim();
+      if (!current.includes("Resultados para:")) {
+        originalTitleText = current;
+      } else {
+        // Fallback based on page
+        originalTitleText = window.location.pathname.includes("peliculas") ? "Películas" : "Descubrimiento";
+      }
+    }
+
     if (filterInput) {
       filterInput.dataset.noSuggest = "1";
-      filterInput.addEventListener("input", () => applyFilter(filterInput.value));
+      const handleFilter = () => applyFilter(filterInput.value);
+      filterInput.addEventListener("input", handleFilter);
+      filterInput.addEventListener("search", handleFilter);
     }
 
     const params = new URLSearchParams(window.location.search);

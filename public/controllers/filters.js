@@ -1,5 +1,5 @@
 (function () {
-  const GENRE_OPTIONS = [
+  const GENRE_OPTIONS = window.DB_GENRES || [
     "Acci\u00f3n",
     "Aventura",
     "Comedia",
@@ -30,12 +30,6 @@
     "Supervivencia",
     "Tragedia",
     "Recuentos de vida",
-    "Gore",
-    "Ecchi",
-    "Harem",
-    "Reverse Harem",
-    "Yaoi",
-    "Yuri",
     "Parodia",
     "Samur\u00e1i",
     "Cyberpunk",
@@ -113,12 +107,6 @@
     "supervivencia": "Supervivencia",
     "tragedy": "Tragedia",
     "tragedia": "Tragedia",
-    "gore": "Gore",
-    "ecchi": "Ecchi",
-    "harem": "Harem",
-    "reverse harem": "Reverse Harem",
-    "yaoi": "Yaoi",
-    "yuri": "Yuri",
     "parody": "Parodia",
     "parodia": "Parodia",
     "samurai": "Samur\u00e1i",
@@ -530,6 +518,21 @@
       applyRuntimeCardData(cards);
     }
 
+    const grid = cards[0]?.parentElement || null;
+    let emptyBox = null;
+
+    const state = {
+      search: "",
+      genres: new Set(),
+      years: new Set(),
+      types: new Set(),
+      statuses: new Set(),
+      sort: "popularity_desc",
+      isFetchingGlobal: false
+    };
+
+    const hideCardYears = /series\.php|peliculas\.php/i.test(window.location.pathname || "");
+
     const available = {
       genres: new Set(),
       years: new Set(),
@@ -808,28 +811,6 @@
     }
 
 
-
-    const state = {
-
-      search: "",
-
-      genres: new Set(),
-
-      years: new Set(),
-
-      types: new Set(),
-
-      statuses: new Set(),
-
-      sort: "popularity_desc"
-
-    };
-
-    const hideCardYears = /series\.php|peliculas\.php/i.test(window.location.pathname || "");
-
-    const grid = cards[0]?.parentElement || null;
-
-    let emptyBox = null;
 
     const stripYearFromMeta = (card) => {
 
@@ -1340,6 +1321,36 @@
 
       toggleEmptyState(visible.length);
 
+      // FALLBACK: Si no hay resultados locales y hay texto de búsqueda, buscar en Jikan
+      if (visible.length === 0 && q && q.length > 2) {
+        if (!state.isFetchingGlobal) {
+          state.isFetchingGlobal = true;
+          const isMoviesPage = window.location.pathname.toLowerCase().includes("peliculas");
+          const mediaType = isMoviesPage ? "movie" : "tv";
+          
+          if (emptyBox) {
+            const msg = emptyBox.querySelector("p");
+            if (msg) msg.textContent = "Buscando en el catálogo global...";
+          }
+
+          fetch(`api/jikan_proxy.php?endpoint=${encodeURIComponent(`anime?q=${encodeURIComponent(state.search)}&type=${mediaType}&limit=12&order_by=popularity&sort=asc`)}`)
+            .then(r => r.ok ? r.json() : null)
+            .then(json => {
+              state.isFetchingGlobal = false;
+              if (json && json.data && json.data.length > 0) {
+                hydrateCardsWithResults(json.data, mediaType);
+              } else {
+                 if (emptyBox && emptyBox.querySelector("p")) {
+                   emptyBox.querySelector("p").textContent = "No se encontraron resultados en el catálogo global.";
+                 }
+              }
+            })
+            .catch(() => {
+              state.isFetchingGlobal = false;
+            });
+        }
+      }
+
       const filtersActive =
 
         state.search ||
@@ -1397,7 +1408,97 @@
       if (n.includes("retras")) return "Retrasada";
       return v || (isMoviesPage ? "Finalizada" : "Finalizado");
     }
+    function hydrateCardsWithResults(items, mediaType) {
+      const grid = document.querySelector("section[aria-label='Grid de anime']");
+      if (!grid || !items || !items.length) return;
 
+      const cards = gatherCards();
+      cards.forEach(c => c.style.display = "none");
+
+      items.forEach((item, idx) => {
+        let card = cards[idx];
+        const isNew = !card;
+
+        const title = item.title_english || item.title || "Anime";
+        const img = item.images?.webp?.large_image_url || item.images?.jpg?.large_image_url || "";
+        const year = item.year || (item.aired?.prop?.from?.year) || "";
+        const score = item.score || item.scored || 0;
+        const genres = (item.genres || []).map(g => g.name || "").join(", ");
+
+        if (isNew) {
+          card = document.createElement("article");
+          card.className = "group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]";
+          card.dataset.animeCard = "1";
+          card.innerHTML = `
+            <a class="block" href="#" aria-label="">
+              <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
+                <img alt="" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="" loading="lazy"/>
+                <span data-card-year="1" class="absolute left-3 top-3 rounded-full bg-surface/90 px-4 py-1.5 text-sm font-bold text-on-surface shadow-lg"></span>
+                <span class="anidex-score-badge absolute top-3 right-3 bg-surface-container-lowest/80 backdrop-blur px-2 py-1 rounded text-xs gap-1 font-bold text-primary flex items-center shadow-lg">
+                  <span class="material-symbols-outlined text-[10px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                  <span>--</span>
+                </span>
+              </div>
+              <div class="space-y-2 mt-2">
+                <h3 class="font-headline text-lg font-bold text-on-surface truncate"></h3>
+              </div>
+            </a>
+          `;
+          grid.appendChild(card);
+        }
+
+        card.dataset.title = normalize(title);
+        card.dataset.genres = genres;
+        card.dataset.year = String(year);
+        card.style.display = "";
+
+        const titleEl = card.querySelector("h3,h4,h5");
+        if (titleEl) titleEl.textContent = title;
+
+        const imgEl = card.querySelector("img");
+        if (imgEl) imgEl.src = img;
+
+        const yearEl = card.querySelector("[data-card-year]") || card.querySelector("span.absolute");
+        if (yearEl) {
+          yearEl.textContent = String(year);
+          yearEl.style.display = year ? "" : "none";
+        }
+
+        const scoreEl = card.querySelector(".anidex-score-badge span:last-child");
+        if (scoreEl) scoreEl.textContent = score ? Number(score).toFixed(1) : "--";
+
+        const link = card.closest("a") || card.querySelector("a") || card.querySelector("a");
+        if (link) {
+          link.href = `detail.php?mal_id=${item.mal_id}&q=${encodeURIComponent(title)}`;
+          link.ariaLabel = title;
+        }
+      });
+
+      toggleEmptyState(items.length);
+      updateHeaderCount(items.length);
+
+      // Re-apply styles needed for movies page if applicable
+      const isMoviesPage = window.location.pathname.toLowerCase().includes("peliculas");
+      if (isMoviesPage) {
+        items.forEach((item, idx) => {
+           let card = cards[idx] || grid.children[grid.children.length - items.length + idx];
+           const badge = card.querySelector("span.absolute.left-3");
+           if (badge) {
+             badge.classList.remove("top-3");
+              badge.classList.add("bottom-3", "px-4", "py-1.5", "text-sm", "bg-surface/90", "shadow-lg");
+           }
+           const scoreBadge = card.querySelector(".anidex-score-badge");
+           if (scoreBadge) {
+             scoreBadge.classList.replace("px-2", "px-2.5");
+             scoreBadge.classList.replace("py-1", "py-1.5");
+             scoreBadge.classList.replace("rounded", "rounded-lg");
+             scoreBadge.classList.add("text-sm", "gap-1.5");
+             const star = scoreBadge.querySelector(".material-symbols-outlined");
+             if (star) star.style.fontSize = "14px";
+           }
+        });
+      }
+    }
 
 
     function sortAndRepaint(visible) {
@@ -1577,10 +1678,8 @@
     }
 
     const type = host.dataset.rankingType || "anime";
-    const endpoint =
-      type === "movie"
-        ? "https://api.jikan.moe/v4/top/anime?type=movie&limit=5"
-        : "https://api.jikan.moe/v4/top/anime?type=tv&limit=5";
+    const jikanEndpoint = type === "movie" ? "top/anime?type=movie&limit=5" : "top/anime?type=tv&limit=5";
+    const endpoint = `api/jikan_proxy.php?endpoint=${encodeURIComponent(jikanEndpoint)}`;
 
     host.innerHTML = `<div class="text-xs text-on-surface-variant">Cargando ranking...</div>`;
 
@@ -1721,11 +1820,18 @@
       article.dataset.year = String(year || "");
       article.dataset.type = overrides.type;
       article.dataset.status = overrides.status;
+      const score = item.score || item.scored || "";
       article.innerHTML = `
         <a class="block" href="${hrefId}" aria-label="${title}">
           <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
             ${img ? `<img alt="${title}" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="${img}" loading="lazy"/>` : ""}
-            ${year ? `<span class="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs font-bold text-on-surface">${year}</span>` : ""}
+            ${year ? `<span class="absolute left-3 ${isMoviesPage ? 'bottom-3 px-4 py-1.5 text-sm' : 'top-3 px-3 py-1 text-xs'} rounded-full bg-surface/80 font-bold text-on-surface">${year}</span>` : ""}
+            ${score ? `
+              <span class="anidex-score-badge absolute top-3 right-3 bg-surface-container-lowest/80 backdrop-blur ${isMoviesPage ? 'px-2.5 py-1.5 rounded-lg text-sm gap-1.5' : 'px-2 py-1 rounded text-xs gap-1'} font-bold text-primary flex items-center shadow-lg">
+                <span class="material-symbols-outlined text-[${isMoviesPage ? '14px' : '10px'}]" style="font-variation-settings: 'FILL' 1;">star</span>
+                <span>${Number(score).toFixed(1)}</span>
+              </span>
+            ` : ""}
           </div>
           <div class="space-y-2 mt-2">
             <h3 class="font-headline text-lg font-bold text-on-surface truncate">${title}</h3>
@@ -1742,12 +1848,13 @@
         .catch(() => null);
 
     if (!isMoviesPage) {
+      const proxy = "api/jikan_proxy.php?endpoint=";
       const tasks = [
-        { url: "https://api.jikan.moe/v4/anime?type=ova&order_by=score&sort=desc&limit=1", type: "OVA", status: "Finalizado" },
-        { url: "https://api.jikan.moe/v4/anime?type=special&order_by=score&sort=desc&limit=1", type: "Especiales", status: "Finalizado" },
-        { url: "https://api.jikan.moe/v4/anime?status=airing&type=tv&order_by=score&sort=desc&limit=1", type: "Serie de TV", status: "En emisin" },
-        { url: "https://api.jikan.moe/v4/anime?status=upcoming&type=tv&order_by=score&sort=desc&limit=1", type: "Serie de TV", status: "Prximamente" },
-        { url: "https://api.jikan.moe/v4/anime?status=cancelled&order_by=score&sort=desc&limit=1", type: "Serie de TV", status: "Cancelado" },
+        { url: proxy + encodeURIComponent("anime?type=ova&order_by=score&sort=desc&limit=1"), type: "OVA", status: "Finalizado" },
+        { url: proxy + encodeURIComponent("anime?type=special&order_by=score&sort=desc&limit=1"), type: "Especiales", status: "Finalizado" },
+        { url: proxy + encodeURIComponent("anime?status=airing&type=tv&order_by=score&sort=desc&limit=1"), type: "Serie de TV", status: "En emisin" },
+        { url: proxy + encodeURIComponent("anime?status=upcoming&type=tv&order_by=score&sort=desc&limit=1"), type: "Serie de TV", status: "Prximamente" },
+        { url: proxy + encodeURIComponent("anime?status=cancelled&order_by=score&sort=desc&limit=1"), type: "Serie de TV", status: "Cancelado" },
       ];
       return Promise.all(tasks.map((t) => fetchOne(t.url).then((item) => ({ item, t }))))
         .then((results) => {
@@ -1766,7 +1873,7 @@
       { status: "Cancelada", type: "Secuela" },
       { status: "Retrasada", type: "Spin-off" },
     ];
-    return fetch("https://api.jikan.moe/v4/top/anime?type=movie&limit=10", { cache: "no-store" })
+    return fetch("api/jikan_proxy.php?endpoint=" + encodeURIComponent("top/anime?type=movie&limit=10"), { cache: "no-store" })
       .then((res) => (res && res.ok ? res.json() : null))
       .then((json) => (json && Array.isArray(json.data) ? json.data : []))
       .then((items) => {

@@ -266,7 +266,7 @@ const AniDexDetailDataBoot = () => {
     const isPremium = localStorage.getItem("nekora_premium") === "true";
     const canWatchEpisodes = isLogged && isPremium;
     const params = new URLSearchParams(location.search);
-    const query = params.get("q") || document.querySelector("h1")?.textContent?.trim() || "Solo Leveling";
+    const query = params.get("q") || document.querySelector("h1")?.textContent?.trim() || "";
     const malIdParam = params.get("mal_id");
     const preTitle = params.get("q");
     if (preTitle && document.querySelector("h1")) {
@@ -286,14 +286,19 @@ const AniDexDetailDataBoot = () => {
         selectedId = Number(malIdParam);
         if (selectedId) full = await byId(selectedId, "full");
       }
-      if (!full) {
+      if (!full && query) {
         const found = await pickTitle(query);
-        if (!found?.mal_id) return;
-        selectedId = found.mal_id;
-        full = await byId(selectedId, "full");
+        if (found) {
+          selectedId = found.mal_id;
+          full = await byId(selectedId, "full");
+        }
       }
     }
     if (!full) return;
+
+    // Defer saving until sub-data (chars, vids, pics) is ready
+
+
     try {
       const mapKey = "anidex_title_id_map_v1";
       const mapRaw = localStorage.getItem(mapKey);
@@ -309,9 +314,23 @@ const AniDexDetailDataBoot = () => {
       addMap(preTitle);
       localStorage.setItem(mapKey, JSON.stringify(map));
     } catch {}
-    const chars = isLocal ? [] : ((await byId(selectedId, "characters")) || []);
-    const vids = isLocal ? {} : ((await byId(selectedId, "videos")) || {});
-    const pics = isLocal ? [] : ((await byId(selectedId, "pictures")) || []);
+    const chars = (isLocal && full.characters && full.characters.length > 0) ? full.characters : ((await byId(selectedId, "characters")) || []);
+    const vids = (isLocal && full.videos && (full.videos.promo?.length > 0)) ? full.videos : ((await byId(selectedId, "videos")) || {});
+    const pics = (isLocal && full.pictures && full.pictures.length > 0) ? full.pictures : ((await byId(selectedId, "pictures")) || []);
+
+    if (!isLocal && full && full.mal_id) {
+      const deepData = {
+        ...full,
+        characters: chars,
+        videos: vids,
+        pictures: pics
+      };
+      fetch("api/save_anime.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(deepData)
+      }).catch(() => {});
+    }
     const forceTitles = [
       "Jujutsu Kaisen: Shimetsu Kaiyuu - Zenpen"
     ];
@@ -1250,9 +1269,7 @@ const AniDexDetailDataBoot = () => {
       charsRow.innerHTML = topChars.map((c, idx) => {
         const cleanName = (c.character?.name || "Personaje").replace(/,/g, "");
         const roleLabel = /main/i.test(c?.role || "") ? "principal" : "secundario";
-        const fallbackMini = roleLabel === "principal"
-          ? `${cleanName} es un personaje clave que impulsa la historia.`
-          : `${cleanName} es un personaje secundario que apoya la historia.`;
+        const fallbackMini = "Cargando biografía...";
         const desc = fallbackMini;
         const charId = c.character?.mal_id || "";
         const charImg = c.character?.images?.jpg?.image_url || "";
@@ -1263,9 +1280,45 @@ const AniDexDetailDataBoot = () => {
           </div>
           <span class="text-sm font-bold break-words whitespace-normal">${cleanName}</span>
           <span class="text-[11px] font-semibold text-primary-dim">${roleLabel}</span>
-          <span data-char-mini class="text-xs text-on-surface-variant leading-snug break-words whitespace-normal">${desc}</span>
+          <span data-char-mini="${charId}" class="text-xs text-on-surface-variant leading-snug break-words whitespace-normal">${desc}</span>
         </div>`;
       }).join("");
+
+      const charsToLoad = topChars.slice(0, 10);
+      const loadBios = async () => {
+         for (const c of charsToLoad) {
+            const charId = c.character?.mal_id;
+            const cardMini = document.body.querySelector(`[data-char-mini="${charId}"]`);
+            if (!charId || !cardMini) continue;
+            try {
+               const r = await fetch(`${API}?endpoint=${encodeURIComponent('characters/' + charId + '/full')}`);
+               if (r.status === 429) { await delay(1500); continue; }
+               if (r.ok) {
+                  const j = await r.json();
+                  const rawAbout = (j?.data?.about || "").replace(/\\n/g, " ").replace(/\r\n/g, " ").trim();
+                  if (!rawAbout) {
+                      cardMini.textContent = "Sin descripción biográfica resgistrada.";
+                      await delay(350);
+                      continue; 
+                  }
+                  const miniSummary = await getMiniSummary(rawAbout);
+                  if (!miniSummary) {
+                      cardMini.textContent = "Sin descripción biográfica resgistrada.";
+                      await delay(350);
+                      continue; 
+                  }
+                  cardMini.textContent = miniSummary;
+               } else {
+                  cardMini.textContent = "Sin descripción biográfica registrada.";
+               }
+               await delay(450);
+            } catch {
+               cardMini.textContent = "Error de conexión temporal.";
+            }
+         }
+      };
+      // Fire the background queue asynchronously
+      loadBios();
       const prev = document.getElementById("chars-prev");
       const next = document.getElementById("chars-next");
       bindHorizontalArrows(charsRow, prev, next, 5);
@@ -1312,7 +1365,7 @@ const AniDexDetailDataBoot = () => {
         for (const s of sentences) {
           if (isPhysical(s)) continue;
           const w = s.split(" ").filter(Boolean);
-          if (w.length >= 6 && w.length <= 24) {
+          if (w.length >= 5 && w.length <= 18) {
             chosen = s;
             break;
           }
@@ -1367,6 +1420,7 @@ const AniDexDetailDataBoot = () => {
       const closeCharacterModal = () => {
         const modal = document.getElementById("detail-character-modal");
         if (modal) modal.classList.add("hidden");
+        document.body.style.overflow = "";
       };
 
       const openCharacterModal = async (card) => {
@@ -1377,30 +1431,28 @@ const AniDexDetailDataBoot = () => {
         const infoEl = modal.querySelector("[data-char-info]");
         const fieldsWrap = modal.querySelector("[data-char-fields-wrap]");
         const fieldsEl = modal.querySelector("[data-char-fields]");
+        
         const charId = card.getAttribute("data-char-id");
         const charName = card.getAttribute("data-char-name") || "Personaje";
         const charRole = card.getAttribute("data-char-role") || "";
         const charImg = card.getAttribute("data-char-img") || "";
+        const miniFromCard = card.querySelector("[data-char-mini]")?.textContent?.trim() || "";
+
         if (nameEl) nameEl.textContent = charName;
         if (roleEl) roleEl.textContent = charRole ? `Rol: ${charRole}` : "Rol";
         if (imgEl && charImg) imgEl.src = charImg;
-        const miniFromCard = card.querySelector("[data-char-mini]")?.textContent?.trim() || "";
-        if (infoEl) infoEl.textContent = miniFromCard || "";
+        if (infoEl) infoEl.textContent = miniFromCard; 
+        
         if (fieldsWrap) fieldsWrap.classList.add("hidden");
         if (fieldsEl) fieldsEl.innerHTML = "";
         modal.classList.remove("hidden");
+        document.body.style.overflow = "hidden";
 
-        if (!charId) {
-          if (infoEl) infoEl.textContent = miniFromCard || "";
-          return;
-        }
+        if (!charId) return;
+        
         if (characterCache.has(charId)) {
           const cached = characterCache.get(charId);
           if (cached.full) {
-            if (infoEl) {
-              const cachedMini = cached.miniSummary || "";
-              infoEl.textContent = cachedMini || miniFromCard || "";
-            }
             if (imgEl && cached.img) imgEl.src = cached.img;
             if (fieldsEl) fieldsEl.innerHTML = cached.fieldsHtml || "";
             if (fieldsWrap) {
@@ -1410,15 +1462,14 @@ const AniDexDetailDataBoot = () => {
             return;
           }
           if (imgEl && cached.img) imgEl.src = cached.img;
-          if (infoEl && cached.miniSummary) infoEl.textContent = cached.miniSummary;
         }
+
         try {
           const res = await fetch(`${API}?endpoint=${encodeURIComponent('characters/' + charId + '/full')}`);
           if (!res.ok) throw new Error("fetch failed");
           const json = await res.json();
           const data = json?.data || {};
-          const aboutRaw = (data?.about || "").trim();
-          const aboutClean = aboutRaw ? aboutRaw.replace(/\s+/g, " ").trim() : "";
+          
           const fieldMap = {
             "Birthday": "Cumpleaños",
             "Height": "Altura"
@@ -1443,11 +1494,12 @@ const AniDexDetailDataBoot = () => {
             if (fields.some((f) => f.label === label)) return;
             fields.push({ label, value: clean });
           };
-          addField("Cumpleaños", data?.birthday);
-          addField("Altura", data?.height);
+          // addField("Cumpleaños", data?.birthday);
+          // addField("Altura", data?.height);
           if (typeof data?.favorites === "number") {
-            addField("Popularidad", ` ${data.favorites} favoritos`);
+             addField("Popularidad", ` ${data.favorites} favoritos`);
           }
+          
           const voices = Array.isArray(data?.voices) ? data.voices : [];
           const voiceNames = (lang) =>
             voices
@@ -1459,15 +1511,7 @@ const AniDexDetailDataBoot = () => {
           const voiceEs = voiceNames("spanish") || voiceNames("español");
           addField("Doblaje japonés", voiceJp);
           addField("Doblaje español", voiceEs);
-          let aboutStripped = aboutClean;
-          Object.keys(fieldMap).forEach((key) => {
-            const re = new RegExp(`${key}\\s*:\\s*([^\\.\\n]+)`, "i");
-            const match = aboutStripped.match(re);
-            if (match) {
-              addField(fieldMap[key], match[1].trim());
-              aboutStripped = aboutStripped.replace(match[0], "").trim();
-            }
-          });
+
           const escapeHtml = (value) =>
             (value || "").replace(/[&<>"']/g, (ch) => ({
               "&": "&amp;",
@@ -1476,6 +1520,7 @@ const AniDexDetailDataBoot = () => {
               '"': "&quot;",
               "'": "&#39;"
             }[ch]));
+
           const noTranslateLabels = new Set(["Doblaje japonés", "Doblaje español"]);
           const translateValue = async (label, value) => {
             if (!value) return value;
@@ -1487,8 +1532,7 @@ const AniDexDetailDataBoot = () => {
               return value;
             }
           };
-          const miniSummary = await getMiniSummary(aboutClean);
-          const aboutHtml = miniSummary ? `<p>${escapeHtml(miniSummary)}</p>` : "";
+
           const fieldsHtml = fields.length
             ? (await Promise.all(
                 fields.map(async (f) => {
@@ -1502,16 +1546,14 @@ const AniDexDetailDataBoot = () => {
             data?.images?.jpg?.image_url ||
             charImg ||
             "";
-          characterCache.set(charId, { aboutHtml, fieldsHtml, img, miniSummary, full: true });
-          if (infoEl) infoEl.innerHTML = aboutHtml || (miniFromCard ? `<p>${escapeHtml(miniFromCard)}</p>` : "");
+
+          characterCache.set(charId, { fieldsHtml, img, full: true });
           if (imgEl && img) imgEl.src = img;
           if (fieldsEl) fieldsEl.innerHTML = fieldsHtml;
           if (fieldsWrap) {
             if (fieldsHtml) fieldsWrap.classList.remove("hidden");
             else fieldsWrap.classList.add("hidden");
           }
-          const miniEl = card.querySelector("[data-char-mini]");
-          if (miniEl && miniSummary) miniEl.textContent = miniSummary;
         } catch {
           if (infoEl) infoEl.textContent = miniFromCard || "";
         }
