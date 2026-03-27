@@ -49,7 +49,7 @@ $jikanData = [
         ]
     ],
     'genres' => [],
-    'studios' => [['name' => 'Local']]
+    'studios' => []
 ];
 
 $genreStmt = $dbConn->prepare("

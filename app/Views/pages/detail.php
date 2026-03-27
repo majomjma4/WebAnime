@@ -1,5 +1,8 @@
+<?php
+session_start();
+$isLoggedIn = isset($_SESSION['user_id']);
+?>
 <!DOCTYPE html>
-
 <html class="dark" lang="en"><head>
     <script data-ui-preload>document.documentElement.classList.add("preload-ui");</script>
     <style>
@@ -240,15 +243,18 @@
             </div>
             <div class="flex flex-wrap gap-4 pt-2 items-center">
               <a data-add-my-list class="px-8 py-3.5 bg-transparent border border-sky-400/40 text-on-surface font-bold rounded-full hover:border-sky-400/70 hover:bg-surface-container-high transition-all flex items-center gap-2 shadow-[0_0_14px_rgba(56,189,248,0.25)] hover:shadow-[0_0_22px_rgba(56,189,248,0.45)]" href="user.php"><span class="material-symbols-outlined">add</span><span data-add-label>Añadir a Mi Lista</span></a>
-              <button data-add-favorite class="group w-12 h-12 p-0 bg-transparent border border-rose-400/40 text-on-surface-variant rounded-full hover:border-rose-400/70 hover:bg-surface-container-high transition-all flex items-center justify-center relative shadow-[0_0_14px_rgba(244,63,94,0.3)] hover:shadow-[0_0_22px_rgba(244,63,94,0.55)]" type="button"><span class="material-symbols-outlined text-[20px]">favoritos</span><span data-fav-label class="pointer-events-none absolute left-1/2 top-full mt-2 -translate-x-1/2 whitespace-nowrap rounded-full bg-surface-container-high px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-on-surface opacity-0 transition-opacity duration-200 group-hover:opacity-100">Agregar a Favoritos</span></button>
-              <button data-detail-status="completed" class="group w-12 h-12 p-0 bg-transparent border border-emerald-400/40 text-on-surface-variant rounded-full hover:border-emerald-400/70 hover:bg-surface-container-high transition-all flex items-center justify-center relative shadow-[0_0_14px_rgba(16,185,129,0.3)] hover:shadow-[0_0_22px_rgba(16,185,129,0.55)]" type="button">
+<?php if ($isLoggedIn): ?>
+              <button data-add-favorite class="hidden group w-12 h-12 p-0 bg-transparent border border-rose-400/40 text-on-surface-variant rounded-full hover:border-rose-400/70 hover:bg-surface-container-high transition-all flex items-center justify-center relative shadow-[0_0_14px_rgba(244,63,94,0.3)] hover:shadow-[0_0_22px_rgba(244,63,94,0.55)]" type="button"><span class="material-symbols-outlined text-[20px]">favorite</span><span data-fav-label class="pointer-events-none absolute left-1/2 top-full mt-2 -translate-x-1/2 whitespace-nowrap rounded-full bg-surface-container-high px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-on-surface opacity-0 transition-opacity duration-200 group-hover:opacity-100">Agregar a Favoritos</span></button>
+              <button data-detail-status="completed" class="hidden group w-12 h-12 p-0 bg-transparent border border-emerald-400/40 text-on-surface-variant rounded-full hover:border-emerald-400/70 hover:bg-surface-container-high transition-all flex items-center justify-center relative shadow-[0_0_14px_rgba(16,185,129,0.3)] hover:shadow-[0_0_22px_rgba(16,185,129,0.55)]" type="button">
                 <span class="material-symbols-outlined text-[20px]">check_circle</span>
                 <span data-detail-status-label class="pointer-events-none absolute left-1/2 top-full mt-2 -translate-x-1/2 whitespace-nowrap rounded-full bg-surface-container-high px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-on-surface opacity-0 transition-opacity duration-200 group-hover:opacity-100">Completado</span>
               </button>
-              <button data-detail-status="pending" class="group w-12 h-12 p-0 bg-transparent border border-amber-400/40 text-on-surface-variant rounded-full hover:border-amber-400/70 hover:bg-surface-container-high transition-all flex items-center justify-center relative shadow-[0_0_14px_rgba(251,191,36,0.3)] hover:shadow-[0_0_22px_rgba(251,191,36,0.55)]" type="button">
+              <button data-detail-status="pending" class="hidden group w-12 h-12 p-0 bg-transparent border border-amber-400/40 text-on-surface-variant rounded-full hover:border-amber-400/70 hover:bg-surface-container-high transition-all flex items-center justify-center relative shadow-[0_0_14px_rgba(251,191,36,0.3)] hover:shadow-[0_0_22px_rgba(251,191,36,0.55)]" type="button">
                 <span class="material-symbols-outlined text-[20px]">schedule</span>
                 <span data-detail-status-label class="pointer-events-none absolute left-1/2 top-full mt-2 -translate-x-1/2 whitespace-nowrap rounded-full bg-surface-container-high px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-on-surface opacity-0 transition-opacity duration-200 group-hover:opacity-100">Pendiente</span>
               </button>
+<?php
+endif; ?>
             </div>
           </div>
         </div>
@@ -377,6 +383,7 @@
           </div>
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-[1.1fr,0.9fr] gap-8">
+<?php if ($isLoggedIn): ?>
           <form id="comment-form" class="rounded-3xl border border-white/10 bg-surface-container-low/60 p-6 md:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.4)] space-y-6">
             <div>
               <h3 class="font-headline text-2xl font-bold">Deja tu comentario</h3>
@@ -419,6 +426,16 @@
               <span class="text-xs text-on-surface-variant">Tu opinión ayuda a la comunidad.</span>
             </div>
           </form>
+<?php
+else: ?>
+          <div class="rounded-3xl border border-white/10 bg-surface-container-low/60 p-6 md:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.4)] flex flex-col items-center justify-center text-center space-y-4">
+            <span class="material-symbols-outlined text-[48px] text-on-surface-variant/70">lock</span>
+            <h3 class="font-headline text-xl font-bold">Inicia sesión para comentar</h3>
+            <p class="text-sm text-on-surface-variant">Únete a la comunidad de WebAnime para calificar títulos y compartir tu opinión con otros otakus.</p>
+            <a href="registro.php" class="rounded-full bg-primary/20 border border-primary/40 text-primary-dim px-8 py-2.5 font-bold uppercase tracking-widest hover:bg-primary hover:text-on-primary transition-all shadow-[0_0_15px_rgba(139,92,246,0.3)] mt-2">Crear Cuenta o Ingresar</a>
+          </div>
+<?php
+endif; ?>
           <div class="rounded-3xl border border-white/10 bg-surface-container-low/60 p-6 md:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.4)] space-y-4">
             <div class="flex items-center justify-between">
               <h3 class="font-headline text-2xl font-bold">Opiniones recientes</h3>
@@ -467,7 +484,7 @@
     </main>
     <!-- Footer Component -->
     <div data-layout="footer"></div>
-    <script src="controllers/layout.js"></script>
+    <script src="controllers/layout.js?v=final5"></script>
     <script src="controllers/i18n.js"></script>
     <script src="controllers/title-images.js?v=3"></script>
     <script src="controllers/search.js"></script>
@@ -505,8 +522,25 @@
     const starsWrap = document.getElementById("rating-stars");
     const ratingValue = document.getElementById("rating-value");
     const submitBtn = document.getElementById("comment-submit");
-    const isLogged = localStorage.getItem("nekora_logged_in") === "true";
-    const isPremium = localStorage.getItem("nekora_premium") === "true";
+    const isLogged = window.AniDexLayout ? window.AniDexLayout.isLoggedIn() : (localStorage.getItem("nekora_logged_in") === "true");
+    const isPremium = window.AniDexLayout ? (window.AniDexLayout.getRole() === "Premium" || window.AniDexLayout.getRole() === "Admin") : (localStorage.getItem("nekora_user") === "Admin99" || localStorage.getItem("nekora_premium") === "true");
+
+    // Registrar vista de anime
+    const logActivity = async (action, extraData = {}) => {
+      if (!isLogged) return;
+      const malId = new URLSearchParams(window.location.search).get("mal_id") || new URLSearchParams(window.location.search).get("id");
+      try {
+        await fetch("api/activity.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action, anime_id: malId, ...extraData })
+        });
+      } catch (e) { console.error("Error logging activity:", e); }
+    };
+
+    // Log view on load
+    logActivity("view");
+
     const canComment = isLogged && isPremium;
     if (!form || !textarea || !list || !total || !ratingValue) return;
 
@@ -541,18 +575,11 @@
         submitBtn.classList.add("opacity-50", "pointer-events-none");
       }
     }
-    const myListBtn = document.querySelector("[data-add-my-list]");
-    const favoriteBtn = document.querySelector("[data-add-favorite]");
+    const myListBtns = document.querySelectorAll("[data-add-my-list]");
+    const favoriteBtns = document.querySelectorAll("[data-add-favorite]");
     const statusBtns = document.querySelectorAll("[data-detail-status]");
     if (!isLogged) {
-      if (myListBtn) {
-        myListBtn.setAttribute("href", "registro.php");
-        myListBtn.addEventListener("click", (e) => {
-          e.preventDefault();
-          window.location.href = "registro.php";
-        });
-      }
-      if (favoriteBtn) favoriteBtn.classList.add("hidden");
+      favoriteBtns.forEach((btn) => btn.classList.add("hidden"));
       statusBtns.forEach((btn) => btn.classList.add("hidden"));
     }
     if (filterSelect) {
@@ -832,8 +859,9 @@
       });
     }
     if (reportSubmit) {
-      reportSubmit.addEventListener("click", () => {
-        if (!reportTargetButton) return;
+        const reason = reportModal.querySelector("input[name='report-reason']:checked")?.value || "Otro";
+        logActivity("report", { message: `Reporte de comentario: ${reason}` });
+        
         reportTargetButton.innerHTML = '<span class="material-symbols-outlined text-[14px]">flag</span><span>Reportado</span>';
         reportTargetButton.classList.add("text-rose-300");
         reportTargetButton.classList.remove("text-sky-200");
@@ -906,13 +934,15 @@
       }
       if (error) error.classList.add("hidden");
       const items = loadComments();
-      items.unshift({
+      const newComment = {
         text,
         rating,
         author: getProfileName(),
         date: new Date().toLocaleDateString("es-ES", { day: "2-digit", month: "short", year: "numeric" })
-      });
+      };
+      items.unshift(newComment);
       saveComments(items);
+      logActivity("comment", { details: `Valoración: ${rating} estrellas. Comentario: ${text.slice(0, 50)}...` });
       textarea.value = "";
       setRating(0);
       updateCount();

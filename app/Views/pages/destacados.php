@@ -6,6 +6,74 @@
     <link rel="icon" href="img/icon3.png" />
     <title>NekoraList - Destacados</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary-dim": "#c0adff",
+              "primary-fixed-dim": "#dacdff",
+              "background": "#0e0e0e",
+              "on-background": "#e7e5e4",
+              "surface-bright": "#2c2c2c",
+              "on-surface-variant": "#acabaa",
+              "tertiary-dim": "#cecfef",
+              "on-tertiary-container": "#4c4e68",
+              "on-secondary-fixed-variant": "#5d5b5f",
+              "on-tertiary-fixed-variant": "#565873",
+              "inverse-surface": "#fcf8f8",
+              "error-container": "#7f2737",
+              "on-primary": "#4800bf",
+              "on-secondary-fixed": "#403e42",
+              "on-error-container": "#ff97a3",
+              "surface-container-highest": "#252626",
+              "on-surface": "#e7e5e4",
+              "outline": "#767575",
+              "on-error": "#490013",
+              "tertiary-fixed": "#ddddfe",
+              "surface-container-lowest": "#000000",
+              "surface-tint": "#cdbdff",
+              "surface": "#0e0e0e",
+              "tertiary-container": "#ddddfe",
+              "surface-variant": "#252626",
+              "inverse-on-surface": "#565554",
+              "inverse-primary": "#6834eb",
+              "surface-container-high": "#1f2020",
+              "primary-container": "#4f00d0",
+              "primary": "#cdbdff",
+              "secondary-fixed": "#e6e1e6",
+              "on-primary-fixed-variant": "#652fe7",
+              "outline-variant": "#484848",
+              "on-secondary-container": "#c2bec3",
+              "on-tertiary-fixed": "#3a3c55",
+              "secondary-dim": "#a09da1",
+              "secondary-container": "#3c3b3e",
+              "error": "#ec7c8a",
+              "on-primary-container": "#d6c9ff",
+              "tertiary": "#edecff",
+              "surface-container-low": "#131313",
+              "surface-container": "#191a1a",
+              "secondary-fixed-dim": "#d8d3d8",
+              "surface-dim": "#0e0e0e",
+              "on-tertiary": "#555671",
+              "on-secondary": "#211f23",
+              "tertiary-fixed-dim": "#cecfef",
+              "error-dim": "#b95463",
+              "secondary": "#a09da1",
+              "primary-fixed": "#e8deff",
+              "on-primary-fixed": "#4700bd"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     <style>
@@ -360,7 +428,7 @@
     </main>
     <!-- Footer Component -->
     <div data-layout="footer"></div>
-    <script src="controllers/layout.js"></script>
+    <script src="controllers/layout.js?v=final5"></script>
     <script src="controllers/i18n.js"></script>
     <script src="controllers/search.js"></script>
     <script src="controllers/detail-links.js"></script>

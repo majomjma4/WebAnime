@@ -619,7 +619,7 @@
     validateForm(false);
   });
 </script>
-<script src="controllers/layout.js"></script>
+<script src="controllers/layout.js?v=final5"></script>
 <script src="controllers/i18n.js"></script>
 <script src="controllers/search.js"></script>
 </body></html>

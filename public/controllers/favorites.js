@@ -6,11 +6,33 @@
   const pathName = window.location.pathname.toLowerCase();
   const isDetailPage = pathName.includes("detail");
   const isIndexPage = pathName.endsWith("/index.php") || pathName.endsWith("index.php") || pathName === "/" || pathName === "";
-  const isLoggedIn = localStorage.getItem("nekora_logged_in") === "true";
+  const getIsLoggedIn = () => {
+    if (window.AniDexLayout && typeof window.AniDexLayout.isLoggedIn === "function") {
+      return window.AniDexLayout.isLoggedIn();
+    }
+    return localStorage.getItem("nekora_logged_in") === "true";
+  };
+  
+  const isLoggedIn = () => getIsLoggedIn();
 
   const readKey = (k) => {
     try { return JSON.parse(localStorage.getItem(k) || "[]"); }
     catch { return []; }
+  };
+  
+  const logActivity = async (action, item, details = "") => {
+    if (!isLoggedIn()) return;
+    try {
+      await fetch("api/activity.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          action, 
+          anime_id: item.mal_id || "", 
+          details: `${details} (Anime: ${item.title})` 
+        })
+      });
+    } catch (e) { console.error("Error logging activity:", e); }
   };
   const writeKey = (k, v) => localStorage.setItem(k, JSON.stringify(v));
   const upsert = (key, item) => {
@@ -188,9 +210,19 @@
   const refreshDetailStatusButtons = () => {
     const buttons = document.querySelectorAll("[data-detail-status]");
     if (!buttons.length) return;
+
+    // HIDE FOR GUESTS
+    if (!isLoggedIn) {
+      buttons.forEach(btn => btn.classList.add("hidden"));
+      return;
+    }
+
     const title = getButtonTitle(buttons[0]) || detectFromPage()?.title || "";
     const current = getStatusForTitle(title);
-    buttons.forEach((btn) => applyDetailStatusState(btn, current));
+    buttons.forEach((btn) => {
+      btn.classList.remove("hidden");
+      applyDetailStatusState(btn, current);
+    });
   };
 
   const bindDetailStatusButtons = () => {
@@ -206,6 +238,7 @@
         const next = current === kind ? "" : kind;
         syncStatusEverywhere(item, next);
         refreshDetailStatusButtons();
+        logActivity("status_update", item, `Cambio de estado a: ${next || 'Ninguno'}`);
       });
     });
   };
@@ -294,18 +327,25 @@
   };
 
   const refreshMyListButtonState = (btn) => {
-    if (!isLoggedIn && (isDetailPage || isIndexPage)) {
+    if (!isLoggedIn()) {
+      btn.classList.remove("hidden");
       setMyListDefaultState(btn);
       return;
     }
     const t = getButtonTitle(btn);
     if (!t) return;
+    btn.classList.remove("hidden");
     if (exists(KEY_MY_LIST, t)) setMyListAddedState(btn);
     else setMyListDefaultState(btn);
   };
-  const refreshFavoriteButtonState = (btn) => {
+   const refreshFavoriteButtonState = (btn) => {
+    if (!isLoggedIn()) {
+      btn.classList.add("hidden");
+      return;
+    }
     const t = getButtonTitle(btn);
     if (!t) return;
+    btn.classList.remove("hidden");
     if (exists(KEY_FAVORITES, t)) setFavoriteAddedState(btn);
     else setFavoriteDefaultState(btn);
   };
@@ -314,14 +354,16 @@
     document.querySelectorAll("[data-add-my-list]").forEach((btn) => {
       if (btn.dataset.boundMyList === "1") return;
       btn.dataset.boundMyList = "1";
-      if (!isLoggedIn && (isDetailPage || isIndexPage)) {
-        setMyListDefaultState(btn);
+      
+      if (!isLoggedIn()) {
+        btn.classList.remove("hidden");
         btn.addEventListener("click", (e) => {
           e.preventDefault();
           window.location.href = "registro.php";
         });
         return;
       }
+      
       refreshMyListButtonState(btn);
       btn.addEventListener("click", (e) => {
         e.preventDefault();
@@ -330,9 +372,11 @@
         if (exists(KEY_MY_LIST, item.title)) {
           remove(KEY_MY_LIST, item.title);
           setMyListDefaultState(btn);
+          logActivity("list_remove", item, "Eliminado de Mi Lista");
         } else {
           upsert(KEY_MY_LIST, item);
           setMyListAddedState(btn);
+          logActivity("list_add", item, "Agregado a Mi Lista");
         }
       });
     });
@@ -342,6 +386,12 @@
     document.querySelectorAll("[data-add-favorite]").forEach((btn) => {
       if (btn.dataset.boundFav === "1") return;
       btn.dataset.boundFav = "1";
+      
+      if (!isLoggedIn()) {
+        btn.classList.add("hidden");
+        return;
+      }
+      
       refreshFavoriteButtonState(btn);
       btn.addEventListener("click", (e) => {
         e.preventDefault();
@@ -350,9 +400,11 @@
         if (exists(KEY_FAVORITES, item.title)) {
           remove(KEY_FAVORITES, item.title);
           setFavoriteDefaultState(btn);
+          logActivity("favorite_remove", item, "Eliminado de Favoritos");
         } else {
           upsert(KEY_FAVORITES, item);
           setFavoriteAddedState(btn);
+          logActivity("favorite_add", item, "Agregado a Favoritos");
         }
       });
     });
@@ -681,19 +733,27 @@
 
   window.AniDexFavorites = {
     init() {
-      migrateStatusFromLists();
-      bindMyListButtons();
-      bindFavoriteButtons();
-      bindDetailStatusButtons();
-      renderUserMyList();
-      renderUserFavorites();
-      renderStatusSections();
-      updateStatusCounters();
-      setTimeout(() => {
-        document.querySelectorAll("[data-add-my-list]").forEach(refreshMyListButtonState);
-        document.querySelectorAll("[data-add-favorite]").forEach(refreshFavoriteButtonState);
-        refreshDetailStatusButtons();
-      }, 700);
+      const start = () => {
+        migrateStatusFromLists();
+        bindMyListButtons();
+        bindFavoriteButtons();
+        bindDetailStatusButtons();
+        renderUserMyList();
+        renderUserFavorites();
+        renderStatusSections();
+        updateStatusCounters();
+        setTimeout(() => {
+          document.querySelectorAll("[data-add-my-list]").forEach(refreshMyListButtonState);
+          document.querySelectorAll("[data-add-favorite]").forEach(refreshFavoriteButtonState);
+          refreshDetailStatusButtons();
+        }, 300);
+      };
+
+      if (window.AniDexLayout && typeof window.AniDexLayout.onReady === "function") {
+        window.AniDexLayout.onReady(start);
+      } else {
+        start();
+      }
     },
     refresh() {
       document.querySelectorAll("[data-add-my-list]").forEach(refreshMyListButtonState);

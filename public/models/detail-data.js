@@ -281,6 +281,21 @@ const AniDexDetailDataBoot = () => {
       full = localData;
       selectedId = full.mal_id;
       isLocal = true;
+      
+      // COMPLEMENT: If local data is sparse, fetch full Jikan info to fill gaps
+      const needsComplement = !full.studios?.length || !full.genres?.length || (full.synopsis || "").length < 50;
+      if (needsComplement && selectedId) {
+        const jikanFull = await byId(selectedId, "full");
+        if (jikanFull) {
+            if (!full.studios?.length && jikanFull.studios?.length) full.studios = jikanFull.studios;
+            if (!full.genres?.length && jikanFull.genres?.length) full.genres = jikanFull.genres;
+            if ((!full.synopsis || full.synopsis.length < 50) && jikanFull.synopsis) full.synopsis = jikanFull.synopsis;
+            if (!full.duration && jikanFull.duration) full.duration = jikanFull.duration;
+            if (!full.rating && jikanFull.rating) full.rating = jikanFull.rating;
+            if (!full.rank && jikanFull.rank) full.rank = jikanFull.rank;
+            if (!full.score && jikanFull.score) full.score = jikanFull.score;
+        }
+      }
     } else {
       if (malIdParam) {
         selectedId = Number(malIdParam);

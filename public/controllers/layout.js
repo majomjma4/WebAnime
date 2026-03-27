@@ -47,7 +47,7 @@
     if (!headerTargets.length && !footerTargets.length) return;
 
     const basePath = window.location.pathname.includes("/views/") ? "../" : "";
-    const res = await fetch(`${basePath}partials/layout.php`, { cache: "no-store" });
+    const res = await fetch(`${basePath}partials/layout.php?v=final2`, { cache: "no-store", credentials: "same-origin" });
     if (!res.ok) {
       throw new Error("No se pudo cargar partials/layout.php");
     }
@@ -57,6 +57,13 @@
     container.innerHTML = html;
 
     injectLayoutStyles(container);
+
+    // Inyectar todos los templates en el body para que los scripts puedan encontrarlos
+    container.querySelectorAll("template").forEach((tpl) => {
+      if (tpl.id && !document.getElementById(tpl.id)) {
+        document.body.appendChild(tpl.cloneNode(true));
+      }
+    });
 
     const headerTpl = container.querySelector("#layout-header");
     const footerTpl = container.querySelector("#layout-footer");
@@ -118,27 +125,63 @@
     return `NekoraUser_${getOrCreateUserSuffix()}`;
   }
 
+  let authState = { logged: false, username: "", role: "Invitado", isAdmin: false };
+
+  async function checkAuth() {
+    try {
+      const res = await fetch("api/auth.php?action=check", { cache: "no-store", credentials: "same-origin" });
+      if (!res.ok) throw new Error("HTTP error " + res.status);
+      authState = await res.json();
+      // Sync legacy localStorage
+      if (authState.logged) {
+        localStorage.setItem("nekora_logged_in", "true");
+        localStorage.setItem("nekora_user", authState.username);
+        if (authState.isAdmin) localStorage.setItem("nekora_admin", "true");
+        localStorage.setItem("anidex_profile_name", authState.username);
+      } else {
+        localStorage.removeItem("nekora_logged_in");
+        localStorage.removeItem("nekora_admin");
+        localStorage.removeItem("anidex_profile_name");
+      }
+    } catch (e) {
+      console.error("Auth check failed:", e);
+      authState = { logged: false, username: "", role: "Invitado", isAdmin: false };
+      localStorage.removeItem("nekora_logged_in");
+      localStorage.removeItem("nekora_admin");
+      localStorage.removeItem("anidex_profile_name");
+    }
+    return authState;
+  }
+
   function isLoggedIn() {
-    return localStorage.getItem("nekora_logged_in") === "true";
+    return authState.logged;
   }
 
   function isAdmin() {
-    return (
-      localStorage.getItem("nekora_admin") === "true" &&
-      localStorage.getItem("nekora_user") === "Admin99"
-    );
+    return authState.isAdmin;
   }
 
-  function setupGuestMenu() {
-    const favLink = document.querySelector("[data-favorites-link]");
+  function getRole() {
+    return authState.role || "Invitado";
+  }
+
+  async function setupProfileMenu() {
     const profileBtn = document.querySelector("[data-profile-trigger]");
     const guestMenu = document.querySelector("[data-guest-menu]");
     const nameEls = document.querySelectorAll("[data-profile-name]");
     const logged = isLoggedIn();
+    const role = getRole();
 
-    if (favLink) favLink.classList.toggle("hidden", !logged);
-    if (guestMenu) guestMenu.classList.add("hidden");
-    nameEls.forEach((el) => { el.textContent = getGuestName(); });
+    nameEls.forEach((el) => { 
+        el.textContent = logged ? authState.username : getGuestName(); 
+    });
+
+    if (logged) {
+      // Si está logueado, eliminar el menú de invitado y redirigir directamente
+      if (guestMenu) {
+        guestMenu.remove();
+      }
+    }
 
     if (profileBtn && !profileBtn.dataset.bound) {
       profileBtn.dataset.bound = "1";
@@ -148,16 +191,18 @@
           return;
         }
         e.preventDefault();
-        if (!guestMenu) return;
-        const isOpen = !guestMenu.classList.contains("hidden");
-        guestMenu.classList.toggle("hidden", isOpen);
+        const menu = document.querySelector("[data-guest-menu]");
+        if (!menu) return;
+        const isOpen = !menu.classList.contains("hidden");
+        menu.classList.toggle("hidden", isOpen);
         profileBtn.setAttribute("aria-expanded", isOpen ? "false" : "true");
       });
       document.addEventListener("click", (e) => {
         if (isLoggedIn()) return;
-        if (!guestMenu || guestMenu.classList.contains("hidden")) return;
-        if (profileBtn.contains(e.target) || guestMenu.contains(e.target)) return;
-        guestMenu.classList.add("hidden");
+        const menu = document.querySelector("[data-guest-menu]");
+        if (!menu || menu.classList.contains("hidden")) return;
+        if (profileBtn.contains(e.target) || menu.contains(e.target)) return;
+        menu.classList.add("hidden");
         profileBtn.setAttribute("aria-expanded", "false");
       });
     }
@@ -221,7 +266,7 @@
         });
       }
     } catch {}
-    setupGuestMenu();
+    setupProfileMenu();
     isReady = true;
     while (readyCallbacks.length) {
       const fn = readyCallbacks.shift();
@@ -234,9 +279,9 @@
     initI18nWhenReady();
     initSearchWhenReady();
   }
-
   async function initLayout() {
     try {
+      await checkAuth();
       await loadLayout();
     } catch (err) {
       console.warn("No se pudo cargar header/footer:", err);
@@ -256,7 +301,13 @@
     requestAnimationFrame(forceScrollTop);
   });
 
-  window.AniDexLayout = { onReady };
+  window.AniDexLayout = { 
+    onReady,
+    isLoggedIn,
+    isAdmin,
+    getRole,
+    get authState() { return authState; }
+  };
 })();
 
 

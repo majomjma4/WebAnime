@@ -167,7 +167,7 @@
               <input id="login-pass" name="login-pass" class="w-full bg-surface-container-lowest border-none rounded-xl py-4 pl-12 pr-4 text-on-surface placeholder:text-on-surface-variant/60 focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="••••••••" type="password" required autocomplete="new-password" />
             </div>
             <div class="flex justify-end">
-              <a class="text-xs text-primary-dim hover:text-primary transition-colors" href="#">¿Olvidaste tu contraseña?</a>
+              <a class="text-xs text-primary-dim hover:text-primary transition-colors cursor-pointer" id="btn-forgot-password" tabindex="0">¿Olvidaste tu contraseña?</a>
             </div>
           </div>
           <button class="w-full bg-gradient-to-br from-primary to-primary-container text-on-primary py-4 rounded-full font-headline font-bold text-lg hover:scale-[1.02] active:scale-95 transition-all duration-300 shadow-lg shadow-primary/20" type="submit">
@@ -196,7 +196,7 @@
       })();
     </script>
 
-    <script src="controllers/layout.js"></script>
+    <script src="controllers/layout.js?v=final5"></script>
     <div id="login-success" class="fixed inset-0 z-[80] hidden">
       <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
       <div class="relative mx-auto mt-[20vh] w-[92%] max-w-md rounded-2xl bg-surface-container-high/90 border border-violet-500/30 p-6 shadow-2xl text-center overflow-hidden">
@@ -208,18 +208,99 @@
           ¡Bienvenido de nuevo, <span id="login-name">Usuario</span>!
         </h3>
         <p id="login-subtitle" class="text-white/80 text-sm leading-relaxed mt-4">
-          Tu colección de animes te estaba esperando. ÃƒÂ¢Ã‚Â­Ã‚Â
-        </p  (function () {
+          Tu colección de animes te estaba esperando. 🌟
+        </p>
+      </div>
+    </div>
+    <div id="auth-error" class="fixed inset-0 z-[80] hidden">
+      <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+      <div class="relative mx-auto mt-[20vh] w-[92%] max-w-md rounded-2xl bg-surface-container-high/95 border border-error/30 p-8 shadow-2xl text-center overflow-hidden">
+        <span class="pointer-events-none absolute -top-20 -right-16 h-40 w-40 rounded-full bg-error/10 blur-3xl"></span>
+        <button type="button" id="error-close" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant hover:text-on-surface flex items-center justify-center">
+          <span class="material-symbols-outlined text-base">close</span>
+        </button>
+        <div class="w-16 h-16 bg-error/10 text-error rounded-full flex items-center justify-center mx-auto mb-4 border border-error/20">
+          <span class="material-symbols-outlined text-3xl">warning</span>
+        </div>
+        <h3 class="font-headline text-xl font-extrabold text-error italic uppercase tracking-wider">¡Ups! Algo salió mal</h3>
+        <p id="error-message" class="text-on-surface-variant text-sm mt-3 leading-relaxed"></p>
+        <button type="button" id="error-btn" class="mt-6 w-full py-3 rounded-full bg-surface-container-low border border-white/5 text-on-surface font-bold text-sm hover:bg-surface-container-highest transition-colors uppercase tracking-widest">Aceptar</button>
+      </div>
+    </div>
+
+    <div id="forgot-password-modal" class="fixed inset-0 z-[80] hidden">
+      <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" id="forgot-bg"></div>
+      <div class="relative mx-auto mt-[20vh] w-[92%] max-w-md rounded-2xl bg-surface-container-high/95 border border-primary/30 p-8 shadow-2xl text-center overflow-hidden">
+        <span class="pointer-events-none absolute -top-20 -right-16 h-40 w-40 rounded-full bg-primary/10 blur-3xl"></span>
+        <button type="button" id="forgot-close" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant hover:text-on-surface flex items-center justify-center">
+          <span class="material-symbols-outlined text-base">close</span>
+        </button>
+        <div class="w-16 h-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-4 border border-primary/20">
+          <span class="material-symbols-outlined text-3xl">mark_email_read</span>
+        </div>
+        <h3 class="font-headline text-xl font-extrabold text-white tracking-wider">Recuperar Contraseña</h3>
+        <p class="text-on-surface-variant text-sm mt-3 leading-relaxed">Ingresa tu correo o usuario y te enviaremos las instrucciones para restablecer tu acceso.</p>
+        <form id="forgot-form" class="mt-6 flex flex-col gap-4" autocomplete="off">
+          <input id="forgot-user" class="w-full bg-surface-container-lowest border border-white/10 rounded-xl py-3 px-4 text-on-surface placeholder:text-on-surface-variant/60 focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="nombre@ejemplo.com" type="text" required />
+          <button type="submit" id="forgot-btn" class="w-full py-3 rounded-full bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold text-sm hover:scale-[1.02] active:scale-95 transition-all shadow-lg shadow-primary/20 uppercase tracking-widest">Enviar enlace</button>
+        </form>
+      </div>
+    </div>
+    
+    <div id="forgot-success" class="fixed inset-0 z-[80] hidden">
+      <div class="absolute inset-0 bg-black/70 backdrop-blur-sm shadow-2xl"></div>
+      <div class="relative mx-auto mt-[20vh] w-[92%] max-w-md rounded-2xl bg-surface-container-high/95 border border-emerald-500/30 p-8 shadow-2xl text-center overflow-hidden">
+        <span class="pointer-events-none absolute -top-20 -right-16 h-40 w-40 rounded-full bg-emerald-500/10 blur-3xl"></span>
+        <button type="button" id="forgot-success-close" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant hover:text-on-surface flex items-center justify-center">
+          <span class="material-symbols-outlined text-base">close</span>
+        </button>
+        <div class="w-16 h-16 bg-emerald-500/10 text-emerald-400 rounded-full flex items-center justify-center mx-auto mb-4 border border-emerald-500/20">
+          <span class="material-symbols-outlined text-3xl">check_circle</span>
+        </div>
+        <h3 class="font-headline text-xl font-extrabold text-emerald-400 tracking-wider">¡Correo enviado!</h3>
+        <p class="text-on-surface-variant text-sm mt-3 leading-relaxed">Se ha enviado un mensaje al correo asociado a tu cuenta con las instrucciones para restablecer tu contraseña.</p>
+        <button type="button" id="forgot-success-btn" class="mt-6 w-full py-3 rounded-full bg-surface-container-low border border-white/5 text-on-surface font-bold text-sm hover:bg-surface-container-highest transition-colors uppercase tracking-widest">Aceptar</button>
+      </div>
+    </div>
+    
+
+    <script>
+  (function () {
     const form = document.getElementById("login-form");
     const modal = document.getElementById("login-success");
+    const errModal = document.getElementById("auth-error");
+    const errMsg = document.getElementById("error-message");
     const nameEl = document.getElementById("login-name");
     const nameInput = document.getElementById("login-user");
     const titleEl = document.getElementById("login-title");
     const subtitleEl = document.getElementById("login-subtitle");
     const passInput = document.getElementById("login-pass");
     const closeBtn = document.getElementById("login-close");
+    const errClose = document.getElementById("error-close");
+    const errBtn = document.getElementById("error-btn");
     
+    const forgotLink = document.getElementById("btn-forgot-password");
+    const forgotModal = document.getElementById("forgot-password-modal");
+    const forgotClose = document.getElementById("forgot-close");
+    const forgotBg = document.getElementById("forgot-bg");
+    const forgotForm = document.getElementById("forgot-form");
+    const forgotSuccess = document.getElementById("forgot-success");
+    const forgotSuccessClose = document.getElementById("forgot-success-close");
+    const forgotSuccessBtn = document.getElementById("forgot-success-btn");
+
     if (!form) return;
+
+    const showError = (msg) => {
+      if (errMsg) errMsg.textContent = msg;
+      if (errModal) errModal.classList.remove("hidden");
+    };
+
+    const hideError = () => {
+      if (errModal) errModal.classList.add("hidden");
+    };
+
+    if (errClose) errClose.addEventListener("click", hideError);
+    if (errBtn) errBtn.addEventListener("click", hideError);
     
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -235,6 +316,7 @@
       try {
         const res = await fetch('api/auth.php?action=login', {
           method: 'POST',
+          credentials: 'same-origin',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ userOrEmail: userOrEmail, password: pass })
         });
@@ -272,10 +354,10 @@
             
             if (modal) modal.classList.remove("hidden");
         } else {
-            alert('Error: ' + data.error);
+            showError(data.error || 'Credenciales incorrectas');
         }
       } catch (err) {
-        alert('Error de red u error interno del servidor.');
+        showError('Error de red u error interno del servidor.');
       } finally {
         btn.innerText = textOrig;
         btn.disabled = false;
@@ -287,9 +369,59 @@
         window.location.href = "index.php";
       });
     }
-  })();indow.location.href = "index.php";
+
+    if (forgotLink && forgotModal) {
+      forgotLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        forgotModal.classList.remove("hidden");
       });
+      const hideForgot = () => {
+        forgotModal.classList.add("hidden");
+        const input = document.getElementById("forgot-user");
+        if (input) input.value = '';
+      };
+      if (forgotClose) forgotClose.addEventListener("click", hideForgot);
+      if (forgotBg) forgotBg.addEventListener("click", hideForgot);
+      
+      if (forgotForm) {
+        forgotForm.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const btn = document.getElementById("forgot-btn");
+          const input = document.getElementById("forgot-user");
+          const origText = btn.innerText;
+          btn.innerText = "Enviando...";
+          btn.disabled = true;
+          
+          try {
+            const res = await fetch('api/auth.php?action=forgot_password', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ userOrEmail: input.value.trim() })
+            });
+            const data = await res.json();
+            
+            // Hide modal and clear input first
+            hideForgot();
+            
+            if (data.success) {
+              if (forgotSuccess) forgotSuccess.classList.remove("hidden");
+            } else {
+              showError(data.error || 'No se pudo procesar la solicitud.');
+            }
+          } catch (err) {
+            hideForgot();
+            showError('Error de conexión al enviar el correo.');
+          } finally {
+            btn.innerText = origText;
+            btn.disabled = false;
+          }
+        });
+      }
     }
+    
+    if (forgotSuccessClose) forgotSuccessClose.addEventListener("click", () => forgotSuccess.classList.add("hidden"));
+    if (forgotSuccessBtn) forgotSuccessBtn.addEventListener("click", () => forgotSuccess.classList.add("hidden"));
+
   })();
     </script>
     <script src="controllers/i18n.js"></script>

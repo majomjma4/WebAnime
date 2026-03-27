@@ -476,7 +476,7 @@
 
       <!-- Footer Component -->
       <div data-layout="footer"></div>
-      <script src="controllers/layout.js"></script>
+      <script src="controllers/layout.js?v=final5"></script>
     </div>
     <script src="controllers/i18n.js"></script>
     <script src="controllers/title-images.js?v=1774473995,33386"></script>

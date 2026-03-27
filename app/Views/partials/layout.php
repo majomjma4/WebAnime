@@ -581,7 +581,7 @@
               />
             </button>
             <div
-              class="absolute right-0 mt-3 hidden w-56 rounded-2xl border border-white/10 bg-surface-container-high p-4 shadow-[0_20px_45px_rgba(0,0,0,0.45)]"
+              class="absolute right-0 mt-3 hidden w-56 rounded-2xl border border-white/10 bg-zinc-900/95 bg-surface-container-high p-4 shadow-[0_20px_45px_rgba(0,0,0,0.45)]"
               data-guest-menu
               role="menu"
             >
@@ -609,6 +609,72 @@
       </div>
     </div>
   </nav>
+</template>
+
+<!-- Logged User Menu Component -->
+<template id="layout-user-menu">
+  <div class="absolute right-0 mt-3 w-64 rounded-2xl border border-white/10 bg-surface-container-high p-4 shadow-[0_20px_45px_rgba(0,0,0,0.45)]" role="menu">
+    <div class="flex items-center gap-3 pb-3 border-b border-white/5">
+      <div class="w-12 h-12 rounded-2xl overflow-hidden border border-violet-500/30">
+        <img alt="Avatar" class="w-full h-full object-cover" data-profile-avatar src="https://upload.wikimedia.org/wikipedia/en/b/bd/Doraemon_character.png" />
+      </div>
+      <div class="min-w-0">
+        <div class="text-sm font-bold text-on-surface truncate" data-profile-name>Usuario</div>
+        <div class="text-[10px] font-bold uppercase tracking-widest text-primary flex items-center gap-1">
+          <span class="material-symbols-outlined text-[12px]" data-role-icon>person</span>
+          <span data-profile-role>Registrado</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="mt-3 flex flex-col gap-1">
+      <div class="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.2em] px-3 py-1">Mi Biblioteca</div>
+      <a href="user.php" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-primary hover:text-white hover:bg-primary/20 transition-all shadow-[0_0_15px_rgba(139,92,246,0.15)] border border-primary/20 bg-primary/10">
+        <span class="material-symbols-outlined text-lg">account_circle</span>
+        Mi Perfil
+      </a>
+      <a href="user.php?tab=favoritos" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all">
+        <span class="material-symbols-outlined text-lg">favorite</span>
+        Favoritos
+      </a>
+      <a href="user.php?tab=lista" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all">
+        <span class="material-symbols-outlined text-lg">format_list_bulleted</span>
+        Mi Lista
+      </a>
+      <a href="user.php?tab=pendientes" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all">
+        <span class="material-symbols-outlined text-lg">schedule</span>
+        Pendientes
+      </a>
+      <a href="user.php?tab=completados" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all">
+        <span class="material-symbols-outlined text-lg">check_circle</span>
+        Completados
+      </a>
+    </div>
+
+    <!-- Secciones Premium/Admin Ocultas por defecto -->
+    <div data-premium-only class="mt-2 pt-2 border-t border-white/5 flex flex-col gap-1 hidden">
+      <div class="text-[10px] font-bold text-amber-400 uppercase tracking-[0.2em] px-3 py-1">Premium Perks</div>
+      <a href="premium.php" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-amber-200 hover:text-white hover:bg-amber-500/10 transition-all">
+        <span class="material-symbols-outlined text-lg">workspace_premium</span>
+        Beneficios Gold
+      </a>
+    </div>
+
+    <div data-admin-only class="mt-2 pt-2 border-t border-white/5 flex flex-col gap-1 hidden">
+      <div class="text-[10px] font-bold text-rose-400 uppercase tracking-[0.2em] px-3 py-1">Administración</div>
+      <a href="admin.php" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-rose-200 hover:text-white hover:bg-rose-500/10 transition-all">
+        <span class="material-symbols-outlined text-lg">admin_panel_settings</span>
+        Panel Admin
+      </a>
+    </div>
+
+    <div class="mt-4 pt-4 border-t border-white/5">
+      <button id="logout-btn" class="w-full flex items-center justify-center gap-2 rounded-xl border border-white/5 bg-white/5 px-4 py-3 text-xs font-bold uppercase tracking-widest text-on-surface-variant hover:text-error hover:border-error/30 hover:bg-error/5 transition-all">
+        <span class="material-symbols-outlined text-sm">logout</span>
+        Cerrar Sesión
+      </button>
+    </div>
+  </div>
 </template>
 
 <!-- Footer Component -->
@@ -659,6 +725,7 @@
     </div>
   </footer>
 </template>
+
 
 
 

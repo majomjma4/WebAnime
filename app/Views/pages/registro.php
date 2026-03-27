@@ -210,7 +210,7 @@
       })();
     </script>
 
-    <script src="controllers/layout.js"></script>
+    <script src="controllers/layout.js?v=final5"></script>
     <div id="register-success" class="fixed inset-0 z-[80] hidden">
       <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
       <div class="relative mx-auto mt-[20vh] w-[92%] max-w-md rounded-2xl bg-surface-container-high/90 border border-violet-500/30 p-6 shadow-2xl text-center overflow-hidden">
@@ -223,20 +223,52 @@
           NekoraList, <span id="register-name">Usuario</span>!
         </h4>
         <p class="text-white/80 text-sm leading-relaxed mt-4">
-          Tu viaje por el mundo del anime comienza ahora. Ã¢Â­Â<br/>
+          Tu viaje por el mundo del anime comienza ahora. 🌟<br/>
           Agrega tus favoritos, organiza tu lista y descubre nuevas aventuras cada día.
         </p>
       </div>
     </div>
+    <div id="auth-error" class="fixed inset-0 z-[80] hidden">
+      <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+      <div class="relative mx-auto mt-[20vh] w-[92%] max-w-md rounded-2xl bg-surface-container-high/95 border border-error/30 p-8 shadow-2xl text-center overflow-hidden">
+        <span class="pointer-events-none absolute -top-20 -right-16 h-40 w-40 rounded-full bg-error/10 blur-3xl"></span>
+        <button type="button" id="error-close" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant hover:text-on-surface flex items-center justify-center">
+          <span class="material-symbols-outlined text-base">close</span>
+        </button>
+        <div class="w-16 h-16 bg-error/10 text-error rounded-full flex items-center justify-center mx-auto mb-4 border border-error/20">
+          <span class="material-symbols-outlined text-3xl">warning</span>
+        </div>
+        <h3 class="font-headline text-xl font-extrabold text-error italic uppercase tracking-wider">¡Ups! Algo salió mal</h3>
+        <p id="error-message" class="text-on-surface-variant text-sm mt-3 leading-relaxed"></p>
+        <button type="button" id="error-btn" class="mt-6 w-full py-3 rounded-full bg-surface-container-low border border-white/5 text-on-surface font-bold text-sm hover:bg-surface-container-highest transition-colors uppercase tracking-widest">Aceptar</button>
+      </div>
+    </div>
+
     <script>
   (function () {
     const form = document.getElementById("register-form");
     const modal = document.getElementById("register-success");
+    const errModal = document.getElementById("auth-error");
+    const errMsg = document.getElementById("error-message");
     const nameEl = document.getElementById("register-name");
     const nameInput = document.getElementById("register-username");
     const closeBtn = document.getElementById("register-close");
+    const errClose = document.getElementById("error-close");
+    const errBtn = document.getElementById("error-btn");
     
     if (!form) return;
+
+    const showError = (msg) => {
+      if (errMsg) errMsg.textContent = msg;
+      if (errModal) errModal.classList.remove("hidden");
+    };
+
+    const hideError = () => {
+      if (errModal) errModal.classList.add("hidden");
+    };
+
+    if (errClose) errClose.addEventListener("click", hideError);
+    if (errBtn) errBtn.addEventListener("click", hideError);
     
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -249,7 +281,7 @@
       const pass = document.getElementById("register-pass");
       const passConfirm = document.getElementById("register-pass-confirm");
       if (pass && passConfirm && pass.value !== passConfirm.value) {
-        alert("Las contraseñas no coinciden.");
+        showError("Las contraseñas no coinciden.");
         btn.innerText = textOrig;
         btn.disabled = false;
         return;
@@ -261,6 +293,7 @@
       try {
         const res = await fetch('api/auth.php?action=register', {
           method: 'POST',
+          credentials: 'same-origin',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ username: name, email: email, password: pass.value })
         });
@@ -277,10 +310,10 @@
             } catch (e) {}
             if (modal) modal.classList.remove("hidden");
         } else {
-            alert('Error: ' + data.error);
+            showError(data.error || 'Error al registrar el usuario.');
         }
       } catch (err) {
-        alert('Error conectando al servidor.');
+        showError('Error conectando al servidor.');
       } finally {
         btn.innerText = textOrig;
         btn.disabled = false;

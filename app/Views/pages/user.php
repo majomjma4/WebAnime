@@ -661,7 +661,7 @@
 
     <!-- Footer Component -->
     <div data-layout="footer"></div>
-    <script src="controllers/layout.js"></script>
+    <script src="controllers/layout.js?v=final5"></script>
     <script src="controllers/i18n.js"></script>
     <script src="controllers/title-images.js?v=3"></script>
     <script src="controllers/search.js"></script>
@@ -1102,6 +1102,62 @@
     // ========================
     // CONTROLLER: Behavior
     // ========================
+    const isLogged = localStorage.getItem("nekora_logged_in") === "true";
+
+    const logActivity = async (action, details = "") => {
+      if (!isLogged) return;
+      try {
+        await fetch("api/activity.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action, details })
+        });
+      } catch (e) { console.error("Error logging activity:", e); }
+    };
+
+    const saveProfileToDB = async () => {
+      if (!isLogged) return;
+      const data = {
+        profile_name: localStorage.getItem("anidex_profile_name") || "",
+        profile_desc: localStorage.getItem("anidex_profile_desc") || "",
+        profile_color: localStorage.getItem("anidex_profile_color") || "",
+        profile_avatar: localStorage.getItem("anidex_profile_avatar") || "",
+        profile_member_since: localStorage.getItem("anidex_profile_member_since") || "",
+        my_list: JSON.parse(localStorage.getItem("anidex_my_list_v1") || "[]"),
+        favorites: JSON.parse(localStorage.getItem("anidex_favorites_v1") || "[]"),
+        status_list: JSON.parse(localStorage.getItem("anidex_status_v1") || "{}")
+      };
+      try {
+        await fetch("api/profile.php?action=save", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+      } catch (e) { console.error("Error saving profile to DB:", e); }
+    };
+
+    const restoreFromDB = async () => {
+      if (!isLogged) return;
+      try {
+        const res = await fetch("api/profile.php?action=get");
+        const json = await res.json();
+        if (json.success && json.data) {
+          const d = json.data;
+          if (d.profile.name) localStorage.setItem("anidex_profile_name", d.profile.name);
+          if (d.profile.desc) localStorage.setItem("anidex_profile_desc", d.profile.desc);
+          if (d.profile.color) localStorage.setItem("anidex_profile_color", d.profile.color);
+          if (d.profile.avatar) localStorage.setItem("anidex_profile_avatar", d.profile.avatar);
+          if (d.profile.member_since) localStorage.setItem("anidex_profile_member_since", d.profile.member_since);
+          
+          localStorage.setItem("anidex_my_list_v1", JSON.stringify(d.my_list || []));
+          localStorage.setItem("anidex_favorites_v1", JSON.stringify(d.favorites || []));
+          localStorage.setItem("anidex_status_v1", JSON.stringify(d.status || {}));
+          
+          loadProfile(); // Recargar UI con datos nuevos
+        }
+      } catch (e) { console.error("Error restoring profile:", e); }
+    };
+
     const loadProfile = () => {
       try {
         const defaultName = `NekoraUser_${getOrCreateUserSuffix()}`;
@@ -1149,6 +1205,12 @@
         pendingPrefs = prefs;
         renderPrefPicker(prefs);
         renderPrefDisplay(prefs);
+        
+        // Si no hay datos locales pero está logueado, intentar restaurar una vez
+        if (isLogged && !savedName && !window.__restoreAttempted) {
+          window.__restoreAttempted = true;
+          restoreFromDB();
+        }
       } catch (e) {}
     };
 
@@ -1237,6 +1299,8 @@
         });
         try { localStorage.setItem("anidex_profile_avatar", pendingAvatar); } catch (e) {}
       }
+      logActivity("profile_update", `Nombre: ${newName}, Descripción: ${newDesc.slice(0, 30)}...`);
+      saveProfileToDB(); // Sync con DB
       closeModal();
     });
 
@@ -1255,8 +1319,20 @@
         colorClass.split(" ").forEach((c) => cardEl.classList.add(c));
         colorOptions.querySelectorAll("[data-color-class]").forEach((b) => b.classList.remove("ring-2", "ring-violet-400"));
         btn.classList.add("ring-2", "ring-violet-400");
-        try { localStorage.setItem("anidex_profile_color", colorClass); } catch (e) {}
+        try { 
+          localStorage.setItem("anidex_profile_color", colorClass); 
+          saveProfileToDB(); 
+        } catch (e) {}
       });
+    }
+
+    // Asegurar que cambios en listas también se guarden
+    const originalSavePrefs = window.savePrefs;
+    if (typeof originalSavePrefs === 'function') {
+        window.savePrefs = (prefs) => {
+            originalSavePrefs(prefs);
+            saveProfileToDB();
+        };
     }
 
     if (prefsWrap) {
@@ -1300,6 +1376,7 @@
             requestToast.classList.remove("flex");
           }, 2200);
         }
+        logActivity("title_request", `Título: ${name}, Tipo: ${requestForm.querySelector("select")?.value || 'Anime'}`);
         if (requestInput) requestInput.value = "";
       });
     }
@@ -1322,7 +1399,7 @@
     const premiumAccessBtn = document.getElementById("premium-access-btn");
     const premiumCancelBtn = document.getElementById("premium-cancel-btn");
     const applyState = () => {
-      const isLogged = localStorage.getItem("nekora_logged_in") === "true";
+      const isLogged = window.AniDexLayout ? window.AniDexLayout.isLoggedIn() : (localStorage.getItem("nekora_logged_in") === "true");
       if (createBtn) createBtn.classList.toggle("hidden", isLogged);
       if (loginBtn) loginBtn.classList.toggle("hidden", isLogged);
       if (logoutBtn) logoutBtn.classList.toggle("hidden", !isLogged);
@@ -1371,16 +1448,20 @@
         }
       }
     };
-    const doLogout = () => {
+    const doLogout = async () => {
+      try {
+        await fetch("api/auth.php?action=logout", { credentials: "same-origin" });
+      } catch (e) { console.error("Logout API failed", e); }
+      
       localStorage.removeItem("nekora_logged_in");
       localStorage.removeItem("nekora_user");
       localStorage.removeItem("nekora_premium");
-        [
-          "anidex_my_list_v1",
-          "anidex_favorites_v1",
-          "anidex_status_v1",
-          "nekora_admin",
-          "anidex_profile_prefs",
+      [
+        "anidex_my_list_v1",
+        "anidex_favorites_v1",
+        "anidex_status_v1",
+        "nekora_admin",
+        "anidex_profile_prefs",
         "anidex_profile_desc",
         "anidex_profile_color",
         "anidex_profile_avatar",
@@ -1390,7 +1471,6 @@
         "anidex_user_id",
         "anidex_user_suffix"
       ].forEach((key) => localStorage.removeItem(key));
-      applyState();
       window.location.href = "index.php";
     };
     const openLogoutModal = () => {
@@ -1412,9 +1492,9 @@
     }
     logoutClose.forEach((el) => el.addEventListener("click", closeLogoutModal));
     if (logoutCancel) logoutCancel.addEventListener("click", closeLogoutModal);
-    if (logoutConfirm) logoutConfirm.addEventListener("click", () => {
+    if (logoutConfirm) logoutConfirm.addEventListener("click", async () => {
       closeLogoutModal();
-      doLogout();
+      await doLogout();
     });
     if (premiumCancelBtn) {
       premiumCancelBtn.addEventListener("click", () => {
@@ -1422,7 +1502,11 @@
         applyState();
       });
     }
-    applyState();
+    if (window.AniDexLayout && typeof window.AniDexLayout.onReady === "function") {
+      window.AniDexLayout.onReady(applyState);
+    } else {
+      applyState();
+    }
   })();
     </script>
     <script>

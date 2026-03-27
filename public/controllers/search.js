@@ -4,6 +4,18 @@
   const hasJapaneseChars = (v) => /[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff]/.test(v || "");
 
   let originalTitleText = "";
+  const isLoggedIn = localStorage.getItem("nekora_logged_in") === "true";
+
+  const logActivity = async (action, details = "") => {
+    if (!isLoggedIn) return;
+    try {
+      await fetch("api/activity.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action, details })
+      });
+    } catch (e) { console.error("Error logging activity:", e); }
+  };
 
   const normalize = (value) =>
     (value || "")
@@ -237,6 +249,7 @@
 
   const goToSearchPage = (term, page = "series.php") => {
     const q = encodeURIComponent(term.trim());
+    logActivity("search", `Búsqueda: ${term.trim()} en ${page}`);
     window.location.href = `${page}?q=${q}`;
   };
   const pageForType = (mediaType) => {
@@ -451,6 +464,7 @@
         btn.addEventListener("click", () => {
           input.value = it.title;
           closeBox();
+          logActivity("search_suggestion_click", `Sugerencia clicada: ${it.title} (ID: ${it.malId})`);
           if (it.malId) {
             window.location.href = `detail.php?mal_id=${it.malId}`;
           } else {

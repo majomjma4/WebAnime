@@ -1,5 +1,7 @@
 <?php
 // Basic bootstrap (autoload + helpers)
+session_name('NekoraSession_V1');
+session_set_cookie_params(['path' => '/']);
 
 // Simple autoload for app classes
 spl_autoload_register(function ($class) {
