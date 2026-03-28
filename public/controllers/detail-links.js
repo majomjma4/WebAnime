@@ -28,11 +28,20 @@
   };
 
   const toDetailUrl = (title) => `detail.php?q=${encodeURIComponent((title || "").trim())}`;
-  const toDetailById = (id, title = "") =>
-    `detail.php?mal_id=${encodeURIComponent(String(id))}${title ? `&q=${encodeURIComponent(title)}` : ""}`;
+  const toDetailById = (malId, title = "", dbId = null) => {
+    let url = `detail.php?`;
+    if (dbId) url += `id=${encodeURIComponent(String(dbId))}&`;
+    if (malId) url += `mal_id=${encodeURIComponent(String(malId))}`;
+    if (title && !malId && !dbId) url += `q=${encodeURIComponent(title)}`;
+    else if (title) url += `&q=${encodeURIComponent(title)}`;
+    return url.replace(/\?$/, "").replace(/&$/, "");
+  };
 
   const wireLinks = () => {
-    document.querySelectorAll('a[href="detail.php"]').forEach((a) => {
+    document.querySelectorAll('a[href*="detail.php"]').forEach((a) => {
+      const url = new URL(a.href, window.location.origin);
+      if (url.searchParams.has("id") || url.searchParams.has("mal_id")) return;
+      
       const malId = a.getAttribute("data-mal-id") || a.closest("[data-mal-id]")?.getAttribute("data-mal-id");
       const t = pickTitleFromCard(a);
       if (malId) {
@@ -51,32 +60,52 @@
       };
     });
 
-    // Handler en vivo: evita href viejos cuando el card cambia dinmicamente.
+    // Handler Universal Interceptor: Unifica clics en <a> y elementos con onclick/data-mal-id
     if (!document.body.dataset.detailLiveBound) {
       document.body.dataset.detailLiveBound = "1";
       document.addEventListener("click", (e) => {
-        const a = e.target.closest("a");
-        if (a) {
-          const href = a.getAttribute("href") || "";
-          if (href.includes("detail.php")) {
+        // 1. Buscar el objetivo (enlace o contenedor con datos)
+        const target = e.target.closest('a[href*="detail.php"], [data-mal-id], [onclick*="detail.php"], [data-anime-card]');
+        if (!target) return;
+
+        // 2. Extraer metadatos del objetivo o sus padres
+        const malId = target.getAttribute("data-mal-id") || target.closest("[data-mal-id]")?.getAttribute("data-mal-id");
+        const title = pickTitleFromCard(target);
+        const href = (target.tagName === 'A' ? target.getAttribute("href") : "") || "";
+        
+        let urlMalId = null;
+        let urlDbId = null;
+        if (href.includes("detail.php")) {
+            try {
+                const u = new URL(target.href, window.location.origin);
+                urlMalId = u.searchParams.get("mal_id");
+                urlDbId = u.searchParams.get("id");
+            } catch(err) {}
+        }
+
+        // 3. NUCLEAR FIX: Si tenemos un malId explícito en el DOM, RE-CONSTRUIMOS la URL
+        // Esto evita que IDs clonados (malIdInUrl != malId) nos lleven al anime equivocado.
+        if (malId || urlMalId || urlDbId) {
+            // Solo dejamos navegar libremente si el mal_id de la URL coincide exactamente con el del card
+            if (urlMalId && malId && urlMalId === malId) {
+                return; // Ya es correcto, dejar navegar
+            }
+
             e.preventDefault();
-            const malId = a.getAttribute("data-mal-id") || a.closest("[data-mal-id]")?.getAttribute("data-mal-id");
-            const title = pickTitleFromCard(a);
-            if (malId) window.location.href = toDetailById(malId, title);
-            else window.location.href = toDetailUrl(title);
-            return;
-          }
+            e.stopPropagation();
+            
+            // Prioridad: malId del DOM > malId de la URL > dbId de la URL
+            const finalMalId = malId || urlMalId;
+            const finalDbId = (!malId || malId === urlMalId) ? urlDbId : null;
+            
+            window.location.href = toDetailById(finalMalId, title, finalDbId);
+        } else if (title && href.includes("detail.php")) {
+            // Fallback por t&iacute;tulo si no hay IDs
+            e.preventDefault();
+            e.stopPropagation();
+            window.location.href = toDetailUrl(title);
         }
-        const node = e.target.closest("[onclick*='detail.php']");
-        if (node) {
-          e.preventDefault();
-          e.stopPropagation();
-          const malId = node.getAttribute("data-mal-id") || node.closest("[data-mal-id]")?.getAttribute("data-mal-id");
-          const title = pickTitleFromCard(node);
-          if (malId) window.location.href = toDetailById(malId, title);
-          else window.location.href = toDetailUrl(title);
-        }
-      });
+      }, true); // Usar captura para interceptar antes que otros scripts
     }
   };
 

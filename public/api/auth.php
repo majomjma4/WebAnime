@@ -77,7 +77,7 @@ if ($action === 'register') {
         exit;
     }
 
-    $stmt = $dbConn->prepare("SELECT id, hash_password, nombre_mostrar FROM usuarios WHERE correo = ? OR nombre_mostrar = ?");
+    $stmt = $dbConn->prepare("SELECT id, hash_password, nombre_mostrar, es_premium, premium_vence_en FROM usuarios WHERE correo = ? OR nombre_mostrar = ?");
     $stmt->execute([$userOrEmail, $userOrEmail]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -86,7 +86,6 @@ if ($action === 'register') {
     } elseif (!password_verify($pass, $user['hash_password'])) {
         echo json_encode(['success' => false, 'error' => 'La contraseña es incorrecta.']);
     } else {
-        // Obtener el rol del usuario directamente de la columna rol_id
         $roleStmt = $dbConn->prepare("
             SELECT nombre 
             FROM roles 
@@ -95,9 +94,12 @@ if ($action === 'register') {
         $roleStmt->execute([$user['id']]);
         $role = $roleStmt->fetchColumn() ?: 'Registrado';
         
+        $isPremium = ($role === 'Admin' || ($user['es_premium'] == 1 && (is_null($user['premium_vence_en']) || strtotime($user['premium_vence_en']) > time())));
+
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['username'] = $user['nombre_mostrar'];
         $_SESSION['role'] = $role;
+        $_SESSION['premium'] = $isPremium;
 
         // Registrar inicio de sesión para tiempo
         $dbConn->prepare("INSERT INTO usuarios_sesiones (usuario_id, inicio) VALUES (?, NOW())")->execute([$user['id']]);
@@ -107,21 +109,50 @@ if ($action === 'register') {
             'success' => true, 
             'username' => $user['nombre_mostrar'], 
             'role' => $role,
-            'isAdmin' => ($role === 'Admin')
+            'isAdmin' => ($role === 'Admin'),
+            'isPremium' => $isPremium
         ]);
     }
 } elseif ($action === 'check') {
     if (isset($_SESSION['user_id'])) {
         $username = $_SESSION['username'] ?? 'Usuario';
         $role = $_SESSION['role'] ?? 'Registrado';
+        
+        // Re-verificar premium desde la DB para estar seguros
+        $stmt = $dbConn->prepare("SELECT es_premium, premium_vence_en FROM usuarios WHERE id = ?");
+        $stmt->execute([$_SESSION['user_id']]);
+        $uInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        $isPremium = ($role === 'Admin' || ($uInfo && $uInfo['es_premium'] == 1 && (is_null($uInfo['premium_vence_en']) || strtotime($uInfo['premium_vence_en']) > time())));
+        $_SESSION['premium'] = $isPremium;
+
         echo json_encode([
             'logged' => true,
             'username' => $username,
             'role' => $role,
-            'isAdmin' => ($role === 'Admin')
+            'isAdmin' => ($role === 'Admin'),
+            'isPremium' => $isPremium
         ]);
     } else {
-        echo json_encode(['logged' => false, 'role' => 'Invitado']);
+        echo json_encode(['logged' => false, 'role' => 'Invitado', 'isPremium' => false]);
+    }
+} elseif ($action === 'buy_premium') {
+    $userId = $_SESSION['user_id'] ?? null;
+    if (!$userId) {
+        echo json_encode(['success' => false, 'error' => 'Debes iniciar sesión para comprar Premium']);
+        exit;
+    }
+
+    try {
+        // Activar premium por 30 días
+        $stmt = $dbConn->prepare("UPDATE usuarios SET es_premium = 1, premium_vence_en = DATE_ADD(NOW(), INTERVAL 30 DAY) WHERE id = ?");
+        $stmt->execute([$userId]);
+        
+        $_SESSION['premium'] = true;
+        
+        echo json_encode(['success' => true, 'message' => '¡Premium activado por 30 días!']);
+    } catch (Exception $e) {
+        echo json_encode(['success' => false, 'error' => $e->getMessage()]);
     }
 } elseif ($action === 'logout') {
     if (isset($_SESSION['session_log_id'])) {

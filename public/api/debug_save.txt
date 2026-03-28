@@ -83,3 +83,11 @@ SUCCESS: inserted 59978 with deep data
 SUCCESS: inserted 30276 with deep data
 SUCCESS: inserted 1535 with deep data
 SUCCESS: inserted 19815 with deep data
+SUCCESS: inserted 49233 with deep data
+SUCCESS: inserted 49233 with deep data
+SUCCESS: inserted 58567 with deep data
+SUCCESS: inserted 34034 with deep data
+SUCCESS: inserted 62841 with deep data
+SUCCESS: inserted 10408 with deep data
+SUCCESS: inserted 33486 with deep data
+SUCCESS: inserted 44087 with deep data

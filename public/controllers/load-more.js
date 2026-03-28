@@ -571,9 +571,16 @@
 
     card.setAttribute("data-title", norm(title));
     if (malId) card.setAttribute("data-mal-id", malId);
-    if (malId) {
-      const link = card.querySelector("a");
-      if (link) link.setAttribute("data-mal-id", malId);
+
+    const link = card.querySelector("a");
+    if (link) {
+      if (malId) link.setAttribute("data-mal-id", malId);
+      // Actualizar el href con mal_id y q para evitar ruteos incorrectos
+      if (malId) {
+        link.href = `detail.php?mal_id=${encodeURIComponent(malId)}&q=${encodeURIComponent(title)}`;
+      } else {
+        link.href = `detail.php?q=${encodeURIComponent(title)}`;
+      }
     }
     card.setAttribute("data-type", type);
     if (status) card.setAttribute("data-status", status);

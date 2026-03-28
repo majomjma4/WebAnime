@@ -149,7 +149,7 @@
     return `NekoraUser_${getOrCreateUserSuffix()}`;
   }
 
-  let authState = { logged: false, username: "", role: "Invitado", isAdmin: false };
+  let authState = { logged: false, username: "", role: "Invitado", isAdmin: false, isPremium: false };
 
   async function checkAuth() {
     try {
@@ -161,6 +161,8 @@
         localStorage.setItem("nekora_logged_in", "true");
         localStorage.setItem("nekora_user", authState.username);
         if (authState.isAdmin) localStorage.setItem("nekora_admin", "true");
+        if (authState.isPremium) localStorage.setItem("nekora_premium", "true");
+        else localStorage.removeItem("nekora_premium");
         
         // Solo establecer el nombre si no existe uno personalizado ya cargado
         if (!localStorage.getItem("anidex_profile_name")) {
@@ -169,13 +171,15 @@
       } else {
         localStorage.removeItem("nekora_logged_in");
         localStorage.removeItem("nekora_admin");
+        localStorage.removeItem("nekora_premium");
         localStorage.removeItem("anidex_profile_name");
       }
     } catch (e) {
       console.error("Auth check failed:", e);
-      authState = { logged: false, username: "", role: "Invitado", isAdmin: false };
+      authState = { logged: false, username: "", role: "Invitado", isAdmin: false, isPremium: false };
       localStorage.removeItem("nekora_logged_in");
       localStorage.removeItem("nekora_admin");
+      localStorage.removeItem("nekora_premium");
       localStorage.removeItem("anidex_profile_name");
     }
     return authState;
@@ -443,6 +447,7 @@
 
   window.AniDexLayout = { 
     onReady,
+    checkAuth,
     isLoggedIn,
     isAdmin,
     getRole,

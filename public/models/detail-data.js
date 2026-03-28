@@ -247,9 +247,10 @@ const AniDexDetailDataBoot = () => {
     return section;
   };
 
-  const fetchLocalAnime = async (id, title) => {
+  const fetchLocalAnime = async (malId, title, dbId) => {
     let url = "api/anime_data.php?";
-    if (id) url += `mal_id=${encodeURIComponent(id)}&`;
+    if (dbId) url += `id=${encodeURIComponent(dbId)}&`;
+    if (malId) url += `mal_id=${encodeURIComponent(malId)}&`;
     if (title) url += `q=${encodeURIComponent(title)}`;
     try {
       const res = await fetch(url.replace(/&$/, ""));
@@ -266,8 +267,9 @@ const AniDexDetailDataBoot = () => {
     const isPremium = localStorage.getItem("nekora_premium") === "true";
     const canWatchEpisodes = isLogged && isPremium;
     const params = new URLSearchParams(location.search);
+    const dbIdParam = params.get("id");
     const malIdParam = params.get("mal_id");
-    const query = params.get("q") || (malIdParam ? "" : document.querySelector("h1")?.textContent?.trim()) || "";
+    const query = params.get("q") || (malIdParam || dbIdParam ? "" : document.querySelector("h1")?.textContent?.trim()) || "";
     const preTitle = params.get("q");
     if (preTitle && document.querySelector("h1")) {
       document.querySelector("h1").textContent = preTitle;
@@ -276,7 +278,7 @@ const AniDexDetailDataBoot = () => {
     let selectedId = null;
     let isLocal = false;
 
-    const localData = await fetchLocalAnime(malIdParam, query);
+    const localData = await fetchLocalAnime(malIdParam, query, dbIdParam);
     if (localData) {
       full = localData;
       selectedId = full.mal_id;

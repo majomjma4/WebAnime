@@ -983,20 +983,10 @@ endif; ?>
     
     // Initialize detail data if object is present
     const initDetail = () => {
-      if (window.AniDexDetailData && typeof window.AniDexDetailData.init === "function") {
-        window.AniDexDetailData.init();
-      }
+      // Movido a la inicialización global en el top
     };
     initDetail();
   })();
-    </script>
-    <script src="models/detail-data.js"></script>
-    <script>
-      // Fallback init in case script loads after IIFE
-      if (window.AniDexDetailData && typeof window.AniDexDetailData.init === "function") {
-          window.AniDexDetailData.init();
-      }
-    </script>
     </script>
     <script data-ui-unlock>document.documentElement.classList.remove("preload-ui");</script>
   </body></html>

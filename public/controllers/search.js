@@ -207,6 +207,7 @@
       }
       card.setAttribute("data-title", (item?.title || "").toLowerCase());
       card.setAttribute("data-type", pageForType(mediaType) === "peliculas.php" ? "Película" : "Anime");
+      const cleanTitle = (item?.title || "").trim();
       const key = normalize(item?.title || item?.title_english || "");
       const year = YEAR_OVERRIDES[key] || item?.year || item?.aired?.prop?.from?.year || "";
       if (year) {
@@ -216,11 +217,14 @@
         card.removeAttribute("data-year");
         card.removeAttribute("data-year-original");
       }
-
-      // FIX: Actualizar el enlace para redireccionar correctamente
+      
+      // FIX: Actualizar el mal_id y el enlace para redireccionar correctamente
+      card.setAttribute("data-mal-id", String(item?.mal_id || ""));
       const cardLink = card.closest("a") || card.querySelector("a") || (card.tagName === "A" ? card : null);
       if (cardLink && item?.mal_id) {
-        cardLink.href = `detail.php?mal_id=${item.mal_id}`;
+        cardLink.setAttribute("data-mal-id", String(item.mal_id));
+        // Incluir q= para que detail-links y el backend tengan respaldo
+        cardLink.href = `detail.php?mal_id=${item.mal_id}&q=${encodeURIComponent(cleanTitle)}`;
       }
       const yearEl = card.querySelector("[data-card-year]");
       if (HIDE_CARD_YEARS) {

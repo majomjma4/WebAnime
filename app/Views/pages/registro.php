@@ -322,7 +322,9 @@
 
     if (closeBtn) {
       closeBtn.addEventListener("click", () => {
-        window.location.href = "index.php";
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirect = urlParams.get('redirect');
+        window.location.href = redirect || "index.php";
       });
     }
   })();

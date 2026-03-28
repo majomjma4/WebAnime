@@ -1,4 +1,4 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 
 <html class="dark" lang="en"><head>
 <meta charset="utf-8"/>
@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="controllers/layout.js?v=final14"></script>
 <script id="tailwind-config">
       tailwind.config = {
         darkMode: "class",
@@ -125,9 +126,17 @@
             box-shadow: 0 0 16px rgba(0, 0, 0, 0.35);
         }
         .payment-toggle[data-payment-toggle="card"][data-active="true"] {
-            border-left-color: #38bdf8;
-            box-shadow: 0 0 18px rgba(56, 189, 248, 0.25);
+            border-color: #ec7c8a;
+            box-shadow: 0 0 0 2px rgba(236, 124, 138, 0.2);
         }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-4px); }
+            75% { transform: translateX(4px); }
+        }
+        .shake { animation: shake 0.2s ease-in-out 0s 2; }
+        .payment-submit:not(:disabled) { cursor: pointer; }
+        .payment-submit.btn-invalid { opacity: 0.7; filter: grayscale(0.5); }
         .pay-option {
             position: relative;
             overflow: hidden;
@@ -193,7 +202,7 @@
     </div>
     <div class="mt-3 flex flex-wrap gap-2">
       <label class="cursor-pointer">
-        <input class="sr-only peer" type="radio" name="method-type" value="visa"/>
+        <input class="sr-only peer" type="radio" name="method-type" value="visa" checked/>
         <span class="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-on-surface-variant transition-all hover:border-[#38bdf8] hover:text-[#38bdf8] hover:bg-[#38bdf8]/10 peer-checked:border-[#38bdf8] peer-checked:text-[#38bdf8] peer-checked:bg-[#38bdf8]/10 peer-checked:shadow-[0_0_12px_rgba(56,189,248,0.35)] pay-option pay-option--card">
           <img src="img/visa.png" alt="Visa" class="h-4 w-4 object-contain" loading="lazy" decoding="async"/>Visa
         </span>
@@ -222,7 +231,7 @@
   
 </div>
 <!-- Form Fields -->
-<form class="space-y-6">
+<form id="main-payment-form" class="space-y-6" onsubmit="event.preventDefault(); return false;">
 <div class="space-y-6" data-payment-form-panel="card">
   <div class="space-y-1 hidden" data-selected-method>
     <p class="text-xs font-semibold uppercase tracking-widest text-[#38bdf8]">METODO SELECCIONADO: <span class="text-white" data-selected-method-name></span></p>
@@ -260,7 +269,8 @@
   </div>
 </div>
 <div class="pt-6">
-<button class="payment-submit w-full brand-gradient py-5 rounded-lg text-on-primary-container font-headline font-black uppercase tracking-widest text-lg brand-glow hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3" type="submit" data-payment-submit disabled>COMPLETAR COMPRA <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">bolt</span></button>
+<div id="btn-completar-compra" class="payment-submit w-full brand-gradient py-5 rounded-lg text-on-primary-container font-headline font-black uppercase tracking-widest text-lg brand-glow hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 cursor-pointer select-none" role="button" data-payment-submit onclick="window.processNekoraPayment(event)">COMPLETAR COMPRA <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">bolt</span></div>
+<div id="payment-status-log" class="mt-4 p-4 rounded-xl bg-black/40 border border-white/5 text-[10px] font-mono text-white/40 space-y-1 hidden"></div>
 </div>
 </form>
 </div>
@@ -326,304 +336,180 @@
 <div data-layout="footer"></div>
 <div id="payment-success" class="fixed inset-0 z-[80] hidden flex items-start justify-center">
   <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
-  <div class="relative mt-[20vh] inline-flex w-fit max-w-[24rem] flex-col items-center rounded-2xl bg-surface-container-high/90 border border-violet-500/30 p-3 shadow-2xl text-center overflow-hidden">
+  <div class="relative mt-[20vh] inline-flex w-fit max-w-[24rem] flex-col items-center rounded-2xl bg-surface-container-high/90 border border-violet-500/30 p-8 shadow-2xl text-center overflow-hidden">
     <span class="pointer-events-none absolute -top-20 -right-16 h-40 w-40 rounded-full bg-violet-500/20 blur-3xl"></span>
     <span class="pointer-events-none absolute -bottom-24 -left-16 h-44 w-44 rounded-full bg-fuchsia-500/20 blur-3xl"></span>
-    <button type="button" id="payment-close" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant hover:text-on-surface flex items-center justify-center">x</button>
-    <img src="img/doraemon.gif" alt="Sticker feliz" class="w-20 h-20 mx-auto mb-4 rounded-full" />
-    <h3 class="font-headline text-3xl font-extrabold text-white whitespace-nowrap">COMPRA EXITOSA!!!!</h3>
-    <h4 class="font-headline text-2xl font-extrabold text-violet-400 mt-2">
-      Gracias, <span id="payment-name">Usuario</span>!
-    </h4>
-    <p class="text-white/80 text-sm leading-relaxed mt-4">
-  Tu acceso a NekoraList se ha activado. Disfruta de tu experiencia premium<br/>
-  y explora todo el contenido exclusivo que hemos preparado para ti.<br/>
-  ¡Bienvenido a la comunidad de NekoraList!
-</p>
+    <button type="button" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant hover:text-on-surface flex items-center justify-center transition-all" onclick="document.getElementById('payment-success').classList.add('hidden')">×</button>
+    <div class="relative mb-6">
+      <div class="absolute inset-0 blur-xl bg-violet-500/30 animate-pulse rounded-full"></div>
+      <img src="img/doraemon.gif" alt="Sucesso" class="relative w-24 h-24 mx-auto rounded-full border-2 border-violet-400/50 shadow-lg" />
+    </div>
+    <h3 class="font-headline text-3xl font-extrabold text-white tracking-tighter uppercase italic">¡COMPRA EXITOSA!!!!</h3>
+    <div class="mt-4 space-y-2">
+      <h4 class="font-headline text-xl font-bold text-violet-300">Bienvenido, <span id="payment-name" class="text-white">Nekora</span>!</h4>
+      <p class="text-on-surface-variant text-sm font-body max-w-[18rem] mx-auto opacity-80">Tu acceso al modo <span class="text-primary font-bold">Limit Break</span> ya está activo.</p>
+    </div>
+    <div class="mt-8 flex items-center gap-3 px-6 py-3 bg-violet-500/10 rounded-full border border-violet-500/20 animate-pulse">
+      <span class="material-symbols-outlined text-violet-400 text-sm">sync</span>
+      <span class="text-violet-300 font-label text-[10px] uppercase tracking-widest font-black">Redireccionando al inicio...</span>
+    </div>
   </div>
 </div>
+
 <script>
+  // SISTEMA DE PAGO GLOBAL RECONSTRUIDO (FINAL)
+  const cardOptions = {
+    visa: { name: "Visa", numDigits: 16, pinDigits: 3 },
+    amex: { name: "Amex", numDigits: 15, pinDigits: 4 },
+    discover: { name: "Discover", numDigits: 16, pinDigits: 3 },
+    jcb: { name: "JCB", numDigits: 16, pinDigits: 3 }
+  };
+
+  const onlyDig = (s) => String(s || "").replace(/\D/g, "");
+  
+  const luhnCheck = (v) => {
+    let s = 0;
+    for (let i = 0; i < v.length; i++) {
+        let n = parseInt(v.substr(v.length - 1 - i, 1));
+        if (i % 2 === 1) { n *= 2; if (n > 9) n -= 9; }
+        s += n;
+    }
+    return s % 10 === 0;
+  };
+
+  window.processNekoraPayment = async (event) => {
+    if (event) { event.preventDefault(); event.stopImmediatePropagation(); }
+    
+    const btn = document.getElementById("btn-completar-compra");
+    const logBox = document.getElementById("payment-status-log");
+
+    const log = (msg, isErr = false) => {
+        if (!logBox) return;
+        logBox.classList.remove("hidden");
+        const line = document.createElement("div");
+        line.className = "flex items-center gap-2 " + (isErr ? "text-red-400 font-bold" : "text-white/70");
+        line.innerHTML = `<span class="material-symbols-outlined text-[10px]">${isErr ? 'error' : 'check_circle'}</span> ${msg}`;
+        logBox.appendChild(line);
+        logBox.scrollTop = logBox.scrollHeight;
+    };
+
+    if (logBox) { logBox.innerHTML = ""; logBox.classList.remove("hidden"); }
+    if (btn) {
+        btn.style.pointerEvents = "none";
+        btn.innerHTML = 'VERIFICANDO...';
+    }
+
+    log("Iniciando Verificación Nekora...");
+
+    try {
+        const holder = document.querySelector("[data-field-holder]")?.value.trim() || "";
+        const code = onlyDig(document.querySelector("[data-field-code-input]")?.value || "");
+        const date = document.querySelector("[data-field-date]")?.value.trim() || "";
+        const pin = onlyDig(document.querySelector("[data-field-pin-input]")?.value || "");
+        const addr = document.querySelector("[data-field-address]")?.value.trim() || "";
+        const method = (Array.from(document.querySelectorAll('input[name="method-type"]')).find(r => r.checked))?.value || "visa";
+
+        // Paso a paso
+        if (holder.length < 4) log("❌ Error: Nombre demasiado corto.", true); else log("✅ Nombre OK");
+        
+        let codeOk = code.length === cardOptions[method].numDigits && luhnCheck(code);
+        if (!codeOk) log("❌ Error: Tarjeta inválida (" + cardOptions[method].name + ").", true); else log("✅ Tarjeta OK");
+        
+        let dateOk = date.length === 5 && date.includes("/");
+        if (!dateOk) log("❌ Error: Formato de fecha MM/AA.", true); else log("✅ Fecha OK");
+        
+        let pinOk = pin.length === cardOptions[method].pinDigits;
+        if (!pinOk) log("❌ Error: PIN (" + cardOptions[method].pinDigits + " digitos).", true); else log("✅ PIN OK");
+        
+        if (addr.length < 6) log("❌ Error: Dirección incorrecta.", true); else log("✅ Dirección OK");
+
+        const hasErrors = holder.length < 4 || !codeOk || !dateOk || !pinOk || addr.length < 6;
+
+        if (hasErrors) {
+            log("🛑 CORRIGE LOS ERRORES ARRIBA.", true);
+            if (btn) {
+                btn.style.pointerEvents = "auto";
+                btn.innerHTML = 'COMPLETAR COMPRA <span class="material-symbols-outlined">bolt</span>';
+            }
+            return;
+        }
+
+        log("🚀 Conectando con servidor...");
+        const auth = window.AniDexLayout ? await window.AniDexLayout.checkAuth() : { logged: false };
+        if (!auth.logged) { 
+            log("🔒 Sesión no encontrada.", true); 
+            window.location.href = "ingresar.php?redirect=pago.php";
+            return; 
+        }
+
+        log("💳 Procesando transacción...");
+        window.onbeforeunload = () => "Pago en curso...";
+
+        const res = await fetch("api/auth.php?action=buy_premium", { method: "POST" });
+        const data = await res.json();
+        window.onbeforeunload = null;
+
+        if (data.success) {
+            log("🎉 ¡PAGO CONFIRMADO!");
+            try { new Audio("https://cdn.pixabay.com/audio/2021/11/24/audio_985532d525.mp3").play(); } catch(e){}
+            localStorage.setItem("nekora_premium", "true");
+            document.getElementById("payment-success")?.classList.remove("hidden");
+            if (window.AniDexLayout?.checkAuth) await window.AniDexLayout.checkAuth();
+            setTimeout(() => { window.location.href = "index.php"; }, 2500);
+        } else {
+            log("❌ Error Servidor: " + (data.error || "Fallo"), true);
+            if (btn) { btn.style.pointerEvents = "auto"; btn.innerHTML = 'COMPLETAR COMPRA'; }
+        }
+    } catch (e) {
+        log("💥 Error: " + e.message, true);
+        if (btn) { btn.style.pointerEvents = "auto"; btn.innerHTML = 'COMPLETAR COMPRA'; }
+    }
+  };
+
   document.addEventListener("DOMContentLoaded", () => {
+    const codeInp = document.querySelector("[data-field-code-input]");
+    const dateInp = document.querySelector("[data-field-date]");
     const toggles = Array.from(document.querySelectorAll("[data-payment-toggle]"));
     const panels = { card: document.querySelector('[data-payment-panel="card"]') };
     const formPanels = { card: document.querySelector('[data-payment-form-panel="card"]') };
 
-    function setActiveToggle(kind) {
-      toggles.forEach((btn) => {
-        const isActive = btn.getAttribute("data-payment-t looggle") === kind;
-        btn.setAttribute("data-active", isActive ? "true" : "false");
-      });
+    function goPanel(k) {
+        Object.entries(panels).forEach(([key, v]) => v?.classList.toggle("hidden", key !== k));
+        Object.entries(formPanels).forEach(([key, v]) => v?.classList.toggle("hidden", key !== k));
+        toggles.forEach(b => b.setAttribute("data-active", b.getAttribute("data-payment-toggle") === k ? "true" : "false"));
     }
+    
+    toggles.forEach(b => b.addEventListener("click", () => goPanel(b.getAttribute("data-payment-toggle"))));
 
-    function showPanel(kind) {
-      Object.entries(panels).forEach(([key, panel]) => {
-        if (!panel) return;
-        panel.classList.toggle("hidden", key !== kind);
-      });
-      Object.entries(formPanels).forEach(([key, panel]) => {
-        if (!panel) return;
-        panel.classList.toggle("hidden", key !== kind);
-      });
-      setActiveToggle(kind);
-    }
-
-    toggles.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const kind = btn.getAttribute("data-payment-toggle");
-        showPanel(kind);
-      });
-    });
-
-    const cardOptions = {
-      visa: {
-        name: "Visa",
-        numberLabel: "CODIGO PRINCIPAL",
-        numberHint: "16 digitos",
-        numberPlaceholder: "Ej: 1234567890123456",
-        numberMax: 16,
-        numberDigits: 16,
-        pinLabel: "CODIGO PRIVADO (3 DIGITOS)",
-        pinPlaceholder: "123",
-        pinDigits: 3
-      },
-      amex: {
-        name: "Amex",
-        numberLabel: "CODIGO PRINCIPAL",
-        numberHint: "15 digitos",
-        numberPlaceholder: "Ej: 123456789012345",
-        numberMax: 15,
-        numberDigits: 15,
-        pinLabel: "CODIGO PRIVADO (4 DIGITOS)",
-        pinPlaceholder: "1234",
-        pinDigits: 4
-      },
-      discover: {
-        name: "Discover",
-        numberLabel: "CODIGO PRINCIPAL",
-        numberHint: "16 digitos",
-        numberPlaceholder: "Ej: 1234567890123456",
-        numberMax: 16,
-        numberDigits: 16,
-        pinLabel: "CODIGO PRIVADO (3 DIGITOS)",
-        pinPlaceholder: "123",
-        pinDigits: 3
-      },
-      jcb: {
-        name: "JCB",
-        numberLabel: "CODIGO PRINCIPAL",
-        numberHint: "16 digitos",
-        numberPlaceholder: "Ej: 1234567890123456",
-        numberMax: 16,
-        numberDigits: 16,
-        pinLabel: "CODIGO PRIVADO (3 DIGITOS)",
-        pinPlaceholder: "123",
-        pinDigits: 3
-      }
-    };
-
-    const codeLabel = document.querySelector("[data-field-code-label]");
-    const codeHint = document.querySelector("[data-field-code-hint]");
-    const pinLabel = document.querySelector("[data-field-pin-label]");
-    const pinInput = document.querySelector("[data-field-pin-input]");
-    const codeInput = document.querySelector("[data-field-code-input]");
-    const selectedMethodWrap = document.querySelector("[data-selected-method]");
-    const selectedMethodName = document.querySelector("[data-selected-method-name]");
-    const methodRadios = Array.from(document.querySelectorAll('input[name="method-type"]'));
-    const nameInput = document.querySelector("[data-field-holder]");
-    const dateInput = document.querySelector("[data-field-date]");
-    const addressInput = document.querySelector("[data-field-address]");
-    const submitBtn = document.querySelector("[data-payment-submit]");
-    const paymentForm = document.querySelector("form");
-    const successModal = document.getElementById("payment-success");
-    const successName = document.getElementById("payment-name");
-    const successClose = document.getElementById("payment-close");
-    const errorMap = {
-      holder: document.querySelector('[data-error="field-holder"]'),
-      code: document.querySelector('[data-error="field-code"]'),
-      date: document.querySelector('[data-error="field-date"]'),
-      pin: document.querySelector('[data-error="field-pin"]'),
-      address: document.querySelector('[data-error="field-address"]')
-    };
-    const touched = { holder: false, code: false, date: false, pin: false, address: false };
-
-    function getSelectedMethod() {
-      const selected = methodRadios.find((radio) => radio.checked);
-      return selected ? selected.value : null;
-    }
-
-    function setMethodUI(value) {
-      const option = cardOptions[value];
-      if (!option) return;
-      setFormEnabled(true);
-      if (selectedMethodWrap && selectedMethodName) {
-        selectedMethodName.textContent = option.name;
-        selectedMethodWrap.classList.remove("hidden");
-      }
-      if (codeLabel) codeLabel.textContent = option.numberLabel;
-      if (codeHint) codeHint.textContent = option.numberHint;
-      if (codeInput) {
-        codeInput.placeholder = option.numberPlaceholder;
-        codeInput.maxLength = option.numberMax;
-      }
-      if (pinLabel) pinLabel.textContent = option.pinLabel;
-      if (pinInput) {
-        pinInput.placeholder = option.pinPlaceholder;
-        pinInput.maxLength = option.pinPlaceholder.length;
-      }
-      validateForm(false);
-    }
-
-    function onlyDigits(value) {
-      return value.replace(/\D/g, "");
-    }
-
-    function formatDate(value) {
-      const digits = onlyDigits(value).slice(0, 4);
-      if (digits.length <= 2) return digits;
-      return `${digits.slice(0, 2)}/${digits.slice(2)}`;
-    }
-
-    function isValidName() {
-      return nameInput && nameInput.value.trim().length > 0;
-    }
-
-    function isValidCode() {
-      if (!codeInput) return false;
-      const method = getSelectedMethod();
-      if (!method) return false;
-      const digits = onlyDigits(codeInput.value);
-      const required = cardOptions[method]?.numberDigits || 16;
-      return digits.length === required;
-    }
-
-    function isValidDate() {
-      if (!dateInput) return false;
-      return /^(0[1-9]|1[0-2])\/\d{2}$/.test(dateInput.value.trim());
-    }
-
-    function isValidPin() {
-      if (!pinInput) return false;
-      const method = getSelectedMethod();
-      if (!method) return false;
-      const digits = onlyDigits(pinInput.value);
-      const required = cardOptions[method]?.pinDigits || 3;
-      return digits.length === required;
-    }
-
-    function isValidAddress() {
-      return addressInput && addressInput.value.trim().length > 0;
-    }
-
-    function setInvalidState(input, isInvalid, errorEl, showError) {
-      if (!input) return;
-      input.classList.toggle("input-invalid", isInvalid && showError);
-      if (errorEl) errorEl.classList.toggle("hidden", !(isInvalid && showError));
-    }
-
-    function validateForm(showErrors = false) {
-      if (!getSelectedMethod()) {
-        setFormEnabled(false);
-        if (submitBtn) {
-          submitBtn.disabled = true;
-          submitBtn.setAttribute("aria-disabled", "true");
-        }
-        return false;
-      }
-      const nameOk = isValidName();
-      const codeOk = isValidCode();
-      const dateOk = isValidDate();
-      const pinOk = isValidPin();
-      const addressOk = isValidAddress();
-      const valid = nameOk && codeOk && dateOk && pinOk && addressOk;
-
-      setInvalidState(nameInput, !nameOk, errorMap.holder, showErrors || touched.holder);
-      setInvalidState(codeInput, !codeOk, errorMap.code, showErrors || touched.code);
-      setInvalidState(dateInput, !dateOk, errorMap.date, showErrors || touched.date);
-      setInvalidState(pinInput, !pinOk, errorMap.pin, showErrors || touched.pin);
-      setInvalidState(addressInput, !addressOk, errorMap.address, showErrors || touched.address);
-
-      if (submitBtn) {
-        submitBtn.disabled = !valid;
-        submitBtn.setAttribute("aria-disabled", (!valid).toString());
-      }
-      return valid;
-    }
-
-    methodRadios.forEach((radio) => {
-      radio.addEventListener("change", () => setMethodUI(radio.value));
-    });
-
-    const fieldMap = [
-      { input: nameInput, key: "holder" },
-      { input: codeInput, key: "code" },
-      { input: dateInput, key: "date" },
-      { input: pinInput, key: "pin" },
-      { input: addressInput, key: "address" }
-    ];
-
-    const formInputs = fieldMap.map(({ input }) => input).filter(Boolean);
-    function setFormEnabled(enabled) {
-      const panel = formPanels.card;
-      if (panel) {
-        panel.classList.toggle("opacity-60", !enabled);
-        panel.classList.toggle("pointer-events-none", !enabled);
-      }
-      formInputs.forEach((input) => {
-        input.disabled = !enabled;
-      });
-    }
-
-    fieldMap.forEach(({ input, key }) => {
-      if (!input) return;
-      input.addEventListener("input", () => validateForm(false));
-      input.addEventListener("blur", () => {
-        touched[key] = true;
-        validateForm(true);
-      });
-    });
-
-    if (dateInput) {
-      dateInput.addEventListener("input", () => {
-        dateInput.value = formatDate(dateInput.value);
-        validateForm(false);
-      });
-    }
-
-    if (paymentForm) {
-      paymentForm.addEventListener("submit", (event) => {
-        Object.keys(touched).forEach((key) => {
-          touched[key] = true;
+    if (codeInp) {
+        codeInp.addEventListener("input", (e) => {
+            let v = e.target.value.replace(/\D/g, "").slice(0, 16);
+            let p = v.match(/.{1,4}/g) || [];
+            e.target.value = p.join(" ");
         });
-        if (!validateForm(true)) {
-          event.preventDefault();
-          return;
-        }
-        event.preventDefault();
-        const name = (nameInput && nameInput.value.trim()) || "Usuario";
-        try {
-          localStorage.setItem("nekora_premium", "true");
-        } catch (e) {}
-        if (successName) successName.textContent = name;
-        if (successModal) successModal.classList.remove("hidden");
-      });
     }
 
-    if (successClose) {
-      successClose.addEventListener("click", () => {
-        window.location.href = "index.php";
-      });
+    if (dateInp) {
+        dateInp.addEventListener("input", (e) => {
+            let v = e.target.value.replace(/\D/g, "").slice(0, 4);
+            if (v.length >= 3) {
+                e.target.value = v.slice(0, 2) + "/" + v.slice(2);
+            } else {
+                e.target.value = v;
+            }
+        });
+        dateInp.setAttribute("maxlength", "5");
     }
 
-    setFormEnabled(false);
-    showPanel("card");
-    validateForm(false);
+    // Inicializar UI
+    goPanel("card");
   });
 </script>
-<script src="controllers/layout.js?v=final14"></script>
+
 <script src="controllers/i18n.js"></script>
 <script src="controllers/search.js"></script>
-</body></html>
-
+</body>
+</html>
 
 
 

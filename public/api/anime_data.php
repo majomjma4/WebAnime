@@ -4,6 +4,7 @@ header('Content-Type: application/json');
 
 $q = trim($_GET['q'] ?? '');
 $mal_id = trim($_GET['mal_id'] ?? '');
+$id = trim($_GET['id'] ?? '');
 
 $dbConn = (new \Models\Database())->getConnection();
 if (!$dbConn) {
@@ -13,14 +14,21 @@ if (!$dbConn) {
 
 $animeItem = null;
 
-if ($mal_id) {
-    // Primero intentamos por mal_id que es lo más común desde fuera
+if ($id) {
+    // Si tenemos un ID interno, es la fuente más confiable
+    $stmt = $dbConn->prepare("SELECT * FROM anime WHERE id = ? LIMIT 1");
+    $stmt->execute([$id]);
+    $animeItem = $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+if (!$animeItem && $mal_id) {
+    // Si falla o no hay ID, intentamos por mal_id que es lo más común desde fuera
     $stmt = $dbConn->prepare("SELECT * FROM anime WHERE mal_id = ? LIMIT 1");
     $stmt->execute([$mal_id]);
     $animeItem = $stmt->fetch(PDO::FETCH_ASSOC);
     
-    // Si falla, intentamos por id interno (fallback)
-    if (!$animeItem) {
+    // Si falla, intentamos por id interno (fallback por si mal_id era en realidad un id)
+    if (!$animeItem && is_numeric($mal_id)) {
         $stmt = $dbConn->prepare("SELECT * FROM anime WHERE id = ? LIMIT 1");
         $stmt->execute([$mal_id]);
         $animeItem = $stmt->fetch(PDO::FETCH_ASSOC);
