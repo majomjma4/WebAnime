@@ -505,7 +505,7 @@
 
 <!-- Footer Component -->
 <div data-layout="footer"></div>
-<script src="controllers/layout.js?v=final5"></script>
+<script src="controllers/layout.js?v=final14"></script>
 </div>
 
 <script src="controllers/i18n.js"></script>

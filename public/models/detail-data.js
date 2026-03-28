@@ -266,8 +266,8 @@ const AniDexDetailDataBoot = () => {
     const isPremium = localStorage.getItem("nekora_premium") === "true";
     const canWatchEpisodes = isLogged && isPremium;
     const params = new URLSearchParams(location.search);
-    const query = params.get("q") || document.querySelector("h1")?.textContent?.trim() || "";
     const malIdParam = params.get("mal_id");
+    const query = params.get("q") || (malIdParam ? "" : document.querySelector("h1")?.textContent?.trim()) || "";
     const preTitle = params.get("q");
     if (preTitle && document.querySelector("h1")) {
       document.querySelector("h1").textContent = preTitle;
@@ -283,7 +283,7 @@ const AniDexDetailDataBoot = () => {
       isLocal = true;
       
       // COMPLEMENT: If local data is sparse, fetch full Jikan info to fill gaps
-      const needsComplement = !full.studios?.length || !full.genres?.length || (full.synopsis || "").length < 50;
+      const needsComplement = !full.studios?.length || !full.genres?.length || (full.synopsis || "").length < 50 || !full.title_english || !full.title_japanese;
       if (needsComplement && selectedId) {
         const jikanFull = await byId(selectedId, "full");
         if (jikanFull) {
@@ -294,8 +294,13 @@ const AniDexDetailDataBoot = () => {
             if (!full.rating && jikanFull.rating) full.rating = jikanFull.rating;
             if (!full.rank && jikanFull.rank) full.rank = jikanFull.rank;
             if (!full.score && jikanFull.score) full.score = jikanFull.score;
+            if (!full.title_english && jikanFull.title_english) full.title_english = jikanFull.title_english;
+            if (!full.title_japanese && jikanFull.title_japanese) full.title_japanese = jikanFull.title_japanese;
         }
       }
+      // Safety Fallback: Never show N/A if we have the main title
+      if (!full.title_english) full.title_english = full.title;
+      if (!full.title_japanese) full.title_japanese = full.title;
     } else {
       if (malIdParam) {
         selectedId = Number(malIdParam);
@@ -398,6 +403,7 @@ const AniDexDetailDataBoot = () => {
     const src = imgOf(full);
     if (poster && src) poster.src = src;
     if (bg && src) bg.src = src;
+    document.body.dataset.detailId = selectedId || "";
     document.body.dataset.detailTitle = preferredTitle;
     document.body.dataset.detailImage = src || "";
     document.body.dataset.detailType = full?.type === "Movie" ? "Película" : "Anime";
@@ -632,9 +638,51 @@ const AniDexDetailDataBoot = () => {
       });
       if (trailerCard) trailerCard.addEventListener("click", (e) => e.stopPropagation());
     }
+    if (!full) {
+      console.error("AniDex Detail: No se encontraron datos para", selectedId);
+      return;
+    }
 
     const syn = document.querySelector("h2 + p");
-    if (syn) syn.textContent = (await translateToEs(full.synopsis)) || "Sinopsis no disponible.";
+    if (syn) {
+      const synText = full.synopsis || "Sinopsis no disponible.";
+      syn.textContent = await translateToEs(synText);
+    }
+
+    // Update Status Meta (Status, Episodes, Duration)
+    const statusMeta = document.getElementById("detail-status-meta");
+    if (statusMeta) {
+      const statusText = toSpanishStatus(full.status);
+      const epsText = full.episodes ? `${full.episodes}` : "N/A";
+      const durText = toSpanishDuration(full.duration);
+      statusMeta.innerHTML = `
+        <span>Estado: ${statusText}</span>
+        <span class="text-outline-variant">&gt;&lt;</span>
+        <span>Episodios: ${epsText}</span>
+        <span class="text-outline-variant">&gt;&lt;</span>
+        <span>Duración: ${durText}</span>
+      `;
+    }
+
+    // Update Genres
+    const genreContainer = document.getElementById("detail-genres");
+    if (genreContainer && full.genres) {
+      genreContainer.innerHTML = full.genres.map(g => `
+        <span class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant text-sm rounded-full border border-outline-variant/10">${GENRE_ES[g.name] || g.name}</span>
+      `).join("");
+    }
+
+    // Update Detailed Info Block
+    const infoBlock = document.getElementById("detail-info-block");
+    if (infoBlock) {
+      infoBlock.innerHTML = "";
+      renderMetaBlock(infoBlock, "Título Nativo", full.title_japanese || full.title_japanese_full);
+      renderMetaBlock(infoBlock, "Estudio", (full.studios || []).map(s => s.name).join(", "));
+      renderMetaBlock(infoBlock, "Fuente", await translateToEs(full.source));
+      renderMetaBlock(infoBlock, "Emisión", full.aired?.string || "N/A");
+      renderMetaBlock(infoBlock, "Clasificación", toSpanishRating(full.rating));
+      if (full.score) renderMetaBlock(infoBlock, "Puntuación", `${full.score} (${full.scored_by || 0} votos)`);
+    }
 
     const synopsisBlockEl = Array.from(document.querySelectorAll("h2"))
       .find((x) => /sinopsis/i.test(x.textContent || ""))?.parentElement;
@@ -1184,7 +1232,7 @@ const AniDexDetailDataBoot = () => {
       renderMetaBlock(infoList, "Título (EN)", full.title_english || "N/A");
       renderMetaBlock(infoList, "Título (JP)", full.title_japanese || "N/A");
       renderMetaBlock(infoList, "Duración", toSpanishDuration(full.duration) || "N/A");
-      renderMetaBlock(infoList, "Clasificacin", toSpanishRating(full.rating) || "N/A");
+      renderMetaBlock(infoList, "Clasificación", toSpanishRating(full.rating) || "N/A");
       renderMetaBlock(infoList, "Ranking", full.rank ? `# ${full.rank}` : "N/A");
       renderMetaBlock(infoList, "Estudio", full.studios?.[0]?.name || "N/A");
     }
@@ -1403,7 +1451,9 @@ const AniDexDetailDataBoot = () => {
           <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" data-char-backdrop></div>
           <div class="relative w-full h-full flex items-center justify-center p-4">
             <div class="relative w-[min(92vw,560px)] rounded-2xl bg-surface-container-high/95 border border-white/10 shadow-2xl overflow-hidden" data-char-shell>
-              <button type="button" data-char-close class="absolute top-3 right-3 w-9 h-9 rounded-full bg-surface-container-low text-on-surface-variant hover:text-on-surface flex items-center justify-center"></button>
+              <button type="button" data-char-close class="absolute top-3 right-3 w-10 h-10 rounded-full bg-black/40 text-white/90 hover:text-white hover:bg-violet-500/80 flex items-center justify-center backdrop-blur-md transition-all duration-300 z-10 shadow-lg border border-white/10" aria-label="Cerrar">
+                <span class="material-symbols-outlined text-2xl">close</span>
+              </button>
               <div class="grid grid-cols-1 sm:grid-cols-[240px_1fr] gap-6 p-6 items-stretch">
                 <div class="w-full h-full min-h-[260px] sm:min-h-[320px] rounded-2xl overflow-hidden bg-black/30 shadow-[0_0_24px_rgba(0,0,0,0.35)] flex items-center justify-center">
                   <img data-char-img class="max-w-full max-h-full object-contain block" alt="Personaje" />

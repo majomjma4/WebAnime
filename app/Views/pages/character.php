@@ -23,7 +23,7 @@
     </main>
     <script src="../models/character-data.js"></script>
     <script>document.addEventListener("DOMContentLoaded",()=>window.AniDexCharacterData&&window.AniDexCharacterData.init());</script>
-    <script src="controllers/layout.js?v=final5"></script>
+    <script src="controllers/layout.js?v=final14"></script>
   </body>
 </html>
 

@@ -106,6 +106,20 @@
       .join("");
   }
 
+  function getOrCreateUserId() {
+    try {
+      let id = localStorage.getItem("anidex_user_id");
+      if (!id || !id.startsWith("NK-")) {
+        const rand = Math.floor(100000 + Math.random() * 900000);
+        id = `NK-${rand}`;
+        localStorage.setItem("anidex_user_id", id);
+      }
+      return id;
+    } catch {
+      return `NK-${Math.floor(100000 + Math.random() * 900000)}`;
+    }
+  }
+
   function getOrCreateUserSuffix() {
     try {
       let suffix = localStorage.getItem("anidex_user_suffix");
@@ -117,6 +131,16 @@
     } catch {
       return String(Math.floor(10 + Math.random() * 90));
     }
+  }
+
+  function formatHours(hours) {
+    const total = parseFloat(hours) || 0;
+    const totalMinutes = Math.round(total * 60);
+    const h = Math.floor(totalMinutes / 60);
+    const m = totalMinutes % 60;
+    const mm = String(m).padStart(2, "0");
+    if (h === 0) return `0:${mm} min`;
+    return `${h}:${mm} horas`;
   }
 
   function getGuestName() {
@@ -137,7 +161,11 @@
         localStorage.setItem("nekora_logged_in", "true");
         localStorage.setItem("nekora_user", authState.username);
         if (authState.isAdmin) localStorage.setItem("nekora_admin", "true");
-        localStorage.setItem("anidex_profile_name", authState.username);
+        
+        // Solo establecer el nombre si no existe uno personalizado ya cargado
+        if (!localStorage.getItem("anidex_profile_name")) {
+          localStorage.setItem("anidex_profile_name", authState.username);
+        }
       } else {
         localStorage.removeItem("nekora_logged_in");
         localStorage.removeItem("nekora_admin");
@@ -244,6 +272,39 @@
     }, 50);
   }
 
+  function initSessionTimer() {
+    if (!isLoggedIn()) return;
+    
+    let lastSync = Date.now();
+    const SYNC_INTERVAL = 60000; // Sync every 1 minute
+    
+    setInterval(() => {
+      const now = Date.now();
+      const deltaMs = now - lastSync;
+      if (deltaMs < 1000) return;
+
+      lastSync = now;
+      const deltaHours = deltaMs / (1000 * 60 * 60);
+      
+      try {
+        const currentHours = parseFloat(localStorage.getItem("anidex_profile_hours") || "0");
+        const newTotal = (currentHours + deltaHours).toFixed(2);
+        localStorage.setItem("anidex_profile_hours", newTotal);
+        
+        // Update UI if on user.php
+        const hoursEl = document.querySelector("[data-profile-hours]");
+        if (hoursEl) hoursEl.textContent = formatHours(newTotal);
+
+        // Sync with server if enough time passed
+        fetch("api/activity.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "time_sync", delta: deltaHours.toFixed(4) })
+        }).catch(() => {});
+      } catch (e) {}
+    }, 30000); // Check every 30 seconds
+  }
+
   function finalizeLayout() {
     setActiveMenu();
     const adminBtn = document.getElementById("admin-mode-btn");
@@ -267,6 +328,14 @@
       }
     } catch {}
     setupProfileMenu();
+    initSessionTimer();
+    
+    // Nueva l&oacute;gica de sincronizaci&oacute;n global
+    if (isLoggedIn()) {
+      getOrCreateUserId();
+      restoreFromDB();
+    }
+    
     isReady = true;
     while (readyCallbacks.length) {
       const fn = readyCallbacks.shift();
@@ -301,12 +370,93 @@
     requestAnimationFrame(forceScrollTop);
   });
 
+  window.__anidex_restoring = false;
+
+  async function saveProfileToDB() {
+    if (!authState.logged || window.__anidex_restoring) return;
+    const data = {
+      profile_name: localStorage.getItem("anidex_profile_name") || "",
+      profile_desc: localStorage.getItem("anidex_profile_desc") || "",
+      profile_color: localStorage.getItem("anidex_profile_color") || "",
+      profile_avatar: localStorage.getItem("anidex_profile_avatar") || "",
+      profile_member_since: localStorage.getItem("anidex_profile_member_since") || "",
+      profile_id: localStorage.getItem("anidex_user_id") || "",
+      profile_hours: localStorage.getItem("anidex_profile_hours") || "0",
+      anidex_profile_prefs: JSON.parse(localStorage.getItem("anidex_profile_prefs") || "[]"),
+      anidex_continue_v1: JSON.parse(localStorage.getItem("anidex_continue_v1") || "[]"),
+      my_list: JSON.parse(localStorage.getItem("anidex_my_list_v1") || "[]"),
+      favorites: JSON.parse(localStorage.getItem("anidex_favorites_v1") || "[]"),
+      status_list: JSON.parse(localStorage.getItem("anidex_status_v1") || "{}")
+    };
+    try {
+      await fetch("api/profile.php?action=save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+    } catch (e) { console.error("Error saving profile to DB:", e); }
+  }
+
+  async function restoreFromDB() {
+    if (!authState.logged) return;
+    window.__anidex_restoring = true;
+    try {
+      const res = await fetch("api/profile.php?action=get");
+      const json = await res.json();
+      if (json.success && json.data) {
+        const d = json.data;
+        
+        // Mapeo directo de claves que empiezan con anidex_
+        Object.keys(d).forEach(key => {
+          if (key.startsWith('anidex_')) {
+            const val = d[key];
+            const valStr = (typeof val === 'object') ? JSON.stringify(val) : String(val);
+            // Evitar sobrescribir con valores vacíos si ya tenemos algo localmente
+            if (valStr && valStr !== '[]' && valStr !== '{}' && valStr !== 'null') {
+              localStorage.setItem(key, valStr);
+            }
+          }
+        });
+
+        if (window.AniDexLayout && typeof window.AniDexLayout.triggerRefresh === "function") {
+          window.AniDexLayout.triggerRefresh();
+        }
+      } else if (json.success) {
+         saveProfileToDB();
+      }
+    } catch (e) { 
+      console.error("Error restoring profile from DB:", e); 
+    } finally {
+      window.__anidex_restoring = false;
+    }
+  }
+
+  const refreshCallbacks = [];
+  function registerRefresh(fn) {
+    if (typeof fn === "function") refreshCallbacks.push(fn);
+  }
+  function triggerRefresh() {
+    refreshCallbacks.forEach(fn => {
+      try { fn(); } catch (e) { console.error("Global Refresh Error:", e); }
+    });
+  }
+
   window.AniDexLayout = { 
     onReady,
     isLoggedIn,
     isAdmin,
     getRole,
-    get authState() { return authState; }
+    registerRefresh,
+    triggerRefresh,
+    authState: () => authState
+  };
+
+  window.AniDexProfile = {
+    saveToDB: saveProfileToDB,
+    restoreFromDB: restoreFromDB,
+    getOrCreateUserId: getOrCreateUserId,
+    getOrCreateUserSuffix: getOrCreateUserSuffix,
+    formatHours: formatHours
   };
 })();
 

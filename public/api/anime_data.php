@@ -13,16 +13,32 @@ if (!$dbConn) {
 
 $animeItem = null;
 
-if ($q) {
+if ($mal_id) {
+    // Primero intentamos por mal_id que es lo más común desde fuera
+    $stmt = $dbConn->prepare("SELECT * FROM anime WHERE mal_id = ? LIMIT 1");
+    $stmt->execute([$mal_id]);
+    $animeItem = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    // Si falla, intentamos por id interno (fallback)
+    if (!$animeItem) {
+        $stmt = $dbConn->prepare("SELECT * FROM anime WHERE id = ? LIMIT 1");
+        $stmt->execute([$mal_id]);
+        $animeItem = $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+}
+
+if (!$animeItem && $q) {
+    // Intento 1: Búsqueda exacta
     $stmt = $dbConn->prepare("SELECT * FROM anime WHERE titulo = ? LIMIT 1");
     $stmt->execute([$q]);
     $animeItem = $stmt->fetch(PDO::FETCH_ASSOC);
-}
-
-if (!$animeItem && $mal_id) {
-    $stmt = $dbConn->prepare("SELECT * FROM anime WHERE id = ? LIMIT 1");
-    $stmt->execute([$mal_id]);
-    $animeItem = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    // Intento 2: Búsqueda flexible (LIKE)
+    if (!$animeItem) {
+        $stmt = $dbConn->prepare("SELECT * FROM anime WHERE titulo LIKE ? LIMIT 1");
+        $stmt->execute(["%$q%"]);
+        $animeItem = $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }
 
 if (!$animeItem) {
@@ -33,8 +49,8 @@ if (!$animeItem) {
 $jikanData = [
     'mal_id' => $animeItem['mal_id'] ?: $animeItem['id'],
     'title' => $animeItem['titulo'],
-    'title_english' => $animeItem['titulo'],
-    'title_japanese' => $animeItem['titulo'],
+    'title_english' => null,
+    'title_japanese' => null,
     'type' => $animeItem['tipo'],
     'episodes' => (int)$animeItem['episodios'],
     'status' => $animeItem['estado'],

@@ -236,7 +236,7 @@ $isLoggedIn = isset($_SESSION['user_id']);
                 <span>Duración: 24m</span>
               </p>
             </div>
-            <div class="flex flex-wrap gap-2">
+            <div id="detail-genres" class="flex flex-wrap gap-2">
               <span class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant text-sm rounded-full border border-outline-variant/10">Acción</span>
               <span class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant text-sm rounded-full border border-outline-variant/10">Fantasía</span>
               <span class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant text-sm rounded-full border border-outline-variant/10">Aventura</span>
@@ -277,7 +277,7 @@ endif; ?>
         <div class="space-y-10">
           <div class="bg-surface-container-low rounded-lg p-8 border border-outline-variant/5 space-y-8">
             <h3 class="font-headline text-xl font-bold border-b border-outline-variant/10 pb-4">Información</h3>
-            <div class="space-y-6">
+            <div id="detail-info-block" class="space-y-6">
               <div class="flex flex-col gap-1">
                 <span class="text-xs text-on-surface-variant uppercase tracking-widest font-bold">Native Title</span>
                 <span class="text-on-surface font-medium">? ?? ??</span>
@@ -363,15 +363,15 @@ endif; ?>
         </div>
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
           <!-- Card 1 -->
-          <a class="group cursor-pointer" href="detail.php"><div class="poster-fade-left relative aspect-[2/3] rounded-lg overflow-hidden bg-surface-container-high relative mb-4 transition-transform duration-500 ease-[cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.04]"><img alt="Tower of God" class="w-full h-full object-cover" data-alt="Anime fantasy poster vertical" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtqxKcGTcymR4IJol4SxeiIj-BJNATnZcsnFB2ZMYRTa74Vr0wv3vAZ6CEWT1rbGPSDGJrUxs1F6uIcQHQ8iKXtmZIvFLACNlD4UPMFWExAc8CUG2cd_tFeTP0tpM1N_eQ0OkRniEpPz16OEyZjUhmIpXAREqccEnQwbppVkAmyIwXrZjM_7S4FmDqxkG50F5ZTWxzmiWTlDi8zorXn_C5j-ZqIId_lDc6EU00FED-4xW5ht_oYkS0j8kh05o0Kt6g_KJgoKmdrqvi"/><div class="absolute top-3 right-3 bg-neutral-950/80 backdrop-blur-md px-2 py-1 rounded-md flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span> <span class="text-xs font-bold">8.1</span></div></div><h4 class="font-bold text-on-surface group-hover:text-primary transition-colors truncate">Tower of God</h4><p class="text-xs text-on-surface-variant mt-1">Adventure, Mystery</p></a>
+          <a class="group cursor-pointer" href="detail.php?q=Tower of God"><div class="poster-fade-left relative aspect-[2/3] rounded-lg overflow-hidden bg-surface-container-high relative mb-4 transition-transform duration-500 ease-[cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.04]"><img alt="Tower of God" class="w-full h-full object-cover" data-alt="Anime fantasy poster vertical" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtqxKcGTcymR4IJol4SxeiIj-BJNATnZcsnFB2ZMYRTa74Vr0wv3vAZ6CEWT1rbGPSDGJrUxs1F6uIcQHQ8iKXtmZIvFLACNlD4UPMFWExAc8CUG2cd_tFeTP0tpM1N_eQ0OkRniEpPz16OEyZjUhmIpXAREqccEnQwbppVkAmyIwXrZjM_7S4FmDqxkG50F5ZTWxzmiWTlDi8zorXn_C5j-ZqIId_lDc6EU00FED-4xW5ht_oYkS0j8kh05o0Kt6g_KJgoKmdrqvi"/><div class="absolute top-3 right-3 bg-neutral-950/80 backdrop-blur-md px-2 py-1 rounded-md flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span> <span class="text-xs font-bold">8.1</span></div></div><h4 class="font-bold text-on-surface group-hover:text-primary transition-colors truncate">Tower of God</h4><p class="text-xs text-on-surface-variant mt-1">Adventure, Mystery</p></a>
           <!-- Card 2 -->
-          <a class="group cursor-pointer" href="detail.php"><div class="poster-fade-left relative aspect-[2/3] rounded-lg overflow-hidden bg-surface-container-high relative mb-4 transition-transform duration-500 ease-[cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.04]"><img alt="Tower of God" class="w-full h-full object-cover" data-alt="Anime fantasy poster vertical" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtqxKcGTcymR4IJol4SxeiIj-BJNATnZcsnFB2ZMYRTa74Vr0wv3vAZ6CEWT1rbGPSDGJrUxs1F6uIcQHQ8iKXtmZIvFLACNlD4UPMFWExAc8CUG2cd_tFeTP0tpM1N_eQ0OkRniEpPz16OEyZjUhmIpXAREqccEnQwbppVkAmyIwXrZjM_7S4FmDqxkG50F5ZTWxzmiWTlDi8zorXn_C5j-ZqIId_lDc6EU00FED-4xW5ht_oYkS0j8kh05o0Kt6g_KJgoKmdrqvi"/><div class="absolute top-3 right-3 bg-neutral-950/80 backdrop-blur-md px-2 py-1 rounded-md flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span> <span class="text-xs font-bold">8.1</span></div></div><h4 class="font-bold text-on-surface group-hover:text-primary transition-colors truncate">Tower of God</h4><p class="text-xs text-on-surface-variant mt-1">Adventure, Mystery</p></a>
+          <a class="group cursor-pointer" href="detail.php?q=Your Name"><div class="poster-fade-left relative aspect-[2/3] rounded-lg overflow-hidden bg-surface-container-high relative mb-4 transition-transform duration-500 ease-[cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.04]"><img alt="Your Name" class="w-full h-full object-cover" data-alt="Anime romance poster vertical" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtqxKcGTcymR4IJol4SxeiIj-BJNATnZcsnFB2ZMYRTa74Vr0wv3vAZ6CEWT1rbGPSDGJrUxs1F6uIcQHQ8iKXtmZIvFLACNlD4UPMFWExAc8CUG2cd_tFeTP0tpM1N_eQ0OkRniEpPz16OEyZjUhmIpXAREqccEnQwbppVkAmyIwXrZjM_7S4FmDqxkG50F5ZTWxzmiWTlDi8zorXn_C5j-ZqIId_lDc6EU00FED-4xW5ht_oYkS0j8kh05o0Kt6g_KJgoKmdrqvi"/><div class="absolute top-3 right-3 bg-neutral-950/80 backdrop-blur-md px-2 py-1 rounded-md flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span> <span class="text-xs font-bold">8.9</span></div></div><h4 class="font-bold text-on-surface group-hover:text-primary transition-colors truncate">Your Name</h4><p class="text-xs text-on-surface-variant mt-1">Romance, Drama</p></a>
           <!-- Card 3 -->
-          <a class="group cursor-pointer" href="detail.php"><div class="poster-fade-left relative aspect-[2/3] rounded-lg overflow-hidden bg-surface-container-high relative mb-4 transition-transform duration-500 ease-[cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.04]"><img alt="Tower of God" class="w-full h-full object-cover" data-alt="Anime fantasy poster vertical" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtqxKcGTcymR4IJol4SxeiIj-BJNATnZcsnFB2ZMYRTa74Vr0wv3vAZ6CEWT1rbGPSDGJrUxs1F6uIcQHQ8iKXtmZIvFLACNlD4UPMFWExAc8CUG2cd_tFeTP0tpM1N_eQ0OkRniEpPz16OEyZjUhmIpXAREqccEnQwbppVkAmyIwXrZjM_7S4FmDqxkG50F5ZTWxzmiWTlDi8zorXn_C5j-ZqIId_lDc6EU00FED-4xW5ht_oYkS0j8kh05o0Kt6g_KJgoKmdrqvi"/><div class="absolute top-3 right-3 bg-neutral-950/80 backdrop-blur-md px-2 py-1 rounded-md flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span> <span class="text-xs font-bold">8.1</span></div></div><h4 class="font-bold text-on-surface group-hover:text-primary transition-colors truncate">Tower of God</h4><p class="text-xs text-on-surface-variant mt-1">Adventure, Mystery</p></a>
+          <a class="group cursor-pointer" href="detail.php?q=Solo Leveling"><div class="poster-fade-left relative aspect-[2/3] rounded-lg overflow-hidden bg-surface-container-high relative mb-4 transition-transform duration-500 ease-[cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.04]"><img alt="Solo Leveling" class="w-full h-full object-cover" data-alt="Anime action poster vertical" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXTXqdDIpKJHKrJNqlN-s7KMfzwFvt6rOtGu823T9YwAdyi6UEeanLdk9bqVlZ8ho5vTFT7MDZ6vzPK4KY7BJP13NbLY_vk_gooV2eHcmjbyP9weV8jSsNAnMZ_QJT54fqop6etgY343bdhrCO--xxETu162oetRJCyr0HpWKNw2NpQCSK024fF7PvE7RiypLSPQDTXxOG-TO4cAplVg_TuTwzEooVYnPehX57TkY2_pMDoTFuAYFkM9vyCyuQz0AljMmSIz1r-XDr"/><div class="absolute top-3 right-3 bg-neutral-950/80 backdrop-blur-md px-2 py-1 rounded-md flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span> <span class="text-xs font-bold">8.7</span></div></div><h4 class="font-bold text-on-surface group-hover:text-primary transition-colors truncate">Solo Leveling</h4><p class="text-xs text-on-surface-variant mt-1">Action, Fantasy</p></a>
           <!-- Card 4 -->
-          <a class="group cursor-pointer" href="detail.php"><div class="poster-fade-left relative aspect-[2/3] rounded-lg overflow-hidden bg-surface-container-high relative mb-4 transition-transform duration-500 ease-[cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.04]"><img alt="Tower of God" class="w-full h-full object-cover" data-alt="Anime fantasy poster vertical" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtqxKcGTcymR4IJol4SxeiIj-BJNATnZcsnFB2ZMYRTa74Vr0wv3vAZ6CEWT1rbGPSDGJrUxs1F6uIcQHQ8iKXtmZIvFLACNlD4UPMFWExAc8CUG2cd_tFeTP0tpM1N_eQ0OkRniEpPz16OEyZjUhmIpXAREqccEnQwbppVkAmyIwXrZjM_7S4FmDqxkG50F5ZTWxzmiWTlDi8zorXn_C5j-ZqIId_lDc6EU00FED-4xW5ht_oYkS0j8kh05o0Kt6g_KJgoKmdrqvi"/><div class="absolute top-3 right-3 bg-neutral-950/80 backdrop-blur-md px-2 py-1 rounded-md flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span> <span class="text-xs font-bold">8.1</span></div></div><h4 class="font-bold text-on-surface group-hover:text-primary transition-colors truncate">Tower of God</h4><p class="text-xs text-on-surface-variant mt-1">Adventure, Mystery</p></a>
+          <a class="group cursor-pointer" href="detail.php?q=Chainsaw Man"><div class="poster-fade-left relative aspect-[2/3] rounded-lg overflow-hidden bg-surface-container-high relative mb-4 transition-transform duration-500 ease-[cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.04]"><img alt="Chainsaw Man" class="w-full h-full object-cover" data-alt="Anime horror poster vertical" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3K_I8d_R8f6D6S8o7E4U6P7uN9eX5zT6wQ7zT6wQ7zT6wQ7zT6wQ7zT6wQ7zT6wQ7zT6wQ7zT6wQ7zT6wQ7zT6w"/><div class="absolute top-3 right-3 bg-neutral-950/80 backdrop-blur-md px-2 py-1 rounded-md flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span> <span class="text-xs font-bold">8.5</span></div></div><h4 class="font-bold text-on-surface group-hover:text-primary transition-colors truncate">Chainsaw Man</h4><p class="text-xs text-on-surface-variant mt-1">Action, Horror</p></a>
           <!-- Card 5 -->
-          <a class="group cursor-pointer" href="detail.php"><div class="poster-fade-left relative aspect-[2/3] rounded-lg overflow-hidden bg-surface-container-high relative mb-4 transition-transform duration-500 ease-[cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.04]"><img alt="Tower of God" class="w-full h-full object-cover" data-alt="Anime fantasy poster vertical" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtqxKcGTcymR4IJol4SxeiIj-BJNATnZcsnFB2ZMYRTa74Vr0wv3vAZ6CEWT1rbGPSDGJrUxs1F6uIcQHQ8iKXtmZIvFLACNlD4UPMFWExAc8CUG2cd_tFeTP0tpM1N_eQ0OkRniEpPz16OEyZjUhmIpXAREqccEnQwbppVkAmyIwXrZjM_7S4FmDqxkG50F5ZTWxzmiWTlDi8zorXn_C5j-ZqIId_lDc6EU00FED-4xW5ht_oYkS0j8kh05o0Kt6g_KJgoKmdrqvi"/><div class="absolute top-3 right-3 bg-neutral-950/80 backdrop-blur-md px-2 py-1 rounded-md flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span> <span class="text-xs font-bold">8.1</span></div></div><h4 class="font-bold text-on-surface group-hover:text-primary transition-colors truncate">Tower of God</h4><p class="text-xs text-on-surface-variant mt-1">Adventure, Mystery</p></a>
+          <a class="group cursor-pointer" href="detail.php?q=Spy x Family"><div class="poster-fade-left relative aspect-[2/3] rounded-lg overflow-hidden bg-surface-container-high relative mb-4 transition-transform duration-500 ease-[cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.04]"><img alt="Spy x Family" class="w-full h-full object-cover" data-alt="Anime comedy poster vertical" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtqxKcGTcymR4IJol4SxeiIj-BJNATnZcsnFB2ZMYRTa74Vr0wv3vAZ6CEWT1rbGPSDGJrUxs1F6uIcQHQ8iKXtmZIvFLACNlD4UPMFWExAc8CUG2cd_tFeTP0tpM1N_eQ0OkRniEpPz16OEyZjUhmIpXAREccEnQwbppVkAmyIwXrZjM_7S4FmDqxkG50F5ZTWxzmiWTlDi8zorXn_C5j-ZqIId_lDc6EU00FED-4xW5ht_oYkS0j8kh05o0Kt6g_KJgoKmdrqvi"/><div class="absolute top-3 right-3 bg-neutral-950/80 backdrop-blur-md px-2 py-1 rounded-md flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span> <span class="text-xs font-bold">8.6</span></div></div><h4 class="font-bold text-on-surface group-hover:text-primary transition-colors truncate">Spy x Family</h4><p class="text-xs text-on-surface-variant mt-1">Comedy, Action</p></a>
         </div>
       </section>
       <!-- Comments Section -->
@@ -383,8 +383,23 @@ endif; ?>
           </div>
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-[1.1fr,0.9fr] gap-8">
-<?php if ($isLoggedIn): ?>
-          <form id="comment-form" class="rounded-3xl border border-white/10 bg-surface-container-low/60 p-6 md:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.4)] space-y-6">
+          <form id="comment-form" class="relative rounded-3xl border border-white/10 bg-surface-container-low/60 p-6 md:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.4)] space-y-6 overflow-hidden">
+            <!-- Bloqueo Premium Estilo Episodios Como Enlace Real -->
+            <a id="comment-lock-overlay" href="registro.php" class="absolute inset-0 bg-black/65 backdrop-blur-md flex flex-col items-center justify-center z-[40] transition-all duration-500 rounded-3xl border border-violet-500/30 cursor-pointer group/lock no-underline">
+              <div class="relative flex flex-col items-center justify-center">
+                 <div class="absolute -inset-4 bg-gradient-to-r from-violet-600 to-fuchsia-600 rounded-2xl blur-xl opacity-20 group-hover/lock:opacity-50 transition duration-700"></div>
+                 <div class="relative flex flex-col items-center gap-4 bg-surface-container-high/95 px-10 py-8 rounded-2xl border border-white/10 shadow-2xl transform transition-all group-hover/lock:scale-[1.03] group-hover/lock:border-violet-400/40">
+                    <div class="w-16 h-16 rounded-full bg-violet-500/10 flex items-center justify-center border border-violet-500/20 text-violet-400 group-hover/lock:bg-violet-500 group-hover/lock:text-white transition-all duration-300">
+                      <span class="material-symbols-outlined text-4xl">lock</span>
+                    </div>
+                    <div class="text-center px-4">
+                      <span class="block text-white font-bold text-lg tracking-tight mb-1" id="lock-message">INICIA SESIÓN PARA COMENTAR</span>
+                      <span class="text-[11px] text-on-surface-variant/70 uppercase tracking-widest leading-none">DISPONIBLE PARA MIEMBROS NEKORA PREMIUM</span>
+                    </div>
+                 </div>
+              </div>
+            </a>
+
             <div>
               <h3 class="font-headline text-2xl font-bold">Deja tu comentario</h3>
               <p class="text-sm text-on-surface-variant mt-1">Sé breve, claro y respetuoso.</p>
@@ -426,16 +441,6 @@ endif; ?>
               <span class="text-xs text-on-surface-variant">Tu opinión ayuda a la comunidad.</span>
             </div>
           </form>
-<?php
-else: ?>
-          <div class="rounded-3xl border border-white/10 bg-surface-container-low/60 p-6 md:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.4)] flex flex-col items-center justify-center text-center space-y-4">
-            <span class="material-symbols-outlined text-[48px] text-on-surface-variant/70">lock</span>
-            <h3 class="font-headline text-xl font-bold">Inicia sesión para comentar</h3>
-            <p class="text-sm text-on-surface-variant">Únete a la comunidad de WebAnime para calificar títulos y compartir tu opinión con otros otakus.</p>
-            <a href="registro.php" class="rounded-full bg-primary/20 border border-primary/40 text-primary-dim px-8 py-2.5 font-bold uppercase tracking-widest hover:bg-primary hover:text-on-primary transition-all shadow-[0_0_15px_rgba(139,92,246,0.3)] mt-2">Crear Cuenta o Ingresar</a>
-          </div>
-<?php
-endif; ?>
           <div class="rounded-3xl border border-white/10 bg-surface-container-low/60 p-6 md:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.4)] space-y-4">
             <div class="flex items-center justify-between">
               <h3 class="font-headline text-2xl font-bold">Opiniones recientes</h3>
@@ -484,7 +489,7 @@ endif; ?>
     </main>
     <!-- Footer Component -->
     <div data-layout="footer"></div>
-    <script src="controllers/layout.js?v=final5"></script>
+    <script src="controllers/layout.js?v=final14"></script>
     <script src="controllers/i18n.js"></script>
     <script src="controllers/title-images.js?v=3"></script>
     <script src="controllers/search.js"></script>
@@ -496,7 +501,6 @@ endif; ?>
     if (window.AniDexI18n) window.AniDexI18n.init();
     if (window.AniDexTitleImages) window.AniDexTitleImages.init();
     if (window.AniDexSearch) window.AniDexSearch.init();
-    if (window.AniDexDetailLinks) window.AniDexDetailLinks.init();
     if (window.AniDexFavorites) window.AniDexFavorites.init();
     if (window.AniDexDetailLinks) window.AniDexDetailLinks.init();
     if (window.AniDexDetailData) window.AniDexDetailData.init();
@@ -523,17 +527,41 @@ endif; ?>
     const ratingValue = document.getElementById("rating-value");
     const submitBtn = document.getElementById("comment-submit");
     const isLogged = window.AniDexLayout ? window.AniDexLayout.isLoggedIn() : (localStorage.getItem("nekora_logged_in") === "true");
-    const isPremium = window.AniDexLayout ? (window.AniDexLayout.getRole() === "Premium" || window.AniDexLayout.getRole() === "Admin") : (localStorage.getItem("nekora_user") === "Admin99" || localStorage.getItem("nekora_premium") === "true");
+    const isPremium = window.AniDexLayout ? (window.AniDexLayout.getRole() === "Premium" || window.AniDexLayout.getRole() === "Admin") : (localStorage.getItem("nekora_premium") === "true" || localStorage.getItem("nekora_user") === "Admin99");
 
     // Registrar vista de anime
     const logActivity = async (action, extraData = {}) => {
       if (!isLogged) return;
-      const malId = new URLSearchParams(window.location.search).get("mal_id") || new URLSearchParams(window.location.search).get("id");
+      const params = new URLSearchParams(window.location.search);
+      let animeId = params.get("mal_id") || params.get("id");
+      
+      // Si no hay ID en la URL, intentamos obtenerlo del dataset que llena detail-data.js
+      if (!animeId && action === "view") {
+        let retries = 0;
+        const checkId = setInterval(async () => {
+          animeId = document.body.dataset.detailId;
+          if (animeId || retries > 10) {
+            clearInterval(checkId);
+            if (animeId) {
+                fetch("api/activity.php", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ action, anime_id: animeId, ...extraData })
+                }).catch(() => {});
+            }
+          }
+          retries++;
+        }, 500);
+        return;
+      }
+
+      if (!animeId) return;
+
       try {
         await fetch("api/activity.php", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action, anime_id: malId, ...extraData })
+          body: JSON.stringify({ action, anime_id: animeId, ...extraData })
         });
       } catch (e) { console.error("Error logging activity:", e); }
     };
@@ -550,38 +578,57 @@ endif; ?>
     let visibleCount = 3;
     let filterRating = 0;
     let reportTargetButton = null;
-    if (!canComment) {
-      const lockText = "Activa el modo premium para comentar";
-      form.classList.add("relative", "overflow-hidden");
-      form.insertAdjacentHTML(
-        "afterbegin",
-        `<div class="absolute inset-0 bg-black/55 backdrop-blur-[1px] flex items-center justify-center z-10">
-          <button type="button" class="flex flex-col items-center gap-2 rounded-full bg-surface-container-high/80 px-4 py-3 text-xs font-semibold uppercase tracking-widest text-on-surface hover:bg-surface-container-high transition-colors text-center" data-comment-login>
-            <span class="material-symbols-outlined text-base">lock</span>
-            <span>${lockText}</span>
-          </button>
-        </div>`
-      );
-      const loginBtn = form.querySelector("[data-comment-login]");
-      const overlay = form.querySelector(".absolute.inset-0");
-      const goRegister = () => { window.location.href = isLogged ? "pago.php" : "registro.php"; };
-      if (loginBtn) loginBtn.addEventListener("click", goRegister);
-      if (overlay) overlay.addEventListener("click", goRegister);
-      textarea.setAttribute("disabled", "true");
-      submitBtn?.setAttribute("disabled", "true");
-      starsWrap?.classList.add("pointer-events-none", "opacity-60");
-      textarea.classList.add("opacity-60");
-      if (submitBtn) {
-        submitBtn.classList.add("opacity-50", "pointer-events-none");
+    const lockOverlay = document.getElementById("comment-lock-overlay");
+    const lockMsg = document.getElementById("lock-message");
+
+    const applyLock = (isLogged, isPremium) => {
+      if (!lockOverlay) return;
+      if (isPremium) {
+        lockOverlay.classList.remove("flex");
+        lockOverlay.classList.add("hidden");
+        textarea.removeAttribute("disabled");
+        submitBtn?.classList.remove("opacity-30", "pointer-events-none", "grayscale");
+        starsWrap?.classList.remove("pointer-events-none", "opacity-40");
+        textarea.classList.remove("opacity-40", "grayscale");
+      } else {
+        lockOverlay.classList.remove("hidden");
+        lockOverlay.classList.add("flex");
+        
+        // Update the link destination
+        lockOverlay.href = isLogged ? "pago.php" : "registro.php";
+
+        lockMsg.textContent = isLogged ? "ACTIVA EL MODO PREMIUM PARA COMENTAR" : "INICIA SESIÓN PARA COMENTAR";
+        
+        textarea.setAttribute("disabled", "true");
+        if (submitBtn) {
+          submitBtn.setAttribute("disabled", "true");
+          submitBtn.classList.add("opacity-30", "pointer-events-none", "grayscale");
+        }
+        starsWrap?.classList.add("pointer-events-none", "opacity-40");
+        textarea.classList.add("opacity-40", "grayscale");
       }
+    };
+
+    if (window.AniDexLayout && typeof window.AniDexLayout.onReady === "function") {
+      window.AniDexLayout.onReady(() => {
+        const isLogged = window.AniDexLayout.isLoggedIn();
+        const isPremium = window.AniDexLayout.getRole() === "Premium" || window.AniDexLayout.getRole() === "Admin";
+        applyLock(isLogged, isPremium);
+        if (isLogged) logActivity("view");
+        
+        const favoriteBtns = document.querySelectorAll("[data-add-favorite]");
+        const statusBtns = document.querySelectorAll("[data-detail-status]");
+        if (!isLogged) {
+          favoriteBtns.forEach((btn) => btn.classList.add("hidden"));
+          statusBtns.forEach((btn) => btn.classList.add("hidden"));
+        }
+      });
+    } else {
+      const isLogged = localStorage.getItem("nekora_logged_in") === "true";
+      const isPremium = localStorage.getItem("nekora_premium") === "true" || localStorage.getItem("nekora_user") === "Admin99";
+      applyLock(isLogged, isPremium);
     }
-    const myListBtns = document.querySelectorAll("[data-add-my-list]");
-    const favoriteBtns = document.querySelectorAll("[data-add-favorite]");
-    const statusBtns = document.querySelectorAll("[data-detail-status]");
-    if (!isLogged) {
-      favoriteBtns.forEach((btn) => btn.classList.add("hidden"));
-      statusBtns.forEach((btn) => btn.classList.add("hidden"));
-    }
+
     if (filterSelect) {
       filterSelect.addEventListener("change", () => {
         filterRating = Number(filterSelect.value || 0);
@@ -922,34 +969,34 @@ endif; ?>
       count.textContent = `${words.length}/200 palabras`;
       updateSubmitState();
     });
+    updateSubmitState();
     updateCount();
     renderComments();
 
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const text = textarea.value.trim();
-      if (!text || rating === 0) {
-        if (error) error.classList.remove("hidden");
-        return;
+    window.AniDexPages = {
+      refreshProfileUI: () => {
+        if (typeof applyState === "function") applyState();
+        if (typeof loadProfile === "function") loadProfile();
+        console.log("UI Refreshed (Detail)");
       }
-      if (error) error.classList.add("hidden");
-      const items = loadComments();
-      const newComment = {
-        text,
-        rating,
-        author: getProfileName(),
-        date: new Date().toLocaleDateString("es-ES", { day: "2-digit", month: "short", year: "numeric" })
-      };
-      items.unshift(newComment);
-      saveComments(items);
-      logActivity("comment", { details: `Valoración: ${rating} estrellas. Comentario: ${text.slice(0, 50)}...` });
-      textarea.value = "";
-      setRating(0);
-      updateCount();
-      renderComments();
-    });
-    updateSubmitState();
+    };
+    
+    // Initialize detail data if object is present
+    const initDetail = () => {
+      if (window.AniDexDetailData && typeof window.AniDexDetailData.init === "function") {
+        window.AniDexDetailData.init();
+      }
+    };
+    initDetail();
   })();
+    </script>
+    <script src="models/detail-data.js"></script>
+    <script>
+      // Fallback init in case script loads after IIFE
+      if (window.AniDexDetailData && typeof window.AniDexDetailData.init === "function") {
+          window.AniDexDetailData.init();
+      }
+    </script>
     </script>
     <script data-ui-unlock>document.documentElement.classList.remove("preload-ui");</script>
   </body></html>

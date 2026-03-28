@@ -598,8 +598,23 @@
   async function applyUserPage() {
     const userCards = cardsBySelector("main .group.cursor-pointer");
     if (!userCards.length) return;
-    const items = await fetchTop("tv", userCards.length);
-    applyItemsToCards(userCards, items, "tv");
+    
+    // For user page, we must search each title specifically to avoid mismatches
+    for (const card of userCards) {
+      const title = getCardTitle(card);
+      if (!title) continue;
+      
+      const item = await searchByTitleCanonical(title);
+      if (item) {
+        setImage(card, item);
+        setScore(card, item);
+        setDataAttrs(card, item, "tv");
+        // Update badge (episodes)
+        const eps = item?.episodes;
+        const badge = card.querySelector("span.absolute.left-3.top-3, span.absolute.left-3.bottom-3");
+        if (badge && eps) badge.textContent = `${eps} ep`;
+      }
+    }
   }
 
   window.AniDexTitleImages = {

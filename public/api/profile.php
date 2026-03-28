@@ -25,16 +25,18 @@ try {
         echo json_encode([
             'success' => true,
             'data' => [
-                'profile' => [
-                    'name' => $meta['profile_name'] ?? $_SESSION['username'],
-                    'desc' => $meta['profile_desc'] ?? '',
-                    'color' => $meta['profile_color'] ?? '',
-                    'avatar' => $meta['profile_avatar'] ?? '',
-                    'member_since' => $meta['profile_member_since'] ?? date('Y')
-                ],
-                'my_list' => json_decode($meta['my_list'] ?? '[]', true),
-                'favorites' => json_decode($meta['favorites'] ?? '[]', true),
-                'status' => json_decode($meta['status_list'] ?? '{}', true)
+                'anidex_profile_name' => $meta['profile_name'] ?? ($_SESSION['username'] ?? ''),
+                'anidex_profile_desc' => $meta['profile_desc'] ?? 'Explorador de animes en NekoraList',
+                'anidex_profile_color' => $meta['profile_color'] ?? '',
+                'anidex_profile_avatar' => $meta['profile_avatar'] ?? '',
+                'anidex_profile_member_since' => $meta['profile_member_since'] ?? date('Y'),
+                'anidex_user_id' => $meta['profile_id'] ?? '',
+                'anidex_profile_hours' => $meta['profile_hours'] ?? '0',
+                'anidex_profile_prefs' => json_decode($meta['anidex_profile_prefs'] ?? '[]', true),
+                'anidex_continue_v1' => json_decode($meta['anidex_continue_v1'] ?? '[]', true),
+                'anidex_my_list_v1' => json_decode($meta['my_list'] ?? '[]', true),
+                'anidex_favorites_v1' => json_decode($meta['favorites'] ?? '[]', true),
+                'anidex_status_v1' => json_decode($meta['status_list'] ?? '{}', true)
             ]
         ]);
     } elseif ($action === 'save') {

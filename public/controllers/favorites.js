@@ -41,8 +41,16 @@
     const list = readKey(key).filter((x) => norm(x.title) !== id);
     list.unshift({ ...item, status: item.status || "", savedAt: Date.now() });
     writeKey(key, list.slice(0, 120));
+    if (window.AniDexProfile && typeof window.AniDexProfile.saveToDB === "function") {
+      window.AniDexProfile.saveToDB();
+    }
   };
-  const remove = (key, title) => writeKey(key, readKey(key).filter((x) => norm(x.title) !== norm(title)));
+  const remove = (key, title) => {
+    writeKey(key, readKey(key).filter((x) => norm(x.title) !== norm(title)));
+    if (window.AniDexProfile && typeof window.AniDexProfile.saveToDB === "function") {
+      window.AniDexProfile.saveToDB();
+    }
+  };
   const exists = (key, title) => readKey(key).some((x) => norm(x.title) === norm(title));
   const readStatus = () => readKey(KEY_STATUS);
   const writeStatus = (v) => writeKey(KEY_STATUS, v);
@@ -68,6 +76,9 @@
       });
     }
     writeStatus(list);
+    if (window.AniDexProfile && typeof window.AniDexProfile.saveToDB === "function") {
+      window.AniDexProfile.saveToDB();
+    }
   };
 
   const migrateStatusFromLists = () => {

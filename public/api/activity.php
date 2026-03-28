@@ -35,6 +35,20 @@ try {
         if ($animeId) {
             $stmt = $dbConn->prepare("INSERT INTO usuarios_vistas (usuario_id, anime_id) VALUES (?, ?)");
             $stmt->execute([$userId, $animeId]);
+
+            // Incrementar horas vistas (simulado: +0.4h por vista rápida por ahora o según duración)
+            $stmtHours = $dbConn->prepare("INSERT INTO usuarios_meta (usuario_id, meta_key, meta_value) 
+                                           VALUES (?, 'profile_hours', '0.4') 
+                                           ON DUPLICATE KEY UPDATE meta_value = CAST(meta_value AS DECIMAL(10,1)) + 0.4");
+            $stmtHours->execute([$userId]);
+        }
+    } elseif ($action === 'time_sync') {
+        $delta = floatval($data['delta'] ?? 0);
+        if ($delta > 0) {
+            $stmtHours = $dbConn->prepare("INSERT INTO usuarios_meta (usuario_id, meta_key, meta_value) 
+                                           VALUES (?, 'profile_hours', ?) 
+                                           ON DUPLICATE KEY UPDATE meta_value = CAST(meta_value AS DECIMAL(10,1)) + ?");
+            $stmtHours->execute([$userId, $delta, $delta]);
         }
     } elseif ($action === 'report') {
         $animeId = $data['anime_id'] ?? null;

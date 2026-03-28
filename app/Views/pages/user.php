@@ -247,8 +247,8 @@
             <div class="p-8 md:p-10 pb-0 space-y-8">
             <div class="flex flex-wrap items-start justify-between gap-4">
               <div>
-                <h2 class="font-headline text-2xl md:text-3xl font-black italic tracking-tight text-primary uppercase">IDENTIDAD OTAKU</h2>
-                <p class="text-on-surface-variant font-label text-[10px] tracking-widest">ID: NK-2489542</p>
+                <h2 class="font-headline text-2xl md:text-3xl font-black italic tracking-tight text-primary uppercase">IDENTIDAD NEKORA</h2>
+                <p class="text-on-surface-variant font-label text-[10px] tracking-widest" data-profile-id-display>ID: ...</p>
               </div>
               <div class="flex items-center gap-2 -mr-4">
                 <span class="bg-emerald-500/15 text-emerald-300 px-3 py-1 rounded-full font-label text-[10px] font-bold tracking-widest uppercase inline-flex items-center gap-1.5" data-identity-badge>
@@ -271,9 +271,9 @@
               </div>
               <div class="space-y-5 text-center lg:text-left">
                 <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3">
-                  <h1 class="font-headline text-4xl md:text-5xl font-extrabold tracking-tight text-on-surface">NekoraUser_62</h1>
+                  <h1 class="font-headline text-4xl md:text-5xl font-extrabold tracking-tight text-on-surface">Cargando...</h1>
                 </div>
-                <p class="text-on-surface-variant font-medium whitespace-pre-line">Curando el mejor shonen desde 2018</p>
+                <p class="text-on-surface-variant font-medium whitespace-pre-line">...</p>
               </div>
                 <div class="lg:col-span-2 space-y-3">
                   <div class="grid w-full grid-cols-3 gap-2 text-left">
@@ -290,10 +290,10 @@
                     <div class="mt-1 text-sm font-semibold text-on-surface" data-profile-hours>0 h</div>
                   </div>
                 </div>
-                  <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
-                    <div class="text-[10px] uppercase tracking-widest text-on-surface-variant">Preferencias</div>
-                    <div class="mt-2 grid grid-cols-4 gap-2 text-xs" data-pref-display>
-                      <span class="rounded-full border border-white/10 bg-white/10 inline-flex w-fit items-center justify-center px-3 py-1 text-xs text-center text-on-surface-variant h-7 truncate col-span-4 justify-self-center">Sin preferencias</span>
+                  <div class="rounded-2xl border border-white/10 bg-white/5 p-4 overflow-hidden">
+                    <div class="text-[10px] uppercase tracking-widest text-on-surface-variant mb-2">Preferencias</div>
+                    <div class="flex flex-nowrap gap-2 overflow-x-auto no-scrollbar pb-1 h-8 items-center" data-pref-display>
+                      <span class="rounded-full border border-white/10 bg-white/10 inline-flex w-fit items-center justify-center px-4 py-1 text-xs text-center text-on-surface-variant h-7 truncate shrink-0">Sin preferencias</span>
                     </div>
                   </div>
                   <div class="mt-3 flex w-full flex-wrap items-center justify-center gap-x-3 gap-y-2 translate-y-2" id="profile-actions">
@@ -661,7 +661,7 @@
 
     <!-- Footer Component -->
     <div data-layout="footer"></div>
-    <script src="controllers/layout.js?v=final5"></script>
+    <script src="controllers/layout.js?v=final14"></script>
     <script src="controllers/i18n.js"></script>
     <script src="controllers/title-images.js?v=3"></script>
     <script src="controllers/search.js"></script>
@@ -757,7 +757,10 @@
       document.querySelectorAll("img[data-profile-avatar]").forEach((img) => {
         img.src = src;
       });
-      try { localStorage.setItem("anidex_profile_avatar", src); } catch (e) {}
+      try { 
+          localStorage.setItem("anidex_profile_avatar", src); 
+          saveProfileToDB();
+      } catch (e) {}
     };
 
     const saved = (() => { try { return localStorage.getItem("anidex_profile_avatar"); } catch (e) { return null; } })();
@@ -923,115 +926,74 @@
     </script>
     <script>
   (function () {
-    const editBtn = document.getElementById("profile-edit-btn");
+    // DOM Elements
     const settingsBtn = document.getElementById("profile-settings-btn");
+    const editBtn = document.getElementById("edit-profile-btn");
     const modal = document.getElementById("profile-modal");
     const closeEls = modal ? modal.querySelectorAll("[data-profile-close]") : [];
+    
     const requestBtn = document.getElementById("request-title-btn");
     const requestModal = document.getElementById("request-title-modal");
     const requestForm = document.getElementById("request-title-form");
     const requestInput = document.getElementById("request-title-input");
     const requestToast = document.getElementById("request-toast");
     const requestCloseEls = requestModal ? requestModal.querySelectorAll("[data-request-close]") : [];
+    
+    const idDisplay = document.querySelector("[data-profile-id-display]");
+    console.log("AniDex DEBUG: idDisplay =", idDisplay);
+    const avatarImg = document.querySelector("img[alt='Foto de perfil']");
     const nameInput = document.getElementById("profile-name-input");
     const descInput = document.getElementById("profile-desc-input");
     const saveBtn = document.getElementById("profile-save-btn");
     const descCount = document.getElementById("profile-desc-count");
+    
     const nameEl = document.querySelector("h1.font-headline");
     const descEl = document.querySelector("p.text-on-surface-variant.font-medium");
     const cardEl = document.getElementById("profile-card");
     const memberEl = document.querySelector("[data-profile-member]");
     const lastEl = document.querySelector("[data-profile-last]");
     const hoursEl = document.querySelector("[data-profile-hours]");
+    
     const colorOptions = document.getElementById("profile-color-options");
     const prefsWrap = document.getElementById("preferences-picker");
     const prefsDisplay = document.querySelector("[data-pref-display]");
+
+    // Constants
     const PREF_KEY = "anidex_profile_prefs";
     const PREF_GROUPS = {
-      "Idioma": ["Sub. espa\u00f1ol", "Doblaje espa\u00f1ol", "Japon\u00e9s", "Ingl\u00e9s"],
-      "G\u00e9nero": ["Acci\u00f3n", "Fantas\u00eda", "Drama", "Comedia", "Romance", "Terror", "Sci-Fi"]
+      "Idioma": ["Sub. español", "Doblaje español", "Japonés", "Inglés"],
+      "Género": ["Acción", "Fantasía", "Drama", "Comedia", "Romance", "Terror", "Sci-Fi"]
     };
-    const PREF_DEFAULTS = {
-      "Idioma": [],
-      "G\u00e9nero": []
-    };
+    const PREF_DEFAULTS = { "Idioma": [], "Género": [] };
     const PREF_GROUP_STYLES = {
-      "Idioma": {
-        baseBorder: "border-blue-400/70",
-        baseBg: "bg-blue-500/45",
-        activeBorder: "border-blue-300/90",
-        activeBg: "bg-blue-500/70",
-        hoverRing: "hover:ring-0",
-        glow: ""
-      },
-      "G?nero": {
-        baseBorder: "border-violet-400/70",
-        baseBg: "bg-violet-500/45",
-        activeBorder: "border-violet-300/90",
-        activeBg: "bg-violet-500/70",
-        hoverRing: "hover:ring-0",
-        glow: ""
-      }
-    };
-    const prefStyleFor = (group, isActive) => {
-      const palette = PREF_GROUP_STYLES[group] || {};
-      const base = `${palette.baseBg || "bg-white/10"} ${palette.baseBorder || "border-white/20"} text-white ${palette.glow || ""} ${palette.hoverRing || "hover:ring-2 hover:ring-white/20"}`;
-      if (isActive) {
-        return `bg-slate-400/70 border-slate-500/80 text-white ${palette.glow || ""} ring-2 ring-white/35`;
-      }
-      return `${base} opacity-85 hover:opacity-100`;
+      "Idioma": { baseBorder: "border-blue-400/70", baseBg: "bg-blue-500/45", activeBorder: "border-blue-300/90", activeBg: "bg-blue-500/70", hoverRing: "hover:ring-0", glow: "" },
+      "Género": { baseBorder: "border-violet-400/70", baseBg: "bg-violet-500/45", activeBorder: "border-violet-300/90", activeBg: "bg-violet-500/70", hoverRing: "hover:ring-0", glow: "" }
     };
     const colorClasses = [
-      "bg-gradient-to-br",
-      "from-zinc-950", "from-zinc-900", "via-zinc-900", "to-zinc-800",
+      "bg-gradient-to-br", "from-zinc-950", "from-zinc-900", "via-zinc-900", "to-zinc-800",
       "from-violet-900/50", "via-indigo-900/40", "to-slate-900/30",
-      "from-fuchsia-900/50", "via-rose-900/40",
-      "from-emerald-900/50", "via-teal-900/40",
-      "from-sky-900/50", "via-cyan-900/40",
-      "from-amber-900/50", "via-orange-900/40",
-      "from-lime-900/50", "via-green-900/40",
-      "from-red-900/50",
-      "from-blue-900/50",
+      "from-fuchsia-900/50", "via-rose-900/40", "from-emerald-900/50", "via-teal-900/40",
+      "from-sky-900/50", "via-cyan-900/40", "from-amber-900/50", "via-orange-900/40",
+      "from-lime-900/50", "via-green-900/40", "from-red-900/50", "from-blue-900/50",
       "from-purple-900/50", "via-pink-900/40"
     ];
 
-    if ((!editBtn && !settingsBtn) || !modal || !nameInput || !descInput || !saveBtn || !nameEl || !descEl) return;
+    let pendingPrefs = null;
+    const isLogged = (window.AniDexLayout && typeof window.AniDexLayout.isLoggedIn === 'function') 
+      ? window.AniDexLayout.isLoggedIn() 
+      : (localStorage.getItem("nekora_logged_in") === "true");
 
-    const getOrCreateUserSuffix = () => {
-      try {
-        let suffix = localStorage.getItem("anidex_user_suffix");
-        if (!suffix) {
-          suffix = String(Math.floor(10 + Math.random() * 90));
-          localStorage.setItem("anidex_user_suffix", suffix);
-        }
-        return suffix;
-      } catch (e) {
-        return String(Math.floor(10 + Math.random() * 90));
-      }
-    };
-    const getOrCreateUserId = () => {
-      try {
-        let id = localStorage.getItem("anidex_user_id");
-        if (!id) {
-          const year = new Date().getFullYear();
-          const rand = Math.floor(1000 + Math.random() * 9000);
-          id = `NK-${year}-${rand}`;
-          localStorage.setItem("anidex_user_id", id);
-        }
-        return id;
-      } catch (e) {
-        const year = new Date().getFullYear();
-        const rand = Math.floor(1000 + Math.random() * 9000);
-        return `NK-${year}-${rand}`;
-      }
+    // Functions
+    const prefStyleFor = (group, isActive) => {
+      const gKey = group === "Género" ? "G\u00e9nero" : group; 
+      const palette = PREF_GROUP_STYLES[group] || PREF_GROUP_STYLES[gKey] || {};
+      const base = `${palette.baseBg || "bg-white/10"} ${palette.baseBorder || "border-white/20"} text-white ${palette.glow || ""} ${palette.hoverRing || "hover:ring-2 hover:ring-white/20"}`;
+      return isActive ? `bg-slate-400/70 border-slate-500/80 text-white ${palette.glow || ""} ring-2 ring-white/35` : `${base} opacity-85 hover:opacity-100`;
     };
 
     const normalizePrefs = (prefs) => {
       const out = {};
-      Object.keys(PREF_GROUPS).forEach((k) => {
-        const list = prefs && Array.isArray(prefs[k]) ? prefs[k] : [];
-        out[k] = list;
-      });
+      Object.keys(PREF_GROUPS).forEach((k) => { out[k] = prefs && Array.isArray(prefs[k]) ? prefs[k] : []; });
       return out;
     };
 
@@ -1043,296 +1005,151 @@
       return normalizePrefs(PREF_DEFAULTS);
     };
 
-    const savePrefs = (prefs) => {
-      try {
-        localStorage.setItem(PREF_KEY, JSON.stringify(prefs));
-      } catch (e) {}
-    };
-
-    // ========================
-    // VIEW: Rendering Helpers
-    // ========================
     const renderPrefDisplay = (prefs) => {
       if (!prefsDisplay) return;
       const chips = [];
       Object.keys(PREF_GROUPS).forEach((group) => {
         (prefs[group] || []).forEach((value) => {
-          const style = prefStyleFor(group, false);
-          chips.push({
-            value,
-            style
-          });
+          chips.push({ value, style: prefStyleFor(group, false) });
         });
       });
-      const chipHtml = chips.map((chip) => {
-        const spanClass = `rounded-full border ${chip.style} inline-flex w-full items-center justify-center px-3 py-1 text-xs text-center h-7 truncate`;
-        return `<span class="${spanClass}">${chip.value}</span>`;
-      });
       prefsDisplay.innerHTML = chips.length
-        ? chipHtml.join("")
-        : '<span class="rounded-full border border-white/10 bg-white/10 inline-flex w-fit items-center justify-center px-3 py-1 text-xs text-center text-on-surface-variant h-7 truncate col-span-4 justify-self-center">Sin preferencias</span>';
+        ? chips.map(c => `<span class="rounded-full border ${c.style} inline-flex items-center justify-center px-1 py-1 text-[10px] text-center h-7 truncate shrink-0 w-[110px]">${c.value}</span>`).join("")
+        : '<span class="rounded-full border border-white/10 bg-white/10 inline-flex items-center justify-center px-1 py-1 text-[10px] text-center text-on-surface-variant h-7 truncate shrink-0 w-[110px]">Sin preferencias</span>';
     };
-
-    let pendingPrefs = null;
 
     const renderPrefPicker = (prefs) => {
       if (!prefsWrap) return;
-      const chipBase = "rounded-full border px-3 py-1 text-[11px] uppercase tracking-widest transition-all text-white inline-flex w-full items-center justify-center text-center h-7 truncate focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30";
-      const chipActive = "scale-[1.01]";
-      const chipInactive = "";
-      prefsWrap.innerHTML = Object.entries(PREF_GROUPS).map(([group, options]) => {
-        const chips = options.map((opt) => {
-          const isOn = (prefs[group] || []).includes(opt);
-          const color = prefStyleFor(group, isOn);
-          const cls = `${chipBase} ${color} ${isOn ? chipActive : chipInactive}`;
-          return { opt, cls, isOn };
-        });
-        const chipHtml = chips.map((chip) => {
-          const cls = `${chip.cls}`;
-          return `<button type="button" class="${cls}" data-pref-cat="${group}" data-pref-val="${chip.opt}" aria-pressed="${chip.isOn}">${chip.opt}</button>`;
-        }).join("");
-        return `
-          <div class="rounded-2xl border border-white/10 bg-white/5 p-3">
-            <div class="text-[10px] uppercase tracking-widest text-on-surface-variant">${group}</div>
-            <div class="mt-2 grid grid-cols-4 gap-2">${chipHtml}</div>
-          </div>`;
-      }).join("");
+      prefsWrap.innerHTML = Object.entries(PREF_GROUPS).map(([group, values]) => `
+        <div class="space-y-4">
+          <h4 class="text-xs uppercase tracking-[0.2em] text-on-surface-variant font-bold">${group}</h4>
+            <div class="grid grid-cols-2 gap-2">
+              ${values.map(val => {
+                const active = (prefs[group] || []).includes(val);
+                return `<button type="button" data-pref-cat="${group}" data-pref-val="${val}" class="transition-all duration-300 ${prefStyleFor(group, active)}">${val}</button>`;
+              }).join("")}
+            </div>
+        </div>
+      `).join("");
     };
 
-    // ========================
-    // CONTROLLER: Behavior
-    // ========================
-    const isLogged = localStorage.getItem("nekora_logged_in") === "true";
-
-    const logActivity = async (action, details = "") => {
-      if (!isLogged) return;
+    const loadProfile = (skipRestore = false) => {
       try {
-        await fetch("api/activity.php", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action, details })
-        });
-      } catch (e) { console.error("Error logging activity:", e); }
-    };
-
-    const saveProfileToDB = async () => {
-      if (!isLogged) return;
-      const data = {
-        profile_name: localStorage.getItem("anidex_profile_name") || "",
-        profile_desc: localStorage.getItem("anidex_profile_desc") || "",
-        profile_color: localStorage.getItem("anidex_profile_color") || "",
-        profile_avatar: localStorage.getItem("anidex_profile_avatar") || "",
-        profile_member_since: localStorage.getItem("anidex_profile_member_since") || "",
-        my_list: JSON.parse(localStorage.getItem("anidex_my_list_v1") || "[]"),
-        favorites: JSON.parse(localStorage.getItem("anidex_favorites_v1") || "[]"),
-        status_list: JSON.parse(localStorage.getItem("anidex_status_v1") || "{}")
-      };
-      try {
-        await fetch("api/profile.php?action=save", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data)
-        });
-      } catch (e) { console.error("Error saving profile to DB:", e); }
-    };
-
-    const restoreFromDB = async () => {
-      if (!isLogged) return;
-      try {
-        const res = await fetch("api/profile.php?action=get");
-        const json = await res.json();
-        if (json.success && json.data) {
-          const d = json.data;
-          if (d.profile.name) localStorage.setItem("anidex_profile_name", d.profile.name);
-          if (d.profile.desc) localStorage.setItem("anidex_profile_desc", d.profile.desc);
-          if (d.profile.color) localStorage.setItem("anidex_profile_color", d.profile.color);
-          if (d.profile.avatar) localStorage.setItem("anidex_profile_avatar", d.profile.avatar);
-          if (d.profile.member_since) localStorage.setItem("anidex_profile_member_since", d.profile.member_since);
-          
-          localStorage.setItem("anidex_my_list_v1", JSON.stringify(d.my_list || []));
-          localStorage.setItem("anidex_favorites_v1", JSON.stringify(d.favorites || []));
-          localStorage.setItem("anidex_status_v1", JSON.stringify(d.status || {}));
-          
-          loadProfile(); // Recargar UI con datos nuevos
-        }
-      } catch (e) { console.error("Error restoring profile:", e); }
-    };
-
-    const loadProfile = () => {
-      try {
-        const defaultName = `NekoraUser_${getOrCreateUserSuffix()}`;
-        getOrCreateUserId();
+        const userSuffix = (window.AniDexProfile && window.AniDexProfile.getOrCreateUserSuffix) ? AniDexProfile.getOrCreateUserSuffix() : (localStorage.getItem("anidex_user_suffix") || "22");
+        const defaultName = `NekoraUser_${userSuffix}`;
+        const userId = (window.AniDexProfile && window.AniDexProfile.getOrCreateUserId) ? AniDexProfile.getOrCreateUserId() : (localStorage.getItem("anidex_user_id") || "NK-000000");
         const savedName = localStorage.getItem("anidex_profile_name");
         const savedDesc = localStorage.getItem("anidex_profile_desc");
         const savedColor = localStorage.getItem("anidex_profile_color");
         const savedMember = localStorage.getItem("anidex_profile_member_since");
         const savedHours = localStorage.getItem("anidex_profile_hours");
-        const cleanedName = (savedName || "").trim();
-        if (cleanedName && cleanedName.toLowerCase() !== "animefan99") {
-          nameEl.textContent = cleanedName;
-        } else {
-          nameEl.textContent = defaultName;
-          localStorage.setItem("anidex_profile_name", defaultName);
-        }
-        if (savedDesc) descEl.textContent = savedDesc;
-        const isPremium = localStorage.getItem("nekora_premium") === "true";
+        
+        if (idDisplay) idDisplay.textContent = `ID: ${userId}`;
+        if (nameEl) nameEl.textContent = (savedName || defaultName).trim();
+        if (descEl) descEl.textContent = (savedDesc || "Explorador de animes en NekoraList").trim();
+
         if (memberEl) {
           const yearNow = new Date().getFullYear();
-          const memberYear = isPremium ? "2018" : (savedMember || String(yearNow));
-          memberEl.textContent = memberYear;
-          if (!savedMember) {
-            try { localStorage.setItem("anidex_profile_member_since", memberYear); } catch (e) {}
-          }
+          memberEl.textContent = savedMember || String(yearNow);
         }
-        if (lastEl) lastEl.textContent = "Hoy";
+
         if (hoursEl) {
-          const hoursVal = isPremium ? "128" : (savedHours && savedHours.trim() ? savedHours.trim() : "0");
-          hoursEl.textContent = `${hoursVal} h`;
-          if (!savedHours) {
-            try { localStorage.setItem("anidex_profile_hours", hoursVal); } catch (e) {}
-          }
+          const hoursVal = (savedHours && savedHours.trim() ? savedHours.trim() : "0");
+          hoursEl.textContent = (window.AniDexProfile && window.AniDexProfile.formatHours) 
+            ? window.AniDexProfile.formatHours(hoursVal) 
+            : `${hoursVal} h`;
         }
+
         if (savedColor && cardEl) {
           colorClasses.forEach((c) => cardEl.classList.remove(c));
           savedColor.split(" ").forEach((c) => cardEl.classList.add(c));
-          if (colorOptions) {
-            colorOptions.querySelectorAll("[data-color-class]").forEach((b) => b.classList.remove("ring-2", "ring-violet-400"));
-            const selected = colorOptions.querySelector(`[data-color-class="${savedColor}"]`);
-            if (selected) selected.classList.add("ring-2", "ring-violet-400");
-          }
         }
+
+        const savedAvatar = localStorage.getItem("anidex_profile_avatar");
+        if (savedAvatar && avatarImg) avatarImg.src = savedAvatar;
+        
         const prefs = loadPrefs();
         pendingPrefs = prefs;
         renderPrefPicker(prefs);
         renderPrefDisplay(prefs);
         
-        // Si no hay datos locales pero está logueado, intentar restaurar una vez
-        if (isLogged && !savedName && !window.__restoreAttempted) {
+        if (isLogged && !skipRestore && !window.__restoreAttempted) {
           window.__restoreAttempted = true;
-          restoreFromDB();
+          if (window.AniDexProfile && typeof window.AniDexProfile.restoreFromDB === 'function') {
+              window.AniDexProfile.restoreFromDB();
+          }
         }
-      } catch (e) {}
-    };
-
-    const limitDesc = (value) => {
-      let text = String(value || "");
-      text = text.replace(/\r\n/g, "\n");
-      const parts = text.split("\n");
-      if (parts.length > 3) {
-        text = parts.slice(0, 3).join("\n");
-      }
-      if (text.length > 200) {
-        text = text.slice(0, 200);
-        if (text.includes("\n")) {
-          const lines = text.split("\n");
-          if (lines.length > 3) text = lines.slice(0, 3).join("\n");
-        }
-      }
-      return text;
-    };
-
-    const updateDescCount = () => {
-      if (!descCount) return;
-      const len = (descInput.value || "").length;
-      descCount.textContent = `${len}/200`;
+      } catch (e) { console.error("loadProfile error:", e); }
     };
 
     const openModal = () => {
+      if (!modal) return;
       nameInput.value = nameEl.textContent.trim();
-      descInput.value = limitDesc(descEl.textContent.trim());
-      updateDescCount();
+      descInput.value = descEl.textContent.trim();
+      if (descCount) descCount.textContent = `${descInput.value.length}/200`;
       pendingPrefs = loadPrefs();
       renderPrefPicker(pendingPrefs);
-      try {
-        const currentAvatar = localStorage.getItem("anidex_profile_avatar");
-        if (currentAvatar) {
-          const preview = document.querySelector("[data-profile-avatar-preview]");
-          if (preview) preview.src = currentAvatar;
-          window.__profilePendingAvatar = currentAvatar;
-        }
-      } catch (e) {}
       modal.classList.remove("hidden");
       document.body.style.overflow = "hidden";
     };
+
     const closeModal = () => {
-      modal.classList.add("hidden");
+      if (modal) modal.classList.add("hidden");
       document.body.style.overflow = "";
     };
 
     const openRequestModal = () => {
-      if (!requestModal) return;
-      requestModal.classList.remove("hidden");
-      requestToast?.classList.add("hidden");
-      requestToast?.classList.remove("flex");
-      document.body.style.overflow = "hidden";
-      if (requestInput) {
-        requestInput.classList.remove("border-rose-400");
-        requestInput.focus();
+      if (requestModal) {
+        requestModal.classList.remove("hidden");
+        requestModal.classList.add("flex");
+        document.body.style.overflow = "hidden";
       }
     };
+
     const closeRequestModal = () => {
-      if (!requestModal) return;
-      requestModal.classList.add("hidden");
-      document.body.style.overflow = "";
+      if (requestModal) {
+        requestModal.classList.add("hidden");
+        requestModal.classList.remove("flex");
+        document.body.style.overflow = "";
+      }
     };
 
-    saveBtn.addEventListener("click", () => {
-      const defaultName = `NekoraUser_${getOrCreateUserSuffix()}`;
-      const newName = nameInput.value.trim() || defaultName;
-      const newDesc = limitDesc(descInput.value.trim()) || "Curando el mejor shonen desde 2018";
-      nameEl.textContent = newName;
-      descEl.textContent = newDesc;
-      try {
-        localStorage.setItem("anidex_profile_name", newName);
-        localStorage.setItem("anidex_profile_desc", newDesc);
-      } catch (e) {}
-      if (pendingPrefs) {
-        savePrefs(pendingPrefs);
-        renderPrefDisplay(pendingPrefs);
+    const saveProfileToDB = async () => {
+      if (window.__anidex_restoring) return;
+      if (window.AniDexProfile && typeof window.AniDexProfile.saveToDB === "function") {
+        await window.AniDexProfile.saveToDB();
       }
-      const pendingAvatar = window.__profilePendingAvatar;
-      if (pendingAvatar) {
-        const avatarImgMain = document.querySelector("img[alt='Foto de perfil']");
-        if (avatarImgMain) avatarImgMain.src = pendingAvatar;
-        document.querySelectorAll("img[data-profile-avatar]").forEach((img) => {
-          img.src = pendingAvatar;
-        });
-        try { localStorage.setItem("anidex_profile_avatar", pendingAvatar); } catch (e) {}
-      }
-      logActivity("profile_update", `Nombre: ${newName}, Descripción: ${newDesc.slice(0, 30)}...`);
-      saveProfileToDB(); // Sync con DB
-      closeModal();
-    });
+    };
 
-    descInput.addEventListener("input", () => {
-      descInput.value = limitDesc(descInput.value);
-      updateDescCount();
-    });
+    // Listeners
+    if (editBtn) editBtn.addEventListener("click", openModal);
+    if (settingsBtn) settingsBtn.addEventListener("click", openModal);
+    closeEls.forEach(el => el.addEventListener("click", closeModal));
+    if (requestBtn) requestBtn.addEventListener("click", openRequestModal);
+    requestCloseEls.forEach(el => el.addEventListener("click", closeRequestModal));
 
-    if (colorOptions && cardEl) {
-      colorOptions.addEventListener("click", (e) => {
-        const btn = e.target.closest("[data-color-class]");
-        if (!btn) return;
-        const colorClass = btn.getAttribute("data-color-class");
-        if (!colorClass) return;
-        colorClasses.forEach((c) => cardEl.classList.remove(c));
-        colorClass.split(" ").forEach((c) => cardEl.classList.add(c));
-        colorOptions.querySelectorAll("[data-color-class]").forEach((b) => b.classList.remove("ring-2", "ring-violet-400"));
-        btn.classList.add("ring-2", "ring-violet-400");
-        try { 
-          localStorage.setItem("anidex_profile_color", colorClass); 
-          saveProfileToDB(); 
-        } catch (e) {}
+    if (descInput && descCount) {
+      descInput.addEventListener("input", () => {
+        if (descInput.value.length > 200) descInput.value = descInput.value.slice(0, 200);
+        descCount.textContent = `${descInput.value.length}/200`;
       });
     }
 
-    // Asegurar que cambios en listas también se guarden
-    const originalSavePrefs = window.savePrefs;
-    if (typeof originalSavePrefs === 'function') {
-        window.savePrefs = (prefs) => {
-            originalSavePrefs(prefs);
-            saveProfileToDB();
-        };
+    if (saveBtn) {
+      saveBtn.addEventListener("click", async () => {
+        const newName = nameInput.value.trim() || nameEl.textContent;
+        const newDesc = descInput.value.trim() || descEl.textContent;
+        nameEl.textContent = newName;
+        descEl.textContent = newDesc;
+        localStorage.setItem("anidex_profile_name", newName);
+        localStorage.setItem("anidex_profile_desc", newDesc);
+        if (pendingPrefs) {
+          localStorage.setItem(PREF_KEY, JSON.stringify(pendingPrefs));
+          renderPrefDisplay(pendingPrefs);
+        }
+        await saveProfileToDB();
+        closeModal();
+      });
     }
 
     if (prefsWrap) {
@@ -1341,46 +1158,49 @@
         if (!btn) return;
         const cat = btn.getAttribute("data-pref-cat");
         const val = btn.getAttribute("data-pref-val");
-        if (!cat || !val) return;
         const prefs = pendingPrefs || loadPrefs();
         const list = new Set(prefs[cat] || []);
-        if (list.has(val)) list.delete(val);
-        else list.add(val);
+        if (list.has(val)) list.delete(val); else list.add(val);
         prefs[cat] = Array.from(list);
         pendingPrefs = prefs;
         renderPrefPicker(prefs);
       });
     }
 
-    if (editBtn) editBtn.addEventListener("click", openModal);
-    if (settingsBtn) settingsBtn.addEventListener("click", openModal);
-    closeEls.forEach((el) => el.addEventListener("click", closeModal));
-    if (requestBtn) requestBtn.addEventListener("click", openRequestModal);
-    requestCloseEls.forEach((el) => el.addEventListener("click", closeRequestModal));
+    if (colorOptions && cardEl) {
+      colorOptions.addEventListener("click", (e) => {
+        const btn = e.target.closest("[data-color-class]");
+        if (!btn) return;
+        const colorClass = btn.getAttribute("data-color-class");
+        colorClasses.forEach(c => cardEl.classList.remove(c));
+        colorClass.split(" ").forEach(c => cardEl.classList.add(c));
+        localStorage.setItem("anidex_profile_color", colorClass); 
+        saveProfileToDB();
+      });
+    }
+
     if (requestForm) {
       requestForm.addEventListener("submit", (e) => {
         e.preventDefault();
         const name = (requestInput?.value || "").trim();
-        if (!name) {
-          requestInput?.classList.add("border-rose-400");
-          requestInput?.focus();
-          return;
-        }
-        requestInput?.classList.remove("border-rose-400");
+        if (!name) return;
         closeRequestModal();
         if (requestToast) {
           requestToast.classList.remove("hidden");
           requestToast.classList.add("flex");
-          setTimeout(() => {
-            requestToast.classList.add("hidden");
-            requestToast.classList.remove("flex");
-          }, 2200);
+          setTimeout(() => { requestToast.classList.add("hidden"); }, 2000);
         }
-        logActivity("title_request", `Título: ${name}, Tipo: ${requestForm.querySelector("select")?.value || 'Anime'}`);
         if (requestInput) requestInput.value = "";
       });
     }
+
+    // Initial load
     loadProfile();
+
+    // Export refresh (Registry pattern)
+    if (window.AniDexLayout && typeof window.AniDexLayout.registerRefresh === "function") {
+      window.AniDexLayout.registerRefresh(() => loadProfile(true));
+    }
   })();
     </script>
     <script>
@@ -1584,9 +1404,28 @@
         }
       }
     });
-    try {
-      localStorage.setItem("anidex_continue_v1", JSON.stringify(items));
-    } catch {}
+    // Solo guardamos si hay items o si queremos resetear explcitamente. 
+    // Para evitar sobreescribir datos sincronizados con una lista vaca local:
+    if (items.length > 0) {
+      try {
+        localStorage.setItem("anidex_continue_v1", JSON.stringify(items));
+      } catch {}
+    }
+    
+    if (items.length === 0) {
+      // Intentar recuperar de localStorage si el render local fall pero hay datos sincronizados
+      const synced = JSON.parse(localStorage.getItem("anidex_continue_v1") || "[]");
+      if (synced.length > 0) {
+          items = synced;
+      }
+    }
+
+    if (items.length === 0) {
+        empty.classList.remove("hidden");
+        grid.classList.add("hidden");
+        return;
+    }
+
     empty.classList.add("hidden");
     grid.classList.remove("hidden");
     grid.innerHTML = items.map((item) => {
@@ -1637,6 +1476,10 @@
       } catch {}
       window.location.href = link.getAttribute("href");
     });
+
+    if (window.AniDexLayout && typeof window.AniDexLayout.registerRefresh === "function") {
+      window.AniDexLayout.registerRefresh(applyState);
+    }
   })();
     </script>
     <script data-ui-unlock>document.documentElement.classList.remove("preload-ui");</script>
