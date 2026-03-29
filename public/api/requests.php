@@ -43,6 +43,21 @@ function ensureRequestsTable(PDO $dbConn) {
     ");
 }
 
+function normalizeSearchTerm(string $value): string
+{
+    $value = trim(mb_strtolower($value, 'UTF-8'));
+    $map = [
+        'á' => 'a',
+        'é' => 'e',
+        'í' => 'i',
+        'ó' => 'o',
+        'ú' => 'u',
+        'ü' => 'u',
+    ];
+
+    return strtr($value, $map);
+}
+
 ensureRequestsTable($dbConn);
 
 if ($action === 'create') {
@@ -100,10 +115,49 @@ if ($action === 'list') {
         $params[] = $userId;
     }
     if ($q !== '') {
-        $where .= " AND (r.titulo LIKE ? OR r.user_name LIKE ?)";
+        $normalizedQ = normalizeSearchTerm($q);
+        $searchClauses = [
+            "r.titulo LIKE ?",
+            "r.user_name LIKE ?",
+            "DATE_FORMAT(r.creado_en, '%d/%m/%Y') LIKE ?",
+            "DATE_FORMAT(r.creado_en, '%Y-%m-%d') LIKE ?",
+            "DATE_FORMAT(r.creado_en, '%d-%m-%Y') LIKE ?",
+            "DATE_FORMAT(r.creado_en, '%d %m %Y') LIKE ?",
+            "DATE_FORMAT(r.creado_en, '%d/%m/%Y %H:%i') LIKE ?",
+        ];
         $like = '%' . $q . '%';
         $params[] = $like;
         $params[] = $like;
+        $params[] = $like;
+        $params[] = $like;
+        $params[] = $like;
+        $params[] = $like;
+        $params[] = $like;
+
+        $monthMap = [
+            'enero' => 1,
+            'febrero' => 2,
+            'marzo' => 3,
+            'abril' => 4,
+            'mayo' => 5,
+            'junio' => 6,
+            'julio' => 7,
+            'agosto' => 8,
+            'septiembre' => 9,
+            'setiembre' => 9,
+            'octubre' => 10,
+            'noviembre' => 11,
+            'diciembre' => 12,
+        ];
+
+        foreach ($monthMap as $monthName => $monthNumber) {
+            if (strpos($monthName, $normalizedQ) !== false) {
+                $searchClauses[] = "MONTH(r.creado_en) = ?";
+                $params[] = $monthNumber;
+            }
+        }
+
+        $where .= " AND (" . implode(' OR ', $searchClauses) . ")";
     }
 
     $countStmt = $dbConn->prepare("SELECT COUNT(*) AS total FROM solicitudes_anime r WHERE $where");
@@ -149,6 +203,23 @@ if ($action === 'decide') {
             WHERE id = ?
         ");
         $stmt->execute([$decision, $adminId, $id]);
+        echo json_encode(['success' => true]);
+    } catch (Exception $e) {
+        echo json_encode(['success' => false, 'error' => 'Error de BD: ' . $e->getMessage()]);
+    }
+    exit;
+}
+
+if ($action === 'delete') {
+    $id = (int)($data['id'] ?? 0);
+    if (!$id) {
+        echo json_encode(['success' => false, 'error' => 'ID inválido']);
+        exit;
+    }
+
+    try {
+        $stmt = $dbConn->prepare("DELETE FROM solicitudes_anime WHERE id = ?");
+        $stmt->execute([$id]);
         echo json_encode(['success' => true]);
     } catch (Exception $e) {
         echo json_encode(['success' => false, 'error' => 'Error de BD: ' . $e->getMessage()]);
