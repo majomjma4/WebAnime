@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 
 <html class="dark" lang="en"><head>
 <link rel="icon" href="img/icon3.png" />
@@ -117,10 +117,10 @@
 <div class="col-span-8 bg-surface-container-low p-8 rounded-lg flex justify-between items-end relative overflow-hidden group" data-admin-queue>
 <div class="relative z-10">
 <h2 class="font-headline text-4xl font-extrabold mb-2 text-on-surface tracking-tighter">Resumen de la Cola</h2>
-<p class="text-on-surface-variant text-lg font-body max-w-md">Tienes <span class="text-primary font-bold" data-admin-pending-text>24 solicitudes pendientes</span> esperando revisión hoy. Mantén el catálogo actualizado.</p>
+<p class="text-on-surface-variant text-lg font-body max-w-md">Tienes <span class="text-primary font-bold" data-admin-pending-text>0 solicitudes pendientes</span> esperando revisi&oacute;n hoy. Mant&eacute;n el cat&aacute;logo actualizado.</p>
 </div>
 <div class="relative z-10 text-right">
-<span class="block text-5xl font-extrabold font-headline text-primary-container/40" data-admin-pending-count>24</span>
+<span class="block text-5xl font-extrabold font-headline text-primary-container/40" data-admin-pending-count>0</span>
 <span class="text-[10px] uppercase tracking-[0.2em] font-bold text-on-surface-variant">PENDIENTES TOTAL</span>
 </div>
 <!-- Decorative Bleed Image -->
@@ -131,29 +131,36 @@
 <div class="col-span-4 bg-primary-container p-8 rounded-lg flex flex-col justify-between shadow-xl shadow-primary-container/10 cursor-pointer" data-admin-quick-action>
 <span class="material-symbols-outlined text-on-primary-container text-4xl" data-icon="auto_awesome">auto_awesome</span>
 <div>
-<h3 class="font-headline font-bold text-on-primary-container text-xl uppercase tracking-tight">ACCIÓN RÁPIDA</h3>
-<p class="text-on-primary-container/70 text-sm mt-1">Aprobar automáticamente solicitudes de Curadores de Confianza.</p>
+<h3 class="font-headline font-bold text-on-primary-container text-xl uppercase tracking-tight">ACCI&Oacute;N R&Aacute;PIDA</h3>
+<p class="text-on-primary-container/70 text-sm mt-1">Aprobar autom&aacute;ticamente solicitudes de Curadores de Confianza.</p>
 </div>
+</div>
+<div class="col-span-12 flex justify-end mt-4">
+  <div class="ml-auto flex gap-2">
+    <button class="px-4 py-2 rounded-full border border-emerald-400/30 bg-gradient-to-r from-emerald-300 to-emerald-500 text-[10px] font-bold uppercase tracking-widest text-emerald-950 hover:brightness-110 transition-colors" data-admin-filter-approved>Ver aprobadas</button>
+    <button class="px-4 py-2 rounded-full border border-rose-400/30 bg-gradient-to-r from-rose-300 to-rose-500 text-[10px] font-bold uppercase tracking-widest text-rose-950 hover:brightness-110 transition-colors" data-admin-filter-rejected>Ver rechazadas</button>
+  </div>
 </div>
 </section>
+
 <!-- Requests Table Container -->
 <section class="bg-surface-container-low rounded-lg p-1">
-<div class="overflow-x-auto">
+<div class="overflow-x-auto overflow-y-auto max-h-[100%]">
 <table class="w-full text-left border-collapse">
 <thead>
 <tr class="text-on-surface-variant text-[10px] uppercase tracking-[0.2em] font-bold border-b border-outline-variant/10">
 <th class="px-8 py-6">USUARIO</th>
-<th class="px-8 py-6">TÍTULO SOLICITADO</th>
-<th class="px-8 py-6">FECHA DE ENVÍO</th>
+<th class="px-8 py-6">T&Iacute;TULO SOLICITADO</th>
+<th class="px-8 py-6">FECHA DE ENV&Iacute;O</th>
 <th class="px-8 py-6 text-right">ACCIONES</th>
 </tr>
 </thead>
-<tbody class="divide-y divide-outline-variant/5"></tbody>
+<tbody class="divide-y divide-outline-variant/5"><tr><td colspan="4" class="px-8 py-10 text-center text-on-surface-variant" data-admin-empty>No hay solicitudes pendientes.</td></tr></tbody>
 </table>
 </div>
 <!-- Table Footer / Pagination -->
 <div class="px-8 py-6 flex justify-between items-center bg-surface-container-low border-t border-outline-variant/10">
-<p class="text-xs text-on-surface-variant font-body" data-admin-pending-footer>Mostrando 4 de 24 solicitudes pendientes</p>
+<p class="text-xs text-on-surface-variant font-body" data-admin-pending-footer>Mostrando 0 de 0 solicitudes pendientes</p>
 <div class="flex items-center gap-2">
 <button class="w-8 h-8 rounded-full border border-outline-variant/20 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors disabled:opacity-20" data-admin-page-prev>
 <span class="material-symbols-outlined text-sm" data-icon="chevron_left">chevron_left</span>
@@ -164,6 +171,77 @@
 </div>
 </div>
 </section>
+
+<!-- Approved Modal -->
+<div id="admin-approved-modal" class="fixed inset-0 z-[80] hidden items-center justify-center p-6">
+  <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" data-admin-approved-close></div>
+  <div class="relative w-[96%] max-w-6xl h-[88vh] rounded-3xl border border-white/10 bg-surface-container-low p-6 shadow-[0_30px_80px_rgba(0,0,0,0.55)]">
+    <div class="flex items-start justify-between mb-4">
+      <div>
+        <h3 class="font-headline text-2xl font-bold">Solicitudes Aprobadas</h3>
+        <p class="text-sm text-on-surface-variant">Listado de solicitudes aprobadas</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <button class="rounded-full bg-surface-container-high w-9 h-9 flex items-center justify-center text-on-surface-variant hover:text-on-surface" type="button" data-admin-approved-search-toggle>
+          <span class="material-symbols-outlined text-[18px]">search</span>
+        </button>
+        <input class="hidden bg-surface-container-low text-on-surface text-xs rounded-full py-2 px-4 w-64 border-none focus:ring-1 ring-primary/20 transition-all placeholder:text-on-surface-variant/50" placeholder="Buscar (título o fecha)..." data-admin-approved-search />
+        <button class="rounded-full bg-surface-container-high w-9 h-9 flex items-center justify-center text-on-surface-variant hover:text-on-surface" type="button" data-admin-approved-close>
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+      </div>
+    </div><div class="rounded-2xl border border-white/10 bg-surface-container-low/70 p-3 flex-1 overflow-hidden">
+      <div class="w-full" data-admin-approved-list></div>
+    </div>
+    <div class="px-6 py-4 flex justify-between items-center border-t border-outline-variant/10" data-admin-approved-footer>
+      <p class="text-xs text-on-surface-variant font-body" data-admin-approved-footer-text>Mostrando 0 de 0 solicitudes aprobadas</p>
+      <div class="flex items-center gap-2">
+        <button class="w-8 h-8 rounded-full border border-outline-variant/20 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors disabled:opacity-20" data-admin-approved-prev>
+          <span class="material-symbols-outlined text-sm">chevron_left</span>
+        </button>
+        <button class="w-8 h-8 rounded-full border border-outline-variant/20 flex items-center justify-center text-on-surface hover:text-primary hover:border-primary transition-colors" data-admin-approved-next>
+          <span class="material-symbols-outlined text-sm">chevron_right</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Rejected Modal -->
+<div id="admin-rejected-modal" class="fixed inset-0 z-[80] hidden items-center justify-center p-6">
+  <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" data-admin-rejected-close></div>
+  <div class="relative w-[96%] max-w-6xl h-[88vh] rounded-3xl border border-white/10 bg-surface-container-low p-6 shadow-[0_30px_80px_rgba(0,0,0,0.55)]">
+    <div class="flex items-start justify-between mb-4">
+      <div>
+        <h3 class="font-headline text-2xl font-bold">Solicitudes Rechazadas</h3>
+        <p class="text-sm text-on-surface-variant">Listado de solicitudes rechazadas</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <button class="rounded-full bg-surface-container-high w-9 h-9 flex items-center justify-center text-on-surface-variant hover:text-on-surface" type="button" data-admin-rejected-search-toggle>
+          <span class="material-symbols-outlined text-[18px]">search</span>
+        </button>
+        <input class="hidden bg-surface-container-low text-on-surface text-xs rounded-full py-2 px-4 w-64 border-none focus:ring-1 ring-primary/20 transition-all placeholder:text-on-surface-variant/50" placeholder="Buscar (título o fecha)..." data-admin-rejected-search />
+        <button class="rounded-full bg-surface-container-high w-9 h-9 flex items-center justify-center text-on-surface-variant hover:text-on-surface" type="button" data-admin-rejected-close>
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+      </div>
+    </div><div class="rounded-2xl border border-white/10 bg-surface-container-low/70 p-3 flex-1 overflow-hidden">
+      <div class="w-full" data-admin-rejected-list></div>
+    </div>
+    <div class="px-6 py-4 flex justify-between items-center border-t border-outline-variant/10" data-admin-rejected-footer>
+      <p class="text-xs text-on-surface-variant font-body" data-admin-rejected-footer-text>Mostrando 0 de 0 solicitudes rechazadas</p>
+      <div class="flex items-center gap-2">
+        <button class="w-8 h-8 rounded-full border border-outline-variant/20 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors disabled:opacity-20" data-admin-rejected-prev>
+          <span class="material-symbols-outlined text-sm">chevron_left</span>
+        </button>
+        <button class="w-8 h-8 rounded-full border border-outline-variant/20 flex items-center justify-center text-on-surface hover:text-primary hover:border-primary transition-colors" data-admin-rejected-next>
+          <span class="material-symbols-outlined text-sm">chevron_right</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Bottom Note -->
 
 </div>
@@ -174,50 +252,76 @@
   function initAdmin(){
     const tbody = document.querySelector('tbody');
     if (!tbody) return;
-    const total = 6;
-    const data = Array.from({length: total}, (_, i) => ({
-      name: `Usuario ${i+1}`,
-      role: `Curador Nivel ${((i)%5)+1}`,
-      title: `Titulo Solicitud ${i+1}`,
-      source: `Fuente ${((i)%6)+1}`,
-      date: `Oct ${String(24 - (i%24)).padStart(2,'0')}, 2023  -  ${(8 + (i%10))}:${String((i*7)%60).padStart(2,'0')} ${i%2? 'PM':'AM'}`
-    }));
-
     let page = 1;
     const size = 4;
+    let total = 0;
+    let items = [];
+    let searchQuery = '';
+    let statusFilter = 'pendiente';
 
-    const emptyText = 'No hay solicitudes por revisar.';
-    const upToDateText = 'Estas al dia. No hay peticiones.';
+    const emptyText = 'No hay solicitudes pendientes.';
+    const emptyTextApproved = 'No hay solicitudes aprobadas.';
+    const emptyTextRejected = 'No hay solicitudes rechazadas.';
+    const upToDateText = 'Est&aacute;s al d&iacute;a. No hay solicitudes pendientes.';
+
+    const formatDate = (dateStr) => {
+      if (!dateStr) return '';
+      const d = new Date(dateStr.replace(' ', 'T'));
+      if (Number.isNaN(d.getTime())) return dateStr;
+      return d.toLocaleString('es-EC', { dateStyle: 'medium', timeStyle: 'short' });
+    };
+
+    async function loadData(){
+      const params = new URLSearchParams({
+        action: 'list',
+        status: statusFilter,
+        page: String(page),
+        size: String(size)
+      });
+      if (searchQuery) params.set('q', searchQuery);
+      try {
+        const res = await fetch(`api/requests.php?${params.toString()}`);
+        const json = await res.json();
+        if (!json.success) throw new Error(json.error || 'Error al cargar solicitudes');
+        total = json.total || 0;
+        items = json.items || [];
+      } catch (err) {
+        total = 0;
+        items = [];
+        console.error(err);
+      }
+      render();
+    }
 
     function render(){
       const start = (page-1)*size;
       const end = start + size;
-      const slice = data.slice(start, end);
+      const slice = items;
       let html = '';
       slice.forEach((item, idx) => {
         const n = start + idx + 1;
         html += `
-<tr class="group hover:bg-surface-container-high transition-colors" data-admin-request-row data-index="${start+idx}">
+<tr class="group hover:bg-surface-container-high transition-colors" data-admin-request-row data-id="${item.id}">
   <td class="px-8 py-6">
     <div class="flex items-center gap-3">
       <div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-[10px] font-bold text-primary">${String(n).padStart(2,'0')}</div>
       <div>
-        <p class="text-sm font-semibold text-on-surface">${item.name}</p>
-        <p class="text-[10px] text-on-surface-variant">${item.role}</p>
+        <p class="text-sm font-semibold text-on-surface">${item.user_display || 'Usuario'}</p>
+        <p class="text-xs text-on-surface-variant">${item.tipo || 'Anime'}</p>
       </div>
     </div>
   </td>
   <td class="px-8 py-6">
-    <p class="text-base font-bold font-headline text-on-surface tracking-tight">${item.title}</p>
-    <p class="text-xs text-on-surface-variant italic">Source: ${item.source}</p>
+    <p class="text-base font-bold font-headline text-on-surface tracking-tight">${item.titulo || ''}</p>
+    <p class="text-xs text-on-surface-variant italic">Source: ${item.fuente || 'Sin fuente'}</p>
   </td>
   <td class="px-8 py-6">
-    <p class="text-xs text-on-surface-variant font-body">${item.date}</p>
+    <p class="text-xs text-on-surface-variant font-body">${formatDate(item.creado_en)}</p>
   </td>
   <td class="px-8 py-6">
     <div class="flex justify-end items-center gap-3">
       <button class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container-highest text-on-surface-variant hover:bg-surface-container-lowest hover:text-error transition-all group/btn" data-admin-reject>
-        <span class="material-symbols-outlined text-sm">close</span>
+        <span class="material-symbols-outlined text-sm"></span>
       </button>
       <button class="px-5 py-2 rounded-full bg-surface-container-highest text-on-surface font-headline font-bold text-xs uppercase tracking-tight hover:bg-primary hover:text-on-primary transition-all flex items-center gap-2" data-admin-approve>
         <span class="material-symbols-outlined text-[18px]">check</span>
@@ -227,40 +331,43 @@
   </td>
 </tr>`;
       });
-      tbody.innerHTML = html || `<tr><td colspan="4" class="px-8 py-10 text-center text-on-surface-variant" data-admin-empty>${emptyText}</td></tr>`;
+      const emptyByStatus = statusFilter === 'aprobado' ? emptyTextApproved : statusFilter === 'rechazado' ? emptyTextRejected : emptyText;
+      tbody.innerHTML = html || `<tr><td colspan=\"4\" class=\"px-8 py-10 text-center text-on-surface-variant\" data-admin-empty>${emptyByStatus}</td></tr>`;
 
       const countEl = document.querySelector('[data-admin-pending-count]');
       const textEl = document.querySelector('[data-admin-pending-text]');
       const footerEl = document.querySelector('[data-admin-pending-footer]');
-      if (countEl) countEl.textContent = String(data.length);
+      const displayTotal = total || slice.length;
+      const shownCount = displayTotal ? Math.min(displayTotal, start + slice.length) : 0;
+      if (countEl) countEl.textContent = String(displayTotal);
       if (textEl) {
-        textEl.textContent = data.length
-          ? `${data.length} solicitudes pendientes`
+        textEl.textContent = displayTotal
+          ? `${displayTotal} solicitudes pendientes`
           : '0 solicitudes pendientes';
       }
       if (footerEl) {
-        footerEl.textContent = data.length
-          ? `Mostrando ${slice.length} de ${data.length} solicitudes pendientes`
+        footerEl.textContent = displayTotal
+          ? `Mostrando ${shownCount} de ${displayTotal} solicitudes pendientes`
           : 'Mostrando 0 de 0 solicitudes pendientes';
       }
 
       const prev = document.querySelector('[data-admin-page-prev]');
       const next = document.querySelector('[data-admin-page-next]');
-      const maxPage = Math.max(1, Math.ceil(data.length / size));
+      const maxPage = Math.max(1, Math.ceil(total / size));
       if (prev) prev.disabled = page <= 1;
       if (next) next.disabled = page >= maxPage;
 
       const queueText = document.querySelector('[data-admin-queue] p');
       if (queueText) {
-        queueText.innerHTML = `Tienes <span class="text-primary font-bold" data-admin-pending-text>${data.length} solicitudes pendientes</span> esperando revision hoy. Manten el catalogo actualizado.`;
+        queueText.innerHTML = `Tienes <span class="text-primary font-bold" data-admin-pending-text>${displayTotal} solicitudes pendientes</span> esperando revisi&oacute;n hoy. Mant&eacute;n el cat&aacute;logo actualizado.`;
       }
     }
 
-    render();
+    loadData();
     const prev = document.querySelector('[data-admin-page-prev]');
     const next = document.querySelector('[data-admin-page-next]');
-    if (prev) prev.addEventListener('click', e => { e.preventDefault(); if (page>1){ page--; render(); } });
-    if (next) next.addEventListener('click', e => { e.preventDefault(); const maxPage = Math.max(1, Math.ceil(data.length/size)); if (page<maxPage){ page++; render(); } });
+    if (prev) prev.addEventListener('click', e => { e.preventDefault(); if (page>1){ page--; loadData(); } });
+    if (next) next.addEventListener('click', e => { e.preventDefault(); const maxPage = Math.max(1, Math.ceil(total/size)); if (page<maxPage){ page++; loadData(); } });
 
     tbody.addEventListener('click', (e) => {
       const approveBtn = e.target.closest('[data-admin-approve]');
@@ -268,22 +375,255 @@
       if (!approveBtn && !rejectBtn) return;
       const row = e.target.closest('[data-admin-request-row]');
       if (!row) return;
-      const index = Number(row.getAttribute('data-index'));
-      if (Number.isNaN(index)) return;
-      data.splice(index, 1);
-      const maxPage = Math.max(1, Math.ceil(data.length / size));
-      if (page > maxPage) page = maxPage;
-      render();
+      const id = Number(row.getAttribute('data-id'));
+      if (!id) return;
+      const decision = approveBtn ? 'aprobado' : 'rechazado';
+      fetch('api/requests.php?action=decide', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, decision })
+      }).then(r => r.json()).then(() => loadData()).catch(console.error);
     });
 
     const quick = document.querySelector('[data-admin-quick-action]');
     if (quick) {
       quick.addEventListener('click', () => {
-        data.splice(0, data.length);
-        page = 1;
-        render();
+        fetch('api/requests.php?action=bulk_approve', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({})
+        }).then(r => r.json()).then(() => { page = 1; loadData(); }).catch(console.error);
       });
     }
+
+    const search = document.querySelector('[data-admin-search]');
+    if (search) {
+      let t = null;
+      search.addEventListener('input', () => {
+        clearTimeout(t);
+        t = setTimeout(() => {
+          searchQuery = (search.value || '').trim();
+          page = 1;
+          loadData();
+        }, 300);
+      });
+    }
+
+    
+    const approvedModal = document.getElementById('admin-approved-modal');
+    const modalState = { aprobado: { page: 1, size: 5, total: 0 }, rechazado: { page: 1, size: 5, total: 0 } };
+    const rejectedModal = document.getElementById('admin-rejected-modal');
+    const approvedCloseEls = approvedModal ? approvedModal.querySelectorAll('[data-admin-approved-close]') : [];
+    const rejectedCloseEls = rejectedModal ? rejectedModal.querySelectorAll('[data-admin-rejected-close]') : [];
+    const approvedList = document.querySelector('[data-admin-approved-list]');
+    const rejectedList = document.querySelector('[data-admin-rejected-list]');
+    const approvedFooterText = document.querySelector('[data-admin-approved-footer-text]');
+    const rejectedFooterText = document.querySelector('[data-admin-rejected-footer-text]');
+    const approvedPrev = document.querySelector('[data-admin-approved-prev]');
+    const approvedNext = document.querySelector('[data-admin-approved-next]');
+    const rejectedPrev = document.querySelector('[data-admin-rejected-prev]');
+    const rejectedNext = document.querySelector('[data-admin-rejected-next]');
+    let approvedSearchQuery = '';
+    let rejectedSearchQuery = '';
+    const approvedSearchInput = document.querySelector('[data-admin-approved-search]');
+    const rejectedSearchInput = document.querySelector('[data-admin-rejected-search]');
+    const approvedSearchToggle = document.querySelector('[data-admin-approved-search-toggle]');
+    const rejectedSearchToggle = document.querySelector('[data-admin-rejected-search-toggle]');
+
+    const renderModalList = (el, items, emptyText, targetStatus, state) => {
+      if (!el) return;
+      if (!items || items.length === 0) {
+        el.innerHTML = `<div class="px-8 py-10 text-center text-on-surface-variant">${emptyText}</div>`;
+        return;
+      }
+      const rows = items.map((item, idx) => {
+        const n = idx + 1;
+        const titulo = item.titulo || '';
+        const user = item.user_display || 'Usuario';
+        const tipo = item.tipo || 'Anime';
+        const fecha = formatDate(item.creado_en);
+        const actionLabel = targetStatus === 'aprobado' ? 'APROBAR' : 'RECHAZAR';
+        const actionClass = targetStatus === 'aprobado'
+          ? 'bg-emerald-400/10 text-emerald-200 hover:bg-emerald-400/20'
+          : 'bg-rose-400/10 text-rose-200 hover:bg-rose-400/20';
+        return `
+<tr class="group hover:bg-surface-container-high transition-colors" data-admin-modal-row data-id="${item.id}" data-target="${targetStatus}">
+  <td class="px-8 py-6">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-[10px] font-bold text-primary">${String(n).padStart(2,'0')}</div>
+      <div>
+        <p class="text-sm font-semibold text-on-surface">${user}</p>
+        <p class="text-[10px] text-on-surface-variant">${tipo}</p>
+      </div>
+    </div>
+  </td>
+  <td class="px-8 py-6">
+    <p class="text-base font-bold font-headline text-on-surface tracking-tight">${titulo}</p>
+  </td>
+  <td class="px-8 py-6">
+    <p class="text-xs text-on-surface-variant font-body">${fecha}</p>
+  </td>
+  <td class="px-8 py-6">
+    <div class="flex justify-end items-center gap-3">
+      <button class="px-5 py-2 rounded-full bg-surface-container-highest text-on-surface font-headline font-bold text-xs uppercase tracking-tight transition-all flex items-center gap-2 ${actionClass}" data-admin-modal-action>${actionLabel}</button>
+    </div>
+  </td>
+</tr>`;
+      }).join('');
+
+      el.innerHTML = `
+<div class="overflow-x-auto overflow-y-auto max-h-[100%]">
+<table class="w-full text-left border-collapse">
+  <thead>
+    <tr class="text-on-surface-variant text-[10px] uppercase tracking-[0.2em] font-bold border-b border-outline-variant/10">
+      <th class="px-8 py-6">USUARIO</th>
+      <th class="px-8 py-6">T&Iacute;TULO SOLICITADO</th>
+      <th class="px-8 py-6">FECHA DE ENV&Iacute;O</th>
+      <th class="px-8 py-6 text-right">ACCIONES</th>
+    </tr>
+  </thead>
+  <tbody class="divide-y divide-outline-variant/5">${rows}</tbody>
+</table>
+</div>`;
+    };
+
+    const openApprovedModal = async (resetPage = false) => {
+      if (!approvedModal) return;
+      approvedModal.classList.remove('hidden');
+      approvedModal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+      try {
+        const state = modalState.aprobado;
+        if (resetPage) state.page = 1;
+        renderModalList(approvedList, [], 'Cargando solicitudes aprobadas...', 'rechazado', state);
+        const res = await fetch(`api/requests.php?action=list&status=aprobado&page=${state.page}&size=${state.size}&q=${encodeURIComponent(approvedSearchQuery)}`, { credentials: 'same-origin' });
+        const raw = await res.text();
+        let json = {};
+        try { json = JSON.parse(raw); } catch (e) { throw new Error(raw || 'Respuesta inv?lida'); }
+        if (json.success) modalState.aprobado.total = json.total || 0;
+        if (approvedFooterText) approvedFooterText.textContent = `Mostrando ${Math.min(modalState.aprobado.total, modalState.aprobado.page * modalState.aprobado.size)} de ${modalState.aprobado.total} solicitudes aprobadas`;
+        renderModalList(approvedList, json.success ? (json.items || []) : [], 'No hay solicitudes aprobadas.', 'rechazado', modalState.aprobado);
+      } catch (e) { console.error(e); renderModalList(approvedList, [], 'No se pudieron cargar las solicitudes aprobadas.', 'rechazado', modalState.aprobado);
+        if (approvedList && e && e.message) { approvedList.innerHTML = `<div class=\"px-8 py-10 text-center text-on-surface-variant\">${e.message}</div>`; } }
+    };
+
+    const openRejectedModal = async (resetPage = false) => {
+      if (!rejectedModal) return;
+      rejectedModal.classList.remove('hidden');
+      rejectedModal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+      try {
+        const state = modalState.rechazado;
+        if (resetPage) state.page = 1;
+        renderModalList(rejectedList, [], 'Cargando solicitudes rechazadas...', 'aprobado', state);
+        const res = await fetch(`api/requests.php?action=list&status=rechazado&page=${state.page}&size=${state.size}&q=${encodeURIComponent(rejectedSearchQuery)}`, { credentials: 'same-origin' });
+        const raw = await res.text();
+        let json = {};
+        try { json = JSON.parse(raw); } catch (e) { throw new Error(raw || 'Respuesta inv?lida'); }
+        if (json.success) modalState.rechazado.total = json.total || 0;
+        if (rejectedFooterText) rejectedFooterText.textContent = `Mostrando ${Math.min(modalState.rechazado.total, modalState.rechazado.page * modalState.rechazado.size)} de ${modalState.rechazado.total} solicitudes rechazadas`;
+        renderModalList(rejectedList, json.success ? (json.items || []) : [], 'No hay solicitudes rechazadas.', 'aprobado', modalState.rechazado);
+      } catch (e) { console.error(e); renderModalList(approvedList, [], 'No se pudieron cargar las solicitudes aprobadas.', 'rechazado', modalState.aprobado);
+        if (approvedList && e && e.message) { approvedList.innerHTML = `<div class=\"px-8 py-10 text-center text-on-surface-variant\">${e.message}</div>`; } }
+    };
+
+    const closeApprovedModal = () => {
+      if (!approvedModal) return;
+      approvedModal.classList.add('hidden');
+      approvedModal.classList.remove('flex');
+      document.body.style.overflow = '';
+    };
+
+    const closeRejectedModal = () => {
+      if (!rejectedModal) return;
+      rejectedModal.classList.add('hidden');
+      rejectedModal.classList.remove('flex');
+      document.body.style.overflow = '';
+    };
+
+    approvedCloseEls.forEach(el => el.addEventListener('click', closeApprovedModal));
+
+    const handleModalPager = (e, status) => {
+      const state = modalState[status];
+      const prev = e.target.closest('[data-admin-modal-prev]');
+      const next = e.target.closest('[data-admin-modal-next]');
+      if (!prev && !next) return;
+      const maxPage = Math.max(1, Math.ceil((state.total || 0) / state.size));
+      if (prev && state.page > 1) state.page -= 1;
+      if (next && state.page < maxPage) state.page += 1;
+      if (status === 'aprobado') openApprovedModal(false);
+      if (status === 'rechazado') openRejectedModal(false);
+    };
+
+    rejectedCloseEls.forEach(el => el.addEventListener('click', closeRejectedModal));
+
+    const toggleSearch = (input) => {
+      if (!input) return;
+      input.classList.toggle('hidden');
+      if (!input.classList.contains('hidden')) {
+        input.focus();
+        input.select();
+      }
+    };
+    if (approvedSearchToggle) approvedSearchToggle.addEventListener('click', () => toggleSearch(approvedSearchInput));
+    if (rejectedSearchToggle) rejectedSearchToggle.addEventListener('click', () => toggleSearch(rejectedSearchInput));
+
+    const handleModalAction = async (e) => {
+      const btn = e.target.closest('[data-admin-modal-action]');
+      if (!btn) return;
+      const row = e.target.closest('[data-admin-modal-row]');
+      if (!row) return;
+      const id = Number(row.getAttribute('data-id'));
+      const target = row.getAttribute('data-target');
+      if (!id || !target) return;
+      try {
+        await fetch('api/requests.php?action=decide', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, decision: target })
+        });
+        // Refresh lists
+        if (approvedModal && !approvedModal.classList.contains('hidden')) {
+          await openApprovedModal();
+        }
+        if (rejectedModal && !rejectedModal.classList.contains('hidden')) {
+          await openRejectedModal();
+        }
+        loadData();
+      } catch (err) { console.error(err); }
+    };
+    if (approvedList) approvedList.addEventListener('click', handleModalAction);
+    if (approvedPrev) approvedPrev.addEventListener('click', () => handleModalPager({target: approvedPrev}, 'aprobado'));
+    if (approvedNext) approvedNext.addEventListener('click', () => handleModalPager({target: approvedNext}, 'aprobado'));
+    let tA = null;
+    if (approvedSearchInput) approvedSearchInput.addEventListener('input', () => {
+      clearTimeout(tA);
+      tA = setTimeout(() => {
+        approvedSearchQuery = (approvedSearchInput.value || '').trim();
+        modalState.aprobado.page = 1;
+        openApprovedModal(false);
+      }, 300);
+    });
+    if (rejectedList) rejectedList.addEventListener('click', handleModalAction);
+    if (rejectedPrev) rejectedPrev.addEventListener('click', () => handleModalPager({target: rejectedPrev}, 'rechazado'));
+    if (rejectedNext) rejectedNext.addEventListener('click', () => handleModalPager({target: rejectedNext}, 'rechazado'));
+    let tR = null;
+    if (rejectedSearchInput) rejectedSearchInput.addEventListener('input', () => {
+      clearTimeout(tR);
+      tR = setTimeout(() => {
+        rejectedSearchQuery = (rejectedSearchInput.value || '').trim();
+        modalState.rechazado.page = 1;
+        openRejectedModal(false);
+      }, 300);
+    });
+
+
+
+const filterApproved = document.querySelector('[data-admin-filter-approved]');
+    const filterRejected = document.querySelector('[data-admin-filter-rejected]');
+    if (filterApproved) filterApproved.addEventListener('click', () => openApprovedModal(true));
+    if (filterRejected) filterRejected.addEventListener('click', () => openRejectedModal(true));
+
   }
 
   if (document.readyState === 'loading') {
@@ -294,6 +634,8 @@
 })();
 </script>
 </body></html>
+
+
 
 
 

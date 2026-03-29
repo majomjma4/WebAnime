@@ -1147,6 +1147,7 @@
       const requestModal = document.getElementById("request-title-modal");
       const requestForm = document.getElementById("request-title-form");
       const requestInput = document.getElementById("request-title-input");
+      const requestType = document.getElementById("request-title-type");
       const requestToast = document.getElementById("request-toast");
       const requestCloseEls = requestModal ? requestModal.querySelectorAll("[data-request-close]") : [];
 
@@ -1438,17 +1439,29 @@
       }
 
       if (requestForm) {
-        requestForm.addEventListener("submit", (e) => {
+        requestForm.addEventListener("submit", async (e) => {
           e.preventDefault();
-          const name = (requestInput?.value || "").trim();
-          if (!name) return;
-          closeRequestModal();
-          if (requestToast) {
-            requestToast.classList.remove("hidden");
-            requestToast.classList.add("flex");
-            setTimeout(() => { requestToast.classList.add("hidden"); }, 2000);
+          const title = (requestInput?.value || "").trim();
+          const tipo = (requestType?.value || "Anime").trim();
+          if (!title) return;
+          try {
+            const res = await fetch("api/requests.php?action=create", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ titulo: title, tipo })
+            });
+            const json = await res.json();
+            if (!json.success) throw new Error(json.error || "No se pudo enviar la solicitud");
+            closeRequestModal();
+            if (requestToast) {
+              requestToast.classList.remove("hidden");
+              requestToast.classList.add("flex");
+              setTimeout(() => { requestToast.classList.add("hidden"); }, 2000);
+            }
+            if (requestInput) requestInput.value = "";
+          } catch (err) {
+            console.error("Request error:", err);
           }
-          if (requestInput) requestInput.value = "";
         });
       }
 
