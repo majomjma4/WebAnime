@@ -30,13 +30,13 @@ try {
                 'anidex_profile_color' => $meta['profile_color'] ?? '',
                 'anidex_profile_avatar' => $meta['profile_avatar'] ?? '',
                 'anidex_profile_member_since' => $meta['profile_member_since'] ?? date('Y'),
-                'anidex_user_id' => $meta['profile_id'] ?? '',
+                'anidex_user_id' => (string)$userId,
                 'anidex_profile_hours' => $meta['profile_hours'] ?? '0',
                 'anidex_profile_prefs' => json_decode($meta['anidex_profile_prefs'] ?? '[]', true),
                 'anidex_continue_v1' => json_decode($meta['anidex_continue_v1'] ?? '[]', true),
                 'anidex_my_list_v1' => json_decode($meta['my_list'] ?? '[]', true),
                 'anidex_favorites_v1' => json_decode($meta['favorites'] ?? '[]', true),
-                'anidex_status_v1' => json_decode($meta['status_list'] ?? '{}', true)
+                'anidex_status_v1' => json_decode($meta['status_list'] ?? '[]', true)
             ]
         ]);
     } elseif ($action === 'save') {

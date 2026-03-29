@@ -528,71 +528,101 @@
           </div>
         </section>
 
-        <!-- Recomendados: Movido al flujo principal y al fondo -->
-        <section
-          class="space-y-6 rounded-3xl border border-white/5 bg-gradient-to-b from-surface-container-low to-surface-container-high/70 p-6 shadow-[0_18px_40px_rgba(0,0,0,0.35)]">
-          <div class="flex items-center justify-between">
-            <h2 class="font-headline text-2xl font-bold text-on-surface">Recomendados para ti</h2>
-            <a class="text-xs font-bold uppercase tracking-widest text-primary hover:text-primary-dim transition-colors"
-                href="destacados.php">Ver destacados</a>
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <button
-              class="bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-4 flex items-center gap-4 border border-white/5 hover:border-violet-400/40 transition-all cursor-pointer relative"
-              data-mal-id="5114" data-title="Fullmetal Alchemist: Brotherhood"
-              onclick="window.location.href='detail.php?mal_id=5114&q=Fullmetal%20Alchemist%3A%20Brotherhood'">
-              <span class="absolute top-3 right-3 rounded-full bg-violet-500/90 px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white">Anime</span>
-              <img src="https://cdn.myanimelist.net/images/anime/1223/96541.jpg" alt="FMAB" class="w-14 h-20 object-cover rounded-lg shadow-md" />
-              <div class="text-left">
-                <p class="text-base font-bold text-on-surface">F.M.A. Brotherhood</p>
-                <p class="text-xs text-on-surface-variant">Acci&oacute;n - Fantas&iacute;a</p>
-              </div>
-            </button>
-            <button
-              class="bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-4 flex items-center gap-4 border border-white/5 hover:border-violet-400/40 transition-all cursor-pointer relative"
-              data-mal-id="9253" data-title="Steins;Gate"
-              onclick="window.location.href='detail.php?mal_id=9253&q=Steins%3BGate'">
-              <span class="absolute top-3 right-3 rounded-full bg-violet-500/90 px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white">Anime</span>
-              <img src="https://cdn.myanimelist.net/images/anime/5/73199.jpg" alt="Steins;Gate" class="w-14 h-20 object-cover rounded-lg shadow-md" />
-              <div class="text-left">
-                <p class="text-base font-bold text-on-surface">Steins;Gate</p>
-                <p class="text-xs text-on-surface-variant">Sci-Fi - Suspenso</p>
-              </div>
-            </button>
-            <button
-              class="bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-4 flex items-center gap-4 border border-white/5 hover:border-violet-400/40 transition-all cursor-pointer relative"
-              data-mal-id="32281" data-title="Kimi no Na wa."
-              onclick="window.location.href='detail.php?mal_id=32281&q=Kimi%20no%20Na%20wa.'">
-              <span class="absolute top-3 right-3 rounded-full bg-fuchsia-500/90 px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white">Pel&iacute;cula</span>
-              <img src="https://cdn.myanimelist.net/images/anime/5/87048.jpg" alt="Your Name" class="w-14 h-20 object-cover rounded-lg shadow-md" />
-              <div class="text-left">
-                <p class="text-base font-bold text-on-surface">Your Name</p>
-                <p class="text-xs text-on-surface-variant">Drama - Romance</p>
-              </div>
-            </button>
-            <button
-              class="bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-4 flex items-center gap-4 border border-white/5 hover:border-violet-400/40 transition-all cursor-pointer relative"
-              data-mal-id="16498" data-title="Shingeki no Kyojin"
-              onclick="window.location.href='detail.php?mal_id=16498&q=Shingeki%20no%20Kyojin'">
-              <span class="absolute top-3 right-3 rounded-full bg-violet-500/90 px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white">Anime</span>
-              <img src="https://cdn.myanimelist.net/images/anime/10/47347.jpg" alt="SnK" class="w-14 h-20 object-cover rounded-lg shadow-md" />
-              <div class="text-left">
-                <p class="text-base font-bold text-on-surface">Attack on Titan</p>
-                <p class="text-xs text-on-surface-variant">Acci&oacute;n - Drama</p>
-              </div>
-            </button>
-          </div>
-        </section>
       </div>
 
       <aside class="lg:col-span-4 space-y-6">
-        <!-- Sidebar content (actualizado para mayor equilibrio visual) -->
-        <div class="rounded-3xl border border-white/5 bg-surface-container-low/40 p-6 text-center shadow-lg">
-          <p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">¿Buscas algo m&aacute;s?</p>
-          <a href="series.php" class="mt-4 block w-full rounded-2xl bg-white/5 py-3 text-sm font-bold text-primary hover:bg-white/10 transition-colors">
-            Explorar Cat&aacute;logo
-          </a>
-        </div>
+        <section
+          class="space-y-6 rounded-3xl border border-white/5 bg-gradient-to-b from-surface-container-low to-surface-container-high/70 p-6 shadow-lg">
+          <div class="flex items-center justify-between">
+            <h2 class="font-headline text-xl font-bold text-on-surface">Recomendados</h2>
+            <a class="text-[10px] font-bold uppercase tracking-widest text-primary hover:text-primary-dim transition-colors"
+                href="destacados.php">Ver todo</a>
+          </div>
+          <div class="grid grid-cols-1 gap-2 mt-4">
+            <!-- Anime 1: FMAB -->
+            <button
+              class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-2.5 flex items-center gap-4 border border-white/5 hover:border-violet-400/40 transition-all cursor-pointer relative group"
+              onclick="window.location.href='detail.php?mal_id=5114&q=Fullmetal%20Alchemist%3A%20Brotherhood'">
+              <span class="absolute top-2.5 right-3 rounded-full bg-violet-500/90 px-3 py-1 text-[8px] font-extrabold uppercase tracking-widest text-white shadow-sm">Anime</span>
+              <img src="https://cdn.myanimelist.net/images/anime/1223/96541.jpg" alt="FMAB" class="w-11 h-15 object-cover rounded-lg shadow-md group-hover:scale-105 transition-transform" />
+              <div class="text-left flex-1 min-w-0">
+                <p class="text-[13px] font-bold text-on-surface leading-tight truncate">F.M.A. Brotherhood</p>
+                <p class="text-[10px] text-on-surface-variant mt-0.5">Acci&oacute;n - Fantas&iacute;a</p>
+              </div>
+            </button>
+            <!-- Movie 1: Your Name -->
+            <button
+              class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-2.5 flex items-center gap-4 border border-white/5 hover:border-fuchsia-400/40 transition-all cursor-pointer relative group"
+              onclick="window.location.href='detail.php?mal_id=32281&q=Kimi%20no%20Na%20wa.'">
+              <span class="absolute top-2.5 right-3 rounded-full bg-fuchsia-500/90 px-3 py-1 text-[8px] font-extrabold uppercase tracking-widest text-white shadow-sm">Pel&iacute;cula</span>
+              <img src="https://cdn.myanimelist.net/images/anime/5/87048.jpg" alt="Your Name" class="w-11 h-15 object-cover rounded-lg shadow-md group-hover:scale-105 transition-transform" />
+              <div class="text-left flex-1 min-w-0">
+                <p class="text-[13px] font-bold text-on-surface leading-tight truncate">Your Name</p>
+                <p class="text-[10px] text-on-surface-variant mt-0.5">Drama - Romance</p>
+              </div>
+            </button>
+            <!-- Anime 2: Hunter x Hunter -->
+            <button
+              class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-2.5 flex items-center gap-4 border border-white/5 hover:border-violet-400/40 transition-all cursor-pointer relative group"
+              onclick="window.location.href='detail.php?mal_id=11061&q=Hunter%20x%20Hunter'">
+              <span class="absolute top-2.5 right-3 rounded-full bg-violet-500/90 px-3 py-1 text-[8px] font-extrabold uppercase tracking-widest text-white shadow-sm">Anime</span>
+              <img src="https://cdn.myanimelist.net/images/anime/1337/99013.jpg" alt="HxH" class="w-11 h-15 object-cover rounded-lg shadow-md group-hover:scale-105 transition-transform" />
+              <div class="text-left flex-1 min-w-0">
+                <p class="text-[13px] font-bold text-on-surface leading-tight truncate">Hunter x Hunter</p>
+                <p class="text-[10px] text-on-surface-variant mt-0.5">Acci&oacute;n - Aventura</p>
+              </div>
+            </button>
+            <!-- Movie 2: Suzume -->
+            <button
+              class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-2.5 flex items-center gap-4 border border-white/5 hover:border-fuchsia-400/40 transition-all cursor-pointer relative group"
+              onclick="window.location.href='detail.php?mal_id=50796&q=Suzume'">
+              <span class="absolute top-2.5 right-3 rounded-full bg-fuchsia-500/90 px-3 py-1 text-[8px] font-extrabold uppercase tracking-widest text-white shadow-sm">Pel&iacute;cula</span>
+              <img src="https://image.tmdb.org/t/p/w200/m99O9idLpYv4hC8pDAbL68Y6N02.jpg" alt="Suzume" class="w-11 h-15 object-cover rounded-lg shadow-md group-hover:scale-105 transition-transform" />
+              <div class="text-left flex-1 min-w-0">
+                <p class="text-[13px] font-bold text-on-surface leading-tight truncate">Suzume no Tojimari</p>
+                <p class="text-[10px] text-on-surface-variant mt-0.5">Aventura - Fantas&iacute;a</p>
+              </div>
+            </button>
+            <!-- Anime 3: Jujutsu Kaisen -->
+            <button
+              class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-2.5 flex items-center gap-4 border border-white/5 hover:border-violet-400/40 transition-all cursor-pointer relative group"
+              onclick="window.location.href='detail.php?mal_id=40748&q=Jujutsu%20Kaisen'">
+              <span class="absolute top-2.5 right-3 rounded-full bg-violet-500/90 px-3 py-1 text-[8px] font-extrabold uppercase tracking-widest text-white shadow-sm">Anime</span>
+              <img src="https://cdn.myanimelist.net/images/anime/1171/109222.jpg" alt="JJK" class="w-11 h-15 object-cover rounded-lg shadow-md group-hover:scale-105 transition-transform" />
+              <div class="text-left flex-1 min-w-0">
+                <p class="text-[13px] font-bold text-on-surface leading-tight truncate">Jujutsu Kaisen</p>
+                <p class="text-[10px] text-on-surface-variant mt-0.5">Acci&oacute;n - Sobrenatural</p>
+              </div>
+            </button>
+            <!-- Movie 3: A Silent Voice -->
+            <button
+              class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-2.5 flex items-center gap-4 border border-white/5 hover:border-fuchsia-400/40 transition-all cursor-pointer relative group"
+              onclick="window.location.href='detail.php?mal_id=28851&q=Koe%20no%20Katachi'">
+              <span class="absolute top-2.5 right-3 rounded-full bg-fuchsia-500/90 px-3 py-1 text-[8px] font-extrabold uppercase tracking-widest text-white shadow-sm">Pel&iacute;cula</span>
+              <img src="https://cdn.myanimelist.net/images/anime/1122/96435.jpg" alt="Silent Voice" class="w-11 h-15 object-cover rounded-lg shadow-md group-hover:scale-105 transition-transform" />
+              <div class="text-left flex-1 min-w-0">
+                <p class="text-[13px] font-bold text-on-surface leading-tight truncate">A Silent Voice</p>
+                <p class="text-[10px] text-on-surface-variant mt-0.5">Drama - Escolar</p>
+              </div>
+            </button>
+            <!-- Anime 4: Steins;Gate -->
+            <button
+              class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-2.5 flex items-center gap-4 border border-white/5 hover:border-violet-400/40 transition-all cursor-pointer relative group"
+              onclick="window.location.href='detail.php?mal_id=9253&q=Steins%3BGate'">
+              <span class="absolute top-2.5 right-3 rounded-full bg-violet-500/90 px-3 py-1 text-[8px] font-extrabold uppercase tracking-widest text-white shadow-sm">Anime</span>
+              <img src="https://cdn.myanimelist.net/images/anime/5/73199.jpg" alt="Steins;Gate" class="w-11 h-15 object-cover rounded-lg shadow-md group-hover:scale-105 transition-transform" />
+              <div class="text-left flex-1 min-w-0">
+                <p class="text-[13px] font-bold text-on-surface leading-tight truncate">Steins;Gate</p>
+                <p class="text-[10px] text-on-surface-variant mt-0.5">Sci-Fi - Suspenso</p>
+              </div>
+            </button>
+          </div>
+          <button 
+            onclick="window.location.href='destacados.php'"
+            class="mt-4 w-full rounded-2xl bg-violet-500/10 py-3 text-xs font-bold uppercase tracking-widest text-violet-400 hover:bg-violet-500/20 hover:text-violet-300 hover:scale-[1.01] transition-all border border-violet-500/20 shadow-lg shadow-violet-500/5">
+            Ver m&aacute;s
+          </button>
+        </section>
       </aside>
     </div>
   </main>
@@ -707,41 +737,41 @@
   </div>
 
   <!-- Request Title Modal -->
-  <div id="request-title-modal" class="fixed inset-0 z-[70] hidden">
+  <div id="request-title-modal" class="fixed inset-0 z-[70] hidden flex items-center justify-center">
     <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" data-request-close></div>
     <div
-      class="relative mx-auto mt-24 w-[84%] max-w-sm rounded-2xl border border-white/10 bg-surface-container-high p-5 shadow-[0_20px_50px_rgba(0,0,0,0.45)]">
+      class="relative w-[70%] max-w-[340px] rounded-2xl border border-white/10 bg-surface-container-high p-5 shadow-[0_20px_50px_rgba(0,0,0,0.45)]">
       <div class="flex items-center justify-between mb-4">
-        <h3 class="font-headline text-lg font-bold">Solicitar título</h3>
+        <h3 class="font-headline text-base font-bold">Solicitar título</h3>
         <button
-          class="rounded-full bg-surface-container-low w-8 h-8 flex items-center justify-center text-xs font-bold text-on-surface-variant hover:text-on-surface"
+          class="rounded-full bg-surface-container-low w-7 h-7 flex items-center justify-center text-xs font-bold text-on-surface-variant hover:text-on-surface"
           type="button" data-request-close aria-label="Cerrar">x</button>
       </div>
       <form id="request-title-form" class="space-y-4">
-        <div class="space-y-2">
-          <label class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Nombre del anime o
-            película</label>
+        <div class="space-y-1.5">
+          <label class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Anime o película</label>
           <input id="request-title-input" type="text"
-            class="w-full rounded-xl border border-white/10 bg-surface-container-low/70 px-4 py-2 text-sm text-on-surface outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20"
-            placeholder="Ej: Fullmetal Alchemist: Brotherhood" />
+            class="w-full rounded-xl border border-white/10 bg-surface-container-low/70 px-3 py-2 text-sm text-on-surface outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20"
+            placeholder="Ej: Attack on Titan" />
         </div>
-        <div class="space-y-2">
+        <div class="space-y-1.5">
           <label class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Tipo</label>
           <select id="request-title-type"
-            class="w-full rounded-xl border border-white/10 bg-surface-container-low/70 px-4 py-2 text-sm text-on-surface outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20">
+            class="w-full rounded-xl border border-white/10 bg-surface-container-low/70 px-3 py-2 text-sm text-on-surface outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20">
             <option value="Anime">Anime</option>
             <option value="Película">Película</option>
           </select>
         </div>
-        <div class="flex items-center justify-end gap-3 pt-2">
+        <div class="flex items-center justify-end gap-2 pt-1">
           <button type="button" data-request-close
             class="rounded-full border border-white/10 bg-surface-container-low/70 px-4 py-2 text-xs font-bold uppercase tracking-widest text-on-surface-variant hover:text-on-surface transition-colors">Cancelar</button>
           <button type="submit"
-            class="rounded-full border border-white/10 bg-gradient-to-r from-sky-400 to-violet-400 px-4 py-2 text-xs font-bold uppercase tracking-widest text-slate-900 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(56,189,248,0.25)]">Solicitar</button>
+            class="rounded-full border border-white/10 bg-gradient-to-r from-sky-400 to-violet-400 px-4 py-2 text-xs font-bold uppercase tracking-widest text-slate-900 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(56,189,248,0.3)]">Solicitar</button>
         </div>
       </form>
     </div>
   </div>
+
 
   <!-- Request Toast -->
   <div id="request-toast" class="fixed inset-0 z-[90] hidden items-center justify-center">
@@ -1150,6 +1180,8 @@
         "Idioma": { baseBorder: "border-blue-400/70", baseBg: "bg-blue-500/45", activeBorder: "border-blue-300/90", activeBg: "bg-blue-500/70", glow: "" },
         "Género": { baseBorder: "border-violet-400/70", baseBg: "bg-violet-500/45", activeBorder: "border-violet-300/90", activeBg: "bg-violet-500/70", glow: "" }
       };
+
+      const getK = (k) => (window.AniDexProfile && window.AniDexProfile.getIsolatedKey) ? AniDexProfile.getIsolatedKey(k) : k;
       const colorClasses = [
         "bg-gradient-to-br", "from-zinc-950", "from-zinc-900", "via-zinc-900", "to-zinc-800",
         "from-violet-900/50", "via-indigo-900/40", "to-slate-900/30",
@@ -1160,7 +1192,7 @@
       ];
 
       let pendingPrefs = null;
-      const isLogged = (window.AniDexLayout && typeof window.AniDexLayout.isLoggedIn === 'function')
+      const getIsLogged = () => (window.AniDexLayout && typeof window.AniDexLayout.isLoggedIn === 'function')
         ? window.AniDexLayout.isLoggedIn()
         : (localStorage.getItem("nekora_logged_in") === "true");
 
@@ -1180,7 +1212,7 @@
 
       const loadPrefs = () => {
         try {
-          const raw = localStorage.getItem(PREF_KEY);
+          const raw = localStorage.getItem(getK(PREF_KEY));
           if (raw) return normalizePrefs(JSON.parse(raw));
         } catch (e) { }
         return normalizePrefs(PREF_DEFAULTS);
@@ -1240,11 +1272,12 @@
           const userSuffix = (window.AniDexProfile && window.AniDexProfile.getOrCreateUserSuffix) ? AniDexProfile.getOrCreateUserSuffix() : (localStorage.getItem("anidex_user_suffix") || "22");
           const defaultName = `NekoraUser_${userSuffix}`;
           const userId = (window.AniDexProfile && window.AniDexProfile.getOrCreateUserId) ? AniDexProfile.getOrCreateUserId() : (localStorage.getItem("anidex_user_id") || "NK-000000");
+
           const savedName = localStorage.getItem("anidex_profile_name");
-          const savedDesc = localStorage.getItem("anidex_profile_desc");
-          const savedColor = localStorage.getItem("anidex_profile_color");
-          const savedMember = localStorage.getItem("anidex_profile_member_since");
-          const savedHours = localStorage.getItem("anidex_profile_hours");
+          const savedDesc = localStorage.getItem(getK("anidex_profile_desc"));
+          const savedColor = localStorage.getItem(getK("anidex_profile_color"));
+          const savedMember = localStorage.getItem(getK("anidex_profile_member_since"));
+          const savedHours = localStorage.getItem(getK("anidex_profile_hours"));
 
           if (idDisplay) idDisplay.textContent = `ID: ${userId}`;
           if (nameEl) nameEl.textContent = (savedName || defaultName).trim();
@@ -1267,7 +1300,7 @@
             savedColor.split(" ").forEach((c) => cardEl.classList.add(c));
           }
 
-          const savedAvatar = localStorage.getItem("anidex_profile_avatar");
+          const savedAvatar = localStorage.getItem(getK("anidex_profile_avatar"));
           if (savedAvatar && avatarImg) avatarImg.src = savedAvatar;
 
           const prefs = loadPrefs();
@@ -1275,7 +1308,8 @@
           renderPrefPicker(prefs);
           renderPrefDisplay(prefs);
 
-          if (isLogged && !skipRestore && !window.__restoreAttempted) {
+          const logged = getIsLogged();
+          if (logged && !skipRestore && !window.__restoreAttempted) {
             window.__restoreAttempted = true;
             if (window.AniDexProfile && typeof window.AniDexProfile.restoreFromDB === 'function') {
               window.AniDexProfile.restoreFromDB();
@@ -1347,11 +1381,22 @@
             if (descEl) descEl.textContent = newDesc;
 
             localStorage.setItem("anidex_profile_name", newName);
-            localStorage.setItem("anidex_profile_desc", newDesc);
+            localStorage.setItem(getK("anidex_profile_desc"), newDesc);
 
             if (pendingPrefs) {
-              localStorage.setItem(PREF_KEY, JSON.stringify(pendingPrefs));
+              localStorage.setItem(getK(PREF_KEY), JSON.stringify(pendingPrefs));
               renderPrefDisplay(pendingPrefs);
+            }
+
+            // Aplicar avatar pendiente si existe
+            if (window.__profilePendingAvatar) {
+              const src = window.__profilePendingAvatar;
+              localStorage.setItem(getK("anidex_profile_avatar"), src);
+              if (avatarImg) avatarImg.src = src;
+              document.querySelectorAll("img[data-profile-avatar]").forEach((img) => {
+                img.src = src;
+              });
+              window.__profilePendingAvatar = null;
             }
 
             // Sincronizar en segundo plano sin bloquear el cierre del modal
@@ -1387,7 +1432,7 @@
           const colorClass = btn.getAttribute("data-color-class");
           colorClasses.forEach(c => cardEl.classList.remove(c));
           colorClass.split(" ").forEach(c => cardEl.classList.add(c));
-          localStorage.setItem("anidex_profile_color", colorClass);
+          localStorage.setItem(getK("anidex_profile_color"), colorClass);
           saveProfileToDB();
         });
       }
@@ -1407,12 +1452,18 @@
         });
       }
 
-      // Initial load
-      loadProfile();
-
-      // Export refresh (Registry pattern)
-      if (window.AniDexLayout && typeof window.AniDexLayout.registerRefresh === "function") {
-        window.AniDexLayout.registerRefresh(() => loadProfile(true));
+      // Initial load & Export refresh (Registry pattern)
+      if (window.AniDexLayout && typeof window.AniDexLayout.onReady === "function") {
+        window.AniDexLayout.onReady(() => {
+          console.log("[NekoraProfile] Autenticación lista. Cargando datos con ID:", localStorage.getItem("anidex_user_id"));
+          loadProfile();
+        });
+        window.AniDexLayout.registerRefresh(() => {
+          console.log("[NekoraProfile] Señal de refresco recibida.");
+          loadProfile(true);
+        });
+      } else {
+        loadProfile();
       }
     })();
   </script>
@@ -1436,14 +1487,12 @@
         if (createBtn) createBtn.classList.toggle("hidden", isLogged);
         if (loginBtn) loginBtn.classList.toggle("hidden", isLogged);
         if (logoutBtn) logoutBtn.classList.toggle("hidden", !isLogged);
-        const isPremium =
-          isLogged &&
-          (localStorage.getItem("nekora_premium") === "true" ||
-            localStorage.getItem("nekora_admin") === "true");
+        const isPremium = window.AniDexLayout ? window.AniDexLayout.isPremium() : (localStorage.getItem("nekora_premium") === "true");
+        const isAdmin = window.AniDexLayout ? window.AniDexLayout.isAdmin() : (localStorage.getItem("nekora_admin") === "true");
+        
         if (premiumAccessBtn) premiumAccessBtn.classList.toggle("hidden", isPremium);
         if (premiumCancelBtn) premiumCancelBtn.classList.toggle("hidden", !isPremium);
         if (continueSection) continueSection.classList.toggle("hidden", !isPremium);
-        const isAdmin = localStorage.getItem("nekora_admin") === "true";
         if (requestTitleBtn) requestTitleBtn.classList.toggle("hidden", !isPremium || isAdmin);
         if (profileLists) {
           profileLists.style.marginTop = isPremium ? "-6rem" : "1.5rem";
@@ -1482,28 +1531,24 @@
         }
       };
       const doLogout = async () => {
+        // CRÍTICO: guardar en la BD ANTES de borrar localStorage.
+        // Si no se hace esto, los datos agregados desde el último auto-sync
+        // (hasta 60 seg) se pierden permanentemente al limpiar el storage.
+        try {
+          if (window.AniDexProfile && typeof window.AniDexProfile.saveToDB === "function") {
+            await window.AniDexProfile.saveToDB();
+          }
+        } catch (e) { console.error("Pre-logout save failed", e); }
+
         try {
           await fetch("api/auth.php?action=logout", { credentials: "same-origin" });
         } catch (e) { console.error("Logout API failed", e); }
 
-        localStorage.removeItem("nekora_logged_in");
-        localStorage.removeItem("nekora_user");
-        localStorage.removeItem("nekora_premium");
-        [
-          "anidex_my_list_v1",
-          "anidex_favorites_v1",
-          "anidex_status_v1",
-          "nekora_admin",
-          "anidex_profile_prefs",
-          "anidex_profile_desc",
-          "anidex_profile_color",
-          "anidex_profile_avatar",
-          "anidex_profile_member_since",
-          "anidex_profile_hours",
-          "anidex_profile_name",
-          "anidex_user_id",
-          "anidex_user_suffix"
-        ].forEach((key) => localStorage.removeItem(key));
+        Object.keys(localStorage).forEach((key) => {
+          if (key.startsWith("anidex_") || key.startsWith("nekora_")) {
+            localStorage.removeItem(key);
+          }
+        });
         window.location.href = "index.php";
       };
       const openLogoutModal = () => {
@@ -1544,14 +1589,15 @@
   </script>
   <script>
     /* MVC: Continue Watching (Model / View / Controller) */
-    (async function () {
+    window.renderContinueWatching = async function () {
       // MODEL: continue items stored in localStorage
       const grid = document.getElementById("continue-grid");
       const empty = document.getElementById("continue-empty");
       if (!grid || !empty) return;
+      const getK = (k) => (window.AniDexProfile && window.AniDexProfile.getIsolatedKey) ? AniDexProfile.getIsolatedKey(k) : k;
       let items = [];
       try {
-        items = JSON.parse(localStorage.getItem("anidex_continue_v1") || "[]");
+        items = JSON.parse(localStorage.getItem(getK("anidex_continue_v1")) || "[]");
       } catch {
         items = [];
       }
@@ -1621,13 +1667,13 @@
       // Para evitar sobreescribir datos sincronizados con una lista vaca local:
       if (items.length > 0) {
         try {
-          localStorage.setItem("anidex_continue_v1", JSON.stringify(items));
+          localStorage.setItem(getK("anidex_continue_v1"), JSON.stringify(items));
         } catch { }
       }
 
       if (items.length === 0) {
         // Intentar recuperar de localStorage si el render local fall pero hay datos sincronizados
-        const synced = JSON.parse(localStorage.getItem("anidex_continue_v1") || "[]");
+        const synced = JSON.parse(localStorage.getItem(getK("anidex_continue_v1")) || "[]");
         if (synced.length > 0) {
           items = synced;
         }
@@ -1691,9 +1737,19 @@
       });
 
       if (window.AniDexLayout && typeof window.AniDexLayout.registerRefresh === "function") {
-        window.AniDexLayout.registerRefresh(applyState);
+        window.AniDexLayout.registerRefresh(window.renderContinueWatching);
       }
-    })();
+    };
+    
+    // Initial call synchronized with Layout
+    if (window.AniDexLayout && typeof window.AniDexLayout.onReady === "function") {
+      window.AniDexLayout.onReady(() => {
+        console.log("[NekoraProfile] Iniciando render de Continuar viendo...");
+        window.renderContinueWatching();
+      });
+    } else {
+      window.renderContinueWatching();
+    }
   </script>
   <script data-ui-unlock>document.documentElement.classList.remove("preload-ui");</script>
 </body>

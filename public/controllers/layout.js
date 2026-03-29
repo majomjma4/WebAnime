@@ -34,7 +34,7 @@
     const styles = container.querySelectorAll("style");
     styles.forEach((styleEl, index) => {
       const id = styleEl.getAttribute("data-layout-style") || `layout-style-${index}`;
-      if (document.querySelector(`style[data-layout-style=\"${id}\"]`)) return;
+      if (document.querySelector(`style[data-layout-style="${id}"]`)) return;
       const clone = styleEl.cloneNode(true);
       clone.setAttribute("data-layout-style", id);
       document.head.appendChild(clone);
@@ -133,13 +133,18 @@
     }
   }
 
+  function getIsolatedKey(baseKey) {
+    const id = (authState && authState.logged && authState.userId) ? authState.userId : getOrCreateUserId();
+    return `${baseKey}_${id}`;
+  }
+
   function formatHours(hours) {
     const total = parseFloat(hours) || 0;
     const totalMinutes = Math.round(total * 60);
     const h = Math.floor(totalMinutes / 60);
     const m = totalMinutes % 60;
     const mm = String(m).padStart(2, "0");
-    if (h === 0) return `0:${mm} min`;
+    if (h === 0) return `${m} min`;
     return `${h}:${mm} horas`;
   }
 
@@ -149,7 +154,51 @@
     return `NekoraUser_${getOrCreateUserSuffix()}`;
   }
 
-  let authState = { logged: false, username: "", role: "Invitado", isAdmin: false, isPremium: false };
+  // FIX: Ahora acepta preReadGuestId para evitar leer el ID YA sobreescrito.
+  function migrateGuestData(realUserId, preReadGuestId) {
+    try {
+      // IMPORTANTE: usar el ID leído ANTES de sobrescribir anidex_user_id
+      const guestId = preReadGuestId || localStorage.getItem("anidex_user_id");
+      if (!guestId || guestId === realUserId) return;
+
+      const keysToMigrate = [
+        "anidex_profile_hours",
+        "anidex_profile_prefs",
+        "anidex_continue_v1",
+        "anidex_profile_desc",
+        "anidex_profile_color",
+        "anidex_profile_avatar",
+        "anidex_my_list_v1",
+        "anidex_favorites_v1",
+        "anidex_status_v1"
+      ];
+
+      keysToMigrate.forEach(baseKey => {
+        const guestKey = `${baseKey}_${guestId}`;
+        const realKey = `${baseKey}_${realUserId}`;
+        const guestVal = localStorage.getItem(guestKey);
+        if (!guestVal) return;
+
+        const realVal = localStorage.getItem(realKey);
+
+        if (baseKey === "anidex_profile_hours") {
+          // Para horas: sumar (el usuario ya vio ese tiempo como invitado)
+          const total = (parseFloat(guestVal || "0") + parseFloat(realVal || "0")).toFixed(2);
+          localStorage.setItem(realKey, total);
+          localStorage.removeItem(guestKey);
+          return;
+        }
+
+        // Para el resto: solo migrar si el valor real está vacío
+        if (!realVal || realVal === "0" || realVal === "[]" || realVal === "{}") {
+          localStorage.setItem(realKey, guestVal);
+          localStorage.removeItem(guestKey);
+        }
+      });
+    } catch (e) { console.error("Migration error:", e); }
+  }
+
+  let authState = { logged: false, username: "", userId: null, role: "Invitado", isAdmin: false, isPremium: false };
 
   async function checkAuth() {
     try {
@@ -163,10 +212,13 @@
         if (authState.isAdmin) localStorage.setItem("nekora_admin", "true");
         if (authState.isPremium) localStorage.setItem("nekora_premium", "true");
         else localStorage.removeItem("nekora_premium");
-        
-        // Solo establecer el nombre si no existe uno personalizado ya cargado
-        if (!localStorage.getItem("anidex_profile_name")) {
-          localStorage.setItem("anidex_profile_name", authState.username);
+
+        if (authState.userId) {
+          // FIX CRÍTICO: leer el ID de invitado ANTES de sobrescribir para que la migración funcione.
+          // Si se sobreescribe primero, migrateGuestData ve guestId === realUserId y no hace nada.
+          const oldGuestId = localStorage.getItem("anidex_user_id");
+          localStorage.setItem("anidex_user_id", authState.userId);
+          migrateGuestData(authState.userId, oldGuestId);
         }
       } else {
         localStorage.removeItem("nekora_logged_in");
@@ -176,7 +228,7 @@
       }
     } catch (e) {
       console.error("Auth check failed:", e);
-      authState = { logged: false, username: "", role: "Invitado", isAdmin: false, isPremium: false };
+      authState = { logged: false, username: "", userId: null, role: "Invitado", isAdmin: false, isPremium: false };
       localStorage.removeItem("nekora_logged_in");
       localStorage.removeItem("nekora_admin");
       localStorage.removeItem("nekora_premium");
@@ -193,6 +245,10 @@
     return authState.isAdmin;
   }
 
+  function isPremium() {
+    return authState.isPremium;
+  }
+
   function getRole() {
     return authState.role || "Invitado";
   }
@@ -204,8 +260,8 @@
     const logged = isLoggedIn();
     const role = getRole();
 
-    nameEls.forEach((el) => { 
-        el.textContent = logged ? authState.username : getGuestName(); 
+    nameEls.forEach((el) => {
+        el.textContent = logged ? authState.username : getGuestName();
     });
 
     if (logged) {
@@ -278,10 +334,10 @@
 
   function initSessionTimer() {
     if (!isLoggedIn()) return;
-    
+
     let lastSync = Date.now();
     const SYNC_INTERVAL = 60000; // Sync every 1 minute
-    
+
     setInterval(() => {
       const now = Date.now();
       const deltaMs = now - lastSync;
@@ -289,12 +345,13 @@
 
       lastSync = now;
       const deltaHours = deltaMs / (1000 * 60 * 60);
-      
+
       try {
-        const currentHours = parseFloat(localStorage.getItem("anidex_profile_hours") || "0");
+        const key = getIsolatedKey("anidex_profile_hours");
+        const currentHours = parseFloat(localStorage.getItem(key) || "0");
         const newTotal = (currentHours + deltaHours).toFixed(2);
-        localStorage.setItem("anidex_profile_hours", newTotal);
-        
+        localStorage.setItem(key, newTotal);
+
         // Update UI if on user.php
         const hoursEl = document.querySelector("[data-profile-hours]");
         if (hoursEl) hoursEl.textContent = formatHours(newTotal);
@@ -333,13 +390,13 @@
     } catch {}
     setupProfileMenu();
     initSessionTimer();
-    
-    // Nueva l&oacute;gica de sincronizaci&oacute;n global
+
+    // Lógica de sincronización global
     if (isLoggedIn()) {
       getOrCreateUserId();
       restoreFromDB();
     }
-    
+
     isReady = true;
     while (readyCallbacks.length) {
       const fn = readyCallbacks.shift();
@@ -352,6 +409,7 @@
     initI18nWhenReady();
     initSearchWhenReady();
   }
+
   async function initLayout() {
     try {
       await checkAuth();
@@ -380,17 +438,16 @@
     if (!authState.logged || window.__anidex_restoring) return;
     const data = {
       profile_name: localStorage.getItem("anidex_profile_name") || "",
-      profile_desc: localStorage.getItem("anidex_profile_desc") || "",
-      profile_color: localStorage.getItem("anidex_profile_color") || "",
-      profile_avatar: localStorage.getItem("anidex_profile_avatar") || "",
-      profile_member_since: localStorage.getItem("anidex_profile_member_since") || "",
-      profile_id: localStorage.getItem("anidex_user_id") || "",
-      profile_hours: localStorage.getItem("anidex_profile_hours") || "0",
-      anidex_profile_prefs: JSON.parse(localStorage.getItem("anidex_profile_prefs") || "[]"),
-      anidex_continue_v1: JSON.parse(localStorage.getItem("anidex_continue_v1") || "[]"),
-      my_list: JSON.parse(localStorage.getItem("anidex_my_list_v1") || "[]"),
-      favorites: JSON.parse(localStorage.getItem("anidex_favorites_v1") || "[]"),
-      status_list: JSON.parse(localStorage.getItem("anidex_status_v1") || "{}")
+      profile_desc: localStorage.getItem(getIsolatedKey("anidex_profile_desc")) || "",
+      profile_color: localStorage.getItem(getIsolatedKey("anidex_profile_color")) || "",
+      profile_avatar: localStorage.getItem(getIsolatedKey("anidex_profile_avatar")) || "",
+      profile_member_since: localStorage.getItem(getIsolatedKey("anidex_profile_member_since")) || "",
+      profile_hours: localStorage.getItem(getIsolatedKey("anidex_profile_hours")) || "0",
+      anidex_profile_prefs: JSON.parse(localStorage.getItem(getIsolatedKey("anidex_profile_prefs")) || "[]"),
+      anidex_continue_v1: JSON.parse(localStorage.getItem(getIsolatedKey("anidex_continue_v1")) || "[]"),
+      my_list: JSON.parse(localStorage.getItem(getIsolatedKey("anidex_my_list_v1")) || "[]"),
+      favorites: JSON.parse(localStorage.getItem(getIsolatedKey("anidex_favorites_v1")) || "[]"),
+      status_list: JSON.parse(localStorage.getItem(getIsolatedKey("anidex_status_v1")) || "[]")
     };
     try {
       await fetch("api/profile.php?action=save", {
@@ -409,27 +466,91 @@
       const json = await res.json();
       if (json.success && json.data) {
         const d = json.data;
-        
-        // Mapeo directo de claves que empiezan con anidex_
+
+        // FIX: Conjunto explícito de claves que tienen lógica propia de fusión.
+        // El bucle genérico NUNCA debe procesar estas claves porque cada una
+        // tiene reglas distintas (MAX, suma sin sufijo, etc.).
+        //
+        //  anidex_profile_hours      → Fusión MAX debajo (el mayor gana)
+        //  anidex_user_id            → Es el ID real del servidor; no va con sufijo aislado
+        //  anidex_profile_name/desc/
+        //  color/avatar/member_since → Manejadas por bloque especial debajo
+        const LOOP_EXCLUSION = new Set([
+          "anidex_profile_hours",
+          "anidex_user_id",
+          "anidex_profile_name",
+          "anidex_profile_desc",
+          "anidex_profile_color",
+          "anidex_profile_avatar",
+          "anidex_profile_member_since"
+        ]);
+
+        // Bucle genérico: solo listas/objetos con prefijo anidex_ no excluidos
         Object.keys(d).forEach(key => {
-          if (key.startsWith('anidex_')) {
-            const val = d[key];
-            const valStr = (typeof val === 'object') ? JSON.stringify(val) : String(val);
-            // Evitar sobrescribir con valores vacíos si ya tenemos algo localmente
-            if (valStr && valStr !== '[]' && valStr !== '{}' && valStr !== 'null') {
-              localStorage.setItem(key, valStr);
-            }
+          if (!key.startsWith("anidex_") || LOOP_EXCLUSION.has(key)) return;
+
+          const serverVal = d[key];
+          const localKey = getIsolatedKey(key);
+          const localValRaw = localStorage.getItem(localKey);
+          let finalVal = serverVal;
+
+          // Mezcla Inteligente para Listas
+          if (Array.isArray(serverVal)) {
+            let localArr = [];
+            try { localArr = localValRaw ? JSON.parse(localValRaw) : []; } catch(e) {}
+            if (!Array.isArray(localArr)) localArr = [];
+            const seen = new Set();
+            const merged = [];
+            // Locales primero (más recientes que el servidor)
+            [...localArr, ...serverVal].forEach(item => {
+              const id = item.malId || item.id || (item.title ? item.title.toLowerCase() : null);
+              if (id && !seen.has(id)) { seen.add(id); merged.push(item); }
+            });
+            finalVal = merged;
+          } else if (typeof serverVal === "object" && serverVal !== null) {
+            // Mezcla de objetos (status_v1, etc.): local prevalece
+            let localObj = {};
+            try { localObj = localValRaw ? JSON.parse(localValRaw) : {}; } catch(e) {}
+            finalVal = Object.assign({}, serverVal, localObj);
+          }
+
+          const valStr = (typeof finalVal === "object") ? JSON.stringify(finalVal) : String(finalVal);
+          if (valStr && valStr !== "[]" && valStr !== "{}" && valStr !== "null") {
+            localStorage.setItem(localKey, valStr);
           }
         });
+
+        // ─── Bloque especial: campos de perfil ───────────────────────────────────────
+        // El API los envía con prefijo anidex_ (anidex_profile_name, etc.).
+        // profile_name se guarda SIN sufijo; el resto CON sufijo aislado.
+        if (d.anidex_profile_name)         localStorage.setItem("anidex_profile_name",                              d.anidex_profile_name);
+        if (d.anidex_profile_desc)         localStorage.setItem(getIsolatedKey("anidex_profile_desc"),         d.anidex_profile_desc);
+        if (d.anidex_profile_color)        localStorage.setItem(getIsolatedKey("anidex_profile_color"),        d.anidex_profile_color);
+        if (d.anidex_profile_avatar)       localStorage.setItem(getIsolatedKey("anidex_profile_avatar"),       d.anidex_profile_avatar);
+        if (d.anidex_profile_member_since) localStorage.setItem(getIsolatedKey("anidex_profile_member_since"), d.anidex_profile_member_since);
+
+        // ─── FUSIÓN MAX de horas vistas ──────────────────────────────────────────────
+        // Regla de oro: el contador NUNCA puede retroceder al refrescar la página.
+        // Se usa Math.max en vez de "if server > local" para garantizar atomicidad.
+        // Clave canónica del API: 'anidex_profile_hours'
+        const serverHoursRaw = d.anidex_profile_hours;
+        if (serverHoursRaw !== undefined && serverHoursRaw !== null) {
+          const localKey = getIsolatedKey("anidex_profile_hours");
+          const local  = parseFloat(localStorage.getItem(localKey) || "0");
+          const server = parseFloat(serverHoursRaw || "0");
+          const winner = Math.max(local, server);  // El mayor gana — sin excepciones
+          localStorage.setItem(localKey, winner.toFixed(2));
+        }
 
         if (window.AniDexLayout && typeof window.AniDexLayout.triggerRefresh === "function") {
           window.AniDexLayout.triggerRefresh();
         }
       } else if (json.success) {
-         saveProfileToDB();
+        // Sin datos previos en el servidor → guardar lo local como punto de partida
+        saveProfileToDB();
       }
-    } catch (e) { 
-      console.error("Error restoring profile from DB:", e); 
+    } catch (e) {
+      console.error("Error restoring profile from DB:", e);
     } finally {
       window.__anidex_restoring = false;
     }
@@ -445,11 +566,12 @@
     });
   }
 
-  window.AniDexLayout = { 
+  window.AniDexLayout = {
     onReady,
     checkAuth,
     isLoggedIn,
     isAdmin,
+    isPremium,
     getRole,
     registerRefresh,
     triggerRefresh,
@@ -461,8 +583,7 @@
     restoreFromDB: restoreFromDB,
     getOrCreateUserId: getOrCreateUserId,
     getOrCreateUserSuffix: getOrCreateUserSuffix,
+    getIsolatedKey: getIsolatedKey,
     formatHours: formatHours
   };
 })();
-
-

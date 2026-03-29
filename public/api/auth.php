@@ -63,7 +63,7 @@ if ($action === 'register') {
         $dbConn->prepare("INSERT INTO usuarios_sesiones (usuario_id, inicio) VALUES (?, NOW())")->execute([$userId]);
         $_SESSION['session_log_id'] = $dbConn->lastInsertId();
 
-        echo json_encode(['success' => true, 'username' => $username, 'role' => 'Registrado']);
+        echo json_encode(['success' => true, 'username' => $username, 'role' => 'Registrado', 'userId' => $userId]);
     } catch (Exception $e) {
         $dbConn->rollBack();
         echo json_encode(['success' => false, 'error' => 'Error al registrar el usuario: ' . $e->getMessage()]);
@@ -108,6 +108,7 @@ if ($action === 'register') {
         echo json_encode([
             'success' => true, 
             'username' => $user['nombre_mostrar'], 
+            'userId' => $user['id'],
             'role' => $role,
             'isAdmin' => ($role === 'Admin'),
             'isPremium' => $isPremium
@@ -129,6 +130,7 @@ if ($action === 'register') {
         echo json_encode([
             'logged' => true,
             'username' => $username,
+            'userId' => $_SESSION['user_id'],
             'role' => $role,
             'isAdmin' => ($role === 'Admin'),
             'isPremium' => $isPremium

@@ -263,8 +263,16 @@ const AniDexDetailDataBoot = () => {
   };
 
   const init = async () => {
-    const isLogged = localStorage.getItem("nekora_logged_in") === "true";
-    const isPremium = localStorage.getItem("nekora_premium") === "true";
+    if (window.AniDexLayout && typeof window.AniDexLayout.onReady === "function") {
+      window.AniDexLayout.onReady(_runInit);
+    } else {
+      _runInit();
+    }
+  };
+
+  const _runInit = async () => {
+    const isLogged = window.AniDexLayout ? window.AniDexLayout.isLoggedIn() : (localStorage.getItem("nekora_logged_in") === "true");
+    const isPremium = window.AniDexLayout ? window.AniDexLayout.isPremium() : (localStorage.getItem("nekora_premium") === "true" || localStorage.getItem("nekora_admin") === "true");
     const canWatchEpisodes = isLogged && isPremium;
     const params = new URLSearchParams(location.search);
     const dbIdParam = params.get("id");
@@ -783,10 +791,14 @@ const AniDexDetailDataBoot = () => {
         return { epNumber, epCode, epTitle, epSynopsis, linkUrl };
       });
 
-      const seenKey = selectedId
+      const getK = (k) => (window.AniDexProfile && window.AniDexProfile.getIsolatedKey) ? AniDexProfile.getIsolatedKey(k) : k;
+
+      const seenBaseKey = selectedId
         ? `anidex_seen_eps_${selectedId}`
         : `anidex_seen_eps_${norm(preferredTitle || query || "anime")}`;
-      const continueKey = "anidex_continue_v1";
+      
+      const seenKey = getK(seenBaseKey);
+      const continueKey = getK("anidex_continue_v1");
       const loadSeen = () => {
         try {
           const raw = localStorage.getItem(seenKey);
@@ -796,7 +808,12 @@ const AniDexDetailDataBoot = () => {
         }
       };
       const saveSeen = (map) => {
-        try { localStorage.setItem(seenKey, JSON.stringify(map)); } catch {}
+        try { 
+          localStorage.setItem(seenKey, JSON.stringify(map));
+          if (window.AniDexProfile && typeof window.AniDexProfile.saveToDB === "function") {
+            window.AniDexProfile.saveToDB().catch(e => console.warn("Save seen to DB error:", e));
+          }
+        } catch {}
       };
       let seenMap = loadSeen();
       const loadContinue = () => {
@@ -815,7 +832,12 @@ const AniDexDetailDataBoot = () => {
         }
       };
       const saveContinue = (map) => {
-        try { localStorage.setItem(continueKey, JSON.stringify(Object.values(map))); } catch {}
+        try { 
+          localStorage.setItem(continueKey, JSON.stringify(Object.values(map))); 
+          if (window.AniDexProfile && typeof window.AniDexProfile.saveToDB === "function") {
+            window.AniDexProfile.saveToDB().catch(e => console.warn("Save continue to DB error:", e));
+          }
+        } catch {}
       };
       let continueMap = loadContinue();
       const isSeen = (ep) => Boolean(seenMap[String(ep)]);
@@ -842,7 +864,7 @@ const AniDexDetailDataBoot = () => {
           query: preferredTitle || query || "",
           episode: Number(ep),
           episodeTitle: epTitle,
-          cover: cover || "",
+          cover: src || "",
           detailUrl,
           lastSeen: Date.now()
         };
@@ -883,13 +905,13 @@ const AniDexDetailDataBoot = () => {
       const renderEpisodeCard = (item) => {
         const episodeAttrs = item.linkUrl
           ? `data-episode-link="${item.linkUrl}" data-episode-embed="${toEmbed(item.linkUrl)}"`
-          : `data-episode-image="${cover}" data-episode-title="${item.epTitle}"`;
+          : `data-episode-image="${src}" data-episode-title="${item.epTitle}"`;
         const seenBtnClass = canWatchEpisodes ? "" : "hidden";
         return `
           <div class="episode-card flex gap-6 items-center rounded-2xl border border-white/5 bg-surface-container-low/70 p-4 transition-all duration-300 hover:border-violet-400/70 hover:shadow-[0_0_18px_rgba(139,92,246,0.35)] hover:-translate-y-0.5 cursor-pointer" data-episode="${item.epNumber}" ${episodeAttrs}>
             <div class="flex items-center gap-4 flex-shrink-0">
               <div class="w-20 h-20 rounded-[6px] overflow-hidden bg-surface-container-high">
-                <img src="${cover}" alt="Episodio ${item.epCode}" class="w-full h-full object-cover" />
+                <img src="${src}" alt="Episodio ${item.epCode}" class="w-full h-full object-cover" />
               </div>
               <span class="min-w-[3.5rem] text-center px-4 py-2 rounded-full text-sm font-bold uppercase tracking-widest text-violet-100 bg-violet-500/25 border border-violet-400/50">${episodePrefix}-${item.epNumber}</span>
             </div>

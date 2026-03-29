@@ -5,7 +5,6 @@ header('Content-Type: application/json');
 $data = json_decode(file_get_contents('php://input'), true);
 
 if (!$data || !isset($data['mal_id'])) {
-    file_put_contents('debug_save.txt', "ERROR: Invalid data\n", FILE_APPEND);
     echo json_encode(['success' => false, 'error' => 'Invalid data']);
     exit;
 }
@@ -125,10 +124,8 @@ try {
         }
     }
 
-    file_put_contents('debug_save.txt', "SUCCESS: inserted $mal_id with deep data\n", FILE_APPEND);
     echo json_encode(['success' => true, 'message' => 'Inserted new anime with deep data']);
 } catch (Exception $e) {
     $dbConn->rollBack();
-    file_put_contents('debug_save.txt', "ERROR: " . $e->getMessage() . "\n", FILE_APPEND);
     echo json_encode(['success' => false, 'error' => $e->getMessage()]);
 }

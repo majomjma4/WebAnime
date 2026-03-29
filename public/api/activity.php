@@ -38,8 +38,8 @@ try {
 
             // Incrementar horas vistas (simulado: +0.4h por vista rápida por ahora o según duración)
             $stmtHours = $dbConn->prepare("INSERT INTO usuarios_meta (usuario_id, meta_key, meta_value) 
-                                           VALUES (?, 'profile_hours', '0.4') 
-                                           ON DUPLICATE KEY UPDATE meta_value = CAST(meta_value AS DECIMAL(10,1)) + 0.4");
+                                           VALUES (?, 'profile_hours', '0.01') 
+                                           ON DUPLICATE KEY UPDATE meta_value = CAST(meta_value AS DECIMAL(10,2)) + 0.01");
             $stmtHours->execute([$userId]);
         }
     } elseif ($action === 'time_sync') {

@@ -1,7 +1,7 @@
 (() => {
-  const KEY_MY_LIST = "anidex_my_list_v1";
-  const KEY_FAVORITES = "anidex_favorites_v1";
-  const KEY_STATUS = "anidex_status_v1";
+  const BASE_MY_LIST   = "anidex_my_list_v1";
+  const BASE_FAVORITES = "anidex_favorites_v1";
+  const BASE_STATUS    = "anidex_status_v1";
   const norm = (v) => (v || "").toLowerCase().trim();
   const pathName = window.location.pathname.toLowerCase();
   const isDetailPage = pathName.includes("detail");
@@ -15,8 +15,24 @@
   
   const isLoggedIn = () => getIsLoggedIn();
 
-  const readKey = (k) => {
-    try { return JSON.parse(localStorage.getItem(k) || "[]"); }
+  // ── Clave aislada por usuario ────────────────────────────────────────────────
+  // Delega en AniDexProfile.getIsolatedKey para garantizar que la clave ES
+  // exactamente la misma que usa layout.js al salvar/restaurar desde la BD.
+  // Para invitados usa la clave base (sin sufijo) como fallback.
+  const resolveKey = (baseKey) => {
+    if (window.AniDexProfile && typeof window.AniDexProfile.getIsolatedKey === "function") {
+      return window.AniDexProfile.getIsolatedKey(baseKey);
+    }
+    return baseKey;
+  };
+
+  // Getters de clave dinámica (se evalúan en tiempo de llamada, no al inicio)
+  const KEY_MY_LIST   = () => resolveKey(BASE_MY_LIST);
+  const KEY_FAVORITES = () => resolveKey(BASE_FAVORITES);
+  const KEY_STATUS    = () => resolveKey(BASE_STATUS);
+
+  const readKey = (kFn) => {
+    try { return JSON.parse(localStorage.getItem(kFn()) || "[]"); }
     catch { return []; }
   };
   
@@ -34,26 +50,27 @@
       });
     } catch (e) { console.error("Error logging activity:", e); }
   };
-  const writeKey = (k, v) => localStorage.setItem(k, JSON.stringify(v));
-  const upsert = (key, item) => {
+  const writeKey = (kFn, v) => localStorage.setItem(kFn(), JSON.stringify(v));
+  const upsert = (keyFn, item) => {
     const id = norm(item.title);
     if (!id) return;
-    const list = readKey(key).filter((x) => norm(x.title) !== id);
+    const list = readKey(keyFn).filter((x) => norm(x.title) !== id);
     list.unshift({ ...item, status: item.status || "", savedAt: Date.now() });
-    writeKey(key, list.slice(0, 120));
+    writeKey(keyFn, list.slice(0, 120));
     if (window.AniDexProfile && typeof window.AniDexProfile.saveToDB === "function") {
       window.AniDexProfile.saveToDB();
     }
   };
-  const remove = (key, title) => {
-    writeKey(key, readKey(key).filter((x) => norm(x.title) !== norm(title)));
+  const remove = (keyFn, title) => {
+    writeKey(keyFn, readKey(keyFn).filter((x) => norm(x.title) !== norm(title)));
     if (window.AniDexProfile && typeof window.AniDexProfile.saveToDB === "function") {
       window.AniDexProfile.saveToDB();
     }
   };
-  const exists = (key, title) => readKey(key).some((x) => norm(x.title) === norm(title));
-  const readStatus = () => readKey(KEY_STATUS);
+  const exists = (keyFn, title) => readKey(keyFn).some((x) => norm(x.title) === norm(title));
+  const readStatus  = () => readKey(KEY_STATUS);
   const writeStatus = (v) => writeKey(KEY_STATUS, v);
+
 
   const getStatusForTitle = (title) => {
     const id = norm(title);
@@ -84,8 +101,8 @@
   const migrateStatusFromLists = () => {
     const statusList = readStatus();
     const hasStatus = (title) => statusList.some((x) => norm(x.title) === norm(title));
-    const seed = (key) => {
-      readKey(key).forEach((it) => {
+    const seed = (keyFn) => {
+      readKey(keyFn).forEach((it) => {
         if (it?.status && !hasStatus(it.title)) {
           statusList.unshift({
             title: it.title,
@@ -180,12 +197,12 @@
   };
 
   const syncStatusEverywhere = (item, status) => {
-    [KEY_MY_LIST, KEY_FAVORITES].forEach((key) => {
-      const listNow = readKey(key).map((x) => {
+    [KEY_MY_LIST, KEY_FAVORITES].forEach((keyFn) => {
+      const listNow = readKey(keyFn).map((x) => {
         if (norm(x.title) !== norm(item.title)) return x;
         return { ...x, status };
       });
-      writeKey(key, listNow);
+      writeKey(keyFn, listNow);
     });
     upsertStatus(item, status);
     updateStatusCounters();
@@ -706,9 +723,9 @@
         const t = b.getAttribute("data-title") || "";
         const nextStatus = readStatus().filter((x) => norm(x.title) !== norm(t));
         writeStatus(nextStatus);
-        [KEY_MY_LIST, KEY_FAVORITES].forEach((key) => {
-          const listNow = readKey(key).map((x) => (norm(x.title) === norm(t) ? { ...x, status: "" } : x));
-          writeKey(key, listNow);
+        [KEY_MY_LIST, KEY_FAVORITES].forEach((keyFn) => {
+          const listNow = readKey(keyFn).map((x) => (norm(x.title) === norm(t) ? { ...x, status: "" } : x));
+          writeKey(keyFn, listNow);
         });
         renderUserMyList();
         renderUserFavorites();

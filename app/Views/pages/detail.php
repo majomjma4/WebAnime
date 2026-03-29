@@ -526,8 +526,10 @@ endif; ?>
     const starsWrap = document.getElementById("rating-stars");
     const ratingValue = document.getElementById("rating-value");
     const submitBtn = document.getElementById("comment-submit");
-    const isLogged = window.AniDexLayout ? window.AniDexLayout.isLoggedIn() : (localStorage.getItem("nekora_logged_in") === "true");
-    const isPremium = window.AniDexLayout ? (window.AniDexLayout.getRole() === "Premium" || window.AniDexLayout.getRole() === "Admin") : (localStorage.getItem("nekora_premium") === "true" || localStorage.getItem("nekora_user") === "Admin99");
+    let isLogged = window.AniDexLayout ? window.AniDexLayout.isLoggedIn() : (localStorage.getItem("nekora_logged_in") === "true");
+    let isPremium = window.AniDexLayout 
+      ? window.AniDexLayout.isPremium() 
+      : (localStorage.getItem("nekora_premium") === "true" || localStorage.getItem("nekora_admin") === "true" || localStorage.getItem("nekora_user") === "Admin99");
 
     // Registrar vista de anime
     const logActivity = async (action, extraData = {}) => {
@@ -569,7 +571,7 @@ endif; ?>
     // Log view on load
     logActivity("view");
 
-    const canComment = isLogged && isPremium;
+    const checkCanComment = () => isLogged && isPremium;
     if (!form || !textarea || !list || !total || !ratingValue) return;
 
     let rating = 0;
@@ -587,7 +589,10 @@ endif; ?>
         lockOverlay.classList.remove("flex");
         lockOverlay.classList.add("hidden");
         textarea.removeAttribute("disabled");
-        submitBtn?.classList.remove("opacity-30", "pointer-events-none", "grayscale");
+        if (submitBtn) {
+          submitBtn.removeAttribute("disabled");
+          submitBtn.classList.remove("opacity-30", "pointer-events-none", "grayscale", "opacity-50");
+        }
         starsWrap?.classList.remove("pointer-events-none", "opacity-40");
         textarea.classList.remove("opacity-40", "grayscale");
       } else {
@@ -611,8 +616,8 @@ endif; ?>
 
     if (window.AniDexLayout && typeof window.AniDexLayout.onReady === "function") {
       window.AniDexLayout.onReady(() => {
-        const isLogged = window.AniDexLayout.isLoggedIn();
-        const isPremium = window.AniDexLayout.getRole() === "Premium" || window.AniDexLayout.getRole() === "Admin";
+        isLogged = window.AniDexLayout.isLoggedIn();
+        isPremium = window.AniDexLayout.isPremium();
         applyLock(isLogged, isPremium);
         if (isLogged) logActivity("view");
         
@@ -625,7 +630,7 @@ endif; ?>
       });
     } else {
       const isLogged = localStorage.getItem("nekora_logged_in") === "true";
-      const isPremium = localStorage.getItem("nekora_premium") === "true" || localStorage.getItem("nekora_user") === "Admin99";
+      const isPremium = localStorage.getItem("nekora_premium") === "true" || localStorage.getItem("nekora_admin") === "true" || localStorage.getItem("nekora_user") === "Admin99";
       applyLock(isLogged, isPremium);
     }
 
@@ -846,7 +851,7 @@ endif; ?>
               </div>
               <div class="flex items-center gap-2">
                 <span class="text-xs text-on-surface-variant">${item.date}</span>
-                ${canComment ? `<button type="button" class="text-xs text-sky-200 hover:text-sky-100" data-comment-report data-comment-author="${author}" data-comment-text="${String(item.text || "").slice(0, 120).replace(/\"/g, "&quot;")}">${reportLabel}</button>` : ""}
+                ${checkCanComment() ? `<button type="button" class="text-xs text-sky-200 hover:text-sky-100" data-comment-report data-comment-author="${author}" data-comment-text="${String(item.text || "").slice(0, 120).replace(/\"/g, "&quot;")}">${reportLabel}</button>` : ""}
                 ${canDelete ? `<button type="button" class="text-xs text-rose-300 hover:text-rose-200" data-comment-delete="${item.localIndex}">Eliminar</button>` : ""}
               </div>
             </div>
@@ -906,14 +911,17 @@ endif; ?>
       });
     }
     if (reportSubmit) {
+      reportSubmit.addEventListener("click", () => {
         const reason = reportModal.querySelector("input[name='report-reason']:checked")?.value || "Otro";
         logActivity("report", { message: `Reporte de comentario: ${reason}` });
         
-        reportTargetButton.innerHTML = '<span class="material-symbols-outlined text-[14px]">flag</span><span>Reportado</span>';
-        reportTargetButton.classList.add("text-rose-300");
-        reportTargetButton.classList.remove("text-sky-200");
-        reportTargetButton.classList.add("inline-flex", "items-center", "gap-1");
-        reportTargetButton.disabled = true;
+        if (reportTargetButton) {
+          reportTargetButton.innerHTML = '<span class="material-symbols-outlined text-[14px]">flag</span><span>Reportado</span>';
+          reportTargetButton.classList.add("text-rose-300");
+          reportTargetButton.classList.remove("text-sky-200");
+          reportTargetButton.classList.add("inline-flex", "items-center", "gap-1");
+          reportTargetButton.disabled = true;
+        }
         closeReport();
       });
     }
