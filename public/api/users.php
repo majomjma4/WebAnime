@@ -190,11 +190,9 @@ if ($action === 'list') {
         $dbConn->beginTransaction();
         $dbConn->prepare("DELETE FROM usuarios_meta WHERE usuario_id = ?")->execute([$userId]);
         $dbConn->prepare("DELETE FROM usuarios_actividad WHERE usuario_id = ?")->execute([$userId]);
-        $dbConn->prepare("DELETE FROM usuarios_pagos WHERE usuario_id = ?")->execute([$userId]);
         $dbConn->prepare("DELETE FROM usuarios_reportes WHERE usuario_id = ?")->execute([$userId]);
         $dbConn->prepare("DELETE FROM usuarios_sesiones WHERE usuario_id = ?")->execute([$userId]);
         $dbConn->prepare("DELETE FROM usuarios_vistas WHERE usuario_id = ?")->execute([$userId]);
-        $dbConn->prepare("DELETE FROM listas_usuario WHERE usuario_id = ?")->execute([$userId]);
         $dbConn->prepare("DELETE FROM comentarios WHERE usuario_id = ?")->execute([$userId]);
         $dbConn->prepare("DELETE FROM solicitudes_anime WHERE usuario_id = ?")->execute([$userId]);
         $dbConn->prepare("DELETE FROM usuarios WHERE id = ?")->execute([$userId]);

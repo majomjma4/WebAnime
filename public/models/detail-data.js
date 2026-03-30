@@ -145,15 +145,6 @@ const AniDexDetailDataBoot = () => {
     return value || "N/A";
   };
 
-  const toSpanishSeason = (value) => {
-    const v = (value || "").toLowerCase();
-    if (v === "winter") return "invierno";
-    if (v === "spring") return "primavera";
-    if (v === "summer") return "verano";
-    if (v === "fall") return "otoño";
-    return value || "";
-  };
-
   const toSpanishType = (value) => {
     const v = (value || "").toLowerCase();
     if (v === "tv") return "Anime";
@@ -176,7 +167,6 @@ const AniDexDetailDataBoot = () => {
       .replace("G - All Ages", "G - Todas las edades")
       .replace("Rx - Hentai", "Rx - Adultos");
   };
-  const genresEs = (arr) => (arr || []).map((g) => GENRE_ES[g?.name] || g?.name).join(", ");
 
   const translateToEs = async (text) => {
     const raw = (text || "").trim();
@@ -1007,6 +997,11 @@ const AniDexDetailDataBoot = () => {
       let shown = 0;
       const pageSize = 10;
       let bindEpisodeCards = null;
+      const canAccessEpisode = (card) => {
+        if (canWatchEpisodes) return true;
+        const episodeNumber = Number(card?.getAttribute("data-episode") || 0);
+        return Boolean(isLogged && episodeNumber === 1);
+      };
       const lockEpisodes = () => {
         const lockText = isLogged
           ? "Activa el modo premium para ver los episodios"
@@ -1016,7 +1011,7 @@ const AniDexDetailDataBoot = () => {
         };
         const cards = Array.from(episodesSection.querySelectorAll(".episode-card"));
         cards.forEach((card) => {
-          if (!isLogged && card.hasAttribute("data-episode-video")) return;
+          if (canAccessEpisode(card)) return;
           if (card.dataset.locked) return;
           card.dataset.locked = "1";
           card.classList.add("relative", "overflow-hidden", "cursor-not-allowed", "transition-transform", "duration-300", "hover:-translate-y-1", "hover:shadow-[0_10px_26px_rgba(0,0,0,0.4)]");
@@ -1274,8 +1269,8 @@ const AniDexDetailDataBoot = () => {
           imageFrame.alt = title;
           imageModal.classList.remove("hidden");
         };
-        const linkCards = Array.from(episodesSection.querySelectorAll("[data-episode-link]"));
-        const imageCards = Array.from(episodesSection.querySelectorAll("[data-episode-image]"));
+        const linkCards = Array.from(episodesSection.querySelectorAll("[data-episode-link]")).filter((card) => canAccessEpisode(card));
+        const imageCards = Array.from(episodesSection.querySelectorAll("[data-episode-image]")).filter((card) => canAccessEpisode(card));
         linkCards.forEach((card) => {
           if (card.dataset.episodeBound) return;
           card.dataset.episodeBound = "1";
@@ -1316,10 +1311,10 @@ const AniDexDetailDataBoot = () => {
         }
       };
 
-      if (canWatchEpisodes) {
+      if (canWatchEpisodes || isLogged) {
         bindEpisodeCards();
       }
-      if (videoCard && episodeModal && (canWatchEpisodes || !isLogged)) {
+      if (videoCard && episodeModal && canAccessEpisode(videoCard)) {
         const player = episodeModal.querySelector("[data-episode-video-player]");
         const source = episodeModal.querySelector("[data-episode-video-source]");
         const closeBtn = episodeModal.querySelector("[data-episode-close]");

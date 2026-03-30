@@ -515,7 +515,7 @@ endif; ?>
     <script src="controllers/search.js"></script>
     <script src="controllers/favorites.js"></script>
     <script src="controllers/detail-links.js"></script>
-    <script src="models/detail-data.js?v=32"></script>
+    <script src="models/detail-data.js?v=33"></script>
     <script>
   document.addEventListener("DOMContentLoaded", () => {
     if (window.AniDexI18n) window.AniDexI18n.init();

@@ -42,6 +42,42 @@ if (!$existingAnime) {
 
 $new_id = $existingAnime ? $existingAnime['id'] : null;
 
+$saveEpisodeCache = static function (PDO $dbConn, int $animeId, array $episodesData): void {
+    if ($animeId <= 0 || !$episodesData) {
+        return;
+    }
+
+    $dbConn->exec("CREATE TABLE IF NOT EXISTS anime_episodes (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        anime_id INT NOT NULL,
+        episode_number INT NOT NULL,
+        title VARCHAR(255) DEFAULT NULL,
+        synopsis TEXT DEFAULT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        UNIQUE KEY uniq_anime_episode (anime_id, episode_number)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+    $episodeUpsert = $dbConn->prepare("INSERT INTO anime_episodes (anime_id, episode_number, title, synopsis) VALUES (?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE
+            title = CASE WHEN VALUES(title) IS NOT NULL AND VALUES(title) <> '' THEN VALUES(title) ELSE title END,
+            synopsis = CASE WHEN VALUES(synopsis) IS NOT NULL AND VALUES(synopsis) <> '' THEN VALUES(synopsis) ELSE synopsis END,
+            updated_at = CURRENT_TIMESTAMP");
+
+    foreach ($episodesData as $episode) {
+        $episodeNumber = (int) ($episode['number'] ?? $episode['episode_number'] ?? 0);
+        if ($episodeNumber <= 0) {
+            continue;
+        }
+        $episodeTitle = trim((string) ($episode['title'] ?? ''));
+        $episodeSynopsis = trim((string) ($episode['synopsis'] ?? ''));
+        if ($episodeTitle === '' && $episodeSynopsis === '') {
+            continue;
+        }
+        $episodeUpsert->execute([$animeId, $episodeNumber, $episodeTitle, $episodeSynopsis]);
+    }
+};
+
 if (!$new_id) {
     // Procede con el INSERT principal (línea 51 aprox)
 } else {
@@ -50,36 +86,7 @@ if (!$new_id) {
 
 if ($new_id && isset($data['episodes_data']) && is_array($data['episodes_data']) && !isset($data['type']) && !isset($data['status']) && !isset($data['genres'])) {
     try {
-        $dbConn->exec("CREATE TABLE IF NOT EXISTS anime_episodes (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            anime_id INT NOT NULL,
-            episode_number INT NOT NULL,
-            title VARCHAR(255) DEFAULT NULL,
-            synopsis TEXT DEFAULT NULL,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-            UNIQUE KEY uniq_anime_episode (anime_id, episode_number)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
-
-        $episodeUpsert = $dbConn->prepare("INSERT INTO anime_episodes (anime_id, episode_number, title, synopsis) VALUES (?, ?, ?, ?)
-            ON DUPLICATE KEY UPDATE
-                title = CASE WHEN VALUES(title) IS NOT NULL AND VALUES(title) <> '' THEN VALUES(title) ELSE title END,
-                synopsis = CASE WHEN VALUES(synopsis) IS NOT NULL AND VALUES(synopsis) <> '' THEN VALUES(synopsis) ELSE synopsis END,
-                updated_at = CURRENT_TIMESTAMP");
-
-        foreach ($data['episodes_data'] as $episode) {
-            $episodeNumber = (int) ($episode['number'] ?? $episode['episode_number'] ?? 0);
-            if ($episodeNumber <= 0) {
-                continue;
-            }
-            $episodeTitle = trim((string) ($episode['title'] ?? ''));
-            $episodeSynopsis = trim((string) ($episode['synopsis'] ?? ''));
-            if ($episodeTitle === '' && $episodeSynopsis === '') {
-                continue;
-            }
-            $episodeUpsert->execute([$new_id, $episodeNumber, $episodeTitle, $episodeSynopsis]);
-        }
-
+        $saveEpisodeCache($dbConn, (int) $new_id, $data['episodes_data']);
         echo json_encode(['success' => true, 'message' => 'Episode cache saved']);
     } catch (Throwable $e) {
         echo json_encode(['success' => false, 'error' => $e->getMessage()]);
@@ -219,35 +226,7 @@ try {
     }
 
     if (isset($data['episodes_data']) && is_array($data['episodes_data'])) {
-        $dbConn->exec("CREATE TABLE IF NOT EXISTS anime_episodes (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            anime_id INT NOT NULL,
-            episode_number INT NOT NULL,
-            title VARCHAR(255) DEFAULT NULL,
-            synopsis TEXT DEFAULT NULL,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-            UNIQUE KEY uniq_anime_episode (anime_id, episode_number)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
-
-        $episodeUpsert = $dbConn->prepare("INSERT INTO anime_episodes (anime_id, episode_number, title, synopsis) VALUES (?, ?, ?, ?)
-            ON DUPLICATE KEY UPDATE
-                title = CASE WHEN VALUES(title) IS NOT NULL AND VALUES(title) <> '' THEN VALUES(title) ELSE title END,
-                synopsis = CASE WHEN VALUES(synopsis) IS NOT NULL AND VALUES(synopsis) <> '' THEN VALUES(synopsis) ELSE synopsis END,
-                updated_at = CURRENT_TIMESTAMP");
-
-        foreach ($data['episodes_data'] as $episode) {
-            $episodeNumber = (int) ($episode['number'] ?? $episode['episode_number'] ?? 0);
-            if ($episodeNumber <= 0) {
-                continue;
-            }
-            $episodeTitle = trim((string) ($episode['title'] ?? ''));
-            $episodeSynopsis = trim((string) ($episode['synopsis'] ?? ''));
-            if ($episodeTitle === '' && $episodeSynopsis === '') {
-                continue;
-            }
-            $episodeUpsert->execute([$new_id, $episodeNumber, $episodeTitle, $episodeSynopsis]);
-        }
+        $saveEpisodeCache($dbConn, (int) $new_id, $data['episodes_data']);
     }
 
     echo json_encode(['success' => true, 'message' => 'Inserted new anime with deep data']);
