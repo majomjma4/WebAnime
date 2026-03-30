@@ -257,6 +257,7 @@
       <!-- Footer Component -->
       <div data-layout="footer"></div>
       <script src="controllers/layout.js?v=final14"></script>
+    <script src="controllers/shared-utils.js?v=1"></script>
     </div>
 
     <script src="controllers/i18n.js"></script>
@@ -405,6 +406,10 @@
       }
 
       function fetchJson(url) {
+        if (window.AniDexShared && typeof window.AniDexShared.fetchJson === 'function') {
+          return window.AniDexShared.fetchJson(url, { cache: 'no-store' })
+            .then(function (json) { return json && Array.isArray(json.data) ? json.data : null; });
+        }
         return fetch(url, { cache: 'no-store' })
           .then(function (res) { return res && res.ok ? res.json() : null; })
           .then(function (json) { return json && Array.isArray(json.data) ? json.data : null; });

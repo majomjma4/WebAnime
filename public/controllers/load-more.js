@@ -57,7 +57,7 @@
       ];
 
   function norm(v) {
-    return String(v || "").toLowerCase().trim();
+    return window.AniDexShared?.normalizeText ? window.AniDexShared.normalizeText(v) : String(v || "").toLowerCase().trim();
   }
 
 
@@ -136,6 +136,7 @@
   }
 
   async function fetchJson(url) {
+    if (window.AniDexShared?.fetchJson) return window.AniDexShared.fetchJson(url);
     try {
       let res = await fetch(url);
       if (res.status === 429) {
@@ -178,11 +179,9 @@
     if (synopsisCache.has(text)) return synopsisCache.get(text);
     let translated = text;
     try {
-      const url =
-        "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=es&dt=t&q=" +
-        encodeURIComponent(text);
-      const data = await fetchJson(url);
-      const out = (data?.[0] || []).map((r) => r?.[0] || "").join("").trim();
+      const out = window.AniDexShared?.translateAutoToEs
+        ? await window.AniDexShared.translateAutoToEs(text)
+        : text;
       if (out) translated = out;
     } catch {
       translated = text;

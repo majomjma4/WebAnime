@@ -107,25 +107,17 @@
 
   async function searchByTitle(title) {
     if (!title) return null;
-    try {
-      const url =
-        "api/jikan_proxy.php?endpoint=" + encodeURIComponent("anime?q=" +
-        encodeURIComponent(title) +
-        "&limit=10&order_by=popularity&sort=asc");
-      const res = await fetch(url);
-      if (!res.ok) return null;
-      const json = await res.json();
-      return (json?.data || [])[0] || null;
-    } catch {
-      return null;
-    }
+    const url =
+      "api/jikan_proxy.php?endpoint=" + encodeURIComponent("anime?q=" +
+      encodeURIComponent(title) +
+      "&limit=10&order_by=popularity&sort=asc");
+    const json = await (window.AniDexShared?.fetchJson ? window.AniDexShared.fetchJson(url) : fetch(url).then((res) => res.ok ? res.json() : null).catch(() => null));
+    return (json?.data || [])[0] || null;
   }
 
   function norm(text) {
-    return (text || "")
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
+    const base = window.AniDexShared?.normalizeText ? window.AniDexShared.normalizeText(text) : String(text || "").toLowerCase().trim();
+    return base
       .replace(/[^\w\s]/g, " ")
       .replace(/\s+/g, " ")
       .trim();

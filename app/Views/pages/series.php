@@ -516,11 +516,12 @@
       <!-- Footer Component -->
       <div data-layout="footer"></div>
       <script src="controllers/layout.js?v=final14"></script>
+    <script src="controllers/shared-utils.js?v=1"></script>
     </div>
     <script src="controllers/i18n.js"></script>
     <script src="controllers/title-images.js?v=1774473995,33386"></script>
     <script src="controllers/search.js"></script>
-    <script src="controllers/filters.js?v=1774473995,33386"></script>
+    <script src="controllers/filters.js?v=final3"></script>
     <script src="controllers/detail-links.js"></script>
     <script src="controllers/load-more.js?v=1774473995,33386"></script>
     <script>

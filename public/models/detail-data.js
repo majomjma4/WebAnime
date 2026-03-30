@@ -28,11 +28,9 @@ const AniDexDetailDataBoot = () => {
     "Award Winning": "Premiado"
   };
 
+  const baseNormalize = window.AniDexShared?.normalizeText || ((value) => String(value || "").toLowerCase().trim());
   const norm = (v) =>
-    (v || "")
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
+    baseNormalize(v)
       .replace(/[^\w\s]/g, " ")
       .replace(/\s+/g, " ")
       .trim();
@@ -168,20 +166,7 @@ const AniDexDetailDataBoot = () => {
       .replace("Rx - Hentai", "Rx - Adultos");
   };
 
-  const translateToEs = async (text) => {
-    const raw = (text || "").trim();
-    if (!raw) return "";
-    try {
-      const res = await fetch(
-        "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=es&dt=t&q=" +
-          encodeURIComponent(raw)
-      );
-      const data = await res.json();
-      return (data?.[0] || []).map((r) => r?.[0] || "").join("").trim() || raw;
-    } catch {
-      return raw;
-    }
-  };
+  const translateToEs = async (text) => (window.AniDexShared?.translateAutoToEs ? window.AniDexShared.translateAutoToEs(text) : String(text || "").trim());
 
   const renderMetaBlock = (container, label, value) => {
     const wrap = document.createElement("div");

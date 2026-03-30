@@ -1681,6 +1681,10 @@
 
 
 
+  window.AniDexFilters = {
+    init: setup
+  };
+
   function renderSidebarRanking() {
     const host = document.querySelector("[data-sidebar-ranking]");
     if (!host || window.__aniSidebarRankingLoaded) return;

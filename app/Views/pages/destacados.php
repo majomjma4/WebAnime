@@ -429,6 +429,7 @@
     <!-- Footer Component -->
     <div data-layout="footer"></div>
     <script src="controllers/layout.js?v=final14"></script>
+    <script src="controllers/shared-utils.js?v=1"></script>
     <script src="controllers/i18n.js"></script>
     <script src="controllers/search.js"></script>
     <script src="controllers/detail-links.js"></script>

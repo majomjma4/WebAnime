@@ -17,13 +17,7 @@
     } catch (e) { console.error("Error logging activity:", e); }
   };
 
-  const normalize = (value) =>
-    (value || "")
-      .toString()
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .trim();
+  const normalize = (value) => window.AniDexShared?.normalizeText ? window.AniDexShared.normalizeText(value) : String(value || "").toLowerCase().trim();
 
   const scoreMatch = (query, candidate) => {
     const q = normalize(query);

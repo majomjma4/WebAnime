@@ -1,4 +1,3 @@
 <?php
-require __DIR__ . '/../app/bootstrap.php';
-$controller = new Controllers\PageController();
-$controller->render('pages/ranking');
+$view = 'pages/ranking';
+require __DIR__ . '/_page.php';
