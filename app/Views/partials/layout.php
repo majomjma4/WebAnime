@@ -1,4 +1,4 @@
-<style data-layout-style="layout-logo">
+﻿<style data-layout-style="layout-logo">
   @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&display=swap");
   .logo-badge {
     display: inline-flex;
@@ -421,7 +421,7 @@
   }
 
   body {
-    overflow-x: visible;
+    overflow-x: hidden;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -499,6 +499,89 @@
     box-shadow: 0 -18px 36px rgba(0, 0, 0, 0.45), 0 0 26px rgba(168, 85, 247, 0.7), 0 0 18px rgba(56, 189, 248, 0.35);
   }
 
+  @media (max-width: 1024px) {
+    .footer-content {
+      padding-left: 1.25rem;
+      padding-right: 1.25rem;
+    }
+    .footer-center {
+      min-height: auto;
+      gap: 1.25rem;
+    }
+    .footer-side-left,
+    .footer-side-right {
+      min-width: 0;
+      width: 100%;
+    }
+  }
+  @media (max-width: 768px) {
+    nav.fixed > div {
+      height: auto;
+      min-height: 5rem;
+      padding-top: 0.85rem;
+      padding-bottom: 0.85rem;
+      gap: 0.9rem;
+    }
+    .logo-badge {
+      gap: 0.65rem;
+      padding: 0.2rem 0.3rem;
+      max-width: calc(100vw - 8rem);
+    }
+    .logo-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      flex-shrink: 0;
+    }
+    .logo-text {
+      font-size: 1.25rem;
+    }
+    .logo-tagline {
+      display: none;
+    }
+    .footer-shell {
+      border-radius: 22px 22px 0 0;
+    }
+    .footer-content {
+      padding-top: 2.5rem;
+      padding-bottom: 2.5rem;
+    }
+    .footer-side-row {
+      gap: 1rem !important;
+      column-gap: 1rem !important;
+      flex-wrap: wrap;
+    }
+    .footer-brand {
+      flex-wrap: wrap;
+      justify-content: center;
+      text-align: center;
+    }
+    .footer-tagline {
+      font-size: 1rem;
+      max-width: 22rem;
+    }
+    .footer-nav {
+      gap: 1rem;
+    }
+  }
+  @media (max-width: 520px) {
+    nav.fixed > div {
+      padding-left: 0.85rem;
+      padding-right: 0.85rem;
+    }
+    .logo-badge {
+      max-width: calc(100vw - 7rem);
+    }
+    .logo-text {
+      font-size: 1.08rem;
+    }
+    [data-guest-menu],
+    [role="menu"][data-lang-menu],
+    #layout-user-menu > div,
+    [data-layout="header"] [role="menu"] {
+      max-width: calc(100vw - 1rem);
+    }
+  }
 </style>
 
 <!-- Navbar Component -->
@@ -661,7 +744,7 @@
     </div>
 
     <div data-admin-only class="mt-2 pt-2 border-t border-white/5 flex flex-col gap-1 hidden">
-      <div class="text-[10px] font-bold text-rose-400 uppercase tracking-[0.2em] px-3 py-1">Administración</div>
+      <div class="text-[10px] font-bold text-rose-400 uppercase tracking-[0.2em] px-3 py-1">AdministraciÃ³n</div>
       <a href="admin.php" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-rose-200 hover:text-white hover:bg-rose-500/10 transition-all">
         <span class="material-symbols-outlined text-lg">admin_panel_settings</span>
         Panel Admin
@@ -671,7 +754,7 @@
     <div class="mt-4 pt-4 border-t border-white/5">
       <button id="logout-btn" class="w-full flex items-center justify-center gap-2 rounded-xl border border-white/5 bg-white/5 px-4 py-3 text-xs font-bold uppercase tracking-widest text-on-surface-variant hover:text-error hover:border-error/30 hover:bg-error/5 transition-all">
         <span class="material-symbols-outlined text-sm">logout</span>
-        Cerrar Sesión
+        Cerrar SesiÃ³n
       </button>
     </div>
   </div>
@@ -725,6 +808,9 @@
     </div>
   </footer>
 </template>
+
+
+
 
 
 

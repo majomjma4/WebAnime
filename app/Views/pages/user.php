@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html class="dark" lang="es">
 
 <head>
@@ -307,7 +307,7 @@
   <div data-layout="header"></div>
 
   <!-- VIEW: User Profile Layout -->
-  <main class="relative pt-32 pb-20 px-6 max-w-7xl mx-auto overflow-x-hidden overflow-y-visible">
+  <main class="relative pt-28 sm:pt-32 pb-20 px-4 sm:px-6 max-w-7xl mx-auto overflow-x-hidden overflow-y-visible">
     <div class="pointer-events-none absolute -top-40 right-[-10%] h-72 w-72 rounded-full bg-violet-500/15 blur-3xl">
     </div>
     <div class="pointer-events-none absolute top-16 left-[-10%] h-72 w-72 rounded-full bg-sky-500/15 blur-3xl"></div>
@@ -363,7 +363,7 @@
                     <div class="mt-1 text-sm font-semibold text-on-surface" data-profile-member>2018</div>
                   </div>
                   <div class="rounded-2xl border border-white/10 bg-white/5 px-3 py-1.5 w-full">
-                    <div class="text-[10px] uppercase tracking-widest text-on-surface-variant">Último acceso</div>
+                    <div class="text-[10px] uppercase tracking-widest text-on-surface-variant">Ãšltimo acceso</div>
                     <div class="mt-1 text-sm font-semibold text-on-surface" data-profile-last>Hoy</div>
                   </div>
                   <div class="rounded-2xl border border-white/10 bg-white/5 px-3 py-1.5 w-full">
@@ -382,13 +382,13 @@
                 </div>
                 <div class="mt-3 flex w-full flex-wrap items-center justify-center gap-x-3 gap-y-2 translate-y-2"
                   id="profile-actions">
-                  <button id="request-title-btn" type="button" aria-label="Solicitar título"
+                  <button id="request-title-btn" type="button" aria-label="Solicitar tÃ­tulo"
                     class="hidden rounded-full border border-white/10 bg-gradient-to-r from-sky-400 to-violet-400 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-900 transition-all duration-200 hover:border-sky-200/60 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(56,189,248,0.25)]">
-                    Solicitar título
+                    Solicitar tÃ­tulo
                   </button>
-                  <button id="logout-btn" type="button" aria-label="Cerrar sesión"
+                  <button id="logout-btn" type="button" aria-label="Cerrar sesiÃ³n"
                     class="rounded-full border border-white/10 bg-gradient-to-r from-rose-400 to-orange-300 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-900 transition-all duration-200 hover:border-rose-200/60 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(248,113,113,0.25)] flex items-center justify-center group/logout">
-                    Cerrar sesión
+                    Cerrar sesiÃ³n
                   </button>
                 </div>
               </div>
@@ -423,7 +423,7 @@
             <span class="material-symbols-outlined text-amber-300">schedule</span>
           </div>
           <div class="mt-4 text-4xl font-bold text-on-surface" data-count-pending>0</div>
-          <p class="mt-2 text-sm text-on-surface-variant">Lo próximo en tu maratón.</p>
+          <p class="mt-2 text-sm text-on-surface-variant">Lo prÃ³ximo en tu maratÃ³n.</p>
         </button>
         <button type="button" data-open-status="completed"
           class="group rounded-3xl border border-white/10 bg-surface-container-low/70 p-6 text-left shadow-[0_16px_40px_rgba(0,0,0,0.35)] transition-all hover:-translate-y-1 hover:border-emerald-400/60 hover:shadow-[0_24px_60px_rgba(52,211,153,0.35)]">
@@ -432,7 +432,7 @@
             <span class="material-symbols-outlined text-emerald-400">done_all</span>
           </div>
           <div class="mt-4 text-4xl font-bold text-on-surface" data-count-completed>0</div>
-          <p class="mt-2 text-sm text-on-surface-variant">Historias finalizadas con éxito.</p>
+          <p class="mt-2 text-sm text-on-surface-variant">Historias finalizadas con Ã©xito.</p>
         </button>
         <section id="continue-section"
           class="sm:col-span-2 rounded-3xl border border-white/5 bg-surface-container-low/60 p-5 shadow-[0_18px_40px_rgba(0,0,0,0.35)] overflow-visible min-h-[260px]">
@@ -444,7 +444,7 @@
           <div class="mt-3 flex min-h-[180px] items-center justify-center overflow-visible">
             <div id="continue-empty"
               class="rounded-2xl border border-white/10 bg-white/5 px-4 py-8 text-center text-sm text-on-surface-variant">
-              Aún no tienes títulos en progreso.
+              AÃºn no tienes tÃ­tulos en progreso.
             </div>
             <div id="continue-grid" class="hidden w-full grid grid-cols-4 gap-4 overflow-visible pb-2 pt-3 px-4"></div>
           </div>
@@ -630,7 +630,7 @@
   <!-- Avatar Picker Modal -->
   <div id="avatar-modal" class="fixed inset-0 z-[80] hidden">
     <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" data-avatar-close></div>
-    <div class="relative mx-auto mt-28 w-[86%] max-w-[580px] rounded-lg bg-surface-container-high p-4 shadow-2xl">
+    <div class="relative mx-auto mt-20 sm:mt-28 w-[92%] sm:w-[86%] max-w-[580px] rounded-lg bg-surface-container-high p-4 shadow-2xl">
       <div class="flex items-center justify-between mb-4">
         <h3 class="font-headline text-xl font-bold">Elige tu nuevo avatar</h3>
         <button
@@ -677,10 +677,10 @@
             type="text" placeholder="Tu nombre" />
         </div>
         <div class="space-y-2 soft-accent p-4 rounded-2xl">
-          <label class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Descripción</label>
+          <label class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">DescripciÃ³n</label>
           <textarea id="profile-desc-input" maxlength="200"
             class="w-full rounded-xl bg-surface-container-low border border-outline-variant/60 px-4 py-3 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/40 min-h-[120px]"
-            placeholder="Escribe una breve descripción (máx. 200 caracteres)"></textarea>
+            placeholder="Escribe una breve descripciÃ³n (mÃ¡x. 200 caracteres)"></textarea>
           <div class="text-[11px] text-on-surface-variant text-right" id="profile-desc-count">0/200</div>
         </div>
         <div class="space-y-3 soft-accent p-4 rounded-2xl">
@@ -740,16 +740,16 @@
   <div id="request-title-modal" class="fixed inset-0 z-[70] hidden flex items-center justify-center">
     <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" data-request-close></div>
     <div
-      class="relative w-[70%] max-w-[340px] rounded-2xl border border-white/10 bg-surface-container-high p-5 shadow-[0_20px_50px_rgba(0,0,0,0.45)]">
+      class="relative w-[92%] sm:w-[70%] max-w-[340px] rounded-2xl border border-white/10 bg-surface-container-high p-5 shadow-[0_20px_50px_rgba(0,0,0,0.45)]">
       <div class="flex items-center justify-between mb-4">
-        <h3 class="font-headline text-base font-bold">Solicitar título</h3>
+        <h3 class="font-headline text-base font-bold">Solicitar tÃ­tulo</h3>
         <button
           class="rounded-full bg-surface-container-low w-7 h-7 flex items-center justify-center text-xs font-bold text-on-surface-variant hover:text-on-surface"
           type="button" data-request-close aria-label="Cerrar">x</button>
       </div>
       <form id="request-title-form" class="space-y-4">
         <div class="space-y-1.5">
-          <label class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Anime o película</label>
+          <label class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Anime o pelÃ­cula</label>
           <input id="request-title-input" type="text"
             class="w-full rounded-xl border border-white/10 bg-surface-container-low/70 px-3 py-2 text-sm text-on-surface outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20"
             placeholder="Ej: Attack on Titan" />
@@ -759,7 +759,7 @@
           <select id="request-title-type"
             class="w-full rounded-xl border border-white/10 bg-surface-container-low/70 px-3 py-2 text-sm text-on-surface outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20">
             <option value="Anime">Anime</option>
-            <option value="Película">Película</option>
+            <option value="PelÃ­cula">PelÃ­cula</option>
           </select>
         </div>
         <div class="flex items-center justify-end gap-2 pt-1">
@@ -777,7 +777,7 @@
   <div id="request-toast" class="fixed inset-0 z-[90] hidden items-center justify-center">
     <div
       class="rounded-full border border-white/10 bg-surface-container-high/90 px-6 py-3 text-sm font-semibold text-on-surface shadow-[0_18px_40px_rgba(0,0,0,0.45)]">
-      Título solicitado
+      TÃ­tulo solicitado
     </div>
   </div>
 
@@ -785,8 +785,8 @@
   <div id="logout-confirm" class="fixed inset-0 z-[90] hidden items-center justify-center">
     <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" data-logout-close></div>
     <div
-      class="relative mx-auto w-[86%] max-w-xs rounded-2xl border border-white/10 bg-surface-container-high p-5 text-center shadow-[0_20px_50px_rgba(0,0,0,0.45)]">
-      <h3 class="font-headline text-lg font-bold">¿Seguro que quieres cerrar sesión?</h3>
+      class="relative mx-auto w-[92%] sm:w-[86%] max-w-xs rounded-2xl border border-white/10 bg-surface-container-high p-5 text-center shadow-[0_20px_50px_rgba(0,0,0,0.45)]">
+      <h3 class="font-headline text-lg font-bold">Â¿Seguro que quieres cerrar sesiÃ³n?</h3>
       <div class="mt-4 flex items-center justify-center gap-3">
         <button type="button" data-logout-cancel
           class="rounded-full border border-white/10 bg-surface-container-low/70 px-4 py-2 text-xs font-bold uppercase tracking-widest text-on-surface-variant hover:text-on-surface transition-colors">
@@ -803,7 +803,7 @@
   <!-- Full Lists Modal -->
   <div id="lists-modal" class="fixed inset-0 z-[70] hidden theme-mylist flex items-center justify-center p-4">
     <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" data-lists-close></div>
-    <div class="relative w-[62%] max-w-lg rounded-3xl border border-white/10 p-4 md:p-4 modal-shell">
+    <div class="relative w-[94%] sm:w-[82%] md:w-[72%] lg:w-[62%] max-w-lg rounded-3xl border border-white/10 p-4 md:p-4 modal-shell">
       <div class="modal-accent"></div>
       <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
         <div>
@@ -838,7 +838,7 @@
   <!-- Status Modal -->
   <div id="status-modal" class="fixed inset-0 z-[70] hidden theme-completed flex items-center justify-center p-4">
     <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" data-status-close></div>
-    <div class="relative w-[62%] max-w-lg rounded-3xl border border-white/10 p-4 md:p-4 modal-shell">
+    <div class="relative w-[94%] sm:w-[82%] md:w-[72%] lg:w-[62%] max-w-lg rounded-3xl border border-white/10 p-4 md:p-4 modal-shell">
       <div class="modal-accent"></div>
       <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
         <div>
@@ -1193,13 +1193,13 @@
       // Constants
       const PREF_KEY = "anidex_profile_prefs";
       const PREF_GROUPS = {
-        "Idioma": ["Sub. español", "Doblaje español", "Japonés", "Inglés"],
-        "Género": ["Acción", "Fantasía", "Drama", "Comedia", "Romance", "Terror", "Sci-Fi"]
+        "Idioma": ["Sub. espaÃ±ol", "Doblaje espaÃ±ol", "JaponÃ©s", "InglÃ©s"],
+        "GÃ©nero": ["AcciÃ³n", "FantasÃ­a", "Drama", "Comedia", "Romance", "Terror", "Sci-Fi"]
       };
-      const PREF_DEFAULTS = { "Idioma": [], "Género": [] };
+      const PREF_DEFAULTS = { "Idioma": [], "GÃ©nero": [] };
       const PREF_GROUP_STYLES = {
         "Idioma": { baseBorder: "border-blue-400/70", baseBg: "bg-blue-500/45", activeBorder: "border-blue-300/90", activeBg: "bg-blue-500/70", glow: "" },
-        "Género": { baseBorder: "border-violet-400/70", baseBg: "bg-violet-500/45", activeBorder: "border-violet-300/90", activeBg: "bg-violet-500/70", glow: "" }
+        "GÃ©nero": { baseBorder: "border-violet-400/70", baseBg: "bg-violet-500/45", activeBorder: "border-violet-300/90", activeBg: "bg-violet-500/70", glow: "" }
       };
 
       const getK = (k) => (window.AniDexProfile && window.AniDexProfile.getIsolatedKey) ? window.AniDexProfile.getIsolatedKey(k) : k;
@@ -1507,11 +1507,11 @@
       // Initial load & Export refresh (Registry pattern)
       if (window.AniDexLayout && typeof window.AniDexLayout.onReady === "function") {
         window.AniDexLayout.onReady(() => {
-          console.log("[NekoraProfile] Autenticación lista. Cargando datos con ID:", localStorage.getItem("anidex_user_id"));
+          console.log("[NekoraProfile] AutenticaciÃ³n lista. Cargando datos con ID:", localStorage.getItem("anidex_user_id"));
           loadProfile();
         });
         window.AniDexLayout.registerRefresh(() => {
-          console.log("[NekoraProfile] Señal de refresco recibida.");
+          console.log("[NekoraProfile] SeÃ±al de refresco recibida.");
           loadProfile(true);
         });
       } else {
@@ -1583,8 +1583,8 @@
         }
       };
       const doLogout = async () => {
-        // CRÍTICO: guardar en la BD ANTES de borrar localStorage.
-        // Si no se hace esto, los datos agregados desde el último auto-sync
+        // CRÃTICO: guardar en la BD ANTES de borrar localStorage.
+        // Si no se hace esto, los datos agregados desde el Ãºltimo auto-sync
         // (hasta 60 seg) se pierden permanentemente al limpiar el storage.
         try {
           if (window.AniDexProfile && typeof window.AniDexProfile.saveToDB === "function") {
@@ -1793,4 +1793,5 @@
 </body>
 
 </html>
+
 
