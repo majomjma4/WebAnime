@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="dark" lang="es">
   <head>
     <script data-ui-preload>document.documentElement.classList.add("preload-ui");</script>
@@ -326,13 +326,13 @@
                   </div>
                 </div>
                 <div class="space-y-2">
-                  <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant">GÃ©neros</label>
-                  <!-- Dropdown de gÃ©neros renderizado por controllers/filters.js -->
+                  <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant">Géneros</label>
+                  <!-- Dropdown de géneros renderizado por controllers/filters.js -->
                 </div>
                 <div class="space-y-4">
                   <div class="space-y-2">
-                    <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant" for="filter-year">AÃ±o</label>
-                    <select id="filter-year" class="w-full rounded-xl bg-surface-container-high px-4 py-3 text-on-surface" aria-label="Filtrar por aÃ±o">
+                    <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant" for="filter-year">Año</label>
+                    <select id="filter-year" class="w-full rounded-xl bg-surface-container-high px-4 py-3 text-on-surface" aria-label="Filtrar por año">
                       <option>Todos</option>
                       <option>2026</option>
                       <option>2023</option>
@@ -344,7 +344,7 @@
                     <select id="filter-type" class="w-full rounded-xl bg-surface-container-high px-4 py-3 text-on-surface" aria-label="Filtrar por tipo">
                       <option>Todos</option>
                       <option>Serie</option>
-                      <option>PelÃ­cula</option>
+                      <option>Película</option>
                       <option>OVA</option>
                     </select>
                   </div>
@@ -352,7 +352,7 @@
                     <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant" for="filter-status">Estado</label>
                     <select id="filter-status" class="w-full rounded-xl bg-surface-container-high px-4 py-3 text-on-surface" aria-label="Filtrar por estado">
                       <option>Todos</option>
-                      <option>En emisiÃ³n</option>
+                      <option>En emisión</option>
                       <option>Finalizado</option>
                     </select>
                   </div>
@@ -375,7 +375,7 @@
           </aside>
 
           <!-- Catalog Content -->
-          <section class="lg:col-span-10" aria-label="Resultados de catÃ¡logo">
+          <section class="lg:col-span-10" aria-label="Resultados de catálogo">
             <header class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
               <div>
                 <h1 class="font-headline text-4xl font-extrabold text-on-surface">Descubrimiento</h1>
@@ -422,14 +422,14 @@
               <div class="hidden" data-state="empty">
                 <div class="rounded-lg bg-surface-container-low p-10 text-center">
                   <h2 class="text-2xl font-bold text-on-surface">Sin resultados</h2>
-                  <p class="mt-2 text-on-surface-variant">Prueba otros filtros para ver mÃ¡s tÃ­tulos disponibles.</p>
+                  <p class="mt-2 text-on-surface-variant">Prueba otros filtros para ver más títulos disponibles.</p>
                 </div>
               </div>
 
               <div class="hidden" data-state="error">
                 <div class="rounded-lg bg-error-container/30 p-10 text-center">
-                  <h2 class="text-2xl font-bold text-on-error-container">OcurriÃ³ un error</h2>
-                  <p class="mt-2 text-on-error-container/80">No pudimos cargar el catÃ¡logo. IntÃ©ntalo nuevamente</p>
+                  <h2 class="text-2xl font-bold text-on-error-container">Ocurrió un error</h2>
+                  <p class="mt-2 text-on-error-container/80">No pudimos cargar el catálogo. Inténtalo nuevamente</p>
                   <button class="mt-6 rounded-full bg-primary px-6 py-3 text-sm font-bold text-on-primary" type="button">Reintentar</button>
                 </div>
               </div>
@@ -532,9 +532,9 @@
             </section>
 
             <div class="mt-12 flex justify-center hidden">
-              <button class="rounded-full border border-primary/30 bg-primary/10 px-8 py-4 text-sm font-bold text-primary transition-colors hover:bg-primary/20 inline-flex items-center gap-2" type="button" aria-label="Cargar mÃ¡s resultados">
+              <button class="rounded-full border border-primary/30 bg-primary/10 px-8 py-4 text-sm font-bold text-primary transition-colors hover:bg-primary/20 inline-flex items-center gap-2" type="button" aria-label="Cargar más resultados">
                 <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">add_circle</span>
-                Cargar mÃ¡s
+                Cargar más
               </button>
             </div>
           </section>

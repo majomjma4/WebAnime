@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="dark" lang="es">
   <head>
     <script data-ui-preload>
@@ -39,7 +39,7 @@
 </style>
     <meta charset="UTF-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>NekoraList - CatÃ¡logo</title>
+    <title>NekoraList - Catálogo</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link
     href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap"
@@ -329,7 +329,7 @@
                 </div>
                 <div class="space-y-2">
                   <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant">G?neros</label>
-                  <!-- Dropdown de gÃƒÂ©neros renderizado por controllers/filters.js -->
+                  <!-- Dropdown de generos renderizado por controllers/filters.js -->
           </div>
           <div class="space-y-4">
             <div class="space-y-2">
@@ -339,7 +339,7 @@
               <select
               id="filter-year"
               class="w-full rounded-xl bg-surface-container-high px-4 py-3 text-on-surface"
-              aria-label="Filtrar por aÃ±o"
+              aria-label="Filtrar por año"
               >
               <option>Todos</option>
               <option>2026</option>
@@ -354,7 +354,7 @@
             <select id="filter-type" class="w-full rounded-xl bg-surface-container-high px-4 py-3 text-on-surface" aria-label="Filtrar por tipo">
               <option>Todos</option>
               <option>Serie</option>
-              <option>PelÃ­cula</option>
+              <option>Película</option>
               <option>OVA</option>
             </select>
         </div>
@@ -370,7 +370,7 @@
           aria-label="Filtrar por estado"
           >
           <option>Todos</option>
-          <option>En emisiÃ³n</option>
+          <option>En emisión</option>
           <option>Finalizado</option>
         </select>
       </div>
@@ -397,7 +397,7 @@
 </aside>
 
 <!-- Catalog Content -->
-<section class="lg:col-span-10" aria-label="Resultados de catÃ¡logo">
+<section class="lg:col-span-10" aria-label="Resultados de catálogo">
   <header class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
     <div>
       <h1 class="font-headline text-4xl font-extrabold text-on-surface">Descubrimiento</h1>
@@ -444,14 +444,14 @@
     <div class="hidden" data-state="empty">
       <div class="rounded-lg bg-surface-container-low p-10 text-center">
         <h2 class="text-2xl font-bold text-on-surface">Sin resultados</h2>
-        <p class="mt-2 text-on-surface-variant">Prueba otros filtros para ver mÃ¡s tÃ­tulos disponibles.</p>
+        <p class="mt-2 text-on-surface-variant">Prueba otros filtros para ver más títulos disponibles.</p>
       </div>
     </div>
 
     <div class="hidden" data-state="error">
       <div class="rounded-lg bg-error-container/30 p-10 text-center">
-        <h2 class="text-2xl font-bold text-on-error-container">OcurriÃ³ un error</h2>
-        <p class="mt-2 text-on-error-container/80">No pudimos cargar el catÃ¡logo. IntÃ©ntalo nuevamente</p>
+        <h2 class="text-2xl font-bold text-on-error-container">Ocurrió un error</h2>
+        <p class="mt-2 text-on-error-container/80">No pudimos cargar el catálogo. Inténtalo nuevamente</p>
         <button class="mt-6 rounded-full bg-primary px-6 py-3 text-sm font-bold text-on-primary" type="button">
           Reintentar
         </button>
@@ -515,7 +515,7 @@
     <?php 
             }
         } else {
-            echo "<p class='col-span-full text-center text-on-surface-variant'>No hay pelÃ­culas disponibles.</p>";
+            echo "<p class='col-span-full text-center text-on-surface-variant'>No hay películas disponibles.</p>";
         }
     }
     ?>
@@ -525,10 +525,10 @@
   <button
     class="rounded-full border border-primary/30 bg-primary/10 px-8 py-4 text-sm font-bold text-primary transition-colors hover:bg-primary/20 inline-flex items-center gap-2"
     type="button"
-    aria-label="Cargar mÃ¡s resultados"
+    aria-label="Cargar más resultados"
     >
     <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">add_circle</span>
-    Cargar mÃ¡s
+    Cargar más
   </button>
 </div>
 </section>
@@ -551,12 +551,12 @@
     document.addEventListener("DOMContentLoaded", () => {
       // Fix mojibake and duplicated words in peliculas page text
       const fixMap = {
-        "Pel?culas": "PelÃ­culas",
-        "Pel?culas": "PelÃ­culas",
-        "FantasÃƒÂ­a": "FantasÃ­a",
-        "FantasÃƒÂ­a": "FantasÃ­a",
-        "AcciÃƒÂ³n": "AcciÃ³n",
-        "m?s": "mÃ¡s"
+        "Pel?culas": "Pelí­culas",
+        "Pel?culas": "Pelí­culas",
+        "FantasÃƒÂ­a": "Fantasí­a",
+        "FantasÃƒÂ­a": "Fantasí­a",
+        "AcciÃƒÂ³n": "Acción",
+        "m?s": "más"
       };
       const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
       let node;
@@ -566,9 +566,9 @@
         Object.keys(fixMap).forEach((k) => {
           if (out.includes(k)) out = out.replaceAll(k, fixMap[k]);
         });
-        out = out.replace(/anime\s*peliculas/gi, "Anime y PelÃ­culas");
-        out = out.replace(/pel[?i]culas\s*pel[?i]culas/gi, "PelÃ­culas");
-        out = out.replace(/pel[i]culas+/gi, "PelÃ­culas");
+        out = out.replace(/anime\s*peliculas/gi, "Anime y Pelí­culas");
+        out = out.replace(/pel[?i]culas\s*pel[?i]culas/gi, "Pelí­culas");
+        out = out.replace(/pel[i]culas+/gi, "Pelí­culas");
         out = out.replace(/depeliculastacado/gi, "Destacado");
         if (out !== t) node.nodeValue = out;
       }
@@ -595,7 +595,7 @@
       };
       purgeBlockedMovies();
       new MutationObserver(() => purgeBlockedMovies()).observe(document.body, { childList: true, subtree: true });
-      // En pagina de peliculas: mostrar el aÃ±o de publicaciÃ³n y abajo a la izquierda.
+      // En pagina de peliculas: mostrar el año de publicación y abajo a la izquierda.
       const applyYearBadges = () => {
         document.querySelectorAll("span.absolute.left-3").forEach((badge) => {
           const card = badge.closest("[data-year]");
