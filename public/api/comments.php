@@ -16,6 +16,49 @@ if (!$dbConn) {
     exit;
 }
 
+$resolveAdminAccess = static function (PDO $dbConn, int $userId, string $sessionRole = ''): bool {
+    $normalizedRole = strtolower(trim($sessionRole));
+    if (in_array($normalizedRole, ['admin', 'administrador'], true)) {
+        return true;
+    }
+
+    if ($userId <= 0) {
+        return false;
+    }
+
+    try {
+        $stmt = $dbConn->prepare("
+            SELECT COALESCE(r.nombre, '') AS role_name
+            FROM usuarios u
+            LEFT JOIN roles r ON r.id = u.rol_id
+            WHERE u.id = ?
+            LIMIT 1
+        ");
+        $stmt->execute([$userId]);
+        $dbRole = strtolower(trim((string) $stmt->fetchColumn()));
+        return in_array($dbRole, ['admin', 'administrador'], true);
+    } catch (Exception $e) {
+        return false;
+    }
+};
+
+$resolveSessionUserId = static function (PDO $dbConn, int $userId, string $username = ''): int {
+    $cleanUsername = trim($username);
+    if ($cleanUsername !== '') {
+        try {
+            $stmt = $dbConn->prepare("SELECT id FROM usuarios WHERE nombre_mostrar = ? LIMIT 1");
+            $stmt->execute([$cleanUsername]);
+            $resolvedId = (int) ($stmt->fetchColumn() ?: 0);
+            if ($resolvedId > 0) {
+                return $resolvedId;
+            }
+        } catch (Exception $e) {
+        }
+    }
+
+    return max(0, $userId);
+};
+
 if ($action === 'list') {
     try {
         $animeMalId = isset($_GET['anime_mal_id']) ? (int) $_GET['anime_mal_id'] : 0;
@@ -35,7 +78,8 @@ if ($action === 'list') {
                    COALESCE(dr.estado, '') AS deleted_status,
                    COALESCE(deleter.nombre_mostrar, '') AS deleted_by,
                    COALESCE(mr.estado, '') AS reviewed_status,
-                   COALESCE(reviewer.nombre_mostrar, '') AS reviewed_by
+                   COALESCE(reviewer.nombre_mostrar, '') AS reviewed_by,
+                   mr.revisado_en AS reviewed_at
             FROM comentarios c
             INNER JOIN usuarios u ON c.usuario_id = u.id
             INNER JOIN anime a ON c.anime_id = a.id
@@ -43,7 +87,7 @@ if ($action === 'list') {
             LEFT JOIN (
                 SELECT comentario_id, COUNT(*) AS report_count
                 FROM reportes_comentarios
-                WHERE estado NOT IN ('eliminado_usuario', 'eliminado_admin')
+                WHERE estado IN ('pendiente', 'en_revision')
                 GROUP BY comentario_id
             ) rr ON rr.comentario_id = c.id
             LEFT JOIN (
@@ -52,7 +96,7 @@ if ($action === 'list') {
                 INNER JOIN (
                     SELECT comentario_id, MAX(id) AS max_id
                     FROM reportes_comentarios
-                    WHERE estado NOT IN ('eliminado_usuario', 'eliminado_admin')
+                    WHERE estado IN ('pendiente', 'en_revision', 'Revisado')
                     GROUP BY comentario_id
                 ) latest ON latest.max_id = rc1.id
             ) lr ON lr.comentario_id = c.id
@@ -69,16 +113,16 @@ if ($action === 'list') {
             ) dr ON dr.comentario_id = c.id
             LEFT JOIN usuarios deleter ON deleter.id = dr.reportado_por
             LEFT JOIN (
-                SELECT rc3.comentario_id, rc3.estado, rc3.reportado_por
+                SELECT rc3.comentario_id, rc3.estado, rc3.revisado_por, rc3.revisado_en
                 FROM reportes_comentarios rc3
                 INNER JOIN (
                     SELECT comentario_id, MAX(id) AS max_id
                     FROM reportes_comentarios
-                    WHERE estado = 'revisado_admin'
+                    WHERE estado = 'Revisado'
                     GROUP BY comentario_id
                 ) reviewed_latest ON reviewed_latest.max_id = rc3.id
             ) mr ON mr.comentario_id = c.id
-            LEFT JOIN usuarios reviewer ON reviewer.id = mr.reportado_por
+            LEFT JOIN usuarios reviewer ON reviewer.id = mr.revisado_por
         ";
 
         if ($animeMalId > 0) {
@@ -128,7 +172,8 @@ if ($action === 'list') {
                 'deleted_status' => $row['deleted_status'] ?? '',
                 'deleted_by' => !empty($row['deleted_by']) ? '@' . $row['deleted_by'] : '',
                 'reviewed_status' => $row['reviewed_status'] ?? '',
-                'reviewed_by' => !empty($row['reviewed_by']) ? '@' . $row['reviewed_by'] : ''
+                'reviewed_by' => !empty($row['reviewed_by']) ? '@' . $row['reviewed_by'] : '',
+                'reviewed_at' => !empty($row['reviewed_at']) ? date('M d, Y h:i A', strtotime($row['reviewed_at'])) : ''
             ];
         }
 
@@ -248,11 +293,28 @@ if ($action === 'list') {
             exit;
         }
 
-        $normalizedRole = strtolower(trim((string) $role));
-        $isAdmin = in_array($normalizedRole, ['admin', 'administrador'], true);
+        $isAdmin = $resolveAdminAccess($dbConn, $userId, $role);
         if ($ownerId !== $userId && !$isAdmin) {
             echo json_encode(['success' => false, 'error' => 'Solo puedes ocultar tus propios comentarios o administrar como admin']);
             exit;
+        }
+
+        if (!$isAdmin) {
+            $reportCheckStmt = $dbConn->prepare("
+                SELECT COUNT(*)
+                FROM reportes_comentarios
+                WHERE comentario_id = ?
+                  AND estado IN ('pendiente', 'en_revision', 'Revisado')
+            ");
+            $reportCheckStmt->execute([$commentId]);
+            $hasReports = (int) ($reportCheckStmt->fetchColumn() ?: 0) > 0;
+
+            if (!$hasReports) {
+                $deleteCommentStmt = $dbConn->prepare("DELETE FROM comentarios WHERE id = ? AND usuario_id = ?");
+                $deleteCommentStmt->execute([$commentId, $userId]);
+                echo json_encode(['success' => true, 'mode' => 'hard_deleted']);
+                exit;
+            }
         }
 
         $deleteState = $isAdmin ? 'eliminado_admin' : 'eliminado_usuario';
@@ -272,16 +334,20 @@ if ($action === 'list') {
 } elseif ($action === 'moderate') {
     $commentId = (int) ($data['id'] ?? 0);
     $decision = trim((string) ($data['decision'] ?? ''));
-    $adminId = (int) ($_SESSION['user_id'] ?? 0);
-    $role = strtolower(trim((string) ($_SESSION['role'] ?? '')));
-    $isModerator = in_array($role, ['admin', 'administrador'], true);
+    $adminId = $resolveSessionUserId(
+        $dbConn,
+        (int) ($_SESSION['user_id'] ?? 0),
+        (string) ($_SESSION['username'] ?? '')
+    );
+    $role = (string) ($_SESSION['role'] ?? '');
+    $isModerator = $resolveAdminAccess($dbConn, $adminId, $role);
 
     if ($commentId <= 0) {
         echo json_encode(['success' => false, 'error' => 'ID invalido']);
         exit;
     }
 
-    if ($adminId <= 0 || !$isModerator) {
+    if ($adminId <= 0) {
         echo json_encode(['success' => false, 'error' => 'Solo un administrador puede moderar comentarios']);
         exit;
     }
@@ -300,9 +366,36 @@ if ($action === 'list') {
         }
 
         if ($decision === 'review') {
-            $stmt = $dbConn->prepare("INSERT INTO reportes_comentarios (comentario_id, reportado_por, razon, estado, creado_en) VALUES (?, ?, ?, 'revisado_admin', NOW())");
-            $stmt->execute([$commentId, $adminId, 'Comentario revisado por administrador']);
-            echo json_encode(['success' => true, 'status' => 'revisado_admin']);
+            $pendingStmt = $dbConn->prepare("
+                SELECT id
+                FROM reportes_comentarios
+                WHERE comentario_id = ?
+                  AND estado IN ('pendiente', 'en_revision')
+                ORDER BY id DESC
+                LIMIT 1
+            ");
+            $pendingStmt->execute([$commentId]);
+            $reportId = (int) ($pendingStmt->fetchColumn() ?: 0);
+
+            if ($reportId > 0) {
+                $stmt = $dbConn->prepare("
+                    UPDATE reportes_comentarios
+                    SET estado = 'Revisado',
+                        revisado_por = ?,
+                        revisado_en = NOW()
+                    WHERE id = ?
+                ");
+                $stmt->execute([$adminId, $reportId]);
+            } else {
+                $stmt = $dbConn->prepare("
+                    INSERT INTO reportes_comentarios
+                        (comentario_id, reportado_por, razon, estado, revisado_por, revisado_en, creado_en)
+                    VALUES (?, ?, ?, 'Revisado', ?, NOW(), NOW())
+                ");
+                $stmt->execute([$commentId, $adminId, 'Revision administrativa', $adminId]);
+            }
+
+            echo json_encode(['success' => true, 'status' => 'Revisado']);
             exit;
         }
 
