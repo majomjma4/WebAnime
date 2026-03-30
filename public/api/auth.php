@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . '/../../app/bootstrap.php';
-header('Content-Type: application/json');
+$wantsRedirect = isset($_GET['redirect']) && $_GET['redirect'] === '1';
+if (!$wantsRedirect) {
+    header('Content-Type: application/json');
+}
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -197,6 +200,10 @@ if ($action === 'register') {
     session_unset();
     session_destroy();
     setcookie(session_name(), '', time() - 3600, '/');
+    if ($wantsRedirect) {
+        header('Location: ../index.php?logout=1');
+        exit;
+    }
     echo json_encode(['success' => true]);
 } elseif ($action === 'forgot_password') {
     $userOrEmail = trim($data['userOrEmail'] ?? '');

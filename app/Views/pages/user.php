@@ -386,10 +386,8 @@
                     class="hidden rounded-full border border-white/10 bg-gradient-to-r from-sky-400 to-violet-400 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-900 transition-all duration-200 hover:border-sky-200/60 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(56,189,248,0.25)]">
                     Solicitar título
                   </button>
-                  <button id="logout-btn" type="button" aria-label="Cerrar sesión"
-                    class="rounded-full border border-white/10 bg-gradient-to-r from-rose-400 to-orange-300 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-900 transition-all duration-200 hover:border-rose-200/60 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(248,113,113,0.25)] flex items-center justify-center group/logout">
-                    Cerrar sesión
-                  </button>
+                  <a id="profile-logout-btn" href="api/auth.php?action=logout&redirect=1" aria-label="Cerrar sesión" class="rounded-full border border-white/10 bg-gradient-to-r from-rose-400 to-orange-300 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-900 transition-all duration-200 hover:border-rose-200/60 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(248,113,113,0.25)] inline-flex items-center justify-center group/logout">Cerrar sesión
+                  </a>
                 </div>
               </div>
             </div>
@@ -1522,7 +1520,7 @@
     (function () {
       const createBtn = document.getElementById("auth-create-btn");
       const loginBtn = document.getElementById("auth-login-btn");
-      const logoutBtn = document.getElementById("logout-btn");
+      const logoutBtn = document.getElementById("profile-logout-btn");
       const profileActions = document.getElementById("profile-actions");
       const profileLists = document.getElementById("profile-lists");
       const requestTitleBtn = document.getElementById("request-title-btn");
