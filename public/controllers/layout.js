@@ -253,6 +253,16 @@
     return authState.role || "Invitado";
   }
 
+  function syncProfileAvatar() {
+    try {
+      const savedAvatar = localStorage.getItem(getIsolatedKey("anidex_profile_avatar")) || localStorage.getItem("anidex_profile_avatar");
+      if (!savedAvatar) return;
+      document.querySelectorAll("img[data-profile-avatar]").forEach((img) => {
+        img.src = savedAvatar;
+      });
+    } catch {}
+  }
+
   async function setupProfileMenu() {
     const profileBtn = document.querySelector("[data-profile-trigger]");
     const guestMenu = document.querySelector("[data-guest-menu]");
@@ -405,15 +415,9 @@
       adminBtn.classList.toggle("hidden", !showAdmin);
       adminBtn.style.display = showAdmin ? "inline-flex" : "none";
     }
-    try {
-      const savedAvatar = localStorage.getItem("anidex_profile_avatar");
-      if (savedAvatar) {
-        document.querySelectorAll("img[data-profile-avatar]").forEach((img) => {
-          img.src = savedAvatar;
-        });
-      }
-    } catch {}
+    syncProfileAvatar();
     setupProfileMenu();
+    syncProfileAvatar();
     initSessionTimer();
 
     // Lógica de sincronización global
@@ -552,6 +556,7 @@
         if (d.anidex_profile_desc)         localStorage.setItem(getIsolatedKey("anidex_profile_desc"),         d.anidex_profile_desc);
         if (d.anidex_profile_color)        localStorage.setItem(getIsolatedKey("anidex_profile_color"),        d.anidex_profile_color);
         if (d.anidex_profile_avatar)       localStorage.setItem(getIsolatedKey("anidex_profile_avatar"),       d.anidex_profile_avatar);
+        if (d.anidex_profile_avatar)       localStorage.setItem("anidex_profile_avatar", d.anidex_profile_avatar);
         if (d.anidex_profile_member_since) localStorage.setItem(getIsolatedKey("anidex_profile_member_since"), d.anidex_profile_member_since);
         if (d.anidex_public_user_id)       localStorage.setItem("anidex_public_user_id", d.anidex_public_user_id);
 
@@ -568,9 +573,11 @@
           localStorage.setItem(localKey, winner.toFixed(2));
         }
 
+        syncProfileAvatar();
         if (window.AniDexLayout && typeof window.AniDexLayout.triggerRefresh === "function") {
           window.AniDexLayout.triggerRefresh();
         }
+        syncProfileAvatar();
       } else if (json.success) {
         // Sin datos previos en el servidor → guardar lo local como punto de partida
         saveProfileToDB();

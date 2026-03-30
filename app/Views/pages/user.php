@@ -962,19 +962,26 @@
           grid.innerHTML = '<div class="col-span-full text-center text-xs text-on-surface-variant">No se pudieron cargar avatares.</div>';
         });
 
-      const syncAvatars = (src) => {
+      const paintProfileAvatar = (src) => {
         if (!src) return;
-        avatarImg.src = src;
+        if (avatarImg) avatarImg.src = src;
+        if (previewImg) previewImg.src = src;
         document.querySelectorAll("img[data-profile-avatar]").forEach((img) => {
           img.src = src;
         });
+      };
+
+      const syncAvatars = (src) => {
+        if (!src) return;
+        paintProfileAvatar(src);
         try {
+          localStorage.setItem(getK("anidex_profile_avatar"), src);
           localStorage.setItem("anidex_profile_avatar", src);
-          if (typeof saveProfileToDB === "function") saveProfileToDB();
+          if (window.AniDexProfile && typeof window.AniDexProfile.saveToDB === "function") { window.AniDexProfile.saveToDB().catch(() => {}); }
         } catch (e) { }
       };
 
-      const saved = (() => { try { return localStorage.getItem("anidex_profile_avatar"); } catch (e) { return null; } })();
+      const saved = (() => { try { return localStorage.getItem(getK("anidex_profile_avatar")) || localStorage.getItem("anidex_profile_avatar"); } catch (e) { return null; } })();
       if (saved) syncAvatars(saved);
 
       grid.addEventListener("click", (e) => {
@@ -1303,8 +1310,8 @@
             savedColor.split(" ").forEach((c) => cardEl.classList.add(c));
           }
 
-          const savedAvatar = localStorage.getItem(getK("anidex_profile_avatar"));
-          if (savedAvatar && avatarImg) avatarImg.src = savedAvatar;
+          const savedAvatar = localStorage.getItem(getK("anidex_profile_avatar")) || localStorage.getItem("anidex_profile_avatar");
+          if (savedAvatar) paintProfileAvatar(savedAvatar);
 
           const prefs = loadPrefs();
           pendingPrefs = prefs;
@@ -1325,6 +1332,7 @@
         if (!modal) return;
         nameInput.value = nameEl.textContent.trim();
         descInput.value = descEl.textContent.trim();
+        if (previewImg && avatarImg) previewImg.src = avatarImg.src;
         if (descCount) descCount.textContent = `${descInput.value.length}/200`;
         pendingPrefs = loadPrefs();
         renderPrefPicker(pendingPrefs);
@@ -1395,10 +1403,8 @@
             if (window.__profilePendingAvatar) {
               const src = window.__profilePendingAvatar;
               localStorage.setItem(getK("anidex_profile_avatar"), src);
-              if (avatarImg) avatarImg.src = src;
-              document.querySelectorAll("img[data-profile-avatar]").forEach((img) => {
-                img.src = src;
-              });
+              localStorage.setItem("anidex_profile_avatar", src);
+              paintProfileAvatar(src);
               window.__profilePendingAvatar = null;
             }
 

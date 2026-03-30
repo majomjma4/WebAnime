@@ -387,7 +387,7 @@ endif; ?>
         <div class="grid grid-cols-1 lg:grid-cols-[1.1fr,0.9fr] gap-8">
           <form id="comment-form" class="relative rounded-3xl border border-white/10 bg-surface-container-low/60 p-6 md:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.4)] space-y-6 overflow-hidden">
             <!-- Bloqueo Premium Estilo Episodios Como Enlace Real -->
-            <a id="comment-lock-overlay" href="registro.php" class="absolute inset-0 bg-black/65 backdrop-blur-md flex flex-col items-center justify-center z-[40] transition-all duration-500 rounded-3xl border border-violet-500/30 cursor-pointer group/lock no-underline <?= $sessionPremium ? "hidden" : "" ?>" <?= $sessionPremium ? "style=\"display:none;pointer-events:none\" aria-hidden=\"true\"" : "" ?>>
+            <a id="comment-lock-overlay" href="pago.php" class="absolute inset-0 bg-black/65 backdrop-blur-md flex flex-col items-center justify-center z-[40] transition-all duration-500 rounded-3xl border border-violet-500/30 cursor-pointer group/lock no-underline <?= $sessionPremium ? "hidden" : "" ?>" <?= $sessionPremium ? "style=\"display:none;pointer-events:none\" aria-hidden=\"true\"" : "" ?>>
               <div class="relative flex flex-col items-center justify-center">
                  <div class="absolute -inset-4 bg-gradient-to-r from-violet-600 to-fuchsia-600 rounded-2xl blur-xl opacity-20 group-hover/lock:opacity-50 transition duration-700"></div>
                  <div class="relative flex flex-col items-center gap-4 bg-surface-container-high/95 px-10 py-8 rounded-2xl border border-white/10 shadow-2xl transform transition-all group-hover/lock:scale-[1.03] group-hover/lock:border-violet-400/40">
@@ -659,7 +659,7 @@ endif; ?>
         lockOverlay.removeAttribute("aria-hidden");
         lockOverlay.classList.remove("hidden");
         lockOverlay.classList.add("flex");
-        lockOverlay.href = isLogged ? "pago.php" : "registro.php";
+        lockOverlay.href = "pago.php";
         textarea.setAttribute("disabled", "true");
         if (submitBtn) {
           submitBtn.setAttribute("disabled", "true");

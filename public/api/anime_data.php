@@ -54,18 +54,25 @@ if (!$animeItem) {
     exit;
 }
 
+$studioNames = array_values(array_filter(array_map('trim', explode(',', (string) ($animeItem['estudio'] ?? '')))));
+$titleEnglish = trim((string) ($animeItem['titulo_ingles'] ?? ''));
+$seasonValue = strtolower(trim((string) ($animeItem['temporada'] ?? '')));
+
 $jikanData = [
     'mal_id' => $animeItem['mal_id'] ?: $animeItem['id'],
     'title' => $animeItem['titulo'],
-    'title_english' => null,
-    'title_japanese' => null,
+    'title_english' => $titleEnglish !== '' ? $titleEnglish : $animeItem['titulo'],
+    'title_japanese' => $animeItem['titulo'],
     'type' => $animeItem['tipo'],
     'episodes' => (int)$animeItem['episodios'],
     'status' => $animeItem['estado'],
     'year' => (int)$animeItem['anio'],
-    'season' => strtolower($animeItem['temporada']),
+    'season' => $seasonValue,
     'score' => (float)$animeItem['puntuacion'],
-    'synopsis' => $animeItem['sinopsis'],
+    'synopsis' => (string) ($animeItem['sinopsis'] ?? ''),
+    'rating' => (string) ($animeItem['clasificacion'] ?? ''),
+    'duration' => '',
+    'rank' => null,
     'images' => [
         'jpg' => [
             'large_image_url' => $animeItem['imagen_url'],
@@ -73,7 +80,9 @@ $jikanData = [
         ]
     ],
     'genres' => [],
-    'studios' => []
+    'studios' => array_map(static function ($name) {
+        return ['name' => $name];
+    }, $studioNames)
 ];
 
 $genreStmt = $dbConn->prepare("

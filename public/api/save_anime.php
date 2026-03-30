@@ -76,13 +76,37 @@ if ($anio === 0 && isset($data['aired']['prop']['from']['year'])) {
 $sinopsis = $data['synopsis'] ?? '';
 $imagen_url = $data['images']['jpg']['large_image_url'] ?? $data['images']['jpg']['image_url'] ?? '';
 $puntuacion = (float)($data['score'] ?? 0.0);
+$titulo_ingles = trim((string) ($data['title_english'] ?? ''));
+$clasificacion = trim((string) ($data['rating'] ?? ''));
+$trailer_url = (string) ($data['trailer']['url'] ?? '');
 
 $dbConn->beginTransaction();
 try {
     if (!$new_id) {
-        $stmt = $dbConn->prepare("INSERT INTO anime (mal_id, titulo, tipo, estudio, estado, episodios, temporada, anio, sinopsis, imagen_url, puntuacion, activo, creado_en) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, NOW())");
-        $stmt->execute([$mal_id, $titulo, $tipo, $estudio, $estado, $episodios, $temporada, $anio, $sinopsis, $imagen_url, $puntuacion]);
+        $stmt = $dbConn->prepare("INSERT INTO anime (mal_id, titulo, titulo_ingles, tipo, estudio, estado, episodios, temporada, anio, clasificacion, sinopsis, imagen_url, trailer_url, puntuacion, activo, creado_en) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, NOW())");
+        $stmt->execute([$mal_id, $titulo, $titulo_ingles, $tipo, $estudio, $estado, $episodios, $temporada, $anio, $clasificacion, $sinopsis, $imagen_url, $trailer_url, $puntuacion]);
         $new_id = $dbConn->lastInsertId();
+
+        $generos = $data['genres'] ?? [];
+        foreach ($generos as $g) {
+            $g_name = $g['name'];
+            $gStmt = $dbConn->prepare("SELECT id FROM generos WHERE nombre = ?");
+            $gStmt->execute([$g_name]);
+            $g_row = $gStmt->fetch(PDO::FETCH_ASSOC);
+            if ($g_row) {
+                $g_id = $g_row['id'];
+            } else {
+                $iStmt = $dbConn->prepare("INSERT INTO generos (nombre) VALUES (?)");
+                $iStmt->execute([$g_name]);
+                $g_id = $dbConn->lastInsertId();
+            }
+            $lStmt = $dbConn->prepare("INSERT INTO anime_generos (anime_id, genero_id) VALUES (?, ?)");
+            $lStmt->execute([$new_id, $g_id]);
+        }
+    } else {
+        $stmt = $dbConn->prepare("UPDATE anime SET mal_id = ?, titulo = ?, titulo_ingles = ?, tipo = ?, estudio = ?, estado = ?, episodios = ?, temporada = ?, anio = ?, clasificacion = ?, sinopsis = ?, imagen_url = ?, trailer_url = ?, puntuacion = ? WHERE id = ?");
+        $stmt->execute([$mal_id, $titulo, $titulo_ingles, $tipo, $estudio, $estado, $episodios, $temporada, $anio, $clasificacion, $sinopsis, $imagen_url, $trailer_url, $puntuacion, $new_id]);
+        $dbConn->prepare("DELETE FROM anime_generos WHERE anime_id = ?")->execute([$new_id]);
 
         $generos = $data['genres'] ?? [];
         foreach ($generos as $g) {
