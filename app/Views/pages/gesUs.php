@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html class="dark" lang="es"><head>
 <link rel="icon" href="img/icon3.png" />
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>NekoraList - Gestión de Usuarios</title>
+<title>NekoraList - GestiÃ³n de Usuarios</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
@@ -112,7 +112,7 @@
 <div class="bg-surface-container-low rounded-lg overflow-hidden border-none shadow-2xl">
 <div class="p-8 border-b border-outline-variant/10 flex justify-between items-center">
 <div>
-<h3 class="text-xl font-headline font-bold">Información de Usuarios</h3>
+<h3 class="text-xl font-headline font-bold">InformaciÃ³n de Usuarios</h3>
 <p class="text-sm text-on-surface-variant mt-1">Administra los usuarios registrados en el sistema.</p>
 </div>
 </div>
@@ -123,8 +123,8 @@
 <th class="px-5 py-5 text-xs font-bold uppercase tracking-widest text-outline">ID</th>
 <th class="px-5 py-5 text-xs font-bold uppercase tracking-widest text-outline">USUARIO</th>
 <th class="px-5 py-5 text-center text-xs font-bold uppercase tracking-widest text-outline">ROL</th>
-<th class="px-4 py-5 text-xs font-bold uppercase tracking-widest text-outline">CORREO ELECTRÓNICO</th>
-<th class="px-[4.5rem] py-5 text-center text-xs font-bold uppercase tracking-widest text-outline whitespace-nowrap">FECHA DE UNIÓN</th>
+<th class="px-4 py-5 text-xs font-bold uppercase tracking-widest text-outline">CORREO ELECTRÃ“NICO</th>
+<th class="px-[4.5rem] py-5 text-center text-xs font-bold uppercase tracking-widest text-outline whitespace-nowrap">FECHA DE UNIÃ“N</th>
 <th class="px-4 py-5 text-center text-xs font-bold uppercase tracking-widest text-outline">ESTADO</th>
 <th class="px-4 py-5 text-center text-xs font-bold uppercase tracking-widest text-outline">ACCIONES</th>
 </tr>
@@ -277,14 +277,14 @@
     <div class="flex items-start justify-between border-b border-white/8 px-7 py-6">
       <div class="space-y-2">
         <span class="inline-flex items-center rounded-full border border-emerald-300/20 bg-emerald-400/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-emerald-200">Quitar bloqueo</span>
-        <h3 class="text-3xl font-headline font-extrabold tracking-tight text-on-surface">Confirmar acción</h3>
+        <h3 class="text-3xl font-headline font-extrabold tracking-tight text-on-surface">Confirmar acciÃ³n</h3>
       </div>
       <button class="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-on-surface-variant transition hover:bg-white/10 hover:text-on-surface" data-admin-users-unblock-close>
         <span class="material-symbols-outlined text-lg">close</span>
       </button>
     </div>
     <div class="space-y-4 px-7 py-6">
-      <p class="text-sm text-on-surface-variant">¿Deseas quitar el bloqueo de <span class="font-semibold text-on-surface" data-admin-users-unblock-name>este usuario</span>?</p>
+      <p class="text-sm text-on-surface-variant">Â¿Deseas quitar el bloqueo de <span class="font-semibold text-on-surface" data-admin-users-unblock-name>este usuario</span>?</p>
       <div class="rounded-2xl border border-white/8 bg-white/[0.03] px-5 py-4">
         <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-on-surface-variant">ID</p>
         <p class="mt-2 text-sm font-medium text-on-surface" data-admin-users-unblock-id></p>
@@ -308,7 +308,7 @@
       </button>
     </div>
     <div class="space-y-4 px-7 py-6">
-      <p class="text-sm leading-7 text-on-surface-variant">¿Deseas eliminar para siempre a <span class="font-semibold text-on-surface" data-admin-users-delete-name>este usuario</span>? Esta acción borrara toda su información, incluyendo sus registros en la base de datos.</p>
+      <p class="text-sm leading-7 text-on-surface-variant">Â¿Deseas eliminar para siempre a <span class="font-semibold text-on-surface" data-admin-users-delete-name>este usuario</span>? Esta acciÃ³n borrara toda su informaciÃ³n, incluyendo sus registros en la base de datos.</p>
       <div class="rounded-2xl border border-white/8 bg-white/[0.03] px-5 py-4">
         <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-on-surface-variant">ID</p>
         <p class="mt-2 text-sm font-medium text-on-surface" data-admin-users-delete-id></p>
@@ -733,8 +733,9 @@
 
   })();
 </script>
-<script src="controllers/admin-layout.js"></script>
+<script src="controllers/admin-layout.js?v=20260330a"></script>
 </body></html>
+
 
 
 

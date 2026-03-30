@@ -68,13 +68,21 @@
 <section class="pt-20 pb-20 px-12 max-w-6xl mx-auto">
 <div class="flex flex-col gap-2 mb-12">
 <h1 class="text-5xl font-headline font-extrabold tracking-tight text-on-surface">Añadir Nuevo Anime</h1>
-<p class="text-on-surface-variant text-lg">Completa los detalles para catalogar una nueva obra maestra.</p>
+<p id="add-page-subtitle" class="text-on-surface-variant text-lg">Completa los detalles para catalogar una nueva obra maestra.</p>
 </div>
 <form id="form-añadir" class="grid grid-cols-12 gap-8">
 <!-- Left Column: Core Data & Imagery -->
 <div class="col-span-12 lg:col-span-8 space-y-8">
 <!-- Basic Info Section -->
 <div class="bg-surface-container-low p-8 rounded-lg shadow-sm space-y-6">
+<div class="space-y-3">
+<label class="text-sm font-bold uppercase tracking-wider text-primary">Tipo de contenido</label>
+<div class="grid grid-cols-2 gap-3" id="in-tipo-toggle">
+<button type="button" data-type-option="anime" class="rounded-2xl border border-primary/40 bg-primary/15 px-4 py-4 text-sm font-bold uppercase tracking-widest text-primary transition-all">Anime</button>
+<button type="button" data-type-option="pelicula" class="rounded-2xl border border-outline-variant/30 bg-surface-container-lowest px-4 py-4 text-sm font-bold uppercase tracking-widest text-on-surface-variant transition-all hover:border-primary/30 hover:text-on-surface">Película</button>
+</div>
+<input id="in-tipo" type="hidden" value="anime" />
+</div>
 <div class="space-y-2">
 <label class="text-sm font-bold uppercase tracking-wider text-primary">Título del Anime</label>
 <input id="in-titulo" required class="w-full bg-surface-container-lowest border-none rounded-lg p-4 focus:ring-2 focus:ring-primary/40 text-on-surface" placeholder="Ej: Neon Genesis Evangelion" type="text"/>
@@ -87,11 +95,30 @@
 <!-- Media Section -->
 <div class="bg-surface-container-low p-8 rounded-lg shadow-sm">
 <label class="text-sm font-bold uppercase tracking-wider text-primary mb-6 block">Material Visual (URL)</label>
-<div class="space-y-4">
+<div class="space-y-5">
+<div class="grid grid-cols-2 gap-3" id="media-tab-toggle">
+<button type="button" data-media-tab="poster" class="rounded-2xl border border-primary/40 bg-primary/15 px-4 py-3 text-sm font-bold uppercase tracking-widest text-primary transition-all">Portada</button>
+<button type="button" data-media-tab="trailer" class="rounded-2xl border border-outline-variant/30 bg-surface-container-lowest px-4 py-3 text-sm font-bold uppercase tracking-widest text-on-surface-variant transition-all hover:border-primary/30 hover:text-on-surface">Trailer</button>
+</div>
+<div id="media-panel-poster" class="space-y-4">
 <p class="text-sm font-medium text-on-surface-variant">Imagen Principal (URL Web)</p>
 <input type="url" id="in-imagen" required class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-4 focus:ring-2 focus:ring-primary/40 text-on-surface" placeholder="https://ejemplo.com/poster.jpg" />
-<div class="relative group aspect-video mt-4 rounded-lg overflow-hidden bg-surface-container-lowest border-2 border-dashed border-outline-variant/30 flex items-center justify-center">
-<p class="text-xs text-outline font-bold uppercase">Previsualización del póster no disponible temporalmente</p>
+<div class="mt-4 flex justify-center">
+<div id="poster-preview-frame" class="relative w-[220px] aspect-[2/3] rounded-xl overflow-hidden bg-surface-container-lowest border-2 border-dashed border-outline-variant/30 flex items-center justify-center">
+<img id="poster-preview-image" alt="Previsualización del poster" class="hidden h-full w-full object-cover" />
+<p id="poster-preview-empty" class="px-4 text-center text-xs text-outline font-bold uppercase">Previsualización del poster</p>
+</div>
+</div>
+</div>
+<div id="media-panel-trailer" class="hidden space-y-4">
+<p class="text-sm font-medium text-on-surface-variant">Trailer (URL Web)</p>
+<input type="url" id="in-trailer" class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-4 focus:ring-2 focus:ring-primary/40 text-on-surface" placeholder="https://youtube.com/watch?v=..." />
+<div class="mt-4 flex justify-center">
+<div id="trailer-preview-frame" class="relative w-full max-w-[420px] aspect-video rounded-xl overflow-hidden bg-surface-container-lowest border-2 border-dashed border-outline-variant/30 flex items-center justify-center">
+<iframe id="trailer-preview-embed" class="hidden h-full w-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+<p id="trailer-preview-empty" class="px-4 text-center text-xs text-outline font-bold uppercase">Previsualización del trailer</p>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -101,11 +128,24 @@
 <!-- Technical Specs Section -->
 <div class="bg-surface-container-low p-8 rounded-lg shadow-sm space-y-6">
 <div class="space-y-2">
+<label class="text-sm font-bold uppercase tracking-wider text-primary">Tipo</label>
+<select id="in-tipo-formato" class="w-full bg-surface-container-lowest border-none rounded-lg p-4 focus:ring-2 focus:ring-primary/40 text-on-surface appearance-none cursor-pointer">
+<option value="ALL">Todos</option>
+<option value="TV">Serie de TV</option>
+<option value="OVA">OVA</option>
+<option value="ONA">ONA</option>
+<option value="SPECIAL">Especiales</option>
+<option value="SHORT">Cortos</option>
+</select>
+</div>
+<div class="space-y-2">
 <label class="text-sm font-bold uppercase tracking-wider text-primary">Estado</label>
 <select id="in-estado" class="w-full bg-surface-container-lowest border-none rounded-lg p-4 focus:ring-2 focus:ring-primary/40 text-on-surface appearance-none cursor-pointer">
-<option value="Airing">En Emisión (Airing)</option>
-<option value="Finished">Finalizado (Finished Airing)</option>
-<option value="Upcoming">Próximamente (Not yet aired)</option>
+<option value="ALL">Todos</option>
+<option value="Airing">En emisiÃ³n</option>
+<option value="Finished">Finalizado</option>
+<option value="Upcoming">PrÃ³ximamente</option>
+<option value="Cancelled">Cancelado</option>
 </select>
 </div>
 <div class="grid grid-cols-2 gap-4">
@@ -115,11 +155,11 @@
 <option value="winter">Invierno</option>
 <option value="spring">Primavera</option>
 <option value="summer">Verano</option>
-<option value="fall">Otoño</option>
+<option value="fall">OtoÃ±o</option>
 </select>
 </div>
 <div class="space-y-2">
-<label class="text-sm font-bold uppercase tracking-wider text-primary">Año</label>
+<label class="text-sm font-bold uppercase tracking-wider text-primary">AÃ±o</label>
 <input id="in-anio" class="w-full bg-surface-container-lowest border-none rounded-lg p-4 focus:ring-2 focus:ring-primary/40 text-on-surface" type="number" value="2024"/>
 </div>
 </div>
@@ -132,38 +172,70 @@
 </div>
 <!-- Genres Section -->
 <div class="bg-surface-container-low p-8 rounded-lg shadow-sm">
-<label class="text-sm font-bold uppercase tracking-wider text-primary mb-4 block">Géneros</label>
-<div class="flex flex-wrap gap-2">
-<label class="group flex items-center gap-2 bg-surface-container-lowest px-4 py-2 rounded-full border border-outline-variant/10 cursor-pointer">
+<label class="text-sm font-bold uppercase tracking-wider text-primary mb-4 block">GÃ©neros</label>
+<div class="grid grid-cols-2 gap-3">
+<label class="group flex min-h-[48px] w-full items-center gap-2 rounded-2xl border border-outline-variant/10 bg-surface-container-lowest px-4 py-3 cursor-pointer">
 <input name="in-genero" value="Action" class="rounded text-primary focus:ring-primary/20 bg-transparent border-outline-variant" type="checkbox"/>
-<span class="text-xs font-medium text-on-surface-variant">Acción</span>
+<span class="text-xs font-medium text-on-surface-variant leading-tight">Action</span>
 </label>
-<label class="group flex items-center gap-2 bg-surface-container-lowest px-4 py-2 rounded-full border border-outline-variant/10 cursor-pointer">
+<label class="group flex min-h-[48px] w-full items-center gap-2 rounded-2xl border border-outline-variant/10 bg-surface-container-lowest px-4 py-3 cursor-pointer">
 <input name="in-genero" value="Adventure" class="rounded text-primary focus:ring-primary/20 bg-transparent border-outline-variant" type="checkbox"/>
-<span class="text-xs font-medium text-on-surface-variant">Aventura</span>
+<span class="text-xs font-medium text-on-surface-variant leading-tight">Adventure</span>
 </label>
-<label class="group flex items-center gap-2 bg-surface-container-lowest px-4 py-2 rounded-full border border-outline-variant/10 cursor-pointer">
-<input name="in-genero" value="Romance" class="rounded text-primary focus:ring-primary/20 bg-transparent border-outline-variant" type="checkbox"/>
-<span class="text-xs font-medium text-on-surface-variant">Romance</span>
+<label class="group flex min-h-[48px] w-full items-center gap-2 rounded-2xl border border-outline-variant/10 bg-surface-container-lowest px-4 py-3 cursor-pointer">
+<input name="in-genero" value="Avant Garde" class="rounded text-primary focus:ring-primary/20 bg-transparent border-outline-variant" type="checkbox"/>
+<span class="text-xs font-medium text-on-surface-variant leading-tight">Avant Garde</span>
 </label>
-<label class="group flex items-center gap-2 bg-surface-container-lowest px-4 py-2 rounded-full border border-outline-variant/10 cursor-pointer">
-<input name="in-genero" value="Sci-Fi" class="rounded text-primary focus:ring-primary/20 bg-transparent border-outline-variant" type="checkbox"/>
-<span class="text-xs font-medium text-on-surface-variant">Sci-Fi</span>
+<label class="group flex min-h-[48px] w-full items-center gap-2 rounded-2xl border border-outline-variant/10 bg-surface-container-lowest px-4 py-3 cursor-pointer">
+<input name="in-genero" value="Award Winning" class="rounded text-primary focus:ring-primary/20 bg-transparent border-outline-variant" type="checkbox"/>
+<span class="text-xs font-medium text-on-surface-variant leading-tight">Award Winning</span>
 </label>
-<label class="group flex items-center gap-2 bg-surface-container-lowest px-4 py-2 rounded-full border border-outline-variant/10 cursor-pointer">
+<label class="group flex min-h-[48px] w-full items-center gap-2 rounded-2xl border border-outline-variant/10 bg-surface-container-lowest px-4 py-3 cursor-pointer">
+<input name="in-genero" value="Comedy" class="rounded text-primary focus:ring-primary/20 bg-transparent border-outline-variant" type="checkbox"/>
+<span class="text-xs font-medium text-on-surface-variant leading-tight">Comedy</span>
+</label>
+<label class="group flex min-h-[48px] w-full items-center gap-2 rounded-2xl border border-outline-variant/10 bg-surface-container-lowest px-4 py-3 cursor-pointer">
 <input name="in-genero" value="Drama" class="rounded text-primary focus:ring-primary/20 bg-transparent border-outline-variant" type="checkbox"/>
-<span class="text-xs font-medium text-on-surface-variant">Drama</span>
+<span class="text-xs font-medium text-on-surface-variant leading-tight">Drama</span>
 </label>
-<label class="group flex items-center gap-2 bg-surface-container-lowest px-4 py-2 rounded-full border border-outline-variant/10 cursor-pointer">
+<label class="group flex min-h-[48px] w-full items-center gap-2 rounded-2xl border border-outline-variant/10 bg-surface-container-lowest px-4 py-3 cursor-pointer">
 <input name="in-genero" value="Fantasy" class="rounded text-primary focus:ring-primary/20 bg-transparent border-outline-variant" type="checkbox"/>
-<span class="text-xs font-medium text-on-surface-variant">Fantasía</span>
+<span class="text-xs font-medium text-on-surface-variant leading-tight">Fantasy</span>
+</label>
+<label class="group flex min-h-[48px] w-full items-center gap-2 rounded-2xl border border-outline-variant/10 bg-surface-container-lowest px-4 py-3 cursor-pointer">
+<input name="in-genero" value="Horror" class="rounded text-primary focus:ring-primary/20 bg-transparent border-outline-variant" type="checkbox"/>
+<span class="text-xs font-medium text-on-surface-variant leading-tight">Horror</span>
+</label>
+<label class="group flex min-h-[48px] w-full items-center gap-2 rounded-2xl border border-outline-variant/10 bg-surface-container-lowest px-4 py-3 cursor-pointer">
+<input name="in-genero" value="Mystery" class="rounded text-primary focus:ring-primary/20 bg-transparent border-outline-variant" type="checkbox"/>
+<span class="text-xs font-medium text-on-surface-variant leading-tight">Mystery</span>
+</label>
+<label class="group flex min-h-[48px] w-full items-center gap-2 rounded-2xl border border-outline-variant/10 bg-surface-container-lowest px-4 py-3 cursor-pointer">
+<input name="in-genero" value="Romance" class="rounded text-primary focus:ring-primary/20 bg-transparent border-outline-variant" type="checkbox"/>
+<span class="text-xs font-medium text-on-surface-variant leading-tight">Romance</span>
+</label>
+<label class="group flex min-h-[48px] w-full items-center gap-2 rounded-2xl border border-outline-variant/10 bg-surface-container-lowest px-4 py-3 cursor-pointer">
+<input name="in-genero" value="Sci-Fi" class="rounded text-primary focus:ring-primary/20 bg-transparent border-outline-variant" type="checkbox"/>
+<span class="text-xs font-medium text-on-surface-variant leading-tight">Sci-Fi</span>
+</label>
+<label class="group flex min-h-[48px] w-full items-center gap-2 rounded-2xl border border-outline-variant/10 bg-surface-container-lowest px-4 py-3 cursor-pointer">
+<input name="in-genero" value="Slice of Life" class="rounded text-primary focus:ring-primary/20 bg-transparent border-outline-variant" type="checkbox"/>
+<span class="text-xs font-medium text-on-surface-variant leading-tight">Slice of Life</span>
+</label>
+<label class="group flex min-h-[48px] w-full items-center gap-2 rounded-2xl border border-outline-variant/10 bg-surface-container-lowest px-4 py-3 cursor-pointer">
+<input name="in-genero" value="Sports" class="rounded text-primary focus:ring-primary/20 bg-transparent border-outline-variant" type="checkbox"/>
+<span class="text-xs font-medium text-on-surface-variant leading-tight">Sports</span>
+</label>
+<label class="group flex min-h-[48px] w-full items-center gap-2 rounded-2xl border border-outline-variant/10 bg-surface-container-lowest px-4 py-3 cursor-pointer">
+<input name="in-genero" value="Supernatural" class="rounded text-primary focus:ring-primary/20 bg-transparent border-outline-variant" type="checkbox"/>
+<span class="text-xs font-medium text-on-surface-variant leading-tight">Supernatural</span>
 </label>
 </div>
 </div>
 <!-- Actions -->
 <div class="bg-surface-container-high p-4 rounded-lg flex flex-col gap-3 mt-4">
 <button class="w-full py-4 bg-gradient-to-br from-[#cdbdff] to-[#4f00d0] text-white rounded-full font-headline font-extrabold text-sm uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all shadow-lg shadow-primary/20" type="submit">
-                            Subir Anime
+                            <span id="submit-label">Subir Anime</span>
                         </button>
 </div>
 </div>
@@ -178,15 +250,137 @@
 </div>
 <script>
   (function () {
-    const form = document.getElementById('form-añadir');
+    const form = document.getElementById('form-a?adir') || document.querySelector('form[id^="form-a"]');
     const toast = document.querySelector('[data-admin-save-toast]');
+    const typeInput = document.getElementById('in-tipo');
+    const typeButtons = Array.from(document.querySelectorAll('[data-type-option]'));
+    const pageTitle = document.getElementById('add-page-title');
+    const pageSubtitle = document.getElementById('add-page-subtitle');
+    const labelTitulo = document.getElementById('label-titulo');
+    const tituloInput = document.getElementById('in-titulo');
+    const submitLabel = document.getElementById('submit-label');
     let isDirty = false;
+    const imageInput = document.getElementById('in-imagen');
+    const trailerInput = document.getElementById('in-trailer');
+    const posterPreviewImage = document.getElementById('poster-preview-image');
+    const posterPreviewEmpty = document.getElementById('poster-preview-empty');
+    const trailerPreviewEmbed = document.getElementById('trailer-preview-embed');
+    const trailerPreviewEmpty = document.getElementById('trailer-preview-empty');
+    const mediaTabButtons = Array.from(document.querySelectorAll('[data-media-tab]'));
+    const mediaPosterPanel = document.getElementById('media-panel-poster');
+    const mediaTrailerPanel = document.getElementById('media-panel-trailer');
+
+    const resetPosterPreview = () => {
+      if (!posterPreviewImage || !posterPreviewEmpty) return;
+      posterPreviewImage.classList.add('hidden');
+      posterPreviewImage.removeAttribute('src');
+      posterPreviewEmpty.classList.remove('hidden');
+    };
+
+    const updatePosterPreview = () => {
+      const value = String(imageInput?.value || '').trim();
+      if (!posterPreviewImage || !posterPreviewEmpty) return;
+      if (!value) {
+        resetPosterPreview();
+        return;
+      }
+      posterPreviewImage.onload = () => {
+        posterPreviewImage.classList.remove('hidden');
+        posterPreviewEmpty.classList.add('hidden');
+      };
+      posterPreviewImage.onerror = () => {
+        resetPosterPreview();
+      };
+      posterPreviewImage.src = value;
+    };
+
+    const toEmbedUrl = (value) => {
+      const url = String(value || '').trim();
+      if (!url) return '';
+      const watchMatch = url.match(/[?&]v=([^&]+)/);
+      if (watchMatch) return `https://www.youtube.com/embed/${watchMatch[1]}`;
+      const shortMatch = url.match(/youtu\.be\/([^?&/]+)/);
+      if (shortMatch) return `https://www.youtube.com/embed/${shortMatch[1]}`;
+      const embedMatch = url.match(/youtube\.com\/embed\/([^?&/]+)/);
+      if (embedMatch) return `https://www.youtube.com/embed/${embedMatch[1]}`;
+      return url;
+    };
+
+    const resetTrailerPreview = () => {
+      if (!trailerPreviewEmbed || !trailerPreviewEmpty) return;
+      trailerPreviewEmbed.classList.add('hidden');
+      trailerPreviewEmbed.removeAttribute('src');
+      trailerPreviewEmpty.classList.remove('hidden');
+    };
+
+    const updateTrailerPreview = () => {
+      const value = toEmbedUrl(trailerInput?.value || '');
+      if (!trailerPreviewEmbed || !trailerPreviewEmpty) return;
+      if (!value) {
+        resetTrailerPreview();
+        return;
+      }
+      trailerPreviewEmbed.src = value;
+      trailerPreviewEmbed.classList.remove('hidden');
+      trailerPreviewEmpty.classList.add('hidden');
+    };
+
+    const setMediaTab = (tab) => {
+      const showTrailer = tab === 'trailer';
+      mediaPosterPanel?.classList.toggle('hidden', showTrailer);
+      mediaTrailerPanel?.classList.toggle('hidden', !showTrailer);
+      mediaTabButtons.forEach((btn) => {
+        const active = btn.dataset.mediaTab === tab;
+        btn.classList.toggle('border-primary/40', active);
+        btn.classList.toggle('bg-primary/15', active);
+        btn.classList.toggle('text-primary', active);
+        btn.classList.toggle('border-outline-variant/30', !active);
+        btn.classList.toggle('bg-surface-container-lowest', !active);
+        btn.classList.toggle('text-on-surface-variant', !active);
+      });
+    };
+
+    const applyTypeUI = (type) => {
+      const isMovie = type === 'pelicula';
+      if (typeInput) typeInput.value = isMovie ? 'pelicula' : 'anime';
+      typeButtons.forEach((btn) => {
+        const active = btn.dataset.typeOption === (isMovie ? 'pelicula' : 'anime');
+        btn.classList.toggle('border-primary/40', active);
+        btn.classList.toggle('bg-primary/15', active);
+        btn.classList.toggle('text-primary', active);
+        btn.classList.toggle('border-outline-variant/30', !active);
+        btn.classList.toggle('bg-surface-container-lowest', !active);
+        btn.classList.toggle('text-on-surface-variant', !active);
+      });
+      if (pageTitle) pageTitle.textContent = isMovie ? 'Añadir Nueva Película' : 'Añadir Nuevo Anime';
+      if (pageSubtitle) pageSubtitle.textContent = isMovie ? 'Completa los detalles para catalogar una nueva película.' : 'Completa los detalles para catalogar una nueva obra maestra.';
+      if (labelTitulo) labelTitulo.textContent = isMovie ? 'Título de la Película' : 'Título del Anime';
+      if (tituloInput) tituloInput.placeholder = isMovie ? 'Ej: Koe no Katachi' : 'Ej: Neon Genesis Evangelion';
+      if (submitLabel) submitLabel.textContent = isMovie ? 'Subir Película' : 'Subir Anime';
+    };
+
+    typeButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        applyTypeUI(btn.dataset.typeOption);
+        isDirty = true;
+      });
+    });
+    mediaTabButtons.forEach((btn) => {
+      btn.addEventListener('click', () => setMediaTab(btn.dataset.mediaTab || 'poster'));
+    });
+
+    applyTypeUI(typeInput?.value || 'anime');
+    setMediaTab('poster');
 
     form.addEventListener('input', () => { isDirty = true; }, true);
+    imageInput?.addEventListener('input', updatePosterPreview);
+    trailerInput?.addEventListener('input', updateTrailerPreview);
+    updatePosterPreview();
+    updateTrailerPreview();
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      
+
       const btn = form.querySelector('[type="submit"]');
       const textOrig = btn.innerText;
       btn.innerText = 'PROCESANDO...';
@@ -196,13 +390,16 @@
       const generos = Array.from(generosChecks).map(cb => cb.value);
 
       const payload = {
+        tipo_contenido: typeInput?.value || 'anime',
         titulo: document.getElementById('in-titulo').value,
         sinopsis: document.getElementById('in-sinopsis').value,
+        tipo_formato: document.getElementById('in-tipo-formato').value,
         estado: document.getElementById('in-estado').value,
         temporada: document.getElementById('in-temporada').value,
         anio: document.getElementById('in-anio').value,
         episodios: document.getElementById('in-episodios').value,
         imagen_url: document.getElementById('in-imagen').value,
+        trailer_url: document.getElementById('in-trailer').value,
         generos: generos
       };
 
@@ -213,18 +410,19 @@
           body: JSON.stringify(payload)
         });
         const data = await res.json();
-        
+
         if (data.success) {
-            isDirty = false;
-            toast.classList.remove('hidden');
-            toast.classList.add('flex');
-            form.reset();
-            setTimeout(() => {
-                toast.classList.add('hidden');
-                toast.classList.remove('flex');
-            }, 3000);
+          isDirty = false;
+          toast.classList.remove('hidden');
+          toast.classList.add('flex');
+          form.reset();
+          applyTypeUI('anime');
+          setTimeout(() => {
+            toast.classList.add('hidden');
+            toast.classList.remove('flex');
+          }, 3000);
         } else {
-            alert('Error del Servidor: ' + data.error);
+          alert('Error del Servidor: ' + data.error);
         }
       } catch (err) {
         console.error(err);
@@ -236,5 +434,6 @@
     });
   })();
 </script>
-<script src="controllers/admin-layout.js"></script>
+<script src="controllers/admin-layout.js?v=20260330a"></script>
 </body></html>
+

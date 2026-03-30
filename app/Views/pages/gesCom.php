@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html class="dark" lang="es"><head>
 <link rel="icon" href="img/icon3.png" />
 <meta charset="utf-8"/>
@@ -244,13 +244,13 @@
     <div class="flex items-start justify-between gap-4">
       <div>
         <p class="text-[11px] uppercase tracking-[0.28em] text-amber-300/80">Marcar como revisado</p>
-        <h3 class="mt-2 text-2xl font-headline font-extrabold text-on-surface">Confirmar revisión</h3>
+        <h3 class="mt-2 text-2xl font-headline font-extrabold text-on-surface">Confirmar revisiÃ³n</h3>
       </div>
       <button class="flex h-11 w-11 items-center justify-center rounded-full bg-white/5 text-on-surface-variant transition hover:bg-white/10 hover:text-on-surface" data-comments-review-close type="button">
         <span class="material-symbols-outlined">close</span>
       </button>
     </div>
-    <p class="mt-5 text-sm leading-6 text-on-surface-variant">¿Deseas marcar este comentario como revisado? Luego de hacerlo no se podrá cambiar.</p>
+    <p class="mt-5 text-sm leading-6 text-on-surface-variant">Â¿Deseas marcar este comentario como revisado? Luego de hacerlo no se podrÃ¡ cambiar.</p>
     <div class="mt-4 rounded-2xl border border-white/8 bg-white/4 px-4 py-4">
       <p class="text-xs uppercase tracking-[0.2em] text-on-surface-variant">Comentario seleccionado</p>
       <p class="mt-2 text-sm font-semibold text-on-surface" data-comments-review-user>@usuario</p>
@@ -266,13 +266,13 @@
     <div class="flex items-start justify-between gap-4">
       <div>
         <p class="text-[11px] uppercase tracking-[0.28em] text-error/80">Eliminar comentario</p>
-        <h3 class="mt-2 text-2xl font-headline font-extrabold text-on-surface">Confirmar eliminación</h3>
+        <h3 class="mt-2 text-2xl font-headline font-extrabold text-on-surface">Confirmar eliminaciÃ³n</h3>
       </div>
       <button class="flex h-11 w-11 items-center justify-center rounded-full bg-white/5 text-on-surface-variant transition hover:bg-white/10 hover:text-on-surface" data-comments-delete-close type="button">
         <span class="material-symbols-outlined">close</span>
       </button>
     </div>
-    <p class="mt-5 text-sm leading-6 text-on-surface-variant">¿Deseas eliminar este comentario para siempre? Esta acción borrará el comentario de la base de datos.</p>
+    <p class="mt-5 text-sm leading-6 text-on-surface-variant">Â¿Deseas eliminar este comentario para siempre? Esta acciÃ³n borrarÃ¡ el comentario de la base de datos.</p>
     <div class="mt-4 rounded-2xl border border-white/8 bg-white/4 px-4 py-4">
       <p class="text-xs uppercase tracking-[0.2em] text-on-surface-variant">Comentario seleccionado</p>
       <p class="mt-2 text-sm font-semibold text-on-surface" data-comments-delete-user>@usuario</p>
@@ -797,8 +797,9 @@
     });
   })();
 </script>
-<script src="controllers/admin-layout.js"></script>
+<script src="controllers/admin-layout.js?v=20260330a"></script>
 </body></html>
+
 
 
 

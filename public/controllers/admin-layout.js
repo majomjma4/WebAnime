@@ -38,39 +38,7 @@
   function initAdminButtons() {
     if (document.querySelector('[data-admin-pagination-script]')) return;
 
-    const toast = document.createElement('div');
-    toast.id = 'admin-toast';
-    toast.style.cssText = [
-      'position:fixed',
-      'left:50%',
-      'top:24px',
-      'transform:translateX(-50%)',
-      'background:rgba(17,24,39,0.95)',
-      'color:#e7e5e4',
-      'padding:10px 16px',
-      'border-radius:999px',
-      'font-size:12px',
-      'letter-spacing:0.08em',
-      'text-transform:uppercase',
-      'border:1px solid rgba(124,77,255,0.4)',
-      'box-shadow:0 12px 30px rgba(0,0,0,0.35)',
-      'opacity:0',
-      'pointer-events:none',
-      'transition:opacity 0.2s ease'
-    ].join(';');
-    toast.textContent = 'Funci?n en desarrollo';
-    document.body.appendChild(toast);
-
-    let toastTimer = null;
-    const showToast = () => {
-  const basePath = window.location.pathname.includes('/views/') ? '../' : '';
-      toast.style.opacity = '1';
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => {
-  const basePath = window.location.pathname.includes('/views/') ? '../' : '';
-        toast.style.opacity = '0';
-      }, 1400);
-    };
+    const showToast = () => {};
 
     const externalPagination = document.querySelector('[data-admin-pagination-script]');
     const rows = Array.from(document.querySelectorAll('[data-admin-request-row]'));
@@ -267,7 +235,6 @@
       if (pageKey === 'comments' || pageKey === 'users' || pageKey === 'manage') {
         return;
       }
-      showToast();
     });
 
     const searchInput = document.querySelector('[data-admin-search]');

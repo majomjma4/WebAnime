@@ -1,4 +1,4 @@
-ï»¿<!DOCTYPE html>
+﻿Ã¯Â»Â¿<!DOCTYPE html>
 
 <html class="dark" lang="en"><head>
 <link rel="icon" href="img/icon3.png" />
@@ -186,7 +186,7 @@
         <button class="rounded-full bg-surface-container-high w-9 h-9 flex items-center justify-center text-on-surface-variant hover:text-on-surface" type="button" data-admin-approved-search-toggle>
           <span class="material-symbols-outlined text-[18px]">search</span>
         </button>
-        <input class="hidden bg-surface-container-low text-on-surface text-xs rounded-full py-2 px-4 w-64 border-none focus:ring-1 ring-primary/20 transition-all placeholder:text-on-surface-variant/50" placeholder="Buscar (título o fecha)..." data-admin-approved-search />
+        <input class="hidden bg-surface-container-low text-on-surface text-xs rounded-full py-2 px-4 w-64 border-none focus:ring-1 ring-primary/20 transition-all placeholder:text-on-surface-variant/50" placeholder="Buscar (tÃ­tulo o fecha)..." data-admin-approved-search />
         <button class="rounded-full bg-surface-container-high w-9 h-9 flex items-center justify-center text-on-surface-variant hover:text-on-surface" type="button" data-admin-approved-close>
           <span class="material-symbols-outlined text-[18px]">close</span>
         </button>
@@ -221,7 +221,7 @@
         <button class="rounded-full bg-surface-container-high w-9 h-9 flex items-center justify-center text-on-surface-variant hover:text-on-surface" type="button" data-admin-rejected-search-toggle>
           <span class="material-symbols-outlined text-[18px]">search</span>
         </button>
-        <input class="hidden bg-surface-container-low text-on-surface text-xs rounded-full py-2 px-4 w-64 border-none focus:ring-1 ring-primary/20 transition-all placeholder:text-on-surface-variant/50" placeholder="Buscar (título o fecha)..." data-admin-rejected-search />
+        <input class="hidden bg-surface-container-low text-on-surface text-xs rounded-full py-2 px-4 w-64 border-none focus:ring-1 ring-primary/20 transition-all placeholder:text-on-surface-variant/50" placeholder="Buscar (tÃ­tulo o fecha)..." data-admin-rejected-search />
         <button class="rounded-full bg-surface-container-high w-9 h-9 flex items-center justify-center text-on-surface-variant hover:text-on-surface" type="button" data-admin-rejected-close>
           <span class="material-symbols-outlined text-[18px]">close</span>
         </button>
@@ -268,7 +268,7 @@
 
 </div>
 </main>
-<script src="controllers/admin-layout.js"></script>
+<script src="controllers/admin-layout.js?v=20260330a"></script>
 <script data-admin-pagination-script>
 (function () {
   function initAdmin() {
@@ -817,6 +817,7 @@
 })();
 </script>
 </body></html>
+
 
 
 

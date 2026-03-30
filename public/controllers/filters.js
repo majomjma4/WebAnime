@@ -642,7 +642,7 @@
 
     if (isMoviesPage) {
 
-      // Move duration badge to bottom-left and remove "Pel?cula" label.
+      // Move duration badge to bottom-left and remove "Película" label.
 
       cards.forEach((card) => {
 
@@ -1914,8 +1914,8 @@
     }
 
     const movieCardsNeeded = [
-      { endpoint: 'top/anime?type=movie&limit=10', pick: 0, type: 'Pel?cula original', status: 'Finalizado' },
-      { endpoint: 'anime?status=upcoming&type=movie&order_by=popularity&sort=asc&limit=1', pick: 0, type: 'Basada en serie', status: 'Pr?ximamente' },
+      { endpoint: 'top/anime?type=movie&limit=10', pick: 0, type: 'Película original', status: 'Finalizado' },
+      { endpoint: 'anime?status=upcoming&type=movie&order_by=popularity&sort=asc&limit=1', pick: 0, type: 'Basada en serie', status: 'Próximamente' },
       { endpoint: 'top/anime?type=movie&limit=10', pick: 1, type: 'Recopilatoria', status: 'En cartelera' },
       { endpoint: 'top/anime?type=movie&limit=10', pick: 2, type: 'Secuela', status: 'Cancelado' },
       { endpoint: 'top/anime?type=movie&limit=10', pick: 3, type: 'Precuela', status: 'Retrasado' },
