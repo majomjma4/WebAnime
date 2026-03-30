@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="dark" lang="es">
 
 <head>
@@ -761,7 +761,6 @@
             <option value="Anime">Anime</option>
             <option value="Película">Película</option>
           </select>
-        </div>
         <div class="flex items-center justify-end gap-2 pt-1">
           <button type="button" data-request-close
             class="rounded-full border border-white/10 bg-surface-container-low/70 px-4 py-2 text-xs font-bold uppercase tracking-widest text-on-surface-variant hover:text-on-surface transition-colors">Cancelar</button>
