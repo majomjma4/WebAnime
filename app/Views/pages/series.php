@@ -418,7 +418,42 @@
                   $dbGenres = $genreStmt->fetchAll(PDO::FETCH_COLUMN);
                   echo "<script>window.DB_GENRES = " . json_encode($dbGenres) . ";</script>";
 
-                  $stmt = $dbConn->prepare("SELECT * FROM anime WHERE tipo != 'Movie' AND id NOT IN (SELECT anime_id FROM anime_generos WHERE genero_id IN (SELECT id FROM generos WHERE nombre IN ('Hentai', 'Erotica', 'Ecchi', 'Yaoi', 'Yuri', 'Girls Love', 'Boys Love'))) ORDER BY puntuacion DESC, id DESC");
+                  $stmt = $dbConn->prepare("
+                    SELECT *
+                    FROM anime
+                    WHERE tipo != 'Movie'
+                      AND id NOT IN (
+                        SELECT anime_id
+                        FROM anime_generos
+                        WHERE genero_id IN (
+                          SELECT id
+                          FROM generos
+                          WHERE nombre IN ('Hentai', 'Erotica', 'Ecchi', 'Yaoi', 'Yuri', 'Girls Love', 'Boys Love')
+                        )
+                      )
+                    ORDER BY
+                      CASE
+                        WHEN titulo LIKE 'Shingeki no Kyojin%' THEN 0
+                        WHEN titulo = 'Fullmetal Alchemist: Brotherhood' THEN 1
+                        WHEN titulo = 'Steins;Gate' THEN 2
+                        WHEN titulo LIKE 'Hunter x Hunter%' THEN 3
+                        WHEN titulo LIKE 'Kimetsu no Yaiba%' THEN 4
+                        WHEN titulo LIKE 'Jujutsu Kaisen%' THEN 5
+                        WHEN titulo LIKE 'Chainsaw Man%' THEN 6
+                        WHEN titulo LIKE 'Spy x Family%' THEN 7
+                        WHEN titulo LIKE 'Haikyuu!!%' THEN 8
+                        WHEN titulo LIKE 'Boku no Hero Academia%' THEN 9
+                        WHEN titulo LIKE 'One Piece%' THEN 10
+                        WHEN titulo LIKE 'Naruto%' THEN 11
+                        WHEN titulo LIKE 'Bleach%' THEN 12
+                        WHEN titulo LIKE 'Sousou no Frieren%' THEN 13
+                        WHEN titulo = 'Gintama' THEN 80
+                        WHEN titulo LIKE 'Gintama%' THEN 90
+                        ELSE 40
+                      END ASC,
+                      puntuacion DESC,
+                      id DESC
+                  ");
                   $stmt->execute();
                   $animes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -441,7 +476,7 @@
                        data-type="<?= htmlspecialchars($a['tipo']) ?>" 
                        data-status="<?= htmlspecialchars($a['estado'] ?? 'Desconocido') ?>"
                        data-mal-id="<?= htmlspecialchars($a['mal_id'] ?? '') ?>">
-                <a class="block" href="detail.php?id=<?= $a['id'] ?>" aria-label="<?= htmlspecialchars($a['titulo']) ?>">
+                <a class="block" href="detail.php?mal_id=<?= urlencode((string)($a['mal_id'] ?? $a['id'])) ?>&q=<?= urlencode((string)$a['titulo']) ?>" aria-label="<?= htmlspecialchars($a['titulo']) ?>" data-mal-id="<?= htmlspecialchars((string)($a['mal_id'] ?? $a['id'])) ?>">
                   <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
                     <img alt="<?= htmlspecialchars($a['titulo']) ?>" 
                          class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" 

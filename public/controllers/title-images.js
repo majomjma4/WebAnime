@@ -473,8 +473,13 @@
   async function applyAnimesPage() {
     const cards = cardsBySelector("[data-anime-card]");
     if (!cards.length) return;
-    const items = await fetchTop("tv", cards.length);
-    applyItemsToCards(cards, items, "tv");
+
+    // En series.php conservamos los datos renderizados por la base local
+    // para evitar mezclar portadas, titulos y enlaces al refrescar.
+    cards.forEach((card) => {
+      const img = card.querySelector("img");
+      if (img) applyImageFallback(img);
+    });
   }
 
   function loadMovieCache() {

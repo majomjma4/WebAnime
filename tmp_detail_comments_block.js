@@ -1,5 +1,4 @@
-﻿<?php
-session_start();
+ession_start();
 $isLoggedIn = isset($_SESSION['user_id']);
 $sessionRole = $_SESSION['role'] ?? 'Invitado';
 $sessionPremium = !empty($_SESSION['premium']) || $sessionRole === 'Admin';
@@ -967,7 +966,7 @@ endif; ?>
       const filtered = filterRating ? items.filter((item) => Number(item.rating) === filterRating) : items;
       total.textContent = `${filtered.length} comentario${filtered.length === 1 ? "" : "s"}`;
       if (!filtered.length) {
-        list.innerHTML = '<div class="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-on-surface-variant">Todavía no hay comentarios para este filtro.</div>';
+        list.innerHTML = '<div class="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-on-surface-variant">Todav?a no hay comentarios para este filtro.</div>';
         if (moreWrap) moreWrap.classList.add("hidden");
         return;
       }
@@ -986,11 +985,11 @@ endif; ?>
         const reportLabel = item.flagged ? "Reportado" : "Reportar";
         const canReport = isLogged && Number(item.id || 0) > 0;
         const reportClasses = item.flagged
-          ? "inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-on-surface-variant cursor-default"
+          ? "inline-flex h-9 w-9 items-center justify-center rounded-full border border-rose-400/30 bg-rose-500/12 text-rose-300 cursor-default"
           : "inline-flex h-9 w-9 items-center justify-center rounded-full border border-sky-400/20 bg-sky-500/10 text-sky-200 transition-all duration-200 hover:-translate-y-0.5 hover:border-sky-300/50 hover:bg-sky-400/20 hover:text-sky-100";
         const deleteClasses = "inline-flex h-9 w-9 items-center justify-center rounded-full border border-rose-400/20 bg-rose-500/10 text-rose-300 transition-all duration-200 hover:-translate-y-0.5 hover:border-rose-300/50 hover:bg-rose-400/20 hover:text-rose-100";
         return `
-          <div class="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-2">
+          <div class="rounded-2xl border ${item.flagged ? "border-rose-400/35 bg-rose-500/10" : "border-white/10 bg-white/5"} p-4 space-y-2">
             <div class="flex items-center justify-between gap-3">
               <div>
                 ${authorHtml}
@@ -1004,6 +1003,7 @@ endif; ?>
                 </div>
               </div>
             </div>
+            ${item.flagged ? `<p class="text-xs font-semibold uppercase tracking-widest text-rose-200">Reportado${item.reportReason ? `: ${item.reportReason}` : ""}</p>` : ""}
             <p class="text-sm text-on-surface leading-relaxed">${item.text}</p>
           </div>`;
       }).join("");
@@ -1295,372 +1295,8 @@ endif; ?>
     initDetail();
   })();
     </script>
-    
-    <script id="detail-comments-fix">
-      (function(){
-        const section = document.getElementById("comments-section");
-        const form = document.getElementById("comment-form");
-        const list = document.getElementById("comments-list");
-        const total = document.getElementById("comments-total");
-        const filterSelect = document.getElementById("comments-filter");
-        const moreWrap = document.getElementById("comments-more-wrap");
-        const moreBtn = document.getElementById("comments-more");
-        const textarea = document.getElementById("comment-text");
-        const count = document.getElementById("comment-count");
-        const error = document.getElementById("comment-error");
-        const ratingValue = document.getElementById("rating-value");
-        const submitBtn = document.getElementById("comment-submit");
-        const stars = Array.from(document.querySelectorAll(".comment-star"));
-        const starsWrap = document.getElementById("rating-stars");
-        const reportModal = document.getElementById("report-modal");
-        const reportClose = document.getElementById("report-close");
-        const reportCancel = document.getElementById("report-cancel");
-        const reportSubmit = document.getElementById("report-submit");
-        const reportSnippet = document.getElementById("report-snippet");
-        const reportOtherWrap = document.getElementById("report-other-wrap");
-        const reportOtherText = document.getElementById("report-other-text");
-        const reportOtherError = document.getElementById("report-other-error");
-        const deleteModal = document.getElementById("delete-comment-modal");
-        const deleteClose = document.getElementById("delete-comment-close");
-        const deleteCancel = document.getElementById("delete-comment-cancel");
-        const deleteConfirm = document.getElementById("delete-comment-confirm");
-        if (!section || !form || !list || !total || !textarea || !submitBtn || !ratingValue) return;
-
-        const isLogged = <?= $isLoggedIn ? "true" : "false" ?>;
-        const isPremium = <?= $sessionPremium ? "true" : "false" ?>;
-        const sessionUsername = <?= json_encode((string)($_SESSION['username'] ?? '')) ?>;
-        const sessionRole = <?= json_encode((string)($_SESSION['role'] ?? 'Invitado')) ?>;
-
-        let rating = 0;
-        let hoverRating = 0;
-        let filterRating = 0;
-        let visibleCount = 3;
-        let pendingDeleteId = 0;
-        let pendingReportId = 0;
-        let pendingReportButton = null;
-        let commentsCache = [];
-
-        const getAnimeId = () => {
-          const params = new URLSearchParams(window.location.search);
-          const candidates = [
-            params.get("mal_id"),
-            params.get("id"),
-            document.body?.dataset?.detailId,
-            document.documentElement?.dataset?.detailId
-          ];
-          const found = candidates.find((value) => value && /^\d+$/.test(String(value)));
-          return found ? String(found) : "";
-        };
-
-        const waitForAnimeId = async (retries = 24, delayMs = 250) => {
-          let current = getAnimeId();
-          while (!current && retries > 0) {
-            await new Promise((resolve) => setTimeout(resolve, delayMs));
-            retries -= 1;
-            current = getAnimeId();
-          }
-          return current;
-        };
-
-        const normalizeUser = (value) => `@${String(value || "").trim().replace(/^@+/, "")}`;
-        const canDeleteComment = (item) => {
-          const role = String(sessionRole || "").toLowerCase();
-          return isLogged && (normalizeUser(item.user) === normalizeUser(sessionUsername) || role === "admin" || role === "administrador");
-        };
-        const canReportComment = (item) => isLogged && Number(item.id || 0) > 0 && normalizeUser(item.user) !== normalizeUser(sessionUsername);
-
-        const paintStars = (value, isHoverMode) => {
-          stars.forEach((btn) => {
-            const val = Number(btn.dataset.star || 0);
-            const active = val <= value;
-            btn.classList.toggle("text-yellow-300", active && isHoverMode);
-            btn.classList.toggle("text-yellow-400", active && !isHoverMode);
-            btn.classList.toggle("text-on-surface-variant", !active);
-            const icon = btn.querySelector(".material-symbols-outlined");
-            if (icon) icon.classList.toggle("-translate-y-0.5", active);
-          });
-        };
-
-        const updateSubmitState = () => {
-          const disabled = rating === 0 || !textarea.value.trim() || (!isPremium && String(sessionRole) !== "Admin");
-          submitBtn.disabled = disabled;
-          submitBtn.classList.toggle("opacity-50", disabled);
-          submitBtn.classList.toggle("pointer-events-none", disabled);
-        };
-
-        const updateCount = () => {
-          count.textContent = `${textarea.value.length}/400`;
-          updateSubmitState();
-        };
-
-        const renderEmpty = (message) => {
-          total.textContent = "0 comentarios";
-          list.innerHTML = `<div class="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-on-surface-variant">${message}</div>`;
-          moreWrap?.classList.add("hidden");
-        };
-
-        const fetchComments = async () => {
-          const animeId = await waitForAnimeId();
-          if (!animeId) return [];
-          const res = await fetch(`api/comments.php?action=list&anime_mal_id=${encodeURIComponent(animeId)}`, {
-            cache: "no-store",
-            credentials: "same-origin"
-          });
-          if (!res.ok) return [];
-          const json = await res.json();
-          return json?.success && Array.isArray(json.data) ? json.data : [];
-        };
-
-        const renderComments = () => {
-          const filtered = filterRating ? commentsCache.filter((item) => Number(item.rating || 0) === filterRating) : commentsCache.slice();
-          total.textContent = `${filtered.length} comentario${filtered.length === 1 ? "" : "s"}`;
-          if (!filtered.length) {
-            list.innerHTML = '<div class="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-on-surface-variant">Todav?a no hay comentarios para este filtro.</div>';
-            moreWrap?.classList.add("hidden");
-            return;
-          }
-          const visible = filtered.slice(0, visibleCount);
-          list.innerHTML = visible.map((item) => {
-            const itemRating = Number(item.rating || 0);
-            const starsHtml = Array.from({ length: 5 }).map((_, i) => {
-              const on = i < itemRating;
-              return `<span class="material-symbols-outlined text-[16px] ${on ? "text-yellow-400" : "text-on-surface-variant"}" style="font-variation-settings: 'FILL' 1;">star</span>`;
-            }).join("");
-            const flagged = item.flagged === true || item.flagged === 1 || item.flagged === "1";
-            const reportClasses = flagged
-              ? "inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-on-surface-variant cursor-default"
-              : "inline-flex h-9 w-9 items-center justify-center rounded-full border border-sky-400/20 bg-sky-500/10 text-sky-200 transition-all duration-200 hover:-translate-y-0.5 hover:border-sky-300/50 hover:bg-sky-400/20 hover:text-sky-100";
-            const deleteClasses = "inline-flex h-9 w-9 items-center justify-center rounded-full border border-rose-400/20 bg-rose-500/10 text-rose-300 transition-all duration-200 hover:-translate-y-0.5 hover:border-rose-300/50 hover:bg-rose-400/20 hover:text-rose-100";
-            return `
-              <div class="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-2">
-                <div class="flex items-center justify-between gap-3">
-                  <div>
-                    <div class="text-sm font-semibold text-amber-200">${item.user || "@Usuario"}</div>
-                    <div class="flex items-center gap-1">${starsHtml}</div>
-                  </div>
-                  <div class="flex flex-col items-end gap-2">
-                    <span class="text-xs text-on-surface-variant">${item.date || ""}</span>
-                    <div class="flex items-center gap-2">
-                      ${canReportComment(item) ? `<button type="button" class="${reportClasses}" ${flagged ? "disabled" : ""} title="${flagged ? "Reportado" : "Reportar"}" aria-label="${flagged ? "Reportado" : "Reportar"}" data-comment-report data-comment-id="${Number(item.id || 0)}" data-comment-text="${String(item.msg || item.text || "").slice(0, 160).replace(/"/g, '&quot;')}"><span class="material-symbols-outlined text-[18px]">${flagged ? "flag" : "outlined_flag"}</span></button>` : ""}
-                      ${canDeleteComment(item) ? `<button type="button" class="${deleteClasses}" title="Eliminar" aria-label="Eliminar" data-comment-delete-id="${Number(item.id || 0)}"><span class="material-symbols-outlined text-[18px]">delete</span></button>` : ""}
-                    </div>
-                  </div>
-                </div>
-                <p class="text-sm text-on-surface leading-relaxed">${item.msg || item.text || ""}</p>
-              </div>`;
-          }).join("");
-
-          list.querySelectorAll("[data-comment-delete-id]").forEach((btn) => {
-            btn.addEventListener("click", () => {
-              pendingDeleteId = Number(btn.getAttribute("data-comment-delete-id") || 0);
-              if (!pendingDeleteId || !deleteModal) return;
-              deleteModal.classList.remove("hidden");
-              deleteModal.classList.add("flex");
-            });
-          });
-
-          list.querySelectorAll("[data-comment-report]").forEach((btn) => {
-            btn.addEventListener("click", () => {
-              pendingReportButton = btn;
-              pendingReportId = Number(btn.getAttribute("data-comment-id") || 0);
-              if (!pendingReportId || !reportModal) return;
-              reportSnippet.textContent = btn.getAttribute("data-comment-text") || "";
-              reportModal.classList.remove("hidden");
-              reportModal.classList.add("flex");
-              reportModal.querySelectorAll("input[name='report-reason']").forEach((input) => {
-                input.checked = false;
-              });
-              reportOtherWrap?.classList.add("hidden");
-              reportOtherError?.classList.add("hidden");
-              if (reportOtherText) reportOtherText.value = "";
-              reportSubmit?.classList.add("opacity-50", "pointer-events-none");
-            });
-          });
-
-          if (filtered.length > visibleCount) {
-            moreWrap?.classList.remove("hidden");
-          } else {
-            moreWrap?.classList.add("hidden");
-          }
-        };
-
-        const reloadComments = async () => {
-          try {
-            commentsCache = await fetchComments();
-            renderComments();
-          } catch {
-            renderEmpty("No se pudieron cargar los comentarios.");
-          }
-        };
-
-        const closeDelete = () => {
-          deleteModal?.classList.add("hidden");
-          deleteModal?.classList.remove("flex");
-          pendingDeleteId = 0;
-        };
-        const closeReport = () => {
-          reportModal?.classList.add("hidden");
-          reportModal?.classList.remove("flex");
-          reportOtherWrap?.classList.add("hidden");
-          reportOtherError?.classList.add("hidden");
-          if (reportOtherText) reportOtherText.value = "";
-          pendingReportId = 0;
-          pendingReportButton = null;
-        };
-
-        deleteModal?.addEventListener("click", (event) => { if (event.target === deleteModal) closeDelete(); });
-        deleteClose?.addEventListener("click", closeDelete);
-        deleteCancel?.addEventListener("click", closeDelete);
-        deleteConfirm?.addEventListener("click", async () => {
-          if (!pendingDeleteId) return;
-          const res = await fetch("api/comments.php?action=delete", {
-            method: "POST",
-            credentials: "same-origin",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ id: pendingDeleteId })
-          });
-          const json = await res.json();
-          if (!json?.success) {
-            alert(json?.error || "No se pudo eliminar el comentario.");
-            return;
-          }
-          closeDelete();
-          await reloadComments();
-        });
-
-        reportModal?.addEventListener("click", (event) => { if (event.target === reportModal) closeReport(); });
-        reportClose?.addEventListener("click", closeReport);
-        reportCancel?.addEventListener("click", closeReport);
-        reportModal?.querySelectorAll("input[name='report-reason']").forEach((input) => {
-          input.addEventListener("change", () => {
-            const isOther = input.checked && input.value === "Otro motivo";
-            reportOtherWrap?.classList.toggle("hidden", !isOther);
-            const needsText = isOther && !String(reportOtherText?.value || "").trim();
-            reportSubmit?.classList.toggle("opacity-50", needsText);
-            reportSubmit?.classList.toggle("pointer-events-none", needsText);
-            if (!needsText) reportSubmit?.classList.remove("opacity-50", "pointer-events-none");
-          });
-        });
-        reportOtherText?.addEventListener("input", () => {
-          const selected = reportModal?.querySelector("input[name='report-reason']:checked")?.value || "";
-          const needsText = selected === "Otro motivo" && !reportOtherText.value.trim();
-          reportOtherError?.classList.toggle("hidden", !needsText);
-          reportSubmit?.classList.toggle("opacity-50", needsText);
-          reportSubmit?.classList.toggle("pointer-events-none", needsText);
-          if (!needsText) reportSubmit?.classList.remove("opacity-50", "pointer-events-none");
-        });
-        reportSubmit?.addEventListener("click", async () => {
-          const selected = reportModal?.querySelector("input[name='report-reason']:checked")?.value || "";
-          if (!selected || !pendingReportId) return;
-          const reason = selected === "Otro motivo" ? String(reportOtherText?.value || "").trim() : selected;
-          if (!reason) {
-            reportOtherWrap?.classList.remove("hidden");
-            reportOtherError?.classList.remove("hidden");
-            return;
-          }
-          const res = await fetch("api/comments.php?action=report", {
-            method: "POST",
-            credentials: "same-origin",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ comment_id: pendingReportId, reason })
-          });
-          const json = await res.json();
-          if (!json?.success) {
-            alert(json?.error || "No se pudo reportar el comentario.");
-            return;
-          }
-          closeReport();
-          await reloadComments();
-        });
-
-        filterSelect?.addEventListener("change", () => {
-          filterRating = Number(filterSelect.value || 0);
-          visibleCount = 3;
-          renderComments();
-        });
-        moreBtn?.addEventListener("click", () => {
-          visibleCount += 3;
-          renderComments();
-        });
-
-        stars.forEach((btn) => {
-          btn.addEventListener("click", () => {
-            hoverRating = 0;
-            rating = Number(btn.dataset.star || 0);
-            paintStars(rating, false);
-            ratingValue.textContent = `${rating}/5`;
-            updateSubmitState();
-          });
-          btn.addEventListener("mouseenter", () => {
-            hoverRating = Number(btn.dataset.star || 0);
-            paintStars(hoverRating, true);
-            ratingValue.textContent = `${hoverRating}/5`;
-          });
-        });
-        starsWrap?.addEventListener("mouseleave", () => {
-          hoverRating = 0;
-          paintStars(rating, false);
-          ratingValue.textContent = `${rating}/5`;
-        });
-
-        textarea.addEventListener("input", updateCount);
-        form.addEventListener("submit", async (event) => {
-          event.preventDefault();
-          event.stopPropagation();
-          const animeId = await waitForAnimeId();
-          const message = textarea.value.trim();
-          if (!animeId) {
-            alert("No se pudo identificar este anime.");
-            return;
-          }
-          if (!isLogged || !isPremium) {
-            alert(isLogged ? "Necesitas Premium para comentar." : "Debes iniciar sesi?n para comentar.");
-            return;
-          }
-          if (!rating || !message) {
-            error?.classList.remove("hidden");
-            updateSubmitState();
-            return;
-          }
-          error?.classList.add("hidden");
-          submitBtn.disabled = true;
-          try {
-            const res = await fetch("api/comments.php?action=add", {
-              method: "POST",
-              credentials: "same-origin",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ anime_mal_id: Number(animeId), rating, message })
-            });
-            const json = await res.json();
-            if (!json?.success) {
-              alert(json?.error || "No se pudo publicar el comentario.");
-              return;
-            }
-            textarea.value = "";
-            rating = 0;
-            hoverRating = 0;
-            paintStars(0, false);
-            ratingValue.textContent = "0/5";
-            updateCount();
-            visibleCount = 3;
-            await reloadComments();
-          } catch {
-            alert("No se pudo publicar el comentario.");
-          } finally {
-            submitBtn.disabled = false;
-            updateSubmitState();
-          }
-        }, true);
-
-        paintStars(0, false);
-        updateCount();
-        reloadComments();
-      })();
-    </script>
-
     <script data-ui-unlock>document.documentElement.classList.remove("preload-ui");</script>
   </body></html>
-
 
 
 

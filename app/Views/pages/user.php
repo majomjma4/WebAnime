@@ -302,12 +302,12 @@
 </head>
 
 <body
-  class="bg-background text-on-background font-body selection:bg-primary-container selection:text-on-primary-container">
+  class="bg-background text-on-background font-body overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
   <!-- Navbar Component -->
   <div data-layout="header"></div>
 
   <!-- VIEW: User Profile Layout -->
-  <main class="relative pt-32 pb-20 px-6 max-w-7xl mx-auto overflow-visible">
+  <main class="relative pt-32 pb-20 px-6 max-w-7xl mx-auto overflow-x-hidden overflow-y-visible">
     <div class="pointer-events-none absolute -top-40 right-[-10%] h-72 w-72 rounded-full bg-violet-500/15 blur-3xl">
     </div>
     <div class="pointer-events-none absolute top-16 left-[-10%] h-72 w-72 rounded-full bg-sky-500/15 blur-3xl"></div>
@@ -1704,16 +1704,18 @@
       grid.classList.remove("hidden");
       grid.innerHTML = items.map((item) => {
         const title = item.title || item.query || "Anime";
-        const fallbackId = titleMap[norm(title)] || titleMap[norm(item.query)] || null;
+        const fallbackId = item.malId || item.sourceId || titleMap[norm(title)] || titleMap[norm(item.query)] || null;
         if (!item.malId && fallbackId) {
           item.malId = fallbackId;
         }
         const ep = item.episode || 1;
         const epTitle = item.episodeTitle || `Episodio ${ep}`;
         const cover = item.cover || "https://via.placeholder.com/160x220?text=Anime";
-        const href = `detail.php?q=${encodeURIComponent(title)}`;
+        const href = item.detailUrl || (fallbackId
+          ? `detail.php?mal_id=${encodeURIComponent(fallbackId)}`
+          : `detail.php?q=${encodeURIComponent(title)}`);
         return `
-        <a href="${href}" data-title="${title.replace(/"/g, "&quot;")}" class="group relative w-full rounded-2xl border border-white/10 bg-surface-container-low/70 p-3 shadow-[0_12px_26px_rgba(0,0,0,0.3)] transition-all hover:-translate-y-1 z-0 hover:z-20 overflow-visible">
+        <a href="${href}" data-title="${title.replace(/"/g, "&quot;")}" data-mal-id="${fallbackId ? String(fallbackId).replace(/"/g, "&quot;") : ''}" class="group relative w-full rounded-2xl border border-white/10 bg-surface-container-low/70 p-3 shadow-[0_12px_26px_rgba(0,0,0,0.3)] transition-all hover:-translate-y-1 z-0 hover:z-20 overflow-visible">
           <span class="pointer-events-none absolute -inset-2 rounded-2xl border border-violet-400/0 opacity-0 transition-all duration-200 group-hover:opacity-100 group-hover:border-violet-400/60"></span>
           <div class="relative aspect-square rounded-none overflow-hidden bg-surface-container-high">
             <img src="${cover}" alt="${title}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.06] rounded-none" />
@@ -1726,28 +1728,15 @@
       `;
       }).join("");
 
-      grid.addEventListener("click", async (e) => {
+      grid.addEventListener("click", (e) => {
         const link = e.target.closest("a[data-title]");
         if (!link) return;
         e.preventDefault();
-        const title = link.getAttribute("data-title") || "";
-        if (!title) {
-          window.location.href = link.getAttribute("href");
+        const malId = (link.getAttribute("data-mal-id") || "").trim();
+        if (malId) {
+          window.location.href = `detail.php?mal_id=${encodeURIComponent(malId)}`;
           return;
         }
-        try {
-          const res = await fetch(
-            `https://api.jikan.moe/v4/anime?q=${encodeURIComponent(title)}&limit=1&order_by=popularity&sort=asc`
-          );
-          if (res.ok) {
-            const data = await res.json();
-            const found = data?.data?.[0];
-            if (found?.mal_id) {
-              window.location.href = `detail.php?mal_id=${encodeURIComponent(found.mal_id)}`;
-              return;
-            }
-          }
-        } catch { }
         window.location.href = link.getAttribute("href");
       });
 

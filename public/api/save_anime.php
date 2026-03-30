@@ -131,6 +131,9 @@ try {
 
     // Pictures
     if (isset($data['pictures']) && is_array($data['pictures'])) {
+        $deletePicsStmt = $dbConn->prepare("DELETE FROM anime_pictures WHERE anime_id = ?");
+        $deletePicsStmt->execute([$new_id]);
+
         $picStmt = $dbConn->prepare("INSERT INTO anime_pictures (anime_id, image_url) VALUES (?, ?)");
         foreach ($data['pictures'] as $p) {
             $p_url = $p['jpg']['large_image_url'] ?? $p['jpg']['image_url'] ?? '';
@@ -140,6 +143,9 @@ try {
 
     // Videos
     if (isset($data['videos']) && is_array($data['videos']['promo'])) {
+        $deleteVideosStmt = $dbConn->prepare("DELETE FROM anime_videos WHERE anime_id = ?");
+        $deleteVideosStmt->execute([$new_id]);
+
         $vidStmt = $dbConn->prepare("INSERT INTO anime_videos (anime_id, youtube_id, url, image_url) VALUES (?, ?, ?, ?)");
         foreach ($data['videos']['promo'] as $v) {
             $v_yt = $v['trailer']['youtube_id'] ?? '';
@@ -154,3 +160,4 @@ try {
     $dbConn->rollBack();
     echo json_encode(['success' => false, 'error' => $e->getMessage()]);
 }
+

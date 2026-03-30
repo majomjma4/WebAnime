@@ -55,7 +55,7 @@
 <body class="bg-background text-on-background selection:bg-primary-container selection:text-on-primary-container" data-admin-page="comments">
 <div data-admin-sidebar></div>
 <main class="ml-64 pt-28 px-12 pb-12 min-h-screen">
-<div class="grid grid-cols-4 gap-6 mb-12">
+<div class="grid grid-cols-1 gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
 <div class="bg-surface-container-low p-6 rounded-lg border-l-4 border-primary shadow-lg">
 <p class="text-on-surface-variant text-xs uppercase font-bold tracking-widest mb-1">TOTAL COMENTARIOS</p>
 <h3 class="text-3xl font-headline font-extrabold tracking-tighter" id="stat-total">0</h3>
@@ -68,6 +68,16 @@
 <h3 class="text-3xl font-headline font-extrabold tracking-tighter text-error" id="stat-flagged">0</h3>
 <p class="text-[10px] text-on-surface-variant mt-2 italic">Moderacion requerida</p>
 </div>
+<button class="bg-surface-container-low p-6 rounded-lg border-l-4 border-amber-400 shadow-lg text-left transition hover:-translate-y-0.5 hover:border-amber-300/80 hover:bg-surface-container focus:outline-none focus:ring-2 focus:ring-amber-300/40" data-open-reviewed-modal type="button">
+<p class="text-on-surface-variant text-xs uppercase font-bold tracking-widest mb-1">COMENTARIOS REVISADOS</p>
+<h3 class="text-3xl font-headline font-extrabold tracking-tighter text-amber-300" id="stat-reviewed">0</h3>
+<p class="text-[10px] text-on-surface-variant mt-2 italic">Ya gestionados en base de datos</p>
+</button>
+<button class="bg-surface-container-low p-6 rounded-lg border-l-4 border-rose-400 shadow-lg text-left transition hover:-translate-y-0.5 hover:border-rose-300/80 hover:bg-surface-container focus:outline-none focus:ring-2 focus:ring-rose-300/40" data-open-report-history-modal type="button">
+<p class="text-on-surface-variant text-xs uppercase font-bold tracking-widest mb-1">HISTORIAL DE REPORTES</p>
+<h3 class="text-3xl font-headline font-extrabold tracking-tighter text-rose-300" id="stat-report-history">0</h3>
+<p class="text-[10px] text-on-surface-variant mt-2 italic">Comentarios marcados por usuarios</p>
+</button>
 </div>
 <section class="bg-surface-container-low rounded-lg shadow-2xl overflow-hidden">
 <div class="px-8 py-6 flex flex-wrap items-center justify-between gap-4 border-b border-outline/10">
@@ -79,6 +89,8 @@
 </label>
 <select class="rounded-full border border-outline/30 bg-surface-container px-4 py-3 text-sm text-on-surface focus:border-primary focus:ring-0" id="comments-role-filter">
 <option value="all">Todos</option>
+<option value="reportado">Reportado</option>
+<option value="revisado">Revisado</option>
 <option value="premium">Premium</option>
 <option value="registrado">Registrado</option>
 <option value="administrador">Administrador</option>
@@ -197,6 +209,36 @@
       <button class="rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-on-surface transition hover:bg-white/10" data-comments-view-close type="button">Cerrar</button>
     </div>
   </div>
+</div><div class="fixed inset-0 z-[90] hidden items-center justify-center bg-black/70 px-6" data-comments-status-modal>
+  <div class="flex h-[93vh] w-full max-w-4xl flex-col rounded-[28px] border border-white/10 bg-[#171717] p-7 shadow-[0_24px_80px_rgba(0,0,0,0.45)]">
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <p class="text-[11px] uppercase tracking-[0.28em] text-primary/80" data-comments-status-kicker>Historial</p>
+        <h3 class="mt-2 text-2xl font-headline font-extrabold text-on-surface" data-comments-status-title>Comentarios</h3>
+      </div>
+      <button class="flex h-11 w-11 items-center justify-center rounded-full bg-white/5 text-on-surface-variant transition hover:bg-white/10 hover:text-on-surface" data-comments-status-close type="button">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <p class="mt-4 text-sm text-on-surface-variant" data-comments-status-description>Detalle</p>
+    <div class="mt-5 grid gap-3 rounded-2xl border border-white/8 bg-white/4 px-4 py-4 md:grid-cols-[minmax(0,1.3fr)_minmax(180px,0.7fr)_minmax(180px,0.7fr)]">
+      <label class="flex items-center gap-3 rounded-full border border-white/10 bg-black/20 px-4 py-3">
+        <span class="material-symbols-outlined text-on-surface-variant">search</span>
+        <input class="w-full border-0 bg-transparent p-0 text-sm text-on-surface placeholder:text-on-surface-variant focus:ring-0" data-comments-status-search placeholder="Buscar por ID o usuario" type="text" />
+      </label>
+      <label class="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-on-surface-variant">
+        <span class="mb-2 block text-[11px] uppercase tracking-[0.18em]">Desde</span>
+        <input class="w-full border-0 bg-transparent p-0 text-sm text-on-surface focus:ring-0" data-comments-status-date-from inputmode="numeric" maxlength="10" placeholder="dd/mm/aaaa" type="text" />
+      </label>
+      <label class="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-on-surface-variant">
+        <span class="mb-2 block text-[11px] uppercase tracking-[0.18em]">Hasta</span>
+        <input class="w-full border-0 bg-transparent p-0 text-sm text-on-surface focus:ring-0" data-comments-status-date-to inputmode="numeric" maxlength="10" placeholder="dd/mm/aaaa" type="text" />
+      </label>
+    </div>
+    <div class="mt-6 min-h-0 flex-1 space-y-4 overflow-y-auto pr-2 hide-scrollbar" data-comments-status-list>
+      <article class="rounded-2xl border border-white/8 bg-white/4 px-5 py-5 text-sm text-on-surface-variant">No hay elementos para mostrar.</article>
+    </div>
+  </div>
 </div><div class="fixed inset-0 z-[90] hidden items-center justify-center bg-black/70 px-6" data-comments-review-modal>
   <div class="w-full max-w-md rounded-[28px] border border-white/10 bg-[#171717] p-7 shadow-[0_24px_80px_rgba(0,0,0,0.45)]">
     <div class="flex items-start justify-between gap-4">
@@ -253,6 +295,18 @@
     const roleFilter = document.getElementById('comments-role-filter');
     const totalNode = document.getElementById('stat-total');
     const flaggedNode = document.getElementById('stat-flagged');
+    const reviewedNode = document.getElementById('stat-reviewed');
+    const reportHistoryNode = document.getElementById('stat-report-history');
+    const reviewedTrigger = document.querySelector('[data-open-reviewed-modal]');
+    const reportHistoryTrigger = document.querySelector('[data-open-report-history-modal]');
+    const statusModal = document.querySelector('[data-comments-status-modal]');
+    const statusKicker = document.querySelector('[data-comments-status-kicker]');
+    const statusTitle = document.querySelector('[data-comments-status-title]');
+    const statusDescription = document.querySelector('[data-comments-status-description]');
+    const statusList = document.querySelector('[data-comments-status-list]');
+    const statusSearch = document.querySelector('[data-comments-status-search]');
+    const statusDateFrom = document.querySelector('[data-comments-status-date-from]');
+    const statusDateTo = document.querySelector('[data-comments-status-date-to]');
     const viewModal = document.querySelector('[data-comments-view-modal]');
     const viewClose = document.querySelector('[data-comments-view-close]');
     const viewUser = document.querySelector('[data-comments-view-user]');
@@ -283,6 +337,7 @@
     let deleteTarget = null;
     let reviewTarget = null;
     let currentPage = 1;
+    let currentStatusMode = 'reviewed';
     const perPage = 50;
 
     function normalize(value) {
@@ -299,8 +354,7 @@
       viewText.textContent = comment.msg;
       viewReview.classList.add('hidden');
       if (comment.deleted_status) {
-        const deletedLabel = comment.deleted_status === 'eliminado_admin' ? 'Eliminado por admin' : 'Eliminado por usuario';
-        viewReport.textContent = deletedLabel + (comment.deleted_by ? ' | Por: ' + comment.deleted_by : '');
+        viewReport.textContent = 'Eliminado' + (comment.deleted_by ? ' | Por: ' + comment.deleted_by : '');
         viewReport.classList.remove('hidden');
       } else if (comment.reviewed_status) {
         viewReport.classList.add('hidden');
@@ -321,6 +375,143 @@
     function closeViewModal() {
       viewModal.classList.add('hidden');
       viewModal.classList.remove('flex');
+    }
+
+    function parseCommentDate(comment) {
+      const raw = String(comment.reviewed_at || comment.date || '').trim();
+      if (!raw) return null;
+
+      const normalized = raw.replace(/\s+/g, ' ').replace(/([AP]M)$/i, ' $1');
+      const parsed = Date.parse(normalized);
+      if (!Number.isNaN(parsed)) return new Date(parsed);
+
+      const isoCandidate = raw.match(/^(\d{4}-\d{2}-\d{2})/);
+      if (isoCandidate) {
+        const parsedIso = Date.parse(isoCandidate[1] + 'T00:00:00');
+        if (!Number.isNaN(parsedIso)) return new Date(parsedIso);
+      }
+
+      return null;
+    }
+
+    function parseMaskedDate(value, endOfDay = false) {
+      const digits = String(value || '').replace(/\D/g, '');
+      if (digits.length !== 8) return null;
+
+      const day = digits.slice(0, 2);
+      const month = digits.slice(2, 4);
+      const year = digits.slice(4, 8);
+      const iso = `${year}-${month}-${day}T${endOfDay ? '23:59:59' : '00:00:00'}`;
+      const parsed = Date.parse(iso);
+      return Number.isNaN(parsed) ? null : new Date(parsed);
+    }
+
+    function applyDateMask(input) {
+      if (!input) return;
+      const digits = input.value.replace(/\D/g, '').slice(0, 8);
+      let masked = digits.slice(0, 2);
+      if (digits.length > 2) masked += '/' + digits.slice(2, 4);
+      if (digits.length > 4) masked += '/' + digits.slice(4, 8);
+      input.value = masked;
+    }
+
+    function formatStatusItems(items, isReviewed) {
+      statusList.innerHTML = '';
+
+      if (!items.length) {
+        statusList.innerHTML = '<article class="rounded-2xl border border-white/8 bg-white/4 px-5 py-5 text-sm text-on-surface-variant">No hay elementos para mostrar.</article>';
+        return;
+      }
+
+      items.forEach((comment) => {
+        const stateClass = isReviewed
+          ? 'border-amber-400/30 bg-amber-500/10 text-amber-200'
+          : (comment.reviewed_status ? 'border-amber-400/30 bg-amber-500/10 text-amber-200' : 'border-rose-400/30 bg-rose-500/10 text-rose-200');
+        const stateLabel = isReviewed ? 'Revisado' : (comment.reviewed_status ? 'Reportado y revisado' : 'Reportado');
+        const meta = isReviewed
+          ? `${comment.reviewed_by || 'Admin'}${comment.reviewed_at ? ' | ' + comment.reviewed_at : ''}`
+          : `${comment.reported_by || 'Usuario'}${comment.report_reason ? ' | ' + comment.report_reason : ''}${comment.reviewed_status ? ' | Revisado por ' + (comment.reviewed_by || 'Admin') : ''}${comment.deleted_status ? ' | Eliminado' : ''}`;
+        const item = document.createElement('article');
+        item.className = 'rounded-2xl border border-white/8 bg-white/4 px-5 py-5';
+        item.innerHTML = `
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <p class="text-[11px] uppercase tracking-[0.18em] text-on-surface-variant">ID ${comment.id || '-'}</p>
+              <p class="mt-2 text-sm font-bold text-on-surface">${comment.user || '@usuario'}</p>
+              <p class="mt-1 text-sm text-on-surface-variant">${comment.anime || 'Anime'}</p>
+            </div>
+            <span class="inline-flex rounded-full border px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] ${stateClass}">${stateLabel}</span>
+          </div>
+          <p class="mt-4 text-[11px] uppercase tracking-[0.16em] text-on-surface-variant">${meta}</p>
+          <p class="mt-4 whitespace-pre-wrap text-sm italic leading-6 text-on-surface">${comment.msg || ''}</p>
+        `;
+        statusList.appendChild(item);
+      });
+    }
+
+    function refreshStatusModal() {
+      if (!statusModal || !statusList) return;
+
+      const isReviewed = currentStatusMode === 'reviewed';
+      const query = normalize(statusSearch?.value || '');
+      const fromDate = statusDateFrom?.value || '';
+      const toDate = statusDateTo?.value || '';
+
+      const items = allComments.filter((comment) => {
+        const baseMatch = isReviewed
+          ? !!comment.reviewed_status
+          : (!!comment.flagged || !!comment.report_reason || !!comment.reported_by || !!comment.deleted_status);
+        if (!baseMatch) return false;
+
+        if (query) {
+          const haystack = [String(comment.id || ''), comment.user, comment.anime].map(normalize);
+          if (!haystack.some((value) => value.includes(query))) return false;
+        }
+
+        const parsedDate = parseCommentDate(comment);
+        if ((fromDate || toDate) && !parsedDate) return false;
+
+        if (fromDate) {
+          const from = parseMaskedDate(fromDate, false);
+          if (!from || parsedDate < from) return false;
+        }
+
+        if (toDate) {
+          const to = parseMaskedDate(toDate, true);
+          if (!to || parsedDate > to) return false;
+        }
+
+        return true;
+      });
+
+      formatStatusItems(items, isReviewed);
+    }
+
+    function openStatusModal(mode) {
+      if (!statusModal || !statusList) return;
+
+      const isReviewed = mode === 'reviewed';
+      currentStatusMode = mode;
+
+      statusKicker.textContent = isReviewed ? 'Moderacion aplicada' : 'Historial de reportes';
+      statusTitle.textContent = isReviewed ? 'Comentarios revisados' : 'Comentarios reportados';
+      statusDescription.textContent = isReviewed
+        ? 'Aqui puedes ver los comentarios que ya fueron revisados por administracion.'
+        : 'Aqui se conserva el historial de usuarios y comentarios reportados.';
+
+      if (statusSearch) statusSearch.value = '';
+      if (statusDateFrom) statusDateFrom.value = '';
+      if (statusDateTo) statusDateTo.value = '';
+
+      refreshStatusModal();
+      statusModal.classList.remove('hidden');
+      statusModal.classList.add('flex');
+    }
+
+    function closeStatusModal() {
+      if (!statusModal) return;
+      statusModal.classList.add('hidden');
+      statusModal.classList.remove('flex');
     }
 
     function openReviewModal(comment) {
@@ -356,7 +547,14 @@
       const role = normalize(roleFilter.value);
 
       return allComments.filter((comment) => {
-        const roleOk = role === 'all' || normalize(comment.tag) === role;
+        if (comment.deleted_status) return false;
+
+        const normalizedTag = normalize(comment.tag);
+        const roleOk =
+          role === 'all' ||
+          (role === 'reportado' && !!comment.flagged) ||
+          (role === 'revisado' && !!comment.reviewed_status) ||
+          normalizedTag === role;
         if (!roleOk) return false;
 
         if (!q) return true;
@@ -365,6 +563,7 @@
           .some((value) => normalize(value).includes(q));
       });
     }
+
 
     function renderComments(comments) {
       tbody.innerHTML = '';
@@ -393,8 +592,7 @@
         reportMeta.classList.remove('text-rose-300', 'text-amber-300');
         reportMeta.classList.add('text-on-surface-variant');
         if (c.deleted_status) {
-          const deletedLabel = c.deleted_status === 'eliminado_admin' ? 'Eliminado por admin' : 'Eliminado por usuario';
-          reportMeta.textContent = deletedLabel + (c.deleted_by ? ' | ' + c.deleted_by : '');
+          reportMeta.textContent = 'Eliminado' + (c.deleted_by ? ' | ' + c.deleted_by : '');
           reportMeta.classList.remove('hidden');
           row.classList.add('bg-rose-500/10', 'hover:bg-rose-500/15');
           row.querySelector('[data-user]').classList.add('text-rose-200');
@@ -405,10 +603,9 @@
           row.querySelector('[data-avatar]').classList.remove('bg-primary/20', 'text-primary');
           row.querySelector('[data-avatar]').classList.add('bg-rose-500/20', 'text-rose-200');
         } else if (c.reviewed_status) {
-          reportMeta.textContent = 'Estado: Revisado | Revisado por: ' + (c.reviewed_by || 'Admin') + ' | Revisado en: ' + (c.reviewed_at || 'Sin fecha');
-          reportMeta.classList.remove('hidden');
+          reportMeta.classList.add('hidden');
           row.querySelector('[data-tag]').classList.remove('text-primary/70', 'text-rose-300');
-          row.querySelector('[data-tag]').classList.add('text-on-surface-variant');
+          row.querySelector('[data-tag]').classList.add('text-amber-300');
           row.querySelector('[data-tag]').textContent = 'REVISADO';
         } else if (c.flagged) {
           reportMeta.classList.remove('text-on-surface-variant');
@@ -450,8 +647,10 @@
       const pageItems = filtered.slice(start, start + perPage);
 
       renderComments(pageItems);
-      totalNode.textContent = allComments.length;
-      flaggedNode.textContent = allComments.filter((c) => c.flagged).length;
+      totalNode.textContent = allComments.filter((c) => !c.deleted_status).length;
+      flaggedNode.textContent = allComments.filter((c) => !c.deleted_status && c.flagged).length;
+      reviewedNode.textContent = allComments.filter((c) => !c.deleted_status && c.reviewed_status).length;
+      reportHistoryNode.textContent = allComments.filter((c) => c.flagged || !!c.report_reason || !!c.reported_by || !!c.deleted_status).length;
 
       if (!totalFiltered) {
         footer.textContent = allComments.length ? 'No hay comentarios para esos filtros.' : 'No hay comentarios registrados';
@@ -483,6 +682,11 @@
     roleFilter.addEventListener('change', () => refreshView(true));
     prevBtn.addEventListener('click', () => { currentPage -= 1; refreshView(); });
     nextBtn.addEventListener('click', () => { currentPage += 1; refreshView(); });
+    reviewedTrigger?.addEventListener('click', () => openStatusModal('reviewed'));
+    reportHistoryTrigger?.addEventListener('click', () => openStatusModal('reported'));
+    statusSearch?.addEventListener('input', refreshStatusModal);
+    statusDateFrom?.addEventListener('input', () => { applyDateMask(statusDateFrom); refreshStatusModal(); });
+    statusDateTo?.addEventListener('input', () => { applyDateMask(statusDateTo); refreshStatusModal(); });
 
     document.addEventListener('click', async (e) => {
       const viewBtn = e.target.closest('[data-admin-comment-view]');
@@ -552,6 +756,11 @@
 
       if (e.target === viewModal || e.target.closest('[data-comments-view-close]')) {
         closeViewModal();
+        return;
+      }
+
+      if (e.target === statusModal || e.target.closest('[data-comments-status-close]')) {
+        closeStatusModal();
         return;
       }
 
