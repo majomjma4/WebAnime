@@ -320,7 +320,7 @@ endif; ?>
       </section>
       <!-- Detailed Content Area -->
       <section class="max-w-7xl mx-auto px-8 py-20 grid grid-cols-1 lg:grid-cols-3 gap-16">
-        <!-- Left Column: Sinopsis, Galerí­a y Personajes -->
+        <!-- Left Column: Sinopsis, Galería y Personajes -->
         <div class="lg:col-span-2 space-y-12 detail-left-col">
           <!-- Synopsis -->
           <div class="space-y-6">
@@ -332,14 +332,14 @@ endif; ?>
             </p>
           </div>
         </div>
-        <!-- Right Column: Informacón -->
+        <!-- Right Column: Información -->
         <div class="space-y-10">
           <div class="bg-surface-container-low rounded-lg p-8 border border-outline-variant/5 space-y-8">
-            <h3 class="font-headline text-xl font-bold border-b border-outline-variant/10 pb-4">Información</h3>
+        <!-- Right Column: Información -->
             <div id="detail-info-block" class="space-y-6">
               <div class="flex flex-col gap-1">
-                <span class="text-xs text-on-surface-variant uppercase tracking-widest font-bold">Native Title</span>
-                <span class="text-on-surface font-medium">? ?? ??</span>
+            <h3 class="font-headline text-xl font-bold border-b border-outline-variant/10 pb-4">Información</h3>
+                <span class="text-on-surface font-medium">...</span>
               </div>
               <div class="flex flex-col gap-1">
                 <span class="text-xs text-on-surface-variant uppercase tracking-widest font-bold">Studio</span>
@@ -347,15 +347,15 @@ endif; ?>
               </div>
               <div class="flex flex-col gap-1">
                 <span class="text-xs text-on-surface-variant uppercase tracking-widest font-bold">Source</span>
-                <span class="text-on-surface font-medium">? ?? ??</span>
+                <span class="text-on-surface font-medium">...</span>
               </div>
               <div class="flex flex-col gap-1">
                 <span class="text-xs text-on-surface-variant uppercase tracking-widest font-bold">Aired</span>
-                <span class="text-on-surface font-medium">? ?? ??</span>
+                <span class="text-on-surface font-medium">...</span>
               </div>
               <div class="flex flex-col gap-1">
                 <span class="text-xs text-on-surface-variant uppercase tracking-widest font-bold">Rating</span>
-                <span class="text-on-surface font-medium">? ?? ??</span>
+                <span class="text-on-surface font-medium">...</span>
               </div>
             </div>
           </div>
@@ -417,7 +417,7 @@ endif; ?>
         <div class="flex items-end justify-between">
           <div>
             <h2 class="font-headline text-4xl font-extrabold tracking-tight">Recomendado para Ti</h2>
-            <p class="text-on-surface-variant mt-2">Otros tí­tulos que te pueden interesar</p>
+            <p class="text-on-surface-variant mt-2">Otros títulos que te pueden interesar</p>
           </div>
         </div>
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
@@ -529,7 +529,7 @@ endif; ?>
                 <h4 class="text-lg font-semibold">Eliminar comentario</h4>
                 <button id="delete-comment-close" type="button" class="w-8 h-8 rounded-full border border-white/10 bg-white/5 text-on-surface-variant hover:text-on-surface">X</button>
               </div>
-              <p class="text-sm text-on-surface-variant leading-6">¿Estas seguro de que deseas borrar este comentario? Esta acción no se puede deshacer.</p>
+              <p class="text-sm text-on-surface-variant leading-6">¿Estás seguro de que deseas borrar este comentario? Esta acción no se puede deshacer.</p>
               <div class="flex items-center justify-end gap-2 pt-2">
                 <button id="delete-comment-cancel" type="button" class="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs uppercase tracking-widest text-on-surface-variant hover:text-on-surface">Cancelar</button>
                 <button id="delete-comment-confirm" type="button" class="rounded-full bg-gradient-to-br from-rose-500 to-red-500 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white">Eliminar</button>
@@ -684,6 +684,7 @@ endif; ?>
     let filterRating = 0;
     let reportTargetButton = null;
     let reportTargetCommentId = null;
+    let reportTargetLocalKey = "";
     let pendingDeleteCommentId = null;
     let pendingDeleteLocalIndex = null;
     let backendCommentsCache = null;
@@ -821,10 +822,12 @@ endif; ?>
       return malId;
     };
     const getProfileName = () => {
-      const raw = localStorage.getItem("anidex_profile_name");
-      const clean = (raw || "").trim();
+      const profileName = (localStorage.getItem("anidex_profile_name") || "").trim();
+      const username = (localStorage.getItem("nekora_user") || "").trim();
+      const clean = profileName || username;
       return clean || "NekoraUser";
     };
+    const normalizeHandle = (value) => String(value || "").trim().replace(/^@+/, "").toLowerCase();
     const updateSubmitState = () => {
       if (!submitBtn) return;
       const disabled = rating === 0 || textarea.value.trim().length === 0;
@@ -866,6 +869,37 @@ endif; ?>
       try {
         localStorage.setItem(key, JSON.stringify(items));
       } catch {}
+    };
+    const reportStoreKey = `${key}_reported`;
+    const loadReportedComments = () => {
+      try {
+        const raw = localStorage.getItem(reportStoreKey);
+        const parsed = raw ? JSON.parse(raw) : [];
+        return Array.isArray(parsed) ? parsed : [];
+      } catch {
+        return [];
+      }
+    };
+    const saveReportedComments = (items) => {
+      try {
+        localStorage.setItem(reportStoreKey, JSON.stringify(items));
+      } catch {}
+    };
+    const buildCommentLocalKey = (item) => {
+      if (!item) return "";
+      const source = String(item.source || "");
+      const author = normalizeHandle(item.author || "");
+      const text = String(item.text || "").trim().toLowerCase();
+      const date = String(item.date || "").trim().toLowerCase();
+      const localIndex = Number(item.localIndex);
+      const indexPart = Number.isFinite(localIndex) && localIndex >= 0 ? `:${localIndex}` : "";
+      return `${source}:${author}:${date}:${text}${indexPart}`;
+    };
+    const isCommentReported = (item) => {
+      if (item?.flagged) return true;
+      const localKey = buildCommentLocalKey(item);
+      if (!localKey) return false;
+      return loadReportedComments().includes(localKey);
     };
     const fetchBackendComments = async () => {
       const malId = await waitForMalId();
@@ -989,11 +1023,11 @@ endif; ?>
         });
         for (const item of mapped) {
           if (!item.text) {
-            item.text = "Comentario no disponible en espa?ol.";
+            item.text = "Comentario no disponible en español.";
             continue;
           }
           const translated = await translateToSpanish(item.text);
-          item.text = translated ? truncate(translated) : "Comentario no disponible en espa?ol.";
+          item.text = translated ? truncate(translated) : "Comentario no disponible en español.";
         }
         return mapped;
       } catch {
@@ -1021,7 +1055,7 @@ endif; ?>
       const filtered = filterRating ? items.filter((item) => Number(item.rating) === filterRating) : items;
       total.textContent = `${filtered.length} comentario${filtered.length === 1 ? "" : "s"}`;
       if (!filtered.length) {
-        list.innerHTML = '<div class="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-on-surface-variant">Todav?a no hay comentarios para este filtro.</div>';
+        list.innerHTML = '<div class="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-on-surface-variant">Todavía no hay comentarios para este filtro.</div>';
         if (moreWrap) moreWrap.classList.add("hidden");
         return;
       }
@@ -1034,15 +1068,19 @@ endif; ?>
           return `<span class="material-symbols-outlined text-[16px] ${on ? "text-yellow-400" : "text-on-surface-variant"}" style="font-variation-settings: 'FILL' 1;">star</span>`;
         }).join("");
         const author = (item.author || "").trim();
-        const currentUserHandle = `@${String(currentUser || "").replace(/^@+/, "")}`;
-        const canDelete = item.source !== "jikan" && author && author === currentUserHandle;
+        const currentUserHandle = normalizeHandle(currentUser);
+        const authorHandle = normalizeHandle(author);
+        const isOwnComment = Boolean(authorHandle && authorHandle === currentUserHandle);
+        const isReported = isCommentReported(item);
+        const canDelete = item.source !== "jikan" && isOwnComment;
         const authorHtml = author ? `<div class="text-sm font-semibold text-amber-200">${author}</div>` : "";
-        const reportLabel = item.flagged ? "Reportado" : "Reportar";
-        const canReport = isLogged && Number(item.id || 0) > 0;
-        const reportClasses = item.flagged
+        const reportLabel = isReported ? "Reportado" : "Reportar";
+        const canReport = isLogged && !isOwnComment;
+        const reportClasses = isReported
           ? "inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-on-surface-variant cursor-default"
           : "inline-flex h-9 w-9 items-center justify-center rounded-full border border-sky-400/20 bg-sky-500/10 text-sky-200 transition-all duration-200 hover:-translate-y-0.5 hover:border-sky-300/50 hover:bg-sky-400/20 hover:text-sky-100";
         const deleteClasses = "inline-flex h-9 w-9 items-center justify-center rounded-full border border-rose-400/20 bg-rose-500/10 text-rose-300 transition-all duration-200 hover:-translate-y-0.5 hover:border-rose-300/50 hover:bg-rose-400/20 hover:text-rose-100";
+        const commentLocalKey = buildCommentLocalKey(item).replace(/"/g, "&quot;");
         return `
           <div class="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-2">
             <div class="flex items-center justify-between gap-3">
@@ -1053,7 +1091,7 @@ endif; ?>
               <div class="flex flex-col items-end gap-2">
                 <span class="text-xs text-on-surface-variant">${item.date}</span>
                 <div class="flex items-center gap-2">
-                  ${canReport ? `<button type="button" class="${reportClasses}" ${item.flagged ? "disabled" : ""} title="${reportLabel}" aria-label="${reportLabel}" data-comment-report data-comment-id="${Number(item.id || 0)}" data-comment-author="${author}" data-comment-text="${String(item.text || "").slice(0, 120).replace(/"/g, "&quot;")}"><span class="material-symbols-outlined text-[18px]">${item.flagged ? 'flag' : 'outlined_flag'}</span></button>` : ""}
+                  ${canReport ? `<button type="button" class="${reportClasses}" ${isReported ? "disabled" : ""} title="${reportLabel}" aria-label="${reportLabel}" data-comment-report data-comment-id="${Number(item.id || 0)}" data-comment-local-key="${commentLocalKey}" data-comment-author="${author}" data-comment-text="${String(item.text || "").slice(0, 120).replace(/"/g, "&quot;")}"><span class="material-symbols-outlined text-[18px]">${isReported ? 'flag' : 'outlined_flag'}</span></button>` : ""}
                   ${canDelete ? `<button type="button" class="${deleteClasses}" title="Eliminar" aria-label="Eliminar" data-comment-delete-id="${Number(item.id || 0)}" data-comment-delete-local="${item.localIndex ?? -1}"><span class="material-symbols-outlined text-[18px]">delete</span></button>` : ""}
                 </div>
               </div>
@@ -1075,6 +1113,7 @@ endif; ?>
           if (!reportModal) return;
           reportTargetButton = btn;
           reportTargetCommentId = Number(btn.getAttribute("data-comment-id") || 0);
+          reportTargetLocalKey = btn.getAttribute("data-comment-local-key") || "";
           const preview = btn.getAttribute("data-comment-text") || "";
           reportSnippet.textContent = preview;
           reportModal.classList.remove("hidden");
@@ -1146,6 +1185,7 @@ endif; ?>
       reportOtherError?.classList.add("hidden");
       reportTargetButton = null;
       reportTargetCommentId = null;
+      reportTargetLocalKey = "";
     };
     if (reportModal) {
       reportModal.addEventListener("click", (event) => {
@@ -1194,24 +1234,29 @@ endif; ?>
           reportOtherError?.classList.remove("hidden");
           return;
         }
-        if (!reportTargetCommentId) return;
+        if (!reportTargetCommentId && !reportTargetLocalKey) return;
         try {
-          const res = await fetch("api/comments.php?action=report", {
-            method: "POST",
-            credentials: "same-origin",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ comment_id: reportTargetCommentId, reason })
-          });
-          const data = await res.json();
-          if (!data.success) {
-            alert(data.error || "No se pudo reportar el comentario.");
-            return;
+          if (reportTargetCommentId) {
+            const res = await fetch("api/comments.php?action=report", {
+              method: "POST",
+              credentials: "same-origin",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ comment_id: reportTargetCommentId, reason })
+            });
+            const data = await res.json();
+            if (!data.success) {
+              alert(data.error || "No se pudo reportar el comentario.");
+              return;
+            }
+          } else if (reportTargetLocalKey) {
+            const reportedItems = loadReportedComments();
+            if (!reportedItems.includes(reportTargetLocalKey)) {
+              reportedItems.push(reportTargetLocalKey);
+              saveReportedComments(reportedItems);
+            }
           }
           logActivity("report", { message: `Reporte de comentario: ${reason}` });
           if (reportTargetButton) {
-            reportTargetButton.innerHTML = '<span class="material-symbols-outlined text-[14px]">flag</span><span>Reportado</span>';
-            reportTargetButton.classList.add("text-rose-300", "inline-flex", "items-center", "gap-1");
-            reportTargetButton.classList.remove("text-sky-200");
             reportTargetButton.disabled = true;
           }
           backendCommentsCache = null;
