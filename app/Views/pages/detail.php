@@ -213,7 +213,7 @@ $isLoggedIn = isset($_SESSION['user_id']);
           <!-- Large Poster Card -->
           <div class="hidden md:block w-72 lg:w-80 shrink-0 transform -translate-y-4 pointer-events-auto">
             <div class="relative aspect-[2/3] rounded-lg overflow-hidden shadow-[0px_30px_60px_rgba(0,0,0,0.6)] bg-surface-container-high">
-              <img alt="Solo Leveling Póster" class="w-full h-full object-cover" data-alt="Anime protagonist character art vertical poster" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXTXqdDIpKJHKrJNqlN-s7KMfzwFvt6rOtGu823T9YwAdyi6UEeanLdk9bqVlZ8ho5vTFT7MDZ6vzPK4KY7BJP13NbLY_vk_gooV2eHcmjbyP9weV8jSsNAnMZ_QJT54fqop6etgY343bdhrCO--xxETu162oetRJCyr0HpWKNw2NpQCSK024fF7PvE7RiypLSPQDTXxOG-TO4cAplVg_TuTwzEooVYnPehX57TkY2_pMDoTFuAYFkM9vyCyuQz0AljMmSIz1r-XDr"/>
+              <img alt="Solo Leveling PÃƒÆ’Ã‚Â³ster" class="w-full h-full object-cover" data-alt="Anime protagonist character art vertical poster" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXTXqdDIpKJHKrJNqlN-s7KMfzwFvt6rOtGu823T9YwAdyi6UEeanLdk9bqVlZ8ho5vTFT7MDZ6vzPK4KY7BJP13NbLY_vk_gooV2eHcmjbyP9weV8jSsNAnMZ_QJT54fqop6etgY343bdhrCO--xxETu162oetRJCyr0HpWKNw2NpQCSK024fF7PvE7RiypLSPQDTXxOG-TO4cAplVg_TuTwzEooVYnPehX57TkY2_pMDoTFuAYFkM9vyCyuQz0AljMmSIz1r-XDr"/>
 </div>
           </div>
           <!-- Info Block -->
@@ -224,25 +224,25 @@ $isLoggedIn = isset($_SESSION['user_id']);
                 <span class="flex items-center gap-1 text-primary-dim">
                   <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
                   <span class="font-bold text-lg">8.7</span>
-                  <span class="text-on-surface-variant text-sm font-normal ml-1">Puntuación</span>
+                  <span class="text-on-surface-variant text-sm font-normal ml-1">PuntuaciÃƒÆ’Ã‚Â³n</span>
                 </span>
               </div>
               <h1 class="font-headline text-5xl lg:text-7xl font-extrabold tracking-tighter text-on-surface">Solo Leveling</h1>
               <p id="detail-status-meta" class="text-on-surface-variant font-medium flex gap-4 text-sm lg:text-base">
-                <span>Estado: En emisión</span>
+                <span>Estado: En emisiÃƒÆ’Ã‚Â³n</span>
                 <span class="text-outline-variant">&gt;&lt;</span>
                 <span>Episodios: 12/24</span>
                 <span class="text-outline-variant">&gt;&lt;</span>
-                <span>Duración: 24m</span>
+                <span>DuraciÃƒÆ’Ã‚Â³n: 24m</span>
               </p>
             </div>
             <div id="detail-genres" class="flex flex-wrap gap-2">
-              <span class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant text-sm rounded-full border border-outline-variant/10">Acción</span>
-              <span class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant text-sm rounded-full border border-outline-variant/10">Fantasía</span>
+              <span class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant text-sm rounded-full border border-outline-variant/10">AcciÃƒÆ’Ã‚Â³n</span>
+              <span class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant text-sm rounded-full border border-outline-variant/10">FantasÃƒÆ’Ã‚Â­a</span>
               <span class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant text-sm rounded-full border border-outline-variant/10">Aventura</span>
             </div>
             <div class="flex flex-wrap gap-4 pt-2 items-center">
-              <a data-add-my-list class="px-8 py-3.5 bg-transparent border border-sky-400/40 text-on-surface font-bold rounded-full hover:border-sky-400/70 hover:bg-surface-container-high transition-all flex items-center gap-2 shadow-[0_0_14px_rgba(56,189,248,0.25)] hover:shadow-[0_0_22px_rgba(56,189,248,0.45)]" href="user.php"><span class="material-symbols-outlined">add</span><span data-add-label>Añadir a Mi Lista</span></a>
+              <a data-add-my-list class="px-8 py-3.5 bg-transparent border border-sky-400/40 text-on-surface font-bold rounded-full hover:border-sky-400/70 hover:bg-surface-container-high transition-all flex items-center gap-2 shadow-[0_0_14px_rgba(56,189,248,0.25)] hover:shadow-[0_0_22px_rgba(56,189,248,0.45)]" href="user.php"><span class="material-symbols-outlined">add</span><span data-add-label>AÃƒÆ’Ã‚Â±adir a Mi Lista</span></a>
 <?php if ($isLoggedIn): ?>
               <button data-add-favorite class="hidden group w-12 h-12 p-0 bg-transparent border border-rose-400/40 text-on-surface-variant rounded-full hover:border-rose-400/70 hover:bg-surface-container-high transition-all flex items-center justify-center relative shadow-[0_0_14px_rgba(244,63,94,0.3)] hover:shadow-[0_0_22px_rgba(244,63,94,0.55)]" type="button"><span class="material-symbols-outlined text-[20px]">favorite</span><span data-fav-label class="pointer-events-none absolute left-1/2 top-full mt-2 -translate-x-1/2 whitespace-nowrap rounded-full bg-surface-container-high px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-on-surface opacity-0 transition-opacity duration-200 group-hover:opacity-100">Agregar a Favoritos</span></button>
               <button data-detail-status="completed" class="hidden group w-12 h-12 p-0 bg-transparent border border-emerald-400/40 text-on-surface-variant rounded-full hover:border-emerald-400/70 hover:bg-surface-container-high transition-all flex items-center justify-center relative shadow-[0_0_14px_rgba(16,185,129,0.3)] hover:shadow-[0_0_22px_rgba(16,185,129,0.55)]" type="button">
@@ -261,7 +261,7 @@ endif; ?>
       </section>
       <!-- Detailed Content Area -->
       <section class="max-w-7xl mx-auto px-8 py-20 grid grid-cols-1 lg:grid-cols-3 gap-16">
-        <!-- Left Column: Sinopsis, Galería y Personajes -->
+        <!-- Left Column: Sinopsis, GalerÃƒÆ’Ã‚Â­a y Personajes -->
         <div class="lg:col-span-2 space-y-12 detail-left-col">
           <!-- Synopsis -->
           <div class="space-y-6">
@@ -273,10 +273,10 @@ endif; ?>
             </p>
           </div>
         </div>
-        <!-- Right Column: Información -->
+        <!-- Right Column: InformaciÃƒÆ’Ã‚Â³n -->
         <div class="space-y-10">
           <div class="bg-surface-container-low rounded-lg p-8 border border-outline-variant/5 space-y-8">
-            <h3 class="font-headline text-xl font-bold border-b border-outline-variant/10 pb-4">Información</h3>
+            <h3 class="font-headline text-xl font-bold border-b border-outline-variant/10 pb-4">InformaciÃƒÆ’Ã‚Â³n</h3>
             <div id="detail-info-block" class="space-y-6">
               <div class="flex flex-col gap-1">
                 <span class="text-xs text-on-surface-variant uppercase tracking-widest font-bold">Native Title</span>
@@ -358,7 +358,7 @@ endif; ?>
         <div class="flex items-end justify-between">
           <div>
             <h2 class="font-headline text-4xl font-extrabold tracking-tight">Recomendado para Ti</h2>
-            <p class="text-on-surface-variant mt-2">Otros títulos que te pueden interesar</p>
+            <p class="text-on-surface-variant mt-2">Otros tÃƒÆ’Ã‚Â­tulos que te pueden interesar</p>
           </div>
         </div>
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
@@ -379,7 +379,7 @@ endif; ?>
         <div class="flex flex-wrap items-end justify-between gap-4">
           <div>
             <h2 class="font-headline text-4xl font-extrabold tracking-tight">Comentarios</h2>
-            <p class="text-on-surface-variant mt-2">Comparte tu opinión y califica el título con estrellitas.</p>
+            <p class="text-on-surface-variant mt-2">Comparte tu opiniÃƒÆ’Ã‚Â³n y califica el tÃƒÆ’Ã‚Â­tulo con estrellitas.</p>
           </div>
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-[1.1fr,0.9fr] gap-8">
@@ -393,7 +393,7 @@ endif; ?>
                       <span class="material-symbols-outlined text-4xl">lock</span>
                     </div>
                     <div class="text-center px-4">
-                      <span class="block text-white font-bold text-lg tracking-tight mb-1" id="lock-message">INICIA SESIÓN PARA COMENTAR</span>
+                      <span class="block text-white font-bold text-lg tracking-tight mb-1" id="lock-message">INICIA SESIÃƒÆ’Ã¢â‚¬Å“N PARA COMENTAR</span>
                       <span class="text-[11px] text-on-surface-variant/70 uppercase tracking-widest leading-none">DISPONIBLE PARA MIEMBROS NEKORA PREMIUM</span>
                     </div>
                  </div>
@@ -402,11 +402,11 @@ endif; ?>
 
             <div>
               <h3 class="font-headline text-2xl font-bold">Deja tu comentario</h3>
-              <p class="text-sm text-on-surface-variant mt-1">Sé breve, claro y respetuoso.</p>
+              <p class="text-sm text-on-surface-variant mt-1">SÃƒÆ’Ã‚Â© breve, claro y respetuoso.</p>
             </div>
             <div class="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-3">
               <div class="flex items-center justify-between gap-3">
-                <span class="text-xs uppercase tracking-[0.3em] text-on-surface-variant">Puntuación</span>
+                <span class="text-xs uppercase tracking-[0.3em] text-on-surface-variant">PuntuaciÃƒÆ’Ã‚Â³n</span>
                 <span id="rating-value" class="text-sm font-semibold text-on-surface">0/5</span>
               </div>
               <div class="flex items-center gap-2" id="rating-stars">
@@ -426,19 +426,19 @@ endif; ?>
                   <span class="material-symbols-outlined text-[24px] transition-transform duration-200" style="font-variation-settings: 'FILL' 1;">star</span>
                 </button>
               </div>
-              <p id="rating-help" class="text-xs text-on-surface-variant">Selecciona tu calificación antes de comentar.</p>
+              <p id="rating-help" class="text-xs text-on-surface-variant">Selecciona tu calificaciÃƒÆ’Ã‚Â³n antes de comentar.</p>
             </div>
             <div class="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-2">
               <label for="comment-text" class="text-xs uppercase tracking-[0.3em] text-on-surface-variant">Tu comentario</label>
               <textarea id="comment-text" rows="4" maxlength="400" class="w-full bg-transparent border border-white/10 rounded-2xl px-4 py-3 text-sm text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:ring-2 focus:ring-primary/40" placeholder="Escribe algo que ayude a otros fans..."></textarea>
               <div class="flex items-center justify-between text-xs text-on-surface-variant">
-                <span id="comment-error" class="hidden text-rose-300">Agrega una puntuación y un comentario.</span>
+                <span id="comment-error" class="hidden text-rose-300">Agrega una puntuaciÃƒÆ’Ã‚Â³n y un comentario.</span>
                 <span id="comment-count">0/400</span>
               </div>
             </div>
             <div class="flex flex-wrap items-center gap-4">
               <button type="submit" id="comment-submit" class="rounded-full bg-gradient-to-br from-sky-500 to-violet-500 px-6 py-3 text-sm font-bold uppercase tracking-widest text-white shadow-lg hover:scale-105 active:scale-95 transition-transform">Publicar</button>
-              <span class="text-xs text-on-surface-variant">Tu opinión ayuda a la comunidad.</span>
+              <span class="text-xs text-on-surface-variant">Tu opiniÃƒÆ’Ã‚Â³n ayuda a la comunidad.</span>
             </div>
           </form>
           <div class="rounded-3xl border border-white/10 bg-surface-container-low/60 p-6 md:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.4)] space-y-4">
@@ -456,12 +456,25 @@ endif; ?>
                     <option value="1">1 estrella</option>
                   </select>
                 </label>
-                <span id="comments-total" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-on-surface-variant">0 comentarios</span>
+                <span id="comments-total" class="min-w-[8.5rem] whitespace-nowrap rounded-full border border-white/10 bg-white/5 px-4 py-1 text-center text-xs text-on-surface-variant">0 comentarios</span>
               </div>
             </div>
             <div id="comments-list" class="space-y-4"></div>
             <div id="comments-more-wrap" class="hidden pt-2 flex justify-center">
-              <button id="comments-more" type="button" class="rounded-full border border-white/10 bg-white/5 px-5 py-2 text-xs font-semibold uppercase tracking-widest text-on-surface-variant hover:border-primary/50 hover:text-primary transition-all">Ver más comentarios</button>
+              <button id="comments-more" type="button" class="rounded-full border border-white/10 bg-white/5 px-5 py-2 text-xs font-semibold uppercase tracking-widest text-on-surface-variant hover:border-primary/50 hover:text-primary transition-all">Ver mÃƒÆ’Ã‚Â¡s comentarios</button>
+            </div>
+          </div>
+          <div id="delete-comment-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 px-6">
+            <div class="w-[300px] max-w-[300px] rounded-2xl border border-white/10 bg-surface-container-high p-5 shadow-[0_24px_60px_rgba(0,0,0,0.45)] space-y-4">
+              <div class="flex items-center justify-between">
+                <h4 class="text-lg font-semibold">Eliminar comentario</h4>
+                <button id="delete-comment-close" type="button" class="w-8 h-8 rounded-full border border-white/10 bg-white/5 text-on-surface-variant hover:text-on-surface">X</button>
+              </div>
+              <p class="text-sm text-on-surface-variant leading-6">Estas seguro de que deseas borrar este comentario? Esta accion no se puede deshacer.</p>
+              <div class="flex items-center justify-end gap-2 pt-2">
+                <button id="delete-comment-cancel" type="button" class="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs uppercase tracking-widest text-on-surface-variant hover:text-on-surface">Cancelar</button>
+                <button id="delete-comment-confirm" type="button" class="rounded-full bg-gradient-to-br from-rose-500 to-red-500 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white">Eliminar</button>
+              </div>
             </div>
           </div>
           <div id="report-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 px-6">
@@ -477,6 +490,11 @@ endif; ?>
                 <label class="flex items-center gap-2"><input type="radio" name="report-reason" value="Spoilers" class="accent-primary">Spoilers</label>
                 <label class="flex items-center gap-2"><input type="radio" name="report-reason" value="Contenido inapropiado" class="accent-primary">Contenido inapropiado</label>
                 <label class="flex items-center gap-2"><input type="radio" name="report-reason" value="Otro motivo" class="accent-primary">Otro motivo</label>
+              </div>
+              <div id="report-other-wrap" class="hidden space-y-2">
+                <label for="report-other-text" class="text-xs uppercase tracking-widest text-on-surface-variant">Escribe el motivo</label>
+                <textarea id="report-other-text" rows="3" maxlength="220" class="w-full rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:ring-2 focus:ring-primary/40" placeholder="CuÃ©ntanos por quÃ© quieres reportar este comentario..."></textarea>
+                <p id="report-other-error" class="hidden text-xs text-rose-300">Escribe un motivo para continuar.</p>
               </div>
               <div class="flex items-center justify-end gap-2 pt-2">
                 <button id="report-cancel" type="button" class="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs uppercase tracking-widest text-on-surface-variant hover:text-on-surface">Cancelar</button>
@@ -522,6 +540,13 @@ endif; ?>
     const reportCancel = document.getElementById("report-cancel");
     const reportSubmit = document.getElementById("report-submit");
     const reportSnippet = document.getElementById("report-snippet");
+    const reportOtherWrap = document.getElementById("report-other-wrap");
+    const reportOtherText = document.getElementById("report-other-text");
+    const reportOtherError = document.getElementById("report-other-error");
+    const deleteCommentModal = document.getElementById("delete-comment-modal");
+    const deleteCommentClose = document.getElementById("delete-comment-close");
+    const deleteCommentCancel = document.getElementById("delete-comment-cancel");
+    const deleteCommentConfirm = document.getElementById("delete-comment-confirm");
     const stars = Array.from(document.querySelectorAll(".comment-star"));
     const starsWrap = document.getElementById("rating-stars");
     const ratingValue = document.getElementById("rating-value");
@@ -580,6 +605,10 @@ endif; ?>
     let visibleCount = 3;
     let filterRating = 0;
     let reportTargetButton = null;
+    let reportTargetCommentId = null;
+    let pendingDeleteCommentId = null;
+    let pendingDeleteLocalIndex = null;
+    let backendCommentsCache = null;
     const lockOverlay = document.getElementById("comment-lock-overlay");
     const lockMsg = document.getElementById("lock-message");
 
@@ -602,7 +631,7 @@ endif; ?>
         // Update the link destination
         lockOverlay.href = isLogged ? "pago.php" : "registro.php";
 
-        lockMsg.textContent = isLogged ? "ACTIVA EL MODO PREMIUM PARA COMENTAR" : "INICIA SESIÓN PARA COMENTAR";
+        lockMsg.textContent = isLogged ? "ACTIVA EL MODO PREMIUM PARA COMENTAR" : "INICIA SESIÃƒÆ’Ã¢â‚¬Å“N PARA COMENTAR";
         
         textarea.setAttribute("disabled", "true");
         if (submitBtn) {
@@ -627,10 +656,11 @@ endif; ?>
           favoriteBtns.forEach((btn) => btn.classList.add("hidden"));
           statusBtns.forEach((btn) => btn.classList.add("hidden"));
         }
+        renderComments();
       });
     } else {
-      const isLogged = localStorage.getItem("nekora_logged_in") === "true";
-      const isPremium = localStorage.getItem("nekora_premium") === "true" || localStorage.getItem("nekora_admin") === "true" || localStorage.getItem("nekora_user") === "Admin99";
+      isLogged = localStorage.getItem("nekora_logged_in") === "true";
+      isPremium = localStorage.getItem("nekora_premium") === "true" || localStorage.getItem("nekora_admin") === "true" || localStorage.getItem("nekora_user") === "Admin99";
       applyLock(isLogged, isPremium);
     }
 
@@ -676,6 +706,7 @@ endif; ?>
         if (icon) {
           icon.classList.toggle("-translate-y-0.5", active);
         }
+        renderComments();
       });
     };
 
@@ -698,6 +729,32 @@ endif; ?>
       try {
         localStorage.setItem(key, JSON.stringify(items));
       } catch {}
+    };
+    const fetchBackendComments = async () => {
+      const malId = getMalId();
+      if (!malId) return [];
+      try {
+        const res = await fetch(`api/comments.php?action=list&anime_mal_id=${encodeURIComponent(malId)}`, {
+          cache: "no-store",
+          credentials: "same-origin"
+        });
+        if (!res.ok) return [];
+        const json = await res.json();
+        if (!json?.success || !Array.isArray(json?.data)) return [];
+        return json.data.map((item) => ({
+          id: Number(item.id || 0),
+          author: item.user || "",
+          rating: Number(item.rating || 0),
+          date: item.date || "",
+          text: item.msg || "",
+          source: item.source || "usuario",
+          flagged: item.flagged === true,
+          reportReason: item.report_reason || "",
+          reportedBy: item.reported_by || ""
+        }));
+      } catch {
+        return [];
+      }
     };
 
     let jikanCache = null;
@@ -737,7 +794,7 @@ endif; ?>
     };
     const isLikelySpanish = (text) => {
       const lower = String(text || "").toLowerCase();
-      if (/[áéíóúñÃƒÂÉÃƒÂÓÚÑ]/.test(lower)) return true;
+      if (/[ÃƒÆ’Ã‚Â¡ÃƒÆ’Ã‚Â©ÃƒÆ’Ã‚Â­ÃƒÆ’Ã‚Â³ÃƒÆ’Ã‚ÂºÃƒÆ’Ã‚Â±ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂÃƒÆ’Ã¢â‚¬Â°ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂÃƒÆ’Ã¢â‚¬Å“ÃƒÆ’Ã…Â¡ÃƒÆ’Ã¢â‚¬Ëœ]/.test(lower)) return true;
       const hits = [" el ", " la ", " de ", " que ", " y ", " en ", " los ", " las ", " un ", " una ", " para ", " con ", " por ", " como "];
       let count = 0;
       hits.forEach((word) => {
@@ -795,11 +852,11 @@ endif; ?>
         });
         for (const item of mapped) {
           if (!item.text) {
-            item.text = "Comentario no disponible en español.";
+            item.text = "Comentario no disponible en espaÃƒÆ’Ã‚Â±ol.";
             continue;
           }
           const translated = await translateToSpanish(item.text);
-          item.text = translated ? truncate(translated) : "Comentario no disponible en español.";
+          item.text = translated ? truncate(translated) : "Comentario no disponible en espaÃƒÆ’Ã‚Â±ol.";
         }
         return mapped;
       } catch {
@@ -819,8 +876,11 @@ endif; ?>
         saveComments(localItems);
       }
       const localMapped = localItems.map((item, idx) => ({ ...item, source: "local", localIndex: idx }));
-      const remoteItems = await loadJikanReviews();
-      const items = [...localMapped, ...remoteItems];
+      if (!backendCommentsCache) {
+        backendCommentsCache = await fetchBackendComments();
+      }
+      const remoteItems = backendCommentsCache.length ? backendCommentsCache : await loadJikanReviews();
+      const items = backendCommentsCache.length ? remoteItems : [...localMapped, ...remoteItems];
       const filtered = filterRating ? items.filter((item) => Number(item.rating) === filterRating) : items;
       total.textContent = `${filtered.length} comentario${filtered.length === 1 ? "" : "s"}`;
       if (!filtered.length) {
@@ -837,40 +897,48 @@ endif; ?>
           return `<span class="material-symbols-outlined text-[16px] ${on ? "text-yellow-400" : "text-on-surface-variant"}" style="font-variation-settings: 'FILL' 1;">star</span>`;
         }).join("");
         const author = (item.author || "").trim();
-        const canDelete = item.source === "local" && author && author === currentUser;
-        const authorHtml = author
-          ? `<div class="text-sm font-semibold text-amber-200">${author}</div>`
-          : "";
-        const reportLabel = item.source === "jikan" ? "Reportar" : "Reportar";
+        const currentUserHandle = `@${String(currentUser || "").replace(/^@+/, "")}`;
+        const canDelete = item.source !== "jikan" && author && author === currentUserHandle;
+        const authorHtml = author ? `<div class="text-sm font-semibold text-amber-200">${author}</div>` : "";
+        const reportLabel = item.flagged ? "Reportado" : "Reportar";
+        const canReport = isLogged && Number(item.id || 0) > 0;
+        const reportClasses = item.flagged
+          ? "inline-flex h-9 w-9 items-center justify-center rounded-full border border-rose-400/30 bg-rose-500/12 text-rose-300 cursor-default"
+          : "inline-flex h-9 w-9 items-center justify-center rounded-full border border-sky-400/20 bg-sky-500/10 text-sky-200 transition-all duration-200 hover:-translate-y-0.5 hover:border-sky-300/50 hover:bg-sky-400/20 hover:text-sky-100";
+        const deleteClasses = "inline-flex h-9 w-9 items-center justify-center rounded-full border border-rose-400/20 bg-rose-500/10 text-rose-300 transition-all duration-200 hover:-translate-y-0.5 hover:border-rose-300/50 hover:bg-rose-400/20 hover:text-rose-100";
         return `
-          <div class="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-2">
+          <div class="rounded-2xl border ${item.flagged ? "border-rose-400/35 bg-rose-500/10" : "border-white/10 bg-white/5"} p-4 space-y-2">
             <div class="flex items-center justify-between gap-3">
               <div>
                 ${authorHtml}
                 <div class="flex items-center gap-1">${starsHtml}</div>
               </div>
-              <div class="flex items-center gap-2">
+              <div class="flex flex-col items-end gap-2">
                 <span class="text-xs text-on-surface-variant">${item.date}</span>
-                ${checkCanComment() ? `<button type="button" class="text-xs text-sky-200 hover:text-sky-100" data-comment-report data-comment-author="${author}" data-comment-text="${String(item.text || "").slice(0, 120).replace(/\"/g, "&quot;")}">${reportLabel}</button>` : ""}
-                ${canDelete ? `<button type="button" class="text-xs text-rose-300 hover:text-rose-200" data-comment-delete="${item.localIndex}">Eliminar</button>` : ""}
+                <div class="flex items-center gap-2">
+                  ${canReport ? `<button type="button" class="${reportClasses}" ${item.flagged ? "disabled" : ""} title="${reportLabel}" aria-label="${reportLabel}" data-comment-report data-comment-id="${Number(item.id || 0)}" data-comment-author="${author}" data-comment-text="${String(item.text || "").slice(0, 120).replace(/"/g, "&quot;")}"><span class="material-symbols-outlined text-[18px]">${item.flagged ? 'flag' : 'outlined_flag'}</span></button>` : ""}
+                  ${canDelete ? `<button type="button" class="${deleteClasses}" title="Eliminar" aria-label="Eliminar" data-comment-delete-id="${Number(item.id || 0)}" data-comment-delete-local="${item.localIndex ?? -1}"><span class="material-symbols-outlined text-[18px]">delete</span></button>` : ""}
+                </div>
               </div>
             </div>
+            ${item.flagged ? `<p class="text-xs font-semibold uppercase tracking-widest text-rose-200">Reportado${item.reportReason ? `: ${item.reportReason}` : ""}</p>` : ""}
             <p class="text-sm text-on-surface leading-relaxed">${item.text}</p>
           </div>`;
       }).join("");
-      list.querySelectorAll("[data-comment-delete]").forEach((btn) => {
+      list.querySelectorAll("[data-comment-delete-id]").forEach((btn) => {
         btn.addEventListener("click", () => {
-          const index = Number(btn.getAttribute("data-comment-delete"));
-          const itemsNow = loadComments();
-          itemsNow.splice(index, 1);
-          saveComments(itemsNow);
-          renderComments();
+          pendingDeleteCommentId = Number(btn.getAttribute("data-comment-delete-id") || 0);
+          pendingDeleteLocalIndex = Number(btn.getAttribute("data-comment-delete-local") || -1);
+          if (!deleteCommentModal) return;
+          deleteCommentModal.classList.remove("hidden");
+          deleteCommentModal.classList.add("flex");
         });
       });
       list.querySelectorAll("[data-comment-report]").forEach((btn) => {
         btn.addEventListener("click", () => {
           if (!reportModal) return;
           reportTargetButton = btn;
+          reportTargetCommentId = Number(btn.getAttribute("data-comment-id") || 0);
           const preview = btn.getAttribute("data-comment-text") || "";
           reportSnippet.textContent = preview;
           reportModal.classList.remove("hidden");
@@ -889,11 +957,59 @@ endif; ?>
         }
       }
     };
+    const closeDeleteConfirm = () => {
+      if (!deleteCommentModal) return;
+      deleteCommentModal.classList.add("hidden");
+      deleteCommentModal.classList.remove("flex");
+      pendingDeleteCommentId = null;
+      pendingDeleteLocalIndex = null;
+    };
+    if (deleteCommentModal) {
+      deleteCommentModal.addEventListener("click", (event) => {
+        if (event.target === deleteCommentModal) closeDeleteConfirm();
+      });
+    }
+    if (deleteCommentClose) deleteCommentClose.addEventListener("click", closeDeleteConfirm);
+    if (deleteCommentCancel) deleteCommentCancel.addEventListener("click", closeDeleteConfirm);
+    if (deleteCommentConfirm) {
+      deleteCommentConfirm.addEventListener("click", async () => {
+        if (pendingDeleteCommentId) {
+          try {
+            const res = await fetch("api/comments.php?action=delete", {
+              method: "POST",
+              credentials: "same-origin",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ id: pendingDeleteCommentId })
+            });
+            const data = await res.json();
+            if (!data.success) {
+              alert(data.error || "No se pudo ocultar el comentario.");
+              return;
+            }
+            backendCommentsCache = null;
+          } catch (deleteError) {
+            alert("No se pudo ocultar el comentario.");
+            return;
+          }
+        } else if (pendingDeleteLocalIndex !== null && pendingDeleteLocalIndex >= 0) {
+          const itemsNow = loadComments();
+          itemsNow.splice(pendingDeleteLocalIndex, 1);
+          saveComments(itemsNow);
+        }
+        closeDeleteConfirm();
+        renderComments();
+      });
+    }
+
     const closeReport = () => {
       if (!reportModal) return;
       reportModal.classList.add("hidden");
       reportModal.classList.remove("flex");
+      reportOtherWrap?.classList.add("hidden");
+      if (reportOtherText) reportOtherText.value = "";
+      reportOtherError?.classList.add("hidden");
       reportTargetButton = null;
+      reportTargetCommentId = null;
     };
     if (reportModal) {
       reportModal.addEventListener("click", (event) => {
@@ -905,27 +1021,71 @@ endif; ?>
     if (reportModal) {
       reportModal.querySelectorAll("input[name='report-reason']").forEach((input) => {
         input.addEventListener("change", () => {
+          const isOther = input.checked && input.value === "Otro motivo";
+          reportOtherWrap?.classList.toggle("hidden", !isOther);
+          reportOtherError?.classList.add("hidden");
+          if (!isOther && reportOtherText) reportOtherText.value = "";
           if (!reportSubmit) return;
-          reportSubmit.classList.remove("opacity-50", "pointer-events-none");
+          const needsText = isOther && !String(reportOtherText?.value || "").trim();
+          reportSubmit.classList.toggle("opacity-50", needsText);
+          reportSubmit.classList.toggle("pointer-events-none", needsText);
+          if (!needsText) {
+            reportSubmit.classList.remove("opacity-50", "pointer-events-none");
+          }
         });
       });
     }
-    if (reportSubmit) {
-      reportSubmit.addEventListener("click", () => {
-        const reason = reportModal.querySelector("input[name='report-reason']:checked")?.value || "Otro";
-        logActivity("report", { message: `Reporte de comentario: ${reason}` });
-        
-        if (reportTargetButton) {
-          reportTargetButton.innerHTML = '<span class="material-symbols-outlined text-[14px]">flag</span><span>Reportado</span>';
-          reportTargetButton.classList.add("text-rose-300");
-          reportTargetButton.classList.remove("text-sky-200");
-          reportTargetButton.classList.add("inline-flex", "items-center", "gap-1");
-          reportTargetButton.disabled = true;
+    if (reportOtherText) {
+      reportOtherText.addEventListener("input", () => {
+        const selectedReason = reportModal?.querySelector("input[name='report-reason']:checked")?.value || "";
+        const needsText = selectedReason === "Otro motivo" && !reportOtherText.value.trim();
+        reportOtherError?.classList.toggle("hidden", !needsText);
+        reportSubmit?.classList.toggle("opacity-50", needsText);
+        reportSubmit?.classList.toggle("pointer-events-none", needsText);
+        if (!needsText) {
+          reportSubmit?.classList.remove("opacity-50", "pointer-events-none");
         }
-        closeReport();
       });
     }
-
+    if (reportSubmit) {
+      reportSubmit.addEventListener("click", async () => {
+        const selectedReason = reportModal.querySelector("input[name='report-reason']:checked")?.value || "";
+        const customReason = String(reportOtherText?.value || "").trim();
+        if (!selectedReason) return;
+        const reason = selectedReason === "Otro motivo" ? customReason : selectedReason;
+        if (!reason) {
+          reportOtherWrap?.classList.remove("hidden");
+          reportOtherError?.classList.remove("hidden");
+          return;
+        }
+        if (!reportTargetCommentId) return;
+        try {
+          const res = await fetch("api/comments.php?action=report", {
+            method: "POST",
+            credentials: "same-origin",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ comment_id: reportTargetCommentId, reason })
+          });
+          const data = await res.json();
+          if (!data.success) {
+            alert(data.error || "No se pudo reportar el comentario.");
+            return;
+          }
+          logActivity("report", { message: `Reporte de comentario: ${reason}` });
+          if (reportTargetButton) {
+            reportTargetButton.innerHTML = '<span class="material-symbols-outlined text-[14px]">flag</span><span>Reportado</span>';
+            reportTargetButton.classList.add("text-rose-300", "inline-flex", "items-center", "gap-1");
+            reportTargetButton.classList.remove("text-sky-200");
+            reportTargetButton.disabled = true;
+          }
+          backendCommentsCache = null;
+          closeReport();
+          renderComments();
+        } catch (errorReport) {
+          alert("No se pudo reportar el comentario.");
+        }
+      });
+    }
     stars.forEach((btn) => {
       btn.addEventListener("click", () => {
         hoverRating = 0;
@@ -947,6 +1107,7 @@ endif; ?>
           paintStars(hoverRating, true);
           ratingValue.textContent = `${hoverRating}/5`;
         }
+        renderComments();
       });
       starsWrap.addEventListener("mouseleave", () => {
         hoverRating = 0;
@@ -971,11 +1132,68 @@ endif; ?>
       count.textContent = `${words.length}/200 palabras`;
       updateSubmitState();
     };
-    textarea.addEventListener("input", () => {
+        textarea.addEventListener("input", () => {
       const { text, words } = clampWords(textarea.value, 200);
       if (textarea.value !== text) textarea.value = text;
       count.textContent = `${words.length}/200 palabras`;
       updateSubmitState();
+    });
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!checkCanComment()) {
+        alert(isLogged ? "Necesitas Premium para comentar." : "Debes iniciar sesion para comentar.");
+        return;
+      }
+      const malId = getMalId();
+      const message = textarea.value.trim();
+      if (!malId) {
+        alert("No se pudo identificar este anime.");
+        return;
+      }
+      if (!rating || !message) {
+        error.classList.remove("hidden");
+        updateSubmitState();
+        return;
+      }
+
+      error.classList.add("hidden");
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.classList.add("opacity-50", "pointer-events-none");
+      }
+
+      try {
+        const res = await fetch("api/comments.php?action=add", {
+          method: "POST",
+          credentials: "same-origin",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            anime_mal_id: Number(malId),
+            rating,
+            message
+          })
+        });
+        const data = await res.json();
+        if (!data.success) {
+          alert(data.error || "No se pudo publicar el comentario.");
+          return;
+        }
+
+        textarea.value = "";
+        rating = 0;
+        hoverRating = 0;
+        paintStars(0, false);
+        ratingValue.textContent = "0/5";
+        backendCommentsCache = null;
+        visibleCount = 3;
+        updateCount();
+        await renderComments();
+        logActivity("comment", { message });
+      } catch (submitError) {
+        alert("No se pudo publicar el comentario.");
+      } finally {
+        updateSubmitState();
+      }
     });
     updateSubmitState();
     updateCount();
@@ -991,13 +1209,32 @@ endif; ?>
     
     // Initialize detail data if object is present
     const initDetail = () => {
-      // Movido a la inicialización global en el top
+      // Movido a la inicializaciÃƒÆ’Ã‚Â³n global en el top
     };
     initDetail();
   })();
     </script>
     <script data-ui-unlock>document.documentElement.classList.remove("preload-ui");</script>
   </body></html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
