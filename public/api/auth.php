@@ -15,6 +15,21 @@ if (!$action && ($action !== 'check')) {
 }
 
 $dbConn = (new \Models\Database())->getConnection();
+try {
+    $dbConn?->exec("UPDATE usuarios SET activo = 1, bloqueado = 0, bloqueado_en = NULL, motivo_bloqueo = NULL, penalizacion_hasta = NULL WHERE bloqueado = 1 AND penalizacion_hasta IS NOT NULL AND penalizacion_hasta <= NOW()");
+} catch (Exception $e) {
+    // Si falla el mantenimiento automatico, no detenemos la autenticacion.
+}
+function generatePublicUserCode(PDO $dbConn): string {
+    do {
+        $code = 'NK-' . random_int(100000, 999999);
+        $stmt = $dbConn->prepare("SELECT COUNT(*) FROM usuarios WHERE codigo_publico = ?");
+        $stmt->execute([$code]);
+    } while ((int) $stmt->fetchColumn() > 0);
+
+    return $code;
+}
+
 if (!$dbConn) {
     echo json_encode(['success' => false, 'error' => 'Error de conexión a la base de datos']);
     exit;
@@ -40,8 +55,9 @@ if ($action === 'register') {
     try {
         $dbConn->beginTransaction();
         $hash = password_hash($pass, PASSWORD_DEFAULT);
-        $stmt = $dbConn->prepare("INSERT INTO usuarios (correo, hash_password, nombre_mostrar, activo, creado_en) VALUES (?, ?, ?, 1, NOW())");
-        $stmt->execute([$email, $hash, $username]);
+        $publicCode = generatePublicUserCode($dbConn);
+        $stmt = $dbConn->prepare("INSERT INTO usuarios (codigo_publico, correo, hash_password, nombre_mostrar, activo, creado_en) VALUES (?, ?, ?, ?, 1, NOW())");
+        $stmt->execute([$publicCode, $email, $hash, $username]);
         $userId = $dbConn->lastInsertId();
 
         // Asignar rol Registrado por defecto
@@ -63,7 +79,7 @@ if ($action === 'register') {
         $dbConn->prepare("INSERT INTO usuarios_sesiones (usuario_id, inicio) VALUES (?, NOW())")->execute([$userId]);
         $_SESSION['session_log_id'] = $dbConn->lastInsertId();
 
-        echo json_encode(['success' => true, 'username' => $username, 'role' => 'Registrado', 'userId' => $userId]);
+        echo json_encode(['success' => true, 'username' => $username, 'role' => 'Registrado', 'userId' => $userId, 'publicUserId' => $publicCode]);
     } catch (Exception $e) {
         $dbConn->rollBack();
         echo json_encode(['success' => false, 'error' => 'Error al registrar el usuario: ' . $e->getMessage()]);
@@ -77,14 +93,24 @@ if ($action === 'register') {
         exit;
     }
 
-    $stmt = $dbConn->prepare("SELECT id, hash_password, nombre_mostrar, es_premium, premium_vence_en FROM usuarios WHERE correo = ? OR nombre_mostrar = ?");
+    $stmt = $dbConn->prepare("SELECT id, codigo_publico, hash_password, nombre_mostrar, es_premium, premium_vence_en, activo, bloqueado, motivo_bloqueo, penalizacion_hasta FROM usuarios WHERE correo = ? OR nombre_mostrar = ?");
     $stmt->execute([$userOrEmail, $userOrEmail]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$user) {
-        echo json_encode(['success' => false, 'error' => 'Usuario no encontrado. ¿Ya tienes una cuenta?']);
+        echo json_encode(['success' => false, 'error' => 'Usuario no encontrado. ??Ya tienes una cuenta?']);
     } elseif (!password_verify($pass, $user['hash_password'])) {
-        echo json_encode(['success' => false, 'error' => 'La contraseña es incorrecta.']);
+        echo json_encode(['success' => false, 'error' => 'La contrase??a es incorrecta.']);
+    } elseif (((int)($user['bloqueado'] ?? 0) === 1) || ((int)($user['activo'] ?? 1) !== 1)) {
+        $penaltyUntil = $user['penalizacion_hasta'] ? date('d/m/Y H:i', strtotime($user['penalizacion_hasta'])) : 'Permanente';
+        $reason = trim((string)($user['motivo_bloqueo'] ?? '')) ?: 'Sin motivo registrado';
+        echo json_encode([
+            'success' => false,
+            'blocked' => true,
+            'error' => ('Tu cuenta esta bloqueada. Motivo: ' . $reason . '. Penalizacion: ' . $penaltyUntil),
+            'reason' => $reason,
+            'penaltyUntil' => $penaltyUntil
+        ]);
     } else {
         $roleStmt = $dbConn->prepare("
             SELECT nombre 
@@ -109,6 +135,7 @@ if ($action === 'register') {
             'success' => true, 
             'username' => $user['nombre_mostrar'], 
             'userId' => $user['id'],
+            'publicUserId' => $user['codigo_publico'],
             'role' => $role,
             'isAdmin' => ($role === 'Admin'),
             'isPremium' => $isPremium
@@ -120,7 +147,7 @@ if ($action === 'register') {
         $role = $_SESSION['role'] ?? 'Registrado';
         
         // Re-verificar premium desde la DB para estar seguros
-        $stmt = $dbConn->prepare("SELECT es_premium, premium_vence_en FROM usuarios WHERE id = ?");
+        $stmt = $dbConn->prepare("SELECT codigo_publico, es_premium, premium_vence_en FROM usuarios WHERE id = ?");
         $stmt->execute([$_SESSION['user_id']]);
         $uInfo = $stmt->fetch(PDO::FETCH_ASSOC);
         
@@ -131,6 +158,7 @@ if ($action === 'register') {
             'logged' => true,
             'username' => $username,
             'userId' => $_SESSION['user_id'],
+            'publicUserId' => ($uInfo['codigo_publico'] ?? null),
             'role' => $role,
             'isAdmin' => ($role === 'Admin'),
             'isPremium' => $isPremium
@@ -185,3 +213,6 @@ if ($action === 'register') {
         echo json_encode(['success' => false, 'error' => 'No encontramos ninguna cuenta con esos datos.']);
     }
 }
+
+
+

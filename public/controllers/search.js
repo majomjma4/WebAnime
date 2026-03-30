@@ -1,4 +1,4 @@
-(() => {
+﻿(() => {
   const API_BASE = "api/jikan_proxy.php";
   const suggestCache = new Map();
   const hasJapaneseChars = (v) => /[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff]/.test(v || "");
@@ -206,7 +206,7 @@
         }
       }
       card.setAttribute("data-title", (item?.title || "").toLowerCase());
-      card.setAttribute("data-type", pageForType(mediaType) === "peliculas.php" ? "Película" : "Anime");
+      card.setAttribute("data-type", pageForType(mediaType) === "peliculas.php" ? "PelÃ­cula" : "Anime");
       const cleanTitle = (item?.title || "").trim();
       const key = normalize(item?.title || item?.title_english || "");
       const year = YEAR_OVERRIDES[key] || item?.year || item?.aired?.prop?.from?.year || "";
@@ -253,12 +253,12 @@
 
   const goToSearchPage = (term, page = "series.php") => {
     const q = encodeURIComponent(term.trim());
-    logActivity("search", `Búsqueda: ${term.trim()} en ${page}`);
+    logActivity("search", `BÃºsqueda: ${term.trim()} en ${page}`);
     window.location.href = `${page}?q=${q}`;
   };
   const pageForType = (mediaType) => {
     const t = normalize(mediaType);
-    if (t.includes("movie") || t.includes("película")) return "peliculas.php";
+    if (t.includes("movie") || t.includes("pelÃ­cula")) return "peliculas.php";
     return "series.php";
   };
 
@@ -434,7 +434,7 @@
       let tvCount = 0;
       items.forEach((it) => {
         const t = normalize(it.mediaType || "");
-        if (t.includes("movie") || t.includes("pelicula") || t.includes("película")) movieCount += 1;
+        if (t.includes("movie") || t.includes("pelicula") || t.includes("pelÃ­cula")) movieCount += 1;
         else tvCount += 1;
       });
       return movieCount > tvCount ? "peliculas.php" : "series.php";
@@ -483,7 +483,7 @@
         moreBtn.className =
           "w-full text-center px-3 py-2 text-sm font-semibold text-primary hover:bg-zinc-800/70 transition-colors border-t border-zinc-800";
         moreBtn.style.borderRadius = "0";
-        moreBtn.textContent = "Ver más";
+        moreBtn.textContent = "Ver mÃ¡s";
         moreBtn.addEventListener("click", () => {
           closeBox();
           const page = resolveSuggestPage(items);
@@ -563,7 +563,7 @@
       .filter((el) => el.id !== "filter-search");
     navInputs.forEach(bindInput);
 
-    const filterInput = document.getElementById("filter-search");
+    const filterInput = document.querySelector('[data-catalog-search="1"]') || document.getElementById("filter-search");
     const target = document.querySelector("h1, h2");
     if (target && !originalTitleText) {
       const current = target.textContent.trim();
@@ -571,7 +571,7 @@
         originalTitleText = current;
       } else {
         // Fallback based on page
-        originalTitleText = window.location.pathname.includes("peliculas") ? "Películas" : "Descubrimiento";
+        originalTitleText = window.location.pathname.includes("peliculas") ? "PelÃ­culas" : "Descubrimiento";
       }
     }
 
@@ -602,6 +602,12 @@
 
   window.AniDexSearch = { init };
 })();
+
+
+
+
+
+
 
 
 

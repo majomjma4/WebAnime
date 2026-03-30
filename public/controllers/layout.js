@@ -140,12 +140,13 @@
 
   function formatHours(hours) {
     const total = parseFloat(hours) || 0;
-    const totalMinutes = Math.round(total * 60);
+    const totalMinutes = Math.max(0, Math.round(total * 60));
     const h = Math.floor(totalMinutes / 60);
     const m = totalMinutes % 60;
-    const mm = String(m).padStart(2, "0");
-    if (h === 0) return `${m} min`;
-    return `${h}:${mm} horas`;
+
+    if (h <= 0) return `${m} min`;
+    if (m === 0) return `${h} h`;
+    return `${h} h ${String(m).padStart(2, "0")} min`;
   }
 
   function getGuestName() {
@@ -214,10 +215,9 @@
         else localStorage.removeItem("nekora_premium");
 
         if (authState.userId) {
-          // FIX CRÍTICO: leer el ID de invitado ANTES de sobrescribir para que la migración funcione.
-          // Si se sobreescribe primero, migrateGuestData ve guestId === realUserId y no hace nada.
           const oldGuestId = localStorage.getItem("anidex_user_id");
           localStorage.setItem("anidex_user_id", authState.userId);
+          if (authState.publicUserId) localStorage.setItem("anidex_public_user_id", authState.publicUserId);
           migrateGuestData(authState.userId, oldGuestId);
         }
       } else {
@@ -335,35 +335,60 @@
   function initSessionTimer() {
     if (!isLoggedIn()) return;
 
-    let lastSync = Date.now();
-    const SYNC_INTERVAL = 60000; // Sync every 1 minute
+    let activeSince = document.visibilityState === "visible" ? Date.now() : null;
 
-    setInterval(() => {
-      const now = Date.now();
-      const deltaMs = now - lastSync;
-      if (deltaMs < 1000) return;
+    const syncDelta = (deltaMs) => {
+      if (!deltaMs || deltaMs < 1000 || !isLoggedIn()) return;
 
-      lastSync = now;
       const deltaHours = deltaMs / (1000 * 60 * 60);
 
       try {
         const key = getIsolatedKey("anidex_profile_hours");
         const currentHours = parseFloat(localStorage.getItem(key) || "0");
-        const newTotal = (currentHours + deltaHours).toFixed(2);
+        const newTotal = (currentHours + deltaHours).toFixed(4);
         localStorage.setItem(key, newTotal);
 
-        // Update UI if on user.php
         const hoursEl = document.querySelector("[data-profile-hours]");
         if (hoursEl) hoursEl.textContent = formatHours(newTotal);
 
-        // Sync with server if enough time passed
         fetch("api/activity.php", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ action: "time_sync", delta: deltaHours.toFixed(4) })
         }).catch(() => {});
       } catch (e) {}
-    }, 30000); // Check every 30 seconds
+    };
+
+    const pauseTracking = () => {
+      if (!activeSince) return;
+      const now = Date.now();
+      syncDelta(now - activeSince);
+      activeSince = null;
+    };
+
+    const resumeTracking = () => {
+      if (!isLoggedIn() || document.visibilityState !== "visible") return;
+      activeSince = Date.now();
+    };
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") resumeTracking();
+      else pauseTracking();
+    });
+
+    window.addEventListener("focus", resumeTracking);
+    window.addEventListener("blur", pauseTracking);
+    window.addEventListener("pagehide", pauseTracking);
+    window.addEventListener("beforeunload", pauseTracking);
+
+    setInterval(() => {
+      if (!isLoggedIn() || !activeSince || document.visibilityState !== "visible") return;
+      const now = Date.now();
+      const deltaMs = now - activeSince;
+      if (deltaMs < 30000) return;
+      syncDelta(deltaMs);
+      activeSince = Date.now();
+    }, 5000);
   }
 
   function finalizeLayout() {
@@ -528,6 +553,7 @@
         if (d.anidex_profile_color)        localStorage.setItem(getIsolatedKey("anidex_profile_color"),        d.anidex_profile_color);
         if (d.anidex_profile_avatar)       localStorage.setItem(getIsolatedKey("anidex_profile_avatar"),       d.anidex_profile_avatar);
         if (d.anidex_profile_member_since) localStorage.setItem(getIsolatedKey("anidex_profile_member_since"), d.anidex_profile_member_since);
+        if (d.anidex_public_user_id)       localStorage.setItem("anidex_public_user_id", d.anidex_public_user_id);
 
         // ─── FUSIÓN MAX de horas vistas ──────────────────────────────────────────────
         // Regla de oro: el contador NUNCA puede retroceder al refrescar la página.
@@ -587,3 +613,10 @@
     formatHours: formatHours
   };
 })();
+
+
+
+
+
+
+

@@ -4,7 +4,7 @@ const AniDexDetailDataBoot = () => {
     57658: {
       episodes: 12,
       synopsis:
-        "Tras las masacres de Shibuya, Itadori, cargado de culpa y preocupado por el interes de Sukuna en Fushiguro, decide no volver a la Preparatoria de Hechicería. Se une a Choso para exorcizar los espiritus liberados por Noritoshi Kamo. En medio del caos, la cupula jujutsu reactiva la ejecucion de Itadori y asigna a Yuta Okkotsu como su verdugo. Hechiceros modernos y antiguos, ahora jugadores del Juego de la Exterminación, chocan con motivos opuestos y empujan al mundo hacia una nueva era dominada por la hechicería."
+        "Tras las masacres de Shibuya, Itadori, cargado de culpa y preocupado por el interes de Sukuna en Fushiguro, decide no volver a la Preparatoria de Hechicería. Se une a Choso para exorcizar los espíritus liberados por Noritoshi Kamo. En medio del caos, la cupula jujutsu reactiva la ejecucion de Itadori y asigna a Yuta Okkotsu como su verdugo. Hechiceros modernos y antiguos, ahora jugadores del Juego de la Exterminación, chocan con motivos opuestos y empujan al mundo hacia una nueva era dominada por la hechicería."
     },
     60058: {
       title: "Oshi no Ko Season 3"
@@ -344,11 +344,13 @@ const AniDexDetailDataBoot = () => {
       addMap(preTitle);
       localStorage.setItem(mapKey, JSON.stringify(map));
     } catch {}
-    const chars = (isLocal && full.characters && full.characters.length > 0) ? full.characters : ((await byId(selectedId, "characters")) || []);
-    const vids = (isLocal && full.videos && (full.videos.promo?.length > 0)) ? full.videos : ((await byId(selectedId, "videos")) || {});
-    const pics = (isLocal && full.pictures && full.pictures.length > 0) ? full.pictures : ((await byId(selectedId, "pictures")) || []);
+    const [chars, vids, pics] = await Promise.all([
+      (isLocal && full.characters && full.characters.length > 0) ? Promise.resolve(full.characters) : byId(selectedId, "characters").then((data) => data || []),
+      (isLocal && full.videos && (full.videos.promo?.length > 0)) ? Promise.resolve(full.videos) : byId(selectedId, "videos").then((data) => data || {}),
+      (isLocal && full.pictures && full.pictures.length > 0) ? Promise.resolve(full.pictures) : byId(selectedId, "pictures").then((data) => data || [])
+    ]);
 
-    if (!isLocal && full && full.mal_id) {
+    if (full && full.mal_id) {
       const deepData = {
         ...full,
         characters: chars,
@@ -1243,7 +1245,7 @@ const AniDexDetailDataBoot = () => {
     const genres = document.querySelector("h1")?.parentElement?.querySelector(".flex.flex-wrap.gap-2");
     if (genres) {
       genres.innerHTML = (full.genres || [])
-        .map((g) => `<span class="px-4 py-1.5 rounded-full text-sm font-semibold text-white/90 bg-gradient-to-r from-violet-500/25 via-sky-500/10 to-fuchsia-500/20 border border-violet-400/30 shadow-[0_0_12px_rgba(139,92,246,0.35)]">${g.name}</span>`)
+        .map((g) => `<span class="px-4 py-1.5 rounded-full text-sm font-semibold text-white/90 bg-gradient-to-r from-violet-500/25 via-sky-500/10 to-fuchsia-500/20 border border-violet-400/30 shadow-[0_0_12px_rgba(139,92,246,0.35)]">${GENRE_ES[g.name] || g.name}</span>`)
         .join("");
     }
 
@@ -1789,4 +1791,6 @@ const AniDexDetailDataBoot = () => {
 };
 
 AniDexDetailDataBoot();
+
+
 

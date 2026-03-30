@@ -1272,7 +1272,9 @@
         try {
           const userSuffix = (window.AniDexProfile && window.AniDexProfile.getOrCreateUserSuffix) ? AniDexProfile.getOrCreateUserSuffix() : (localStorage.getItem("anidex_user_suffix") || "22");
           const defaultName = `NekoraUser_${userSuffix}`;
-          const userId = (window.AniDexProfile && window.AniDexProfile.getOrCreateUserId) ? AniDexProfile.getOrCreateUserId() : (localStorage.getItem("anidex_user_id") || "NK-000000");
+          const publicUserId = localStorage.getItem("anidex_public_user_id");
+          const fallbackUserId = localStorage.getItem("anidex_user_id") || "";
+          const userId = publicUserId || (fallbackUserId.startsWith("NK-") ? fallbackUserId : "NK-000000");
 
           const savedName = localStorage.getItem("anidex_profile_name");
           const savedDesc = localStorage.getItem(getK("anidex_profile_desc"));
@@ -1768,3 +1770,4 @@
 </body>
 
 </html>
+

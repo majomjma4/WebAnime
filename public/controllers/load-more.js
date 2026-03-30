@@ -8,7 +8,7 @@
   const grid = document.querySelector("section[aria-label='Grid de anime']");
   const loadBtn = Array.from(document.querySelectorAll("button"))
     .find((b) => (b.textContent || "").toLowerCase().includes("cargar"));
-  const hasLoadMore = !!(grid && loadBtn);
+  const hasLoadMore = false;
 
   const cols = 6;
   const batchRows = 2;
@@ -58,6 +58,12 @@
 
   function norm(v) {
     return String(v || "").toLowerCase().trim();
+  }
+
+
+  function isBlockedMovieTitle(value) {
+    const title = norm(value);
+    return title.includes("does it count if you lose your innocence to an android") || title.includes("does it count if") || title.includes("futanari");
   }
 
   function pretty(text) {
@@ -552,6 +558,7 @@
     const card = base.cloneNode(true);
 
     const title = item?.title || "Anime";
+    if (isBlockedMovieTitle(title)) return null;
     const img = card.querySelector("img");
     if (img) {
       applyImageFallback(img);
@@ -607,6 +614,7 @@
     const unique = [];
     rows.forEach((it) => {
       const t = norm(it?.title);
+      if (isBlockedMovieTitle(t)) return;
       const id = it?.mal_id ? String(it.mal_id) : "";
       if (!t) return;
       if (id && seenIds.has(id)) return;

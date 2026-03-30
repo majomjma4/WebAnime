@@ -97,7 +97,7 @@
           </li>
         </ul>
         <div class="px-6 mt-10">
-          <a href="añadir.php" class="w-full py-4 bg-gradient-to-br from-primary to-primary-container text-on-primary font-headline font-extrabold text-xs uppercase tracking-widest rounded-full shadow-lg shadow-primary-container/20 active:scale-95 transition-all inline-flex items-center justify-center">AÑADIR NUEVO ANIME</a>
+          <a href="a%C3%B1adir.php" class="inline-flex w-full items-center justify-center rounded-full border border-[#9a8cff]/35 bg-gradient-to-r from-[#9a8cff] to-[#74d8ff] py-4 text-xs font-extrabold uppercase tracking-widest text-slate-950 shadow-xl shadow-[#7f8cff]/20 transition-all hover:brightness-110 active:scale-95">A&Ntilde;ADIR NUEVO ANIME</a>
         </div>
       </nav>
       <div class="px-6 pt-4 border-t border-outline-variant/10">

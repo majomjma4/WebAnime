@@ -1,4 +1,4 @@
-?<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="dark" lang="es">
   <head>
     <script data-ui-preload>
@@ -300,13 +300,13 @@
                   </div>
                 </div>
                 <div class="space-y-2">
-                  <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant">Géneros</label>
-                  <!-- Dropdown de géneros renderizado por controllers/filters.js -->
+                  <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant">G?neros</label>
+                  <!-- Dropdown de gÃ©neros renderizado por controllers/filters.js -->
           </div>
           <div class="space-y-4">
             <div class="space-y-2">
               <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant" for="filter-year"
-              >Año</label
+              >A?o</label
               >
               <select
               id="filter-year"
@@ -442,12 +442,16 @@
         $dbGenres = $genreStmt->fetchAll(PDO::FETCH_COLUMN);
         echo "<script>window.DB_GENRES = " . json_encode($dbGenres) . ";</script>";
 
-        $stmt = $dbConn->prepare("SELECT * FROM anime WHERE tipo = 'Movie' AND id NOT IN (SELECT anime_id FROM anime_generos WHERE genero_id IN (SELECT id FROM generos WHERE nombre IN ('Hentai', 'Erotica', 'Ecchi', 'Yaoi', 'Yuri', 'Girls Love', 'Boys Love'))) ORDER BY puntuacion DESC LIMIT 60");
+        $stmt = $dbConn->prepare("SELECT * FROM anime WHERE tipo = 'Movie' AND id NOT IN (SELECT anime_id FROM anime_generos WHERE genero_id IN (SELECT id FROM generos WHERE nombre IN ('Hentai', 'Erotica', 'Ecchi', 'Yaoi', 'Yuri', 'Girls Love', 'Boys Love'))) ORDER BY puntuacion DESC, id DESC");
         $stmt->execute();
         $animes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         if (count($animes) > 0) {
             foreach ($animes as $a) {
+                $tituloNormalizado = strtolower(trim((string) ($a['titulo'] ?? '')));
+                if (str_contains($tituloNormalizado, 'does it count if you lose your innocence to an android') || str_contains($tituloNormalizado, 'does it count if') || str_contains($tituloNormalizado, 'futanari')) {
+                    continue;
+                }
                 $gStmt = $dbConn->prepare("SELECT g.nombre FROM generos g JOIN anime_generos ag ON g.id = ag.genero_id WHERE ag.anime_id = ?");
                 $gStmt->execute([$a['id']]);
                 $generos_arr = $gStmt->fetchAll(PDO::FETCH_COLUMN);
@@ -489,7 +493,7 @@
     ?>
   </section>
 
-  <div class="mt-12 flex justify-center">
+  <div class="mt-12 flex justify-center hidden">
   <button
     class="rounded-full border border-primary/30 bg-primary/10 px-8 py-4 text-sm font-bold text-primary transition-colors hover:bg-primary/20 inline-flex items-center gap-2"
     type="button"
@@ -518,12 +522,12 @@
     document.addEventListener("DOMContentLoaded", () => {
       // Fix mojibake and duplicated words in peliculas page text
       const fixMap = {
-        "Películas": "Películas",
-        "Películas": "Películas",
-        "Fantasía": "Fantasía",
-        "Fantasía": "Fantasía",
-        "Acción": "Acción",
-        "más": "más"
+        "Pel?culas": "Películas",
+        "Pel?culas": "Películas",
+        "FantasÃ­a": "Fantasía",
+        "FantasÃ­a": "Fantasía",
+        "AcciÃ³n": "Acción",
+        "m?s": "más"
       };
       const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
       let node;
@@ -552,6 +556,16 @@
         if (window.AniDexFilters) window.AniDexFilters.init();
       }, 1100);
       if (window.AniDexDetailLinks) window.AniDexDetailLinks.init();
+      const purgeBlockedMovies = () => {
+        document.querySelectorAll('[data-anime-card]').forEach((card) => {
+          const title = ((card.getAttribute('data-title') || '') + ' ' + (card.querySelector('h3,h4,h5')?.textContent || '')).toLowerCase();
+          if (title.includes('does it count if you lose your innocence to an android') || title.includes('does it count if') || title.includes('futanari')) {
+            card.remove();
+          }
+        });
+      };
+      purgeBlockedMovies();
+      new MutationObserver(() => purgeBlockedMovies()).observe(document.body, { childList: true, subtree: true });
       // En pagina de peliculas: mostrar el año de publicación y abajo a la izquierda.
       const applyYearBadges = () => {
         document.querySelectorAll("span.absolute.left-3").forEach((badge) => {
@@ -571,6 +585,8 @@
 <script data-ui-unlock>document.documentElement.classList.remove("preload-ui");</script>
 </body>
 </html>
+
+
 
 
 

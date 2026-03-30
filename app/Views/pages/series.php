@@ -1,4 +1,4 @@
-?<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="dark" lang="es">
   <head>
     <script data-ui-preload>document.documentElement.classList.add("preload-ui");</script>
@@ -294,7 +294,7 @@
                   <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant" for="filter-search">Buscar</label>
                   <div class="flex items-center gap-2 rounded-xl bg-surface-container-high px-4 py-3">
                     <span class="material-symbols-outlined text-primary">search</span>
-                    <input id="filter-search" class="w-full bg-transparent border-none focus:ring-0" type="search" placeholder="Ej: Frieren" aria-label="Buscar anime"/>
+                    <input id="catalog-search-input" name="catalog_search_input" data-catalog-search="1" class="w-full bg-transparent border-none focus:ring-0" type="search" placeholder="Ej: Frieren" aria-label="Buscar anime" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
                   </div>
                 </div>
                 <div class="space-y-2">
@@ -304,7 +304,7 @@
                 <div class="space-y-4">
                   <div class="space-y-2">
                     <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant" for="filter-year">Año</label>
-                    <select id="filter-year" class="w-full rounded-xl bg-surface-container-high px-4 py-3 text-on-surface" aria-label="Filtrar por ao">
+                    <select id="filter-year" class="w-full rounded-xl bg-surface-container-high px-4 py-3 text-on-surface" aria-label="Filtrar por año">
                       <option>Todos</option>
                       <option>2026</option>
                       <option>2023</option>
@@ -400,7 +400,7 @@
 
               <div class="hidden" data-state="error">
                 <div class="rounded-lg bg-error-container/30 p-10 text-center">
-                  <h2 class="text-2xl font-bold text-on-error-container">Ocurrio un error</h2>
+                  <h2 class="text-2xl font-bold text-on-error-container">Ocurrió un error</h2>
                   <p class="mt-2 text-on-error-container/80">No pudimos cargar el catálogo. Inténtalo nuevamente</p>
                   <button class="mt-6 rounded-full bg-primary px-6 py-3 text-sm font-bold text-on-primary" type="button">Reintentar</button>
                 </div>
@@ -418,12 +418,16 @@
                   $dbGenres = $genreStmt->fetchAll(PDO::FETCH_COLUMN);
                   echo "<script>window.DB_GENRES = " . json_encode($dbGenres) . ";</script>";
 
-                  $stmt = $dbConn->prepare("SELECT * FROM anime WHERE tipo != 'Movie' AND id NOT IN (SELECT anime_id FROM anime_generos WHERE genero_id IN (SELECT id FROM generos WHERE nombre IN ('Hentai', 'Erotica', 'Ecchi', 'Yaoi', 'Yuri', 'Girls Love', 'Boys Love'))) ORDER BY puntuacion DESC LIMIT 60");
+                  $stmt = $dbConn->prepare("SELECT * FROM anime WHERE tipo != 'Movie' AND id NOT IN (SELECT anime_id FROM anime_generos WHERE genero_id IN (SELECT id FROM generos WHERE nombre IN ('Hentai', 'Erotica', 'Ecchi', 'Yaoi', 'Yuri', 'Girls Love', 'Boys Love'))) ORDER BY puntuacion DESC, id DESC");
                   $stmt->execute();
                   $animes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                   if (count($animes) > 0) {
                       foreach ($animes as $a) {
+                          $tituloNormalizado = strtolower(trim((string) ($a['titulo'] ?? '')));
+                          if (str_contains($tituloNormalizado, 'does it count if you lose your innocence to an android') || str_contains($tituloNormalizado, 'does it count if') || str_contains($tituloNormalizado, 'futanari')) {
+                              continue;
+                          }
                           $gStmt = $dbConn->prepare("SELECT g.nombre FROM generos g JOIN anime_generos ag ON g.id = ag.genero_id WHERE ag.anime_id = ?");
                           $gStmt->execute([$a['id']]);
                           $generos_arr = $gStmt->fetchAll(PDO::FETCH_COLUMN);
@@ -442,7 +446,7 @@
                     <img alt="<?= htmlspecialchars($a['titulo']) ?>" 
                          class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" 
                          src="<?= htmlspecialchars($a['imagen_url'] ?? 'img/fondoanime.png') ?>" loading="lazy" referrerpolicy="no-referrer"/>
-                    <span class="absolute left-3 top-3 rounded-full bg-surface/90 px-4 py-1.5 text-sm font-bold text-on-surface shadow-lg"><?= htmlspecialchars($a['anio'] ?? '') ?></span>
+                    <span class="absolute left-3 bottom-3 rounded-full bg-surface/90 px-4 py-1.5 text-sm font-bold text-on-surface shadow-lg"><?= htmlspecialchars($a['anio'] ?? '') ?></span>
                     <?php if (!empty($a['puntuacion'])) { ?>
                     <span class="anidex-score-badge absolute top-3 right-3 bg-surface-container-lowest/80 backdrop-blur px-2 py-1 rounded text-xs font-bold text-primary flex items-center gap-1">
                        <span class="material-symbols-outlined text-[10px]" style="font-variation-settings: 'FILL' 1;">star</span>
@@ -464,7 +468,7 @@
               ?>
             </section>
 
-            <div class="mt-12 flex justify-center">
+            <div class="mt-12 flex justify-center hidden">
               <button class="rounded-full border border-primary/30 bg-primary/10 px-8 py-4 text-sm font-bold text-primary transition-colors hover:bg-primary/20 inline-flex items-center gap-2" type="button" aria-label="Cargar más resultados">
                 <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">add_circle</span>
                 Cargar más
@@ -486,70 +490,27 @@
     <script src="controllers/load-more.js?v=1774473995,33386"></script>
     <script>
   document.addEventListener("DOMContentLoaded", () => {
-    // Ajuste global de etiquetas: Series -> Animes, Serie -> Anime
-    if (document.title.includes("Series")) {
-      document.title = document.title.replaceAll("Series", "Animes");
-    }
-    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
-    const textNodes = [];
-    while (walker.nextNode()) textNodes.push(walker.currentNode);
-    textNodes.forEach((node) => {
-      if (!node.nodeValue) return;
-      node.nodeValue = node.nodeValue
-        .replace(/Series\b/g, "Animes")
-        .replace(/Serie(?!\s+de\s+TV)\b/g, "Anime");
-      const fixes = [
-        ["Acción", "Acción"],
-        ["Fantasía", "Fantasía"],
-        ["emision", "emisión"],
-        ["titulos", "títulos"],
-        ["Tambien", "También"],
-        ["tambien", "también"],
-        ["Géneros", "Géneros"],
-        ["Informacion", "Información"],
-        ["Duracion", "Duración"],
-        ["Anio", "Año"]
-      ];
-      fixes.forEach(([bad, good]) => {
-        node.nodeValue = node.nodeValue.replaceAll(bad, good);
-      });
-      node.nodeValue = node.nodeValue.replace(/Serie\s+([0-9+]+)\s+eps/g, "$1 ep");
-    });
-
-    // En animes: badge abajo izquierda con el año de publicación
-    const applyYearBadges = () => {
-      document.querySelectorAll("span.absolute.left-3").forEach((badge) => {
-        const card = badge.closest("[data-year]");
-        const year = card ? card.getAttribute("data-year") : "";
-        if (!year) return;
-        if ((badge.textContent || "").trim() !== year) badge.textContent = year;
-        badge.classList.remove("top-3");
-        badge.classList.add("bottom-3");
-      });
-    };
-    applyYearBadges();
-    const badgeObserver = new MutationObserver(() => applyYearBadges());
-    badgeObserver.observe(document.body, { childList: true, subtree: true, characterData: true });
-
-    document.querySelectorAll("[data-type='Serie']").forEach((el) => {
-      el.setAttribute("data-type", "Anime");
-    });
-    document.querySelectorAll("option").forEach((opt) => {
-      if ((opt.textContent || "").trim() === "Serie") {
-        opt.textContent = "Anime";
-        opt.value = "Anime";
-      }
-    });
-
     if (window.AniDexI18n) window.AniDexI18n.init();
     if (window.AniDexTitleImages) window.AniDexTitleImages.init();
     if (window.AniDexSearch) window.AniDexSearch.init();
     if (window.AniDexFilters) window.AniDexFilters.init();
     if (window.AniDexDetailLinks) window.AniDexDetailLinks.init();
+    const purgeBlockedSeries = () => {
+      document.querySelectorAll('[data-anime-card]').forEach((card) => {
+        const title = ((card.getAttribute('data-title') || '') + ' ' + (card.querySelector('h3,h4,h5')?.textContent || '')).toLowerCase();
+        if (title.includes('does it count if you lose your innocence to an android') || title.includes('does it count if') || title.includes('futanari')) {
+          card.remove();
+        }
+      });
+    };
+    purgeBlockedSeries();
+    new MutationObserver(() => purgeBlockedSeries()).observe(document.body, { childList: true, subtree: true });
   });
-    </script>
+</script>
     <script data-ui-unlock>document.documentElement.classList.remove("preload-ui");</script>
   </body>
 </html>
+
+
 
 

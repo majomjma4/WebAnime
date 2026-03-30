@@ -17,6 +17,10 @@ $action = $_GET['action'] ?? 'get';
 
 try {
     if ($action === 'get') {
+        $userStmt = $dbConn->prepare("SELECT codigo_publico FROM usuarios WHERE id = ?");
+        $userStmt->execute([$userId]);
+        $userRow = $userStmt->fetch(PDO::FETCH_ASSOC) ?: [];
+
         // Obtenemos los meta del usuario (nombre, desc, color, etc)
         $stmt = $dbConn->prepare("SELECT meta_key, meta_value FROM usuarios_meta WHERE usuario_id = ?");
         $stmt->execute([$userId]);
@@ -31,6 +35,7 @@ try {
                 'anidex_profile_avatar' => $meta['profile_avatar'] ?? '',
                 'anidex_profile_member_since' => $meta['profile_member_since'] ?? date('Y'),
                 'anidex_user_id' => (string)$userId,
+                'anidex_public_user_id' => $userRow['codigo_publico'] ?? null,
                 'anidex_profile_hours' => $meta['profile_hours'] ?? '0',
                 'anidex_profile_prefs' => json_decode($meta['anidex_profile_prefs'] ?? '[]', true),
                 'anidex_continue_v1' => json_decode($meta['anidex_continue_v1'] ?? '[]', true),

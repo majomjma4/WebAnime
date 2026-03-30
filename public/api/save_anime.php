@@ -49,7 +49,24 @@ if (!$new_id) {
 }
 
 $tipo = $data['type'] ?? 'TV';
-$estado = $data['status'] ?? 'Unknown';
+$estudio = '';
+if (!empty($data['studios']) && is_array($data['studios'])) {
+    $studioNames = array_filter(array_map(static function ($studio) {
+        return trim((string) ($studio['name'] ?? ''));
+    }, $data['studios']));
+    $estudio = implode(', ', $studioNames);
+}
+$estadoRaw = trim((string) ($data['status'] ?? 'Unknown'));
+$estadoLower = strtolower($estadoRaw);
+if ($estadoLower === 'finished airing') {
+    $estado = 'Finalizado';
+} elseif ($estadoLower === 'currently airing' || $estadoLower === 'en emision') {
+    $estado = 'En emision';
+} elseif ($estadoLower === 'not yet aired') {
+    $estado = 'Proximamente';
+} else {
+    $estado = $estadoRaw;
+}
 $episodios = (int)($data['episodes'] ?? 0);
 $temporada = $data['season'] ?? 'Unknown';
 $anio = (int)($data['year'] ?? 0);
@@ -63,8 +80,8 @@ $puntuacion = (float)($data['score'] ?? 0.0);
 $dbConn->beginTransaction();
 try {
     if (!$new_id) {
-        $stmt = $dbConn->prepare("INSERT INTO anime (mal_id, titulo, tipo, estado, episodios, temporada, anio, sinopsis, imagen_url, puntuacion, activo, creado_en) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, NOW())");
-        $stmt->execute([$mal_id, $titulo, $tipo, $estado, $episodios, $temporada, $anio, $sinopsis, $imagen_url, $puntuacion]);
+        $stmt = $dbConn->prepare("INSERT INTO anime (mal_id, titulo, tipo, estudio, estado, episodios, temporada, anio, sinopsis, imagen_url, puntuacion, activo, creado_en) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, NOW())");
+        $stmt->execute([$mal_id, $titulo, $tipo, $estudio, $estado, $episodios, $temporada, $anio, $sinopsis, $imagen_url, $puntuacion]);
         $new_id = $dbConn->lastInsertId();
 
         $generos = $data['genres'] ?? [];
@@ -92,14 +109,22 @@ try {
     // Secondary Data Ingestion (Characters, Pictures, Videos)
     // We do this after the main transaction to ensure the anime exists.
     
-    // Characters
+    // Characters: keep only the first 10 principal entries from Jikan
     if (isset($data['characters']) && is_array($data['characters'])) {
-        $charStmt = $dbConn->prepare("INSERT IGNORE INTO anime_characters (anime_id, mal_id, name, role, image_url) VALUES (?, ?, ?, ?, ?)");
-        foreach ($data['characters'] as $c) {
-            $c_mal_id = $c['character']['mal_id'] ?? 0;
-            $c_name = $c['character']['name'] ?? 'Unknown';
-            $c_role = $c['role'] ?? 'Supporting';
-            $c_img = $c['character']['images']['jpg']['image_url'] ?? '';
+        $characters = array_values(array_filter($data['characters'], static function ($character) {
+            return !empty($character['character']['mal_id']);
+        }));
+        $characters = array_slice($characters, 0, 10);
+
+        $deleteCharsStmt = $dbConn->prepare("DELETE FROM anime_characters WHERE anime_id = ?");
+        $deleteCharsStmt->execute([$new_id]);
+
+        $charStmt = $dbConn->prepare("INSERT INTO anime_characters (anime_id, mal_id, name, role, image_url) VALUES (?, ?, ?, ?, ?)");
+        foreach ($characters as $c) {
+            $c_mal_id = (int) ($c['character']['mal_id'] ?? 0);
+            $c_name = trim((string) ($c['character']['name'] ?? 'Unknown'));
+            $c_role = trim((string) ($c['role'] ?? 'Supporting'));
+            $c_img = (string) ($c['character']['images']['jpg']['image_url'] ?? '');
             $charStmt->execute([$new_id, $c_mal_id, $c_name, $c_role, $c_img]);
         }
     }

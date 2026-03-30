@@ -22,7 +22,18 @@ if (!$dbConn) {
 if ($action === 'add_anime') {
     $titulo = trim($data['titulo'] ?? '');
     $sinopsis = trim($data['sinopsis'] ?? '');
-    $estado = trim($data['estado'] ?? '');
+    $estadoRaw = trim($data['estado'] ?? '');
+    $estadoLower = strtolower($estadoRaw);
+    if ($estadoLower === 'finished airing') {
+        $estado = 'Finalizado';
+    } elseif ($estadoLower === 'currently airing' || $estadoLower === 'en emision') {
+        $estado = 'En emision';
+    } elseif ($estadoLower === 'not yet aired') {
+        $estado = 'Proximamente';
+    } else {
+        $estado = $estadoRaw;
+    }
+    $estudio = trim($data['estudio'] ?? '');
     $temporada = trim($data['temporada'] ?? '');
     $anio = (int)($data['anio'] ?? 0);
     $episodios = (int)($data['episodios'] ?? 0);
@@ -37,8 +48,8 @@ if ($action === 'add_anime') {
     try {
         $dbConn->beginTransaction();
 
-        $stmt = $dbConn->prepare("INSERT INTO anime (titulo, tipo, estado, episodios, temporada, anio, sinopsis, imagen_url, puntuacion, activo, creado_en) VALUES (?, 'TV', ?, ?, ?, ?, ?, ?, 0.0, 1, NOW())");
-        $stmt->execute([$titulo, $estado, $episodios, $temporada, $anio, $sinopsis, $imagen_url]);
+        $stmt = $dbConn->prepare("INSERT INTO anime (titulo, tipo, estudio, estado, episodios, temporada, anio, sinopsis, imagen_url, puntuacion, activo, creado_en) VALUES (?, 'TV', ?, ?, ?, ?, ?, ?, ?, 0.0, 1, NOW())");
+        $stmt->execute([$titulo, $estudio, $estado, $episodios, $temporada, $anio, $sinopsis, $imagen_url]);
         
         $anime_id = $dbConn->lastInsertId();
 
@@ -69,4 +80,99 @@ if ($action === 'add_anime') {
         $dbConn->rollBack();
         echo json_encode(['success' => false, 'error' => 'Error de BD: ' . $e->getMessage()]);
     }
+}
+
+
+if ($action === 'update_studio') {
+    $animeId = (int) ($data['id'] ?? 0);
+    $estudio = trim((string) ($data['estudio'] ?? ''));
+
+    if ($animeId <= 0) {
+        echo json_encode(['success' => false, 'error' => 'ID invalido']);
+        exit;
+    }
+
+    try {
+        $stmt = $dbConn->prepare("UPDATE anime SET estudio = ? WHERE id = ?");
+        $stmt->execute([$estudio, $animeId]);
+        echo json_encode(['success' => true]);
+    } catch (Exception $e) {
+        echo json_encode(['success' => false, 'error' => 'Error de BD: ' . $e->getMessage()]);
+    }
+    exit;
+}
+
+
+if ($action === 'update_anime') {
+    $animeId = (int) ($data['id'] ?? 0);
+    $titulo = trim((string) ($data['titulo'] ?? ''));
+    $tipo = trim((string) ($data['tipo'] ?? ''));
+    $estudio = trim((string) ($data['estudio'] ?? ''));
+    $anio = trim((string) ($data['anio'] ?? ''));
+    $estadoRaw = trim((string) ($data['estado'] ?? ''));
+    $estadoLower = strtolower($estadoRaw);
+    if ($estadoLower === 'finished airing') {
+        $estado = 'Finalizado';
+    } elseif ($estadoLower === 'currently airing' || $estadoLower === 'en emision') {
+        $estado = 'En emision';
+    } elseif ($estadoLower === 'not yet aired') {
+        $estado = 'Proximamente';
+    } else {
+        $estado = $estadoRaw;
+    }
+    $imagen_url = trim((string) ($data['imagen_url'] ?? ''));
+    $sinopsis = trim((string) ($data['sinopsis'] ?? ''));
+    $temporada = trim((string) ($data['temporada'] ?? ''));
+    $episodios = trim((string) ($data['episodios'] ?? ''));
+
+    if ($animeId <= 0 || $titulo === '') {
+        echo json_encode(['success' => false, 'error' => 'Datos invalidos']);
+        exit;
+    }
+
+    try {
+        $stmt = $dbConn->prepare("UPDATE anime SET titulo = ?, tipo = ?, estudio = ?, anio = ?, estado = ?, imagen_url = ?, sinopsis = ?, temporada = ?, episodios = ? WHERE id = ?");
+        $stmt->execute([
+            $titulo,
+            $tipo,
+            $estudio,
+            $anio !== '' ? (int) $anio : null,
+            $estado,
+            $imagen_url,
+            $sinopsis,
+            $temporada,
+            $episodios !== '' ? (int) $episodios : null,
+            $animeId
+        ]);
+        echo json_encode(['success' => true]);
+    } catch (Exception $e) {
+        echo json_encode(['success' => false, 'error' => 'Error de BD: ' . $e->getMessage()]);
+    }
+    exit;
+}
+
+if ($action === 'delete_anime') {
+    $animeId = (int) ($data['id'] ?? 0);
+
+    if ($animeId <= 0) {
+        echo json_encode(['success' => false, 'error' => 'ID invalido']);
+        exit;
+    }
+
+    try {
+        $dbConn->beginTransaction();
+        $dbConn->prepare("DELETE FROM anime_generos WHERE anime_id = ?")->execute([$animeId]);
+        $dbConn->prepare("DELETE FROM anime_characters WHERE anime_id = ?")->execute([$animeId]);
+        $dbConn->prepare("DELETE FROM anime_pictures WHERE anime_id = ?")->execute([$animeId]);
+        $dbConn->prepare("DELETE FROM anime_videos WHERE anime_id = ?")->execute([$animeId]);
+        $dbConn->prepare("DELETE FROM anime WHERE id = ?")->execute([$animeId]);
+        $dbConn->commit();
+        echo json_encode(['success' => true]);
+    } catch (Exception $e) {
+        if ($dbConn->inTransaction()) {
+            $dbConn->rollBack();
+        }
+        echo json_encode(['success' => false, 'error' => 'Error de BD: ' . $e->getMessage()]);
+    }
+    exit;
 }

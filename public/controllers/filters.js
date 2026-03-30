@@ -1,4 +1,4 @@
-(function () {
+﻿(function () {
   const GENRE_OPTIONS = window.DB_GENRES || [
     "Acci\u00f3n",
     "Aventura",
@@ -148,7 +148,7 @@
   };
   const STATUS_OPTIONS = ["Todos", "En emisi\u00f3n", "Finalizado", "Pr\u00f3ximamente", "Cancelado", "Pausado"];
   const STATUS_OPTIONS_SERIES = ["Todos", "En emisi\u00f3n", "Finalizado", "Pr\u00f3ximamente", "Cancelado", "Pausado"];
-  const STATUS_OPTIONS_MOVIES = ["Todos", "Pr\u00f3ximamente", "En cartelera", "Finalizada", "Cancelada", "Retrasada"];
+  const STATUS_OPTIONS_MOVIES = ["Todos", "Pr\u00f3ximamente", "En cartelera", "Finalizado", "Cancelado", "Retrasado"];
 
 
 
@@ -206,7 +206,7 @@
 
     btn.textContent = label;
 
-    btn.className = `${compact ? "px-2.5 py-1 text-[11px]" : "px-3 py-1.5 text-xs"} rounded-md border transition-colors ${active ? "bg-primary text-on-primary border-primary" : "bg-surface-container-high text-on-surface-variant border-transparent hover:text-on-surface"}`;
+    btn.className = `${compact ? "px-2.5 py-1 text-[11px]" : "px-3 py-1.5 text-xs"} rounded-md border transition-colors inline-flex items-center justify-center text-center leading-tight ${active ? "bg-primary text-on-primary border-primary" : "bg-surface-container-high text-on-surface-variant border-transparent hover:text-on-surface"}`;
 
     btn.addEventListener("click", onClick);
 
@@ -219,16 +219,29 @@
   function gridChip(label, active, onClick) {
 
     const btn = chip(label, active, onClick, true);
+    const normalizedLabel = String(label || "").normalize("NFD").replace(/[̀-ͯ]/g, "");
+    const allowTwoLines = ["Pelicula original", "Basada en serie"].includes(normalizedLabel);
 
-    btn.classList.add("w-full", "text-center", "inline-flex", "items-center", "justify-center");
+    btn.classList.add("w-full", "text-center", "inline-flex", "items-center", "justify-center", allowTwoLines ? "min-h-[3.2rem]" : "min-h-[2.85rem]");
 
     btn.classList.remove("px-2.5");
 
-    btn.classList.add("px-3.5");
+    btn.classList.add("px-2");
 
-    btn.style.paddingLeft = "calc(0.875rem + 5px)";
+    btn.style.paddingLeft = "0.5rem";
 
-    btn.style.paddingRight = "calc(0.875rem + 5px)";
+    btn.style.paddingRight = "0.5rem";
+
+    if (allowTwoLines) {
+      btn.dataset.multiline = "1";
+      btn.style.whiteSpace = "normal";
+      btn.style.wordBreak = "normal";
+      btn.style.overflow = "visible";
+      btn.style.textOverflow = "clip";
+      btn.style.lineHeight = "1.15";
+      btn.style.paddingTop = "0.45rem";
+      btn.style.paddingBottom = "0.45rem";
+    }
 
     return btn;
 
@@ -249,6 +262,20 @@
           gap: 0.5rem;
           align-items: stretch;
           justify-items: stretch;
+        }
+        .anidex-chip-grid button {
+          white-space: nowrap;
+          word-break: normal;
+          line-height: 1.1;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        .anidex-chip-grid button[data-multiline="1"] {
+          white-space: normal !important;
+          overflow: visible !important;
+          text-overflow: clip !important;
+          word-break: normal !important;
+          line-height: 1.15 !important;
         }
         @media (max-width: 1024px) {
           .anidex-chip-grid {
@@ -293,11 +320,11 @@
     const button = document.createElement("button");
     button.type = "button";
     button.className =
-      "w-full flex items-center justify-between gap-2 rounded-full bg-surface-container-high px-4 py-2.5 border border-outline/40 text-sm text-on-surface-variant hover:text-on-surface transition-colors";
+      "w-full relative flex items-center rounded-full bg-surface-container-high pl-4 pr-12 py-2.5 border border-outline/40 text-sm text-on-surface-variant hover:text-on-surface transition-colors overflow-hidden";
     button.setAttribute("aria-expanded", "false");
     button.setAttribute("aria-haspopup", "listbox");
     button.innerHTML =
-      `<span data-year-label>${kindLabel}</span><span class="material-symbols-outlined text-base">expand_more</span>`;
+      `<span data-year-label class="block truncate text-left pr-2">${kindLabel}</span><span class="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-base">expand_more</span>`;
 
     const panel = document.createElement("div");
     panel.className =
@@ -334,7 +361,7 @@
     const button = document.createElement("button");
     button.type = "button";
     button.className =
-      "w-full flex items-center justify-between gap-2 rounded-full bg-surface-container-high px-4 py-2.5 border border-outline/40 text-sm text-on-surface-variant hover:text-on-surface transition-colors";
+      "w-full relative flex items-center rounded-full bg-surface-container-high pl-4 pr-12 py-2.5 border border-outline/40 text-sm text-on-surface-variant hover:text-on-surface transition-colors overflow-hidden";
     button.setAttribute("aria-expanded", "false");
     button.setAttribute("aria-haspopup", "listbox");
     button.innerHTML =
@@ -562,7 +589,7 @@
 
 
 
-    const searchInput = document.getElementById("filter-search");
+    const searchInput = document.querySelector('[data-catalog-search="1"]') || document.getElementById("filter-search");
 
     if (!searchInput) return;
 
@@ -612,7 +639,7 @@
 
     if (isMoviesPage) {
 
-      // Move duration badge to bottom-left and remove "Película" label.
+      // Move duration badge to bottom-left and remove "Pel?cula" label.
 
       cards.forEach((card) => {
 
@@ -1150,7 +1177,7 @@
 
         const active = name === "Todos" ? set.size === 0 : set.has(name);
 
-        const btn = chip(name, active, () => {
+        const btn = gridChip(name, active, () => {
           if (name === "Todos") {
             set.clear();
           } else if (single) {
@@ -1163,8 +1190,7 @@
           }
           renderSimple(wrap, options, key, single);
           applyFilters();
-        }, true);
-        btn.classList.add("w-full", "justify-center", "text-center");
+        });
         wrap.appendChild(btn);
 
       });
@@ -1321,7 +1347,7 @@
 
       toggleEmptyState(visible.length);
 
-      // FALLBACK: Si no hay resultados locales y hay texto de búsqueda, buscar en Jikan
+      // FALLBACK: Si no hay resultados locales y hay texto de bÃºsqueda, buscar en Jikan
       if (visible.length === 0 && q && q.length > 2) {
         if (!state.isFetchingGlobal) {
           state.isFetchingGlobal = true;
@@ -1330,7 +1356,7 @@
           
           if (emptyBox) {
             const msg = emptyBox.querySelector("p");
-            if (msg) msg.textContent = "Buscando en el catálogo global...";
+            if (msg) msg.textContent = "Buscando en el cat?logo global...";
           }
 
           fetch(`api/jikan_proxy.php?endpoint=${encodeURIComponent(`anime?q=${encodeURIComponent(state.search)}&type=${mediaType}&limit=12&order_by=popularity&sort=asc`)}`)
@@ -1341,7 +1367,7 @@
                 hydrateCardsWithResults(json.data, mediaType);
               } else {
                  if (emptyBox && emptyBox.querySelector("p")) {
-                   emptyBox.querySelector("p").textContent = "No se encontraron resultados en el catálogo global.";
+                   emptyBox.querySelector("p").textContent = "No se encontraron resultados en el cat?logo global.";
                  }
               }
             })
@@ -1397,16 +1423,14 @@
 
     function canonicalStatus(v) {
       const n = normalize(v);
-      const isMoviesPage = window.location.pathname.toLowerCase().includes("peliculas");
-      if (n.includes("emision") || n.includes("airing")) return "En emisi\u00f3n";
-      if (n.includes("upcoming") || n.includes("proxim")) return "Pr\u00f3ximamente";
-      if (n.includes("finalizada")) return "Finalizada";
-      if (n.includes("final") || n.includes("finished")) return isMoviesPage ? "Finalizada" : "Finalizado";
-      if (n.includes("cancel")) return isMoviesPage ? "Cancelada" : "Cancelado";
+      if (n.includes("emision") || n.includes("airing")) return "En emisión";
+      if (n.includes("upcoming") || n.includes("proxim")) return "Próximamente";
+      if (n.includes("finalizada") || n.includes("finalizado") || n.includes("final") || n.includes("finished")) return "Finalizado";
+      if (n.includes("cancelada") || n.includes("cancelado") || n.includes("cancel")) return "Cancelado";
       if (n.includes("hiatus") || n.includes("paus")) return "Pausado";
       if (n.includes("cartelera") || n.includes("theater") || n.includes("cinema")) return "En cartelera";
-      if (n.includes("retras")) return "Retrasada";
-      return v || (isMoviesPage ? "Finalizada" : "Finalizado");
+      if (n.includes("retras")) return "Retrasado";
+      return v || "Finalizado";
     }
     function hydrateCardsWithResults(items, mediaType) {
       const grid = document.querySelector("section[aria-label='Grid de anime']");
@@ -1420,6 +1444,8 @@
         const isNew = !card;
 
         const title = item.title_english || item.title || "Anime";
+      const normalizedTitle = normalize(title);
+      if (normalizedTitle.includes("does it count if you lose your innocence to an android") || normalizedTitle.includes("does it count if") || normalizedTitle.includes("futanari")) return null;
         const img = item.images?.webp?.large_image_url || item.images?.jpg?.large_image_url || "";
         const year = item.year || (item.aired?.prop?.from?.year) || "";
         const score = item.score || item.scored || 0;
@@ -1450,6 +1476,9 @@
         card.dataset.title = normalize(title);
         card.dataset.genres = genres;
         card.dataset.year = String(year);
+        card.dataset.type = canonicalType(item.type || card.dataset.type || "");
+        card.dataset.status = canonicalStatus(item.status || card.dataset.status || "");
+        card.setAttribute("data-mal-id", String(item.mal_id || card.getAttribute("data-mal-id") || ""));
         card.style.display = "";
 
         const titleEl = card.querySelector("h3,h4,h5");
@@ -1644,13 +1673,6 @@
     applyFilters();
     renderSidebarRanking();
     if (window.AniDexFilters) window.AniDexFilters.apply = applyFilters;
-    const injectPromise = injectTestCards(isMoviesPage);
-    if (injectPromise && typeof injectPromise.then === "function") {
-      injectPromise.then(() => {
-        applyRuntimeCardData(gatherCards());
-        applyFilters();
-      });
-    }
 
   }
 
@@ -1766,6 +1788,9 @@
   }
 
   function injectTestCards(isMoviesPage) {
+    const params = new URLSearchParams(window.location.search);
+    if ((params.get("q") || "").trim()) return null;
+
     const grid = document.querySelector("section[aria-label='Grid de anime']");
     if (!grid) return null;
     const key = isMoviesPage ? "__aniTestCardsMovies" : "__aniTestCardsSeries";
@@ -1773,15 +1798,23 @@
     window[key] = true;
 
     const existingTitles = new Set();
+    const existingIds = new Set();
     const getTitle = (card) => {
-      const t =
-        card.getAttribute("data-title") ||
-        card.querySelector("h3,h4,h5")?.textContent ||
-        "";
+      const t = card.getAttribute("data-title") || card.querySelector("h3,h4,h5")?.textContent || "";
       return normalize(t);
     };
-    Array.from(grid.querySelectorAll("[data-anime-card]")).forEach((card) => {
+    const getMalId = (card) => String(card.getAttribute("data-mal-id") || card.dataset.malId || "").trim();
+
+    Array.from(grid.querySelectorAll("[data-anime-card]")) .forEach((card) => {
       const t = getTitle(card);
+      const malId = getMalId(card);
+      if (malId) {
+        if (existingIds.has(malId)) {
+          card.remove();
+          return;
+        }
+        existingIds.add(malId);
+      }
       if (!t) return;
       if (existingTitles.has(t)) {
         card.remove();
@@ -1791,41 +1824,46 @@
     });
 
     const createCard = (item, overrides) => {
-      if (!item) return null;
+      if (!item || isAdultItem(item)) return null;
       const title = item.title_english || item.title || "Anime";
       const titleKey = normalize(title);
+      const malIdKey = String(item.mal_id || "").trim();
+      if (malIdKey && existingIds.has(malIdKey)) return null;
       if (titleKey && existingTitles.has(titleKey)) return null;
+      if (malIdKey) existingIds.add(malIdKey);
+      existingTitles.add(titleKey);
+
       const img =
-        (item.images && item.images.webp && item.images.webp.large_image_url) ||
-        (item.images && item.images.webp && item.images.webp.image_url) ||
-        (item.images && item.images.jpg && item.images.jpg.large_image_url) ||
-        (item.images && item.images.jpg && item.images.jpg.image_url) ||
+        item.images?.webp?.large_image_url ||
+        item.images?.webp?.image_url ||
+        item.images?.jpg?.large_image_url ||
+        item.images?.jpg?.image_url ||
         "";
-      const year =
-        item.year ||
-        (item.aired && item.aired.prop && item.aired.prop.from && item.aired.prop.from.year) ||
-        "";
-      const genres = (item.genres || []).map((g) => g && g.name).filter(Boolean);
+      const year = item.year || item.aired?.prop?.from?.year || "";
+      const genres = (item.genres || []).map((g) => g?.name).filter(Boolean);
       const dataGenres = genres.map((g) => normalize(g)).join(",");
       const hrefId = item.mal_id
         ? `detail.php?mal_id=${encodeURIComponent(String(item.mal_id))}&q=${encodeURIComponent(title)}`
         : `detail.php?q=${encodeURIComponent(title)}`;
+      const score = item.score || item.scored || "";
 
       const article = document.createElement("article");
-      article.className =
-        "group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]";
+      article.className = "group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]";
       article.dataset.animeCard = "1";
       article.dataset.title = normalize(title);
       article.dataset.genres = dataGenres;
       article.dataset.year = String(year || "");
       article.dataset.type = overrides.type;
       article.dataset.status = overrides.status;
-      const score = item.score || item.scored || "";
+      article.dataset.malId = String(item.mal_id || "");
+      article.dataset.malId = String(item.mal_id || "");
+      article.setAttribute("data-mal-id", String(item.mal_id || ""));
+      if (score) article.dataset.score = String(score);
       article.innerHTML = `
         <a class="block" href="${hrefId}" aria-label="${title}">
           <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
             ${img ? `<img alt="${title}" class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" src="${img}" loading="lazy"/>` : ""}
-            ${year ? `<span class="absolute left-3 ${isMoviesPage ? 'bottom-3 px-4 py-1.5 text-sm' : 'top-3 px-3 py-1 text-xs'} rounded-full bg-surface/80 font-bold text-on-surface">${year}</span>` : ""}
+            ${year ? `<span class="absolute left-3 ${isMoviesPage ? 'bottom-3 px-4 py-1.5 text-sm' : 'bottom-3 px-4 py-1.5 text-sm'} rounded-full bg-surface/80 font-bold text-on-surface">${year}</span>` : ""}
             ${score ? `
               <span class="anidex-score-badge absolute top-3 right-3 bg-surface-container-lowest/80 backdrop-blur ${isMoviesPage ? 'px-2.5 py-1.5 rounded-lg text-sm gap-1.5' : 'px-2 py-1 rounded text-xs gap-1'} font-bold text-primary flex items-center shadow-lg">
                 <span class="material-symbols-outlined text-[${isMoviesPage ? '14px' : '10px'}]" style="font-variation-settings: 'FILL' 1;">star</span>
@@ -1841,56 +1879,65 @@
       return article;
     };
 
-    const fetchOne = (url) =>
-      fetch(url, { cache: "no-store" })
+    const fetchCollection = (endpoint) =>
+      fetch(`api/jikan_proxy.php?endpoint=${encodeURIComponent(endpoint)}`, { cache: "no-store" })
         .then((res) => (res && res.ok ? res.json() : null))
-        .then((json) => (json && Array.isArray(json.data) ? json.data[0] : null))
-        .catch(() => null);
+        .then((json) => ((json && Array.isArray(json.data) ? json.data : []).filter((item) => !isAdultItem(item))))
+        .catch(() => []);
+
+    const fetchFirst = (endpoint) => fetchCollection(endpoint).then((items) => items[0] || null);
 
     if (!isMoviesPage) {
-      const proxy = "api/jikan_proxy.php?endpoint=";
-      const tasks = [
-        { url: proxy + encodeURIComponent("anime?type=ova&order_by=score&sort=desc&limit=1"), type: "OVA", status: "Finalizado" },
-        { url: proxy + encodeURIComponent("anime?type=special&order_by=score&sort=desc&limit=1"), type: "Especiales", status: "Finalizado" },
-        { url: proxy + encodeURIComponent("anime?status=airing&type=tv&order_by=score&sort=desc&limit=1"), type: "Serie de TV", status: "En emisin" },
-        { url: proxy + encodeURIComponent("anime?status=upcoming&type=tv&order_by=score&sort=desc&limit=1"), type: "Serie de TV", status: "Prximamente" },
-        { url: proxy + encodeURIComponent("anime?status=cancelled&order_by=score&sort=desc&limit=1"), type: "Serie de TV", status: "Cancelado" },
+      const cardsNeeded = [
+        { endpoint: 'anime?status=airing&type=tv&order_by=score&sort=desc&limit=1', type: 'Serie de TV', status: 'En emisi?n' },
+        { endpoint: 'anime?status=upcoming&type=tv&order_by=score&sort=desc&limit=1', type: 'Serie de TV', status: 'Pr?ximamente' },
+        { endpoint: 'top/anime?type=tv&limit=1', type: 'Serie de TV', status: 'Finalizado' },
+        { endpoint: 'anime?type=ova&order_by=score&sort=desc&limit=1', type: 'OVA', status: 'Finalizado' },
+        { endpoint: 'anime?type=ona&order_by=score&sort=desc&limit=1', type: 'ONA', status: 'Finalizado' },
+        { endpoint: 'anime?type=special&order_by=score&sort=desc&limit=1', type: 'Especiales', status: 'Finalizado' },
+        { endpoint: 'anime?status=airing&type=tv&order_by=popularity&sort=asc&limit=1', type: 'Cortos', status: 'Pausado' },
+        { endpoint: 'anime?status=complete&type=tv&order_by=popularity&sort=asc&limit=1', type: 'Serie de TV', status: 'Cancelado' },
       ];
-      return Promise.all(tasks.map((t) => fetchOne(t.url).then((item) => ({ item, t }))))
-        .then((results) => {
-          results.forEach(({ item, t }) => {
-            if (!item) return;
-            const card = createCard(item, { type: t.type, status: t.status });
-            if (card) grid.appendChild(card);
-          });
-        });
-    }
 
-    const movieAssignments = [
-      { status: "En cartelera", type: "Película original" },
-      { status: "Prximamente", type: "Basada en serie" },
-      { status: "Finalizada", type: "Recopilatoria" },
-      { status: "Cancelada", type: "Secuela" },
-      { status: "Retrasada", type: "Spin-off" },
-    ];
-    return fetch("api/jikan_proxy.php?endpoint=" + encodeURIComponent("top/anime?type=movie&limit=10"), { cache: "no-store" })
-      .then((res) => (res && res.ok ? res.json() : null))
-      .then((json) => (json && Array.isArray(json.data) ? json.data : []))
-      .then((items) => {
-        movieAssignments.forEach((assign, idx) => {
-          const item = items[idx];
-          if (!item) return;
-          const card = createCard(item, { type: assign.type, status: assign.status });
+      return Promise.all(cardsNeeded.map((cfg) => fetchFirst(cfg.endpoint).then((item) => ({ item, cfg })))).then((results) => {
+        const fallbackPool = results.map((entry) => entry.item).filter(Boolean);
+        results.forEach(({ item, cfg }, index) => {
+          const chosen = item || fallbackPool[index % Math.max(fallbackPool.length, 1)] || null;
+          if (!chosen) return;
+          const card = createCard(chosen, { type: cfg.type, status: cfg.status });
           if (card) grid.appendChild(card);
         });
-      })
-      .catch(() => null);
+      });
+    }
+
+    const movieCardsNeeded = [
+      { endpoint: 'top/anime?type=movie&limit=10', pick: 0, type: 'Pel?cula original', status: 'Finalizado' },
+      { endpoint: 'anime?status=upcoming&type=movie&order_by=popularity&sort=asc&limit=1', pick: 0, type: 'Basada en serie', status: 'Pr?ximamente' },
+      { endpoint: 'top/anime?type=movie&limit=10', pick: 1, type: 'Recopilatoria', status: 'En cartelera' },
+      { endpoint: 'top/anime?type=movie&limit=10', pick: 2, type: 'Secuela', status: 'Cancelado' },
+      { endpoint: 'top/anime?type=movie&limit=10', pick: 3, type: 'Precuela', status: 'Retrasado' },
+      { endpoint: 'top/anime?type=movie&limit=10', pick: 4, type: 'Spin-off', status: 'Finalizado' },
+    ];
+
+    return fetchCollection('top/anime?type=movie&limit=12').then((topMovies) => {
+      movieCardsNeeded.forEach((cfg, index) => {
+        const item = topMovies[cfg.pick] || topMovies[index] || topMovies[0] || null;
+        if (!item) return;
+        const card = createCard(item, { type: cfg.type, status: cfg.status });
+        if (card) grid.appendChild(card);
+      });
+    }).catch(() => null);
   }
 
   window.AniDexFilters = { init: setup };
 
 
 })();
+
+
+
+
+
 
 
 
