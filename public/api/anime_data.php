@@ -135,4 +135,30 @@ while ($v = $vidStmt->fetch(PDO::FETCH_ASSOC)) {
     ];
 }
 
+$jikanData['episodes_data'] = [];
+try {
+    $dbConn->exec("CREATE TABLE IF NOT EXISTS anime_episodes (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        anime_id INT NOT NULL,
+        episode_number INT NOT NULL,
+        title VARCHAR(255) DEFAULT NULL,
+        synopsis TEXT DEFAULT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        UNIQUE KEY uniq_anime_episode (anime_id, episode_number)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+    $episodeStmt = $dbConn->prepare("SELECT episode_number, title, synopsis FROM anime_episodes WHERE anime_id = ? ORDER BY episode_number ASC");
+    $episodeStmt->execute([$animeItem['id']]);
+    while ($episode = $episodeStmt->fetch(PDO::FETCH_ASSOC)) {
+        $jikanData['episodes_data'][] = [
+            'number' => (int) ($episode['episode_number'] ?? 0),
+            'title' => (string) ($episode['title'] ?? ''),
+            'synopsis' => (string) ($episode['synopsis'] ?? '')
+        ];
+    }
+} catch (Throwable $e) {
+    $jikanData['episodes_data'] = [];
+}
+
 echo json_encode(['success' => true, 'data' => $jikanData]);

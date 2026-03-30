@@ -1744,8 +1744,6 @@
         if (!item.malId && fallbackId) {
           item.malId = fallbackId;
         }
-        const ep = item.episode || 1;
-        const epTitle = item.episodeTitle || `Episodio ${ep}`;
         const cover = item.cover || "https://via.placeholder.com/160x220?text=Anime";
         const href = item.detailUrl || (fallbackId
           ? `detail.php?mal_id=${encodeURIComponent(fallbackId)}`
@@ -1755,7 +1753,6 @@
           <span class="pointer-events-none absolute -inset-2 rounded-2xl border border-violet-400/0 opacity-0 transition-all duration-200 group-hover:opacity-100 group-hover:border-violet-400/60"></span>
           <div class="relative aspect-square rounded-none overflow-hidden bg-surface-container-high">
             <img src="${cover}" alt="${title}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.06] rounded-none" />
-            <span class="absolute bottom-2 left-2 rounded-full bg-black/70 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-white">EP ${ep}</span>
           </div>
           <div class="mt-3">
             <p class="text-[11px] text-on-surface-variant truncate">${title}</p>

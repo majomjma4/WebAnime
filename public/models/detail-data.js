@@ -84,6 +84,38 @@ const AniDexDetailDataBoot = () => {
     }
   };
 
+  const fetchEpisodeMeta = async (id, retries = 2) => {
+    if (!id) return [];
+    try {
+      const r = await fetch(`${API}?endpoint=${encodeURIComponent('anime/' + id + '/episodes')}`);
+      if (r.status === 429 && retries > 0) {
+        await delay(1000);
+        return fetchEpisodeMeta(id, retries - 1);
+      }
+      if (!r.ok) return [];
+      const j = await r.json();
+      return Array.isArray(j?.data) ? j.data : [];
+    } catch {
+      return [];
+    }
+  };
+
+  const fetchEpisodeDetail = async (id, episodeNumber, retries = 1) => {
+    if (!id || !episodeNumber) return null;
+    try {
+      const r = await fetch(`${API}?endpoint=${encodeURIComponent('anime/' + id + '/episodes/' + episodeNumber)}`);
+      if (r.status === 429 && retries > 0) {
+        await delay(1000);
+        return fetchEpisodeDetail(id, episodeNumber, retries - 1);
+      }
+      if (!r.ok) return null;
+      const j = await r.json();
+      return j?.data || null;
+    } catch {
+      return null;
+    }
+  };
+
   const fetchTopByType = async (type, limit = 10, retries = 2) => {
     try {
       const r = await fetch(`${API}?endpoint=${encodeURIComponent('top/anime?filter=bypopularity&type=' + encodeURIComponent(type) + '&limit=' + limit)}`);
@@ -166,6 +198,41 @@ const AniDexDetailDataBoot = () => {
     wrap.className = "flex flex-col gap-1";
     wrap.innerHTML = `<span class="text-xs text-on-surface-variant uppercase tracking-widest font-bold">${label}</span><span class="text-on-surface font-medium">${value || "N/A"}</span>`;
     container.appendChild(wrap);
+  };
+
+  const shortenEpisodeText = (text, maxLength = 170) => {
+    const clean = (text || "").replace(/\s+/g, " ").trim();
+    if (!clean) return "";
+    if (clean.length <= maxLength) return clean;
+
+    const sentenceMatch = clean.match(/[^.!?]+[.!?]+/g) || [];
+    let built = "";
+    for (const sentence of sentenceMatch) {
+      const next = `${built} ${sentence}`.trim();
+      if (next.length > maxLength) break;
+      built = next;
+    }
+    if (built && built.length >= 80) return built.trim();
+
+    const trimmed = clean.slice(0, maxLength);
+    const punctuationIndex = Math.max(
+      trimmed.lastIndexOf('.'),
+      trimmed.lastIndexOf('!'),
+      trimmed.lastIndexOf('?')
+    );
+    if (punctuationIndex >= 80) {
+      return trimmed.slice(0, punctuationIndex + 1).trim();
+    }
+
+    const separators = [',', ';', ':'];
+    const separatorIndex = Math.max(...separators.map((sep) => trimmed.lastIndexOf(sep)));
+    if (separatorIndex >= 90) {
+      return `${trimmed.slice(0, separatorIndex).trim()}.`;
+    }
+
+    const lastSpace = trimmed.lastIndexOf(' ');
+    const base = (lastSpace > 80 ? trimmed.slice(0, lastSpace) : trimmed).trim().replace(/[,:;\-\s]+$/, '');
+    return `${base}.`;
   };
 
   const bindHorizontalArrows = (row, prev, next, perDefault = 5) => {
@@ -762,33 +829,25 @@ const AniDexDetailDataBoot = () => {
         if (!match) return link;
         return `https://uqload.is/embed-${match[1]}.html`;
       };
-      const episodeSnippets = [
-        "Frieren y su equipo enfrentan un reto inesperado mientras avanzan en su viaje. La respuesta pone a prueba su confianza y sus limites.",
-        "Un recuerdo del pasado revela una decision clave que cambia el rumbo del grupo. Las consecuencias se sienten en cada paso.",
-        "La magia antigua vuelve a aparecer y pone a prueba la determinacion de todos. Un descubrimiento altera su mision.",
-        "Un nuevo aliado surge en el camino, con un objetivo que no es lo que parece. La verdad obliga a elegir con cuidado.",
-        "La calma se rompe cuando una amenaza obliga a tomar una decision dificil. El equipo debe actuar sin margen de error.",
-        "Un episodio emotivo que profundiza los lazos y el crecimiento del equipo. Cada uno enfrenta su propio miedo."
-      ];
-      const episodeTitles = [
-        "Ecos del viaje",
-        "Promesa en silencio",
-        "Magia olvidada",
-        "El precio del recuerdo",
-        "Guardianes del bosque",
-        "La prueba del valor",
-        "Sombras del pasado",
-        "Rastro de esperanza",
-        "Votos y despedidas",
-        "El camino de los heroes",
-        "Huellas de luz",
-        "Destino compartido"
-      ];
+      const localEpisodesData = Array.isArray(full.episodes_data) ? full.episodes_data : [];
+      const localEpisodeMap = new Map(
+        localEpisodesData.map((episode) => [Number(episode?.number || episode?.episode_number), episode])
+      );
+      const rawEpisodeMeta = localEpisodesData.length ? [] : await fetchEpisodeMeta(selectedId);
+      const episodeMetaMap = new Map(
+        (rawEpisodeMeta || []).map((episode) => [Number(episode?.mal_id || episode?.mal_episode_id || episode?.episode_id || episode?.number), episode])
+      );
+      const fallbackEpisodeSynopsis = (epNumber) => {
+        const animeLabel = preferredTitle || full.title || "este anime";
+        return `Sinopsis no disponible todavia para el episodio ${epNumber} de ${animeLabel}.`;
+      };
       const episodeItems = Array.from({ length: episodesTotal }).map((_, index) => {
         const epNumber = index + 1;
         const epCode = `${episodePrefix}-${epNumber}`;
-        const epTitle = episodeTitles[index] || `Episodio ${epNumber}`;
-        const epSynopsis = episodeSnippets[index % episodeSnippets.length];
+        const episodeMeta = localEpisodeMap.get(epNumber) || episodeMetaMap.get(epNumber) || {};
+        const epTitle = episodeMeta.title || episodeMeta.title_japanese || `Episodio ${epNumber}`;
+        const rawSynopsis = (episodeMeta.synopsis || "").trim() || fallbackEpisodeSynopsis(epNumber);
+        const epSynopsis = shortenEpisodeText(rawSynopsis);
         const linkUrl = linksForTitle[epNumber];
         return { epNumber, epCode, epTitle, epSynopsis, linkUrl };
       });
@@ -906,7 +965,7 @@ const AniDexDetailDataBoot = () => {
 
       const renderEpisodeCard = (item) => {
         const episodeAttrs = item.linkUrl
-          ? `data-episode-link="${item.linkUrl}" data-episode-embed="${toEmbed(item.linkUrl)}"`
+          ? `data-episode-link="${item.linkUrl}" data-episode-embed="${toEmbed(item.linkUrl)}" data-episode-title="${item.epTitle}"`
           : `data-episode-image="${src}" data-episode-title="${item.epTitle}"`;
         const seenBtnClass = canWatchEpisodes ? "" : "hidden";
         return `
@@ -918,8 +977,8 @@ const AniDexDetailDataBoot = () => {
               <span class="min-w-[3.5rem] text-center px-4 py-2 rounded-full text-sm font-bold uppercase tracking-widest text-violet-100 bg-violet-500/25 border border-violet-400/50">${episodePrefix}-${item.epNumber}</span>
             </div>
             <div class="min-w-0 ml-2 flex flex-col justify-center">
-              <h3 class="font-semibold text-white text-base">${item.epTitle}</h3>
-              <p class="text-on-surface-variant text-sm mt-2">${item.epSynopsis}</p>
+              <h3 class="font-semibold text-white text-base" data-episode-title-text>${item.epTitle}</h3>
+              <p class="text-on-surface-variant text-sm mt-2" data-episode-synopsis>${item.epSynopsis}</p>
             </div>
             <div class="ml-auto flex items-center justify-center">
               <button type="button" class="episode-seen-btn ${seenBtnClass} w-12 h-12 rounded-full border border-white/10 bg-white/5 text-white/60 flex items-center justify-center transition-all duration-200 hover:text-emerald-200 hover:border-emerald-300/50 hover:bg-emerald-500/10" data-episode-seen aria-pressed="false" title="Marcar como visto">
@@ -1002,6 +1061,79 @@ const AniDexDetailDataBoot = () => {
         }, { passive: true });
       };
       ensureEpisodeHoverFix();
+      const episodeDetailCache = new Map();
+      let episodeCacheSaveStarted = false;
+      const pendingEpisodeCache = new Map();
+      const queueEpisodeCacheSave = (episodeNumber, title, synopsis) => {
+        if (!episodeNumber) return;
+        const safeTitle = (title || '').trim();
+        const safeSynopsis = (synopsis || '').trim();
+        if (!safeTitle && !safeSynopsis) return;
+        pendingEpisodeCache.set(String(episodeNumber), {
+          number: Number(episodeNumber),
+          title: safeTitle,
+          synopsis: safeSynopsis
+        });
+      };
+      const flushEpisodeCache = async () => {
+        if (episodeCacheSaveStarted || !pendingEpisodeCache.size || !selectedId) return;
+        episodeCacheSaveStarted = true;
+        const payload = Array.from(pendingEpisodeCache.values());
+        pendingEpisodeCache.clear();
+        try {
+          await fetch("api/save_anime.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              mal_id: selectedId,
+              title: full.title || preferredTitle || "",
+              title_english: full.title_english || preferredTitle || "",
+              episodes_data: payload
+            })
+          });
+        } catch {}
+      };
+      const enrichEpisodeCards = async (cards) => {
+        if (!selectedId || !Array.isArray(cards) || !cards.length) return;
+        await Promise.all(cards.map(async (card) => {
+          if (!card || card.dataset.episodeDetailLoaded === "1") return;
+          const epNumber = Number(card.getAttribute("data-episode") || 0);
+          if (!epNumber || localEpisodeMap.has(epNumber)) return;
+          card.dataset.episodeDetailLoaded = "1";
+          let detail = episodeDetailCache.get(epNumber);
+          if (detail === undefined) {
+            detail = await fetchEpisodeDetail(selectedId, epNumber);
+            episodeDetailCache.set(epNumber, detail || null);
+          }
+          if (!detail) return;
+          const titleText = card.querySelector("[data-episode-title-text]");
+          const synopsisText = card.querySelector("[data-episode-synopsis]");
+          const nextTitle = (detail.title || detail.title_japanese || "").trim();
+          const nextSynopsis = (detail.synopsis || "").trim();
+          let finalTitle = nextTitle;
+          let finalSynopsis = nextSynopsis;
+          if (nextTitle && titleText) {
+            const translatedTitle = await translateToEs(nextTitle);
+            finalTitle = (translatedTitle || nextTitle).trim();
+            titleText.textContent = finalTitle;
+            card.setAttribute("data-episode-title", finalTitle);
+          }
+          if (nextSynopsis && synopsisText) {
+            const translatedSynopsis = await translateToEs(nextSynopsis);
+            finalSynopsis = shortenEpisodeText(translatedSynopsis || nextSynopsis);
+            synopsisText.textContent = finalSynopsis;
+          }
+          if (finalTitle || finalSynopsis) {
+            queueEpisodeCacheSave(epNumber, finalTitle, finalSynopsis);
+            localEpisodeMap.set(epNumber, {
+              number: epNumber,
+              title: finalTitle,
+              synopsis: finalSynopsis
+            });
+          }
+        }));
+        flushEpisodeCache().catch(() => {});
+      };
       const appendBatch = () => {
         const nextItems = episodeItems.slice(shown, shown + pageSize);
         if (!nextItems.length) return;
@@ -1032,6 +1164,9 @@ const AniDexDetailDataBoot = () => {
             updateSeenUI(card, next);
           });
         });
+        const pendingCards = freshCards.filter((card) => card.dataset.episodeEnhanced !== "1");
+        pendingCards.forEach((card) => { card.dataset.episodeEnhanced = "1"; });
+        enrichEpisodeCards(pendingCards).catch(() => {});
         if (typeof bindEpisodeCards === "function") {
           bindEpisodeCards();
         }
