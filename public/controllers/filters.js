@@ -314,13 +314,13 @@
     mini.textContent = kindLabel;
 
     const wrap = document.createElement("div");
-    wrap.className = "relative";
+    wrap.className = "relative w-full";
     wrap.dataset.yearDropdown = kindLabel.toLowerCase();
 
     const button = document.createElement("button");
     button.type = "button";
     button.className =
-      "w-full relative flex items-center rounded-full bg-surface-container-high pl-4 pr-12 py-2.5 border border-outline/40 text-sm text-on-surface-variant hover:text-on-surface transition-colors overflow-hidden";
+      "w-full relative flex items-center justify-between gap-3 rounded-full bg-surface-container-high pl-4 pr-4 py-2.5 border border-outline/40 text-sm text-on-surface-variant hover:text-on-surface transition-colors overflow-hidden";
     button.setAttribute("aria-expanded", "false");
     button.setAttribute("aria-haspopup", "listbox");
     button.innerHTML =
@@ -355,17 +355,20 @@
 
   function createGenreDropdown() {
     const wrap = document.createElement("div");
-    wrap.className = "relative";
+    wrap.className = "relative w-full";
     wrap.dataset.genreDropdown = "1";
 
     const button = document.createElement("button");
     button.type = "button";
     button.className =
-      "w-full relative flex items-center rounded-full bg-surface-container-high pl-4 pr-12 py-2.5 border border-outline/40 text-sm text-on-surface-variant hover:text-on-surface transition-colors overflow-hidden";
+      "w-full rounded-full bg-surface-container-high pl-4 pr-12 py-2.5 border border-outline/40 text-sm text-on-surface-variant hover:text-on-surface transition-colors overflow-hidden text-left bg-no-repeat";
+    button.style.backgroundImage = 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'16\' height=\'16\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%239aa0a6\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3E%3Cpolyline points=\'6 9 12 15 18 9\'/%3E%3C/svg%3E")';
+    button.style.backgroundPosition = "right 0.75rem center";
+    button.style.backgroundSize = "14px";
     button.setAttribute("aria-expanded", "false");
     button.setAttribute("aria-haspopup", "listbox");
     button.innerHTML =
-      "<span data-genre-label>Todos</span><span class=\"material-symbols-outlined text-base\">expand_more</span>";
+      `<span data-genre-label class="block min-w-0 truncate pr-2">Todos</span>`;
 
     const panel = document.createElement("div");
     panel.className =

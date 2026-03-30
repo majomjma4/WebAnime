@@ -645,10 +645,10 @@
   </div>
 
   <!-- Edit Profile Modal -->
-  <div id="profile-modal" class="fixed inset-0 z-[60] hidden">
+  <div id="profile-modal" class="fixed inset-0 z-[90] hidden flex items-center justify-center px-4">
     <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" data-profile-close></div>
     <div
-      class="relative mx-auto mt-16 w-[78%] max-w-md rounded-2xl border border-white/10 bg-surface-container-high p-5 shadow-[0_24px_60px_rgba(0,0,0,0.5)]">
+      class="relative w-full max-w-md rounded-2xl border border-white/10 bg-surface-container-high p-5 shadow-[0_24px_60px_rgba(0,0,0,0.5)]">
       <div class="flex items-center justify-between mb-4">
         <h3 class="font-headline text-xl font-bold">Editar perfil</h3>
         <button
@@ -900,6 +900,7 @@
       const grid = document.getElementById("avatar-grid");
       const avatarImg = document.querySelector("img[alt='Foto de perfil']");
       const previewImg = document.querySelector("[data-profile-avatar-preview]");
+      const getK = (k) => (window.AniDexProfile && window.AniDexProfile.getIsolatedKey) ? window.AniDexProfile.getIsolatedKey(k) : k;
 
       if (!modal || !grid || !avatarImg) return;
 
@@ -981,8 +982,10 @@
         } catch (e) { }
       };
 
+      window.paintProfileAvatar = paintProfileAvatar;
+
       const saved = (() => { try { return localStorage.getItem(getK("anidex_profile_avatar")) || localStorage.getItem("anidex_profile_avatar"); } catch (e) { return null; } })();
-      if (saved) syncAvatars(saved);
+      if (saved) paintProfileAvatar(saved);
 
       grid.addEventListener("click", (e) => {
         const btn = e.target.closest("[data-avatar-src]");
@@ -1161,6 +1164,15 @@
       const idDisplay = document.querySelector("[data-profile-id-display]");
       console.log("AniDex DEBUG: idDisplay =", idDisplay);
       const avatarImg = document.querySelector("img[alt='Foto de perfil']");
+      const previewImg = document.querySelector("[data-profile-avatar-preview]");
+      const paintProfileAvatar = (src) => {
+        if (!src) return;
+        if (avatarImg) avatarImg.src = src;
+        if (previewImg) previewImg.src = src;
+        document.querySelectorAll("img[data-profile-avatar]").forEach((img) => {
+          img.src = src;
+        });
+      };
       const nameInput = document.getElementById("profile-name-input");
       const descInput = document.getElementById("profile-desc-input");
       const saveBtn = document.getElementById("profile-save-btn");
@@ -1189,7 +1201,7 @@
         "Género": { baseBorder: "border-violet-400/70", baseBg: "bg-violet-500/45", activeBorder: "border-violet-300/90", activeBg: "bg-violet-500/70", glow: "" }
       };
 
-      const getK = (k) => (window.AniDexProfile && window.AniDexProfile.getIsolatedKey) ? AniDexProfile.getIsolatedKey(k) : k;
+      const getK = (k) => (window.AniDexProfile && window.AniDexProfile.getIsolatedKey) ? window.AniDexProfile.getIsolatedKey(k) : k;
       const colorClasses = [
         "bg-gradient-to-br", "from-zinc-950", "from-zinc-900", "via-zinc-900", "to-zinc-800",
         "from-violet-900/50", "via-indigo-900/40", "to-slate-900/30",
@@ -1330,18 +1342,22 @@
 
       const openModal = () => {
         if (!modal) return;
-        nameInput.value = nameEl.textContent.trim();
-        descInput.value = descEl.textContent.trim();
+        if (nameInput && nameEl) nameInput.value = nameEl.textContent.trim();
+        if (descInput && descEl) descInput.value = descEl.textContent.trim();
         if (previewImg && avatarImg) previewImg.src = avatarImg.src;
-        if (descCount) descCount.textContent = `${descInput.value.length}/200`;
+        if (descInput && descCount) descCount.textContent = `${descInput.value.length}/200`;
         pendingPrefs = loadPrefs();
         renderPrefPicker(pendingPrefs);
         modal.classList.remove("hidden");
+        modal.classList.add("flex");
         document.body.style.overflow = "hidden";
       };
 
       const closeModal = () => {
-        if (modal) modal.classList.add("hidden");
+        if (modal) {
+          modal.classList.add("hidden");
+          modal.classList.remove("flex");
+        }
         document.body.style.overflow = "";
       };
 
@@ -1369,9 +1385,23 @@
       };
 
       // Listeners
-      if (editBtn) editBtn.addEventListener("click", openModal);
-      if (settingsBtn) settingsBtn.addEventListener("click", openModal);
-      closeEls.forEach(el => el.addEventListener("click", closeModal));
+      if (editBtn) editBtn.addEventListener("click", (e) => { e.preventDefault(); openModal(); });
+      if (settingsBtn) settingsBtn.addEventListener("click", (e) => { e.preventDefault(); openModal(); });
+      closeEls.forEach(el => el.addEventListener("click", (e) => { e.preventDefault(); closeModal(); }));
+
+      document.addEventListener("click", (e) => {
+        const openTrigger = e.target.closest("#profile-settings-btn, #edit-profile-btn");
+        if (openTrigger) {
+          e.preventDefault();
+          openModal();
+          return;
+        }
+        const closeTrigger = e.target.closest("[data-profile-close]");
+        if (closeTrigger) {
+          e.preventDefault();
+          closeModal();
+        }
+      });
       if (requestBtn) requestBtn.addEventListener("click", openRequestModal);
       requestCloseEls.forEach(el => el.addEventListener("click", closeRequestModal));
 
@@ -1615,7 +1645,7 @@
       const grid = document.getElementById("continue-grid");
       const empty = document.getElementById("continue-empty");
       if (!grid || !empty) return;
-      const getK = (k) => (window.AniDexProfile && window.AniDexProfile.getIsolatedKey) ? AniDexProfile.getIsolatedKey(k) : k;
+      const getK = (k) => (window.AniDexProfile && window.AniDexProfile.getIsolatedKey) ? window.AniDexProfile.getIsolatedKey(k) : k;
       let items = [];
       try {
         items = JSON.parse(localStorage.getItem(getK("anidex_continue_v1")) || "[]");
