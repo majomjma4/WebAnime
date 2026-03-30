@@ -20,6 +20,22 @@
             font-family: 'Inter', sans-serif;
         }
         .font-headline { font-family: 'Manrope', sans-serif; }
+        .transparent-scrollbar {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.12) transparent;
+        }
+        .transparent-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .transparent-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .transparent-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.12);
+            border-radius: 9999px;
+            border: 2px solid transparent;
+            background-clip: content-box;
+        }
     </style>
 <script id="tailwind-config">
       tailwind.config = {
@@ -89,7 +105,7 @@
 </div>
 <div class="space-y-2">
 <label class="text-sm font-bold uppercase tracking-wider text-primary">Sinopsis / Descripción</label>
-<textarea id="in-sinopsis" required class="w-full bg-surface-container-lowest border-none rounded-lg p-4 focus:ring-2 focus:ring-primary/40 text-on-surface resize-none" placeholder="Escribe una descripción detallada..." rows="6"></textarea>
+<textarea id="in-sinopsis" required class="w-full bg-surface-container-lowest border-none rounded-lg p-4 focus:ring-2 focus:ring-primary/40 text-on-surface resize-none transparent-scrollbar" placeholder="Escribe una descripción detallada..." rows="6"></textarea>
 </div>
 </div>
 <!-- Media Section -->
@@ -128,7 +144,7 @@
 <!-- Technical Specs Section -->
 <div class="bg-surface-container-low p-8 rounded-lg shadow-sm space-y-6">
 <div class="space-y-2">
-<label class="text-sm font-bold uppercase tracking-wider text-primary">Tipo</label>
+<label id="label-tipo-formato" class="text-sm font-bold uppercase tracking-wider text-primary">Tipo</label>
 <select id="in-tipo-formato" class="w-full bg-surface-container-lowest border-none rounded-lg p-4 focus:ring-2 focus:ring-primary/40 text-on-surface appearance-none cursor-pointer">
 <option value="ALL">Todos</option>
 <option value="TV">Serie de TV</option>
@@ -139,40 +155,40 @@
 </select>
 </div>
 <div class="space-y-2">
-<label class="text-sm font-bold uppercase tracking-wider text-primary">Estado</label>
+<label id="label-estado" class="text-sm font-bold uppercase tracking-wider text-primary">Estado</label>
 <select id="in-estado" class="w-full bg-surface-container-lowest border-none rounded-lg p-4 focus:ring-2 focus:ring-primary/40 text-on-surface appearance-none cursor-pointer">
 <option value="ALL">Todos</option>
-<option value="Airing">En emisiÃ³n</option>
+<option value="Airing">En emisión</option>
 <option value="Finished">Finalizado</option>
-<option value="Upcoming">PrÃ³ximamente</option>
+<option value="Upcoming">Próximamente</option>
 <option value="Cancelled">Cancelado</option>
 </select>
 </div>
 <div class="grid grid-cols-2 gap-4">
-<div class="space-y-2">
+<div id="temporada-wrap" class="space-y-2">
 <label class="text-sm font-bold uppercase tracking-wider text-primary">Temporada</label>
 <select id="in-temporada" class="w-full bg-surface-container-lowest border-none rounded-lg p-4 focus:ring-2 focus:ring-primary/40 text-on-surface appearance-none cursor-pointer">
 <option value="winter">Invierno</option>
 <option value="spring">Primavera</option>
 <option value="summer">Verano</option>
-<option value="fall">OtoÃ±o</option>
+<option value="fall">Otoño</option>
 </select>
 </div>
 <div class="space-y-2">
-<label class="text-sm font-bold uppercase tracking-wider text-primary">AÃ±o</label>
-<input id="in-anio" class="w-full bg-surface-container-lowest border-none rounded-lg p-4 focus:ring-2 focus:ring-primary/40 text-on-surface" type="number" value="2024"/>
+<label class="text-sm font-bold uppercase tracking-wider text-primary">Año</label>
+<input id="in-anio" class="w-full bg-surface-container-lowest border-none rounded-lg p-4 focus:ring-2 focus:ring-primary/40 text-on-surface" type="number" value="2026"/>
 </div>
 </div>
 <div class="grid grid-cols-2 gap-4">
-<div class="space-y-2">
-<label class="text-sm font-bold uppercase tracking-wider text-primary">Episodios</label>
+<div id="duration-wrap" class="space-y-2">
+<label id="label-duracion" class="text-sm font-bold uppercase tracking-wider text-primary">Episodios</label>
 <input id="in-episodios" class="w-full bg-surface-container-lowest border-none rounded-lg p-4 focus:ring-2 focus:ring-primary/40 text-on-surface" placeholder="0" type="number"/>
 </div>
 </div>
 </div>
 <!-- Genres Section -->
 <div class="bg-surface-container-low p-8 rounded-lg shadow-sm">
-<label class="text-sm font-bold uppercase tracking-wider text-primary mb-4 block">GÃ©neros</label>
+<label class="text-sm font-bold uppercase tracking-wider text-primary mb-4 block">Géneros</label>
 <div class="grid grid-cols-2 gap-3">
 <label class="group flex min-h-[48px] w-full items-center gap-2 rounded-2xl border border-outline-variant/10 bg-surface-container-lowest px-4 py-3 cursor-pointer">
 <input name="in-genero" value="Action" class="rounded text-primary focus:ring-primary/20 bg-transparent border-outline-variant" type="checkbox"/>
@@ -248,10 +264,33 @@
     Anime guardado en la base de datos exitosamente
   </div>
 </div>
+<div id="admin-confirm-modal" class="fixed inset-0 z-[70] hidden items-center justify-center bg-black/70 px-6">
+  <div class="w-full max-w-md rounded-[28px] border border-primary/20 bg-surface-container p-6 shadow-[0_24px_80px_rgba(0,0,0,0.45)]">
+    <div class="flex items-start gap-4">
+      <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary/15 text-primary">
+        <span class="material-symbols-outlined text-[24px]" id="admin-confirm-icon">warning</span>
+      </div>
+      <div class="flex-1 space-y-2">
+        <h3 id="admin-confirm-title" class="text-xl font-headline font-extrabold text-on-surface">Confirmar acción</h3>
+        <p id="admin-confirm-message" class="text-sm leading-relaxed text-on-surface-variant">?Deseas continuar?</p>
+      </div>
+    </div>
+    <div class="mt-6 flex justify-end gap-3">
+      <button type="button" id="admin-confirm-cancel" class="rounded-full border border-outline-variant/30 bg-surface-container-lowest px-5 py-3 text-xs font-bold uppercase tracking-widest text-on-surface-variant transition hover:border-outline/60 hover:text-on-surface">Cancelar</button>
+      <button type="button" id="admin-confirm-ok" class="rounded-full bg-gradient-to-r from-[#cdbdff] to-[#4f00d0] px-5 py-3 text-xs font-bold uppercase tracking-widest text-white shadow-lg shadow-primary/20 transition hover:brightness-110">Continuar</button>
+    </div>
+  </div>
+</div>
 <script>
   (function () {
     const form = document.getElementById('form-a?adir') || document.querySelector('form[id^="form-a"]');
     const toast = document.querySelector('[data-admin-save-toast]');
+    const confirmModal = document.getElementById('admin-confirm-modal');
+    const confirmTitle = document.getElementById('admin-confirm-title');
+    const confirmMessage = document.getElementById('admin-confirm-message');
+    const confirmOk = document.getElementById('admin-confirm-ok');
+    const confirmCancel = document.getElementById('admin-confirm-cancel');
+    const confirmIcon = document.getElementById('admin-confirm-icon');
     const typeInput = document.getElementById('in-tipo');
     const typeButtons = Array.from(document.querySelectorAll('[data-type-option]'));
     const pageTitle = document.getElementById('add-page-title');
@@ -259,7 +298,13 @@
     const labelTitulo = document.getElementById('label-titulo');
     const tituloInput = document.getElementById('in-titulo');
     const submitLabel = document.getElementById('submit-label');
+    const tipoFormatoSelect = document.getElementById('in-tipo-formato');
+    const estadoSelect = document.getElementById('in-estado');
+    const temporadaWrap = document.getElementById('temporada-wrap');
+    const durationLabel = document.getElementById('label-duracion');
+    const durationInput = document.getElementById('in-episodios');
     let isDirty = false;
+    let isSubmitting = false;
     const imageInput = document.getElementById('in-imagen');
     const trailerInput = document.getElementById('in-trailer');
     const posterPreviewImage = document.getElementById('poster-preview-image');
@@ -269,6 +314,37 @@
     const mediaTabButtons = Array.from(document.querySelectorAll('[data-media-tab]'));
     const mediaPosterPanel = document.getElementById('media-panel-poster');
     const mediaTrailerPanel = document.getElementById('media-panel-trailer');
+
+    let confirmResolver = null;
+
+    const closeConfirmModal = (result) => {
+      if (!confirmModal) return;
+      confirmModal.classList.add('hidden');
+      confirmModal.classList.remove('flex');
+      document.body.style.overflow = '';
+      if (confirmResolver) {
+        confirmResolver(result);
+        confirmResolver = null;
+      }
+    };
+
+    const openConfirmModal = ({ title, message, confirmText = 'Continuar', cancelText = 'Cancelar', icon = 'warning' }) => {
+      if (!confirmModal || !confirmTitle || !confirmMessage || !confirmOk || !confirmCancel || !confirmIcon) {
+        return Promise.resolve(window.confirm(message || '?Deseas continuar?'));
+      }
+      confirmTitle.textContent = title || 'Confirmar acción';
+      confirmMessage.textContent = message || '?Deseas continuar?';
+      confirmOk.textContent = confirmText;
+      confirmCancel.textContent = cancelText;
+      confirmIcon.textContent = icon;
+      confirmModal.classList.remove('hidden');
+      confirmModal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+      return new Promise((resolve) => {
+        confirmResolver = resolve;
+      });
+    };
+
 
     const resetPosterPreview = () => {
       if (!posterPreviewImage || !posterPreviewEmpty) return;
@@ -352,11 +428,34 @@
         btn.classList.toggle('bg-surface-container-lowest', !active);
         btn.classList.toggle('text-on-surface-variant', !active);
       });
-      if (pageTitle) pageTitle.textContent = isMovie ? 'Añadir Nueva Película' : 'Añadir Nuevo Anime';
+      if (pageTitle) pageTitle.textContent = isMovie ? 'A?adir Nueva Película' : 'A?adir Nuevo Anime';
       if (pageSubtitle) pageSubtitle.textContent = isMovie ? 'Completa los detalles para catalogar una nueva película.' : 'Completa los detalles para catalogar una nueva obra maestra.';
-      if (labelTitulo) labelTitulo.textContent = isMovie ? 'Título de la Película' : 'Título del Anime';
+      if (labelTitulo) labelTitulo.textContent = isMovie ? 'T?tulo de la Película' : 'T?tulo del Anime';
       if (tituloInput) tituloInput.placeholder = isMovie ? 'Ej: Koe no Katachi' : 'Ej: Neon Genesis Evangelion';
       if (submitLabel) submitLabel.textContent = isMovie ? 'Subir Película' : 'Subir Anime';
+
+      if (tipoFormatoSelect) {
+        tipoFormatoSelect.innerHTML = isMovie
+          ? `<option value="ORIGINAL">Película original</option><option value="BASED_ON_SERIES">Basada en serie</option><option value="COMPILATION">Recopilatoria</option><option value="SEQUEL">Secuela</option><option value="PREQUEL">Precuela</option><option value="SPIN_OFF">Spin-off</option>`
+          : `<option value="ALL">Todos</option><option value="TV">Serie de TV</option><option value="OVA">OVA</option><option value="ONA">ONA</option><option value="SPECIAL">Especiales</option><option value="SHORT">Cortos</option>`;
+      }
+
+      if (estadoSelect) {
+        estadoSelect.innerHTML = isMovie
+          ? `<option value="Upcoming">Proximamente</option><option value="In Theaters">En cartelera</option><option value="Finished">Finalizado</option><option value="Cancelled">Cancelado</option>`
+          : `<option value="ALL">Todos</option><option value="Airing">En emisión</option><option value="Finished">Finalizado</option><option value="Upcoming">Proximamente</option><option value="Cancelled">Cancelado</option>`;
+      }
+
+      if (temporadaWrap) {
+        temporadaWrap.classList.toggle('hidden', isMovie);
+      }
+      if (durationLabel) {
+        durationLabel.textContent = isMovie ? 'Duración' : 'Episodios';
+      }
+      if (durationInput) {
+        durationInput.placeholder = isMovie ? 'Ej: 120 min' : '0';
+        durationInput.value = '';
+      }
     };
 
     typeButtons.forEach((btn) => {
@@ -373,6 +472,61 @@
     setMediaTab('poster');
 
     form.addEventListener('input', () => { isDirty = true; }, true);
+
+    const warnUnsaved = () => 'Si sales de esta pantalla se borrarán los cambios no guardados. ¿Quieres continuar?';
+
+    window.addEventListener('beforeunload', (event) => {
+      if (!isDirty || isSubmitting) return;
+      event.preventDefault();
+      event.returnValue = '';
+    });
+
+    document.addEventListener('click', async (event) => {
+      if (!isDirty || isSubmitting) return;
+      const link = event.target.closest('a[href]');
+      if (!link) return;
+      const href = link.getAttribute('href') || '';
+      if (!href || href.startsWith('#') || href.startsWith('javascript:')) return;
+      const url = new URL(href, window.location.href);
+      if (url.href === window.location.href) return;
+      event.preventDefault();
+      event.stopPropagation();
+      const ok = await openConfirmModal({
+        title: 'Salir sin guardar',
+        message: warnUnsaved(),
+        confirmText: 'Salir',
+        cancelText: 'Quedarme',
+        icon: 'warning'
+      });
+      if (ok) {
+        isDirty = false;
+        window.location.href = url.href;
+      }
+    }, true);
+
+    document.addEventListener('keydown', async (event) => {
+      if (!isDirty || isSubmitting) return;
+      const wantsRefresh = event.key === 'F5' || ((event.ctrlKey || event.metaKey) && String(event.key).toLowerCase() === 'r');
+      if (!wantsRefresh) return;
+      event.preventDefault();
+      const ok = await openConfirmModal({
+        title: 'Recargar p?gina',
+        message: 'Si recargas esta pantalla, se borrar? el contenido no guardado. ?Quieres continuar?',
+        confirmText: 'Recargar',
+        cancelText: 'Quedarme',
+        icon: 'refresh'
+      });
+      if (ok) {
+        isDirty = false;
+        window.location.reload();
+      }
+    });
+    confirmModal?.addEventListener('click', (event) => {
+      if (event.target === confirmModal) closeConfirmModal(false);
+    });
+    confirmCancel?.addEventListener('click', () => closeConfirmModal(false));
+    confirmOk?.addEventListener('click', () => closeConfirmModal(true));
+
     imageInput?.addEventListener('input', updatePosterPreview);
     trailerInput?.addEventListener('input', updateTrailerPreview);
     updatePosterPreview();
@@ -381,6 +535,18 @@
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
+      const confirmed = await openConfirmModal({
+        title: 'Confirmar subida',
+        message: '¿Estás seguro de subir este anime a NekoraList?',
+        confirmText: 'Sí, subir',
+        cancelText: 'Cancelar',
+        icon: 'upload'
+      });
+      if (!confirmed) {
+        return;
+      }
+
+      isSubmitting = true;
       const btn = form.querySelector('[type="submit"]');
       const textOrig = btn.innerText;
       btn.innerText = 'PROCESANDO...';
@@ -413,10 +579,14 @@
 
         if (data.success) {
           isDirty = false;
+          isSubmitting = false;
           toast.classList.remove('hidden');
           toast.classList.add('flex');
           form.reset();
           applyTypeUI('anime');
+          setMediaTab('poster');
+          updatePosterPreview();
+          updateTrailerPreview();
           setTimeout(() => {
             toast.classList.add('hidden');
             toast.classList.remove('flex');
@@ -428,6 +598,7 @@
         console.error(err);
         alert('Error de red al conectar con el servidor.');
       } finally {
+        isSubmitting = false;
         btn.innerText = textOrig;
         btn.disabled = false;
       }
@@ -436,4 +607,5 @@
 </script>
 <script src="controllers/admin-layout.js?v=20260330a"></script>
 </body></html>
+
 

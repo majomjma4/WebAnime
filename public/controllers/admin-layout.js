@@ -23,8 +23,44 @@
 
       const logout = host.querySelector('[data-admin-logout]');
       if (logout) {
-        logout.addEventListener('click', (event) => {
+        logout.addEventListener('click', async (event) => {
           event.preventDefault();
+          try {
+            const res = await fetch('api/auth.php?action=check', { cache: 'no-store', credentials: 'same-origin' });
+            if (res.ok) {
+              const auth = await res.json();
+              if (auth && auth.logged) {
+                localStorage.setItem('nekora_logged_in', 'true');
+                if (auth.username) {
+                  localStorage.setItem('nekora_user', auth.username);
+                  localStorage.setItem('anidex_profile_name', auth.username);
+                }
+                if (auth.userId) localStorage.setItem('anidex_user_id', auth.userId);
+                if (auth.publicUserId) localStorage.setItem('anidex_public_user_id', auth.publicUserId);
+                if (auth.isPremium || auth.isAdmin) localStorage.setItem('nekora_premium', 'true');
+                else localStorage.removeItem('nekora_premium');
+                if (auth.isAdmin) localStorage.setItem('nekora_admin', 'true');
+                else localStorage.removeItem('nekora_admin');
+
+                try {
+                  const profileRes = await fetch('api/profile.php?action=get', { cache: 'no-store', credentials: 'same-origin' });
+                  if (profileRes.ok) {
+                    const profileJson = await profileRes.json();
+                    const d = profileJson?.data || null;
+                    if (profileJson?.success && d) {
+                      if (d.anidex_profile_name) localStorage.setItem('anidex_profile_name', d.anidex_profile_name);
+                      if (d.anidex_profile_desc && auth.userId) localStorage.setItem(`anidex_profile_desc_${auth.userId}`, d.anidex_profile_desc);
+                      if (d.anidex_profile_color && auth.userId) localStorage.setItem(`anidex_profile_color_${auth.userId}`, d.anidex_profile_color);
+                      if (d.anidex_profile_avatar) {
+                        localStorage.setItem('anidex_profile_avatar', d.anidex_profile_avatar);
+                        if (auth.userId) localStorage.setItem(`anidex_profile_avatar_${auth.userId}`, d.anidex_profile_avatar);
+                      }
+                    }
+                  }
+                } catch (e) {}
+              }
+            }
+          } catch (e) {}
           window.location.href = 'index.php';
         });
       }

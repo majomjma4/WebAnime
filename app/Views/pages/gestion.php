@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once __DIR__ . '/../../Models/Database.php';
 $dbConn = (new \Models\Database())->getConnection();
 $page = max(1, (int) ($_GET['page'] ?? 1));
@@ -163,12 +163,12 @@ $buildPageUrl = static function (int $targetPage) use ($queryParams): string {
       <div>
         <p class="mb-2 text-xs font-bold uppercase tracking-[0.25em] text-primary">Vista General Del Catalogo</p>
         <h2 class="font-headline text-5xl font-extrabold tracking-tight text-on-surface">Administrar Anime</h2>
-        <p class="mt-3 max-w-2xl text-sm text-on-surface-variant">Organiza el catalogo, revisa estados y mantÃ©n la lista limpia desde un solo lugar.</p>
+        <p class="mt-3 max-w-2xl text-sm text-on-surface-variant">Organiza el catalogo, revisa estados y mantén la lista limpia desde un solo lugar.</p>
       </div>
       <div class="flex flex-wrap gap-3">
         <button class="flex items-center gap-2 rounded-full border border-[#9a8cff]/35 bg-gradient-to-r from-[#9a8cff] to-[#74d8ff] px-6 py-3 text-sm font-bold text-slate-950 shadow-xl shadow-[#7f8cff]/20 transition hover:brightness-110" data-admin-link="a%C3%B1adir.php">
           <span class="material-symbols-outlined text-[18px]">add</span>
-          AÃ‘ADIR NUEVO ANIME
+          AÑADIR NUEVO ANIME
         </button>
       </div>
     </div>
@@ -213,7 +213,7 @@ $buildPageUrl = static function (int $targetPage) use ($queryParams): string {
               <option value="SPECIAL" <?= strtoupper($typeFilter) === "SPECIAL" ? "selected" : "" ?>>Special</option>
             </select>
           </label>
-          <label class="text-[10px] font-bold uppercase tracking-[0.18em] text-on-surface-variant">AÃ±o
+          <label class="text-[10px] font-bold uppercase tracking-[0.18em] text-on-surface-variant">Año
             <input class="mt-2 w-full rounded-full border border-outline-variant/20 bg-surface-container-highest px-4 py-3 text-sm text-on-surface placeholder:text-outline focus:border-primary focus:ring-0" placeholder="Ej: 2022" type="text" data-admin-filter-year-input value="<?= htmlspecialchars($yearFilter) ?>"/>
           </label>
         </div>
@@ -343,7 +343,7 @@ $buildPageUrl = static function (int $targetPage) use ($queryParams): string {
       <label class="text-xs text-on-surface-variant">Episodios
         <input class="mt-2 w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-2 text-sm text-on-surface" data-admin-field="episodes"/>
       </label>
-      <label class="text-xs text-on-surface-variant">AÃƒÂ±o
+      <label class="text-xs text-on-surface-variant">Año
         <input class="mt-2 w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-2 text-sm text-on-surface" data-admin-field="date"/>
       </label>
       <label class="text-xs text-on-surface-variant">Estado

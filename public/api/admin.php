@@ -33,6 +33,15 @@ if ($action === 'add_anime') {
     } else {
         $estado = $estadoRaw;
     }
+    $tipoContenido = strtolower(trim((string)($data['tipo_contenido'] ?? 'anime')));
+    $tipoFormato = strtoupper(trim((string)($data['tipo_formato'] ?? 'ALL')));
+    if ($tipoContenido === 'pelicula') {
+        $tipo = 'MOVIE';
+    } elseif (in_array($tipoFormato, ['TV', 'OVA', 'ONA', 'SPECIAL', 'SHORT'], true)) {
+        $tipo = $tipoFormato;
+    } else {
+        $tipo = 'TV';
+    }
     $estudio = trim($data['estudio'] ?? '');
     $temporada = trim($data['temporada'] ?? '');
     $anio = (int)($data['anio'] ?? 0);
@@ -48,8 +57,8 @@ if ($action === 'add_anime') {
     try {
         $dbConn->beginTransaction();
 
-        $stmt = $dbConn->prepare("INSERT INTO anime (titulo, tipo, estudio, estado, episodios, temporada, anio, sinopsis, imagen_url, puntuacion, activo, creado_en) VALUES (?, 'TV', ?, ?, ?, ?, ?, ?, ?, 0.0, 1, NOW())");
-        $stmt->execute([$titulo, $estudio, $estado, $episodios, $temporada, $anio, $sinopsis, $imagen_url]);
+        $stmt = $dbConn->prepare("INSERT INTO anime (titulo, tipo, estudio, estado, episodios, temporada, anio, sinopsis, imagen_url, puntuacion, activo, creado_por, creado_en) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0.0, 1, 1, NOW())");
+        $stmt->execute([$titulo, $tipo, $estudio, $estado, $episodios, $temporada, $anio, $sinopsis, $imagen_url]);
         
         $anime_id = $dbConn->lastInsertId();
 
