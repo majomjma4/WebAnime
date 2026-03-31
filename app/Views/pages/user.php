@@ -312,9 +312,9 @@
     </div>
     <div class="pointer-events-none absolute top-16 left-[-10%] h-72 w-72 rounded-full bg-sky-500/15 blur-3xl"></div>
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start overflow-visible">
-      <section class="relative group lg:col-span-6">
+      <section class="relative z-[200] isolate group lg:col-span-6">
         <div id="profile-card"
-          class="glass-panel w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_30px_80px_rgba(0,0,0,0.45)] relative overflow-visible">
+          class="glass-panel relative z-[210] w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_30px_80px_rgba(0,0,0,0.45)] overflow-visible">
           <div class="h-1 w-full bg-gradient-to-r from-sky-400 via-violet-400 to-primary"></div>
           <div class="p-8 md:p-10 pb-0 space-y-8">
             <div class="flex flex-wrap items-start justify-between gap-4">
@@ -363,7 +363,7 @@
                     <div class="mt-1 text-sm font-semibold text-on-surface" data-profile-member>2018</div>
                   </div>
                   <div class="rounded-2xl border border-white/10 bg-white/5 px-3 py-1.5 w-full">
-                    <div class="text-[10px] uppercase tracking-widest text-on-surface-variant">Último acceso</div>
+                    <div class="text-[10px] uppercase tracking-widest text-on-surface-variant">&Uacute;ltimo acceso</div>
                     <div class="mt-1 text-sm font-semibold text-on-surface" data-profile-last>Hoy</div>
                   </div>
                   <div class="rounded-2xl border border-white/10 bg-white/5 px-3 py-1.5 w-full">
@@ -380,14 +380,14 @@
                       preferencias</span>
                   </div>
                 </div>
-                <div class="mt-3 flex w-full flex-wrap items-center justify-center gap-x-3 gap-y-2 translate-y-2"
+                <div class="relative z-[220] mt-3 flex w-full flex-wrap items-center justify-center gap-x-3 gap-y-2 translate-y-2 pointer-events-auto"
                   id="profile-actions">
-                  <button id="request-title-btn" type="button" aria-label="Solicitar título"
+                  <button id="request-title-btn" type="button" aria-label="Solicitar t&iacute;tulo"
                     class="hidden rounded-full border border-white/10 bg-gradient-to-r from-sky-400 to-violet-400 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-900 transition-all duration-200 hover:border-sky-200/60 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(56,189,248,0.25)]">
-                    Solicitar título
+                    Solicitar t&iacute;tulo
                   </button>
-                  <a id="profile-logout-btn" href="api/auth.php?action=logout&redirect=1" aria-label="Cerrar sesión" class="rounded-full border border-white/10 bg-gradient-to-r from-rose-400 to-orange-300 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-900 transition-all duration-200 hover:border-rose-200/60 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(248,113,113,0.25)] inline-flex items-center justify-center group/logout">Cerrar sesión
-                  </a>
+                  <button id="profile-logout-btn" type="button" aria-label="Cerrar sesi&oacute;n" onclick="var m=document.getElementById('logout-confirm'); if(m){m.classList.remove('hidden'); m.classList.add('flex'); document.body.style.overflow='hidden';} return false;"
+                    class="relative z-[230] pointer-events-auto rounded-full border border-white/10 bg-gradient-to-r from-rose-400 to-orange-300 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-900 transition-all duration-200 hover:border-rose-200/60 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(248,113,113,0.25)] inline-flex items-center justify-center group/logout">Cerrar sesi&oacute;n</button>
                 </div>
               </div>
             </div>
@@ -395,7 +395,7 @@
         </div>
       </section>
 
-      <section class="lg:col-span-6 lg:h-full grid grid-cols-1 sm:grid-cols-2 gap-5 mt-0 overflow-visible">
+      <section class="relative z-0 lg:col-span-6 lg:h-full grid grid-cols-1 sm:grid-cols-2 gap-5 mt-0 overflow-visible">
         <button type="button" data-open-list="my-list"
           class="group rounded-3xl border border-white/10 bg-surface-container-low/70 p-6 text-left shadow-[0_16px_40px_rgba(0,0,0,0.35)] transition-all hover:-translate-y-1 hover:border-violet-400/60 hover:shadow-[0_24px_60px_rgba(139,92,246,0.35)]">
           <div class="flex items-center justify-between">
@@ -421,7 +421,7 @@
             <span class="material-symbols-outlined text-amber-300">schedule</span>
           </div>
           <div class="mt-4 text-4xl font-bold text-on-surface" data-count-pending>0</div>
-          <p class="mt-2 text-sm text-on-surface-variant">Lo próximo en tu maratón.</p>
+          <p class="mt-2 text-sm text-on-surface-variant">Lo pr&oacute;ximo en tu marat&oacute;n.</p>
         </button>
         <button type="button" data-open-status="completed"
           class="group rounded-3xl border border-white/10 bg-surface-container-low/70 p-6 text-left shadow-[0_16px_40px_rgba(0,0,0,0.35)] transition-all hover:-translate-y-1 hover:border-emerald-400/60 hover:shadow-[0_24px_60px_rgba(52,211,153,0.35)]">
@@ -430,7 +430,7 @@
             <span class="material-symbols-outlined text-emerald-400">done_all</span>
           </div>
           <div class="mt-4 text-4xl font-bold text-on-surface" data-count-completed>0</div>
-          <p class="mt-2 text-sm text-on-surface-variant">Historias finalizadas con éxito.</p>
+          <p class="mt-2 text-sm text-on-surface-variant">Historias finalizadas con &eacute;xito.</p>
         </button>
         <section id="continue-section"
           class="sm:col-span-2 rounded-3xl border border-white/5 bg-surface-container-low/60 p-5 shadow-[0_18px_40px_rgba(0,0,0,0.35)] overflow-visible min-h-[260px]">
@@ -442,7 +442,7 @@
           <div class="mt-3 flex min-h-[180px] items-center justify-center overflow-visible">
             <div id="continue-empty"
               class="rounded-2xl border border-white/10 bg-white/5 px-4 py-8 text-center text-sm text-on-surface-variant">
-              Aún no tienes títulos en progreso.
+              A&uacute;n no tienes t&iacute;tulos en progreso.
             </div>
             <div id="continue-grid" class="hidden w-full grid grid-cols-4 gap-4 overflow-visible pb-2 pt-3 px-4"></div>
           </div>
@@ -740,14 +740,14 @@
     <div
       class="relative w-[92%] sm:w-[70%] max-w-[340px] rounded-2xl border border-white/10 bg-surface-container-high p-5 shadow-[0_20px_50px_rgba(0,0,0,0.45)]">
       <div class="flex items-center justify-between mb-4">
-        <h3 class="font-headline text-base font-bold">Solicitar tí­tulo</h3>
+        <h3 class="font-headline text-base font-bold">Solicitar t&iacute;tulo</h3>
         <button
           class="rounded-full bg-surface-container-low w-7 h-7 flex items-center justify-center text-xs font-bold text-on-surface-variant hover:text-on-surface"
           type="button" data-request-close aria-label="Cerrar">x</button>
       </div>
       <form id="request-title-form" class="space-y-4">
         <div class="space-y-1.5">
-          <label class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Anime o pelí­cula</label>
+          <label class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Anime o pel&iacute;cula</label>
           <input id="request-title-input" type="text"
             class="w-full rounded-xl border border-white/10 bg-surface-container-low/70 px-3 py-2 text-sm text-on-surface outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20"
             placeholder="Ej: Attack on Titan" />
@@ -757,8 +757,9 @@
           <select id="request-title-type"
             class="w-full rounded-xl border border-white/10 bg-surface-container-low/70 px-3 py-2 text-sm text-on-surface outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20">
             <option value="Anime">Anime</option>
-            <option value="Película">Película</option>
+            <option value="Pel&iacute;cula">Pel&iacute;cula</option>
           </select>
+        </div>
         <div class="flex items-center justify-end gap-2 pt-1">
           <button type="button" data-request-close
             class="rounded-full border border-white/10 bg-surface-container-low/70 px-4 py-2 text-xs font-bold uppercase tracking-widest text-on-surface-variant hover:text-on-surface transition-colors">Cancelar</button>
@@ -774,18 +775,18 @@
   <div id="request-toast" class="fixed inset-0 z-[90] hidden items-center justify-center">
     <div
       class="rounded-full border border-white/10 bg-surface-container-high/90 px-6 py-3 text-sm font-semibold text-on-surface shadow-[0_18px_40px_rgba(0,0,0,0.45)]">
-      Título solicitado
+      T&iacute;tulo solicitado
     </div>
   </div>
 
   <!-- Logout Confirm Modal -->
-  <div id="logout-confirm" class="fixed inset-0 z-[90] hidden items-center justify-center">
-    <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" data-logout-close></div>
+  <div id="logout-confirm" class="fixed inset-0 z-[500] hidden items-center justify-center">
+    <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" data-logout-close onclick="var m=document.getElementById('logout-confirm'); if(m){m.classList.add('hidden'); m.classList.remove('flex');} return false;"></div>
     <div
       class="relative mx-auto w-[92%] sm:w-[86%] max-w-xs rounded-2xl border border-white/10 bg-surface-container-high p-5 text-center shadow-[0_20px_50px_rgba(0,0,0,0.45)]">
-      <h3 class="font-headline text-lg font-bold">¿Seguro que quieres cerrar sesión?</h3>
+      <h3 class="font-headline text-lg font-bold">&iquest;Seguro que quieres cerrar sesi&oacute;n?</h3>
       <div class="mt-4 flex items-center justify-center gap-3">
-        <button type="button" data-logout-cancel
+        <button type="button" data-logout-cancel onclick="var m=document.getElementById('logout-confirm'); if(m){m.classList.add('hidden'); m.classList.remove('flex');} return false;"
           class="rounded-full border border-white/10 bg-surface-container-low/70 px-4 py-2 text-xs font-bold uppercase tracking-widest text-on-surface-variant hover:text-on-surface transition-colors">
           cancelar
         </button>
@@ -1790,5 +1791,3 @@
 </body>
 
 </html>
-
-
