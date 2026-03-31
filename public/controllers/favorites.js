@@ -5,7 +5,7 @@
   const norm = (v) => (v || "").toLowerCase().trim();
   const pathName = window.location.pathname.toLowerCase();
   const isDetailPage = pathName.includes("detail");
-  const isIndexPage = pathName.endsWith("/index.php") || pathName.endsWith("index.php") || pathName === "/" || pathName === "";
+  const isIndexPage = pathName.endsWith("/index.php") || pathName.endsWith("index") || pathName === "/" || pathName === "";
   const getIsLoggedIn = () => {
     if (window.AniDexLayout && typeof window.AniDexLayout.isLoggedIn === "function") {
       return window.AniDexLayout.isLoggedIn();
@@ -387,7 +387,7 @@
         btn.classList.remove("hidden");
         btn.addEventListener("click", (e) => {
           e.preventDefault();
-          window.location.href = "registro.php";
+          window.location.href = "registro";
         });
         return;
       }
@@ -521,7 +521,7 @@
         if (e.target.closest("button")) return;
         const title = card.getAttribute("data-detail-title") || "";
         const id = card.getAttribute("data-detail-id") || "";
-        let url = "detail.php";
+        let url = "detail";
         if (id) {
           url += `?mal_id=${encodeURIComponent(id)}`;
           if (title) url += `&q=${encodeURIComponent(title)}`;
@@ -648,7 +648,7 @@
         if (e.target.closest("button")) return;
         const title = card.getAttribute("data-detail-title") || "";
         const id = card.getAttribute("data-detail-id") || "";
-        let url = "detail.php";
+        let url = "detail";
         if (id) {
           url += `?mal_id=${encodeURIComponent(id)}`;
           if (title) url += `&q=${encodeURIComponent(title)}`;
@@ -740,7 +740,7 @@
         if (e.target.closest("button")) return;
         const title = card.getAttribute("data-detail-title") || "";
         const id = card.getAttribute("data-detail-id") || "";
-        let url = "detail.php";
+        let url = "detail";
         if (id) {
           url += `?mal_id=${encodeURIComponent(id)}`;
           if (title) url += `&q=${encodeURIComponent(title)}`;

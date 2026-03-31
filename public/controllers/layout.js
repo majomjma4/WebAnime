@@ -1,4 +1,4 @@
-(() => {
+﻿(() => {
   if ("scrollRestoration" in history) {
     history.scrollRestoration = "manual";
   }
@@ -12,11 +12,11 @@
   };
 
   const menuItems = [
-    { name: "Inicio", href: "index.php", icon: "home" },
-    { name: "Animes", href: "series.php", icon: "live_tv" },
-    { name: "Películas", href: "peliculas.php", icon: "movie" },
-    { name: "Destacados", href: "destacados.php", icon: "star" },
-    { name: "Ranking", href: "ranking.php", icon: "leaderboard" }
+    { name: "Inicio", href: "index", icon: "home" },
+    { name: "Animes", href: "series", icon: "live_tv" },
+    { name: "Películas", href: "peliculas", icon: "movie" },
+    { name: "Destacados", href: "destacados", icon: "star" },
+    { name: "Ranking", href: "ranking", icon: "leaderboard" }
   ];
 
   const readyCallbacks = [];
@@ -47,9 +47,9 @@
     if (!headerTargets.length && !footerTargets.length) return;
 
     const basePath = window.location.pathname.includes("/views/") ? "../" : "";
-    const res = await fetch(`${basePath}partials/layout.php?v=final2`, { cache: "no-store", credentials: "same-origin" });
+    const res = await fetch(`${basePath}partials/layout?v=final2`, { cache: "no-store", credentials: "same-origin" });
     if (!res.ok) {
-      throw new Error("No se pudo cargar partials/layout.php");
+      throw new Error("No se pudo cargar partials/layout");
     }
     const html = await res.text();
 
@@ -158,7 +158,7 @@
   // FIX: Ahora acepta preReadGuestId para evitar leer el ID YA sobreescrito.
   function migrateGuestData(realUserId, preReadGuestId) {
     try {
-      // IMPORTANTE: usar el ID leído ANTES de sobrescribir anidex_user_id
+      // IMPORTANTE: usar el ID leÃ­do ANTES de sobrescribir anidex_user_id
       const guestId = preReadGuestId || localStorage.getItem("anidex_user_id");
       if (!guestId || guestId === realUserId) return;
 
@@ -190,7 +190,7 @@
           return;
         }
 
-        // Para el resto: solo migrar si el valor real está vacío
+        // Para el resto: solo migrar si el valor real estÃ¡ vacÃ­o
         if (!realVal || realVal === "0" || realVal === "[]" || realVal === "{}") {
           localStorage.setItem(realKey, guestVal);
           localStorage.removeItem(guestKey);
@@ -275,7 +275,7 @@
     });
 
     if (logged) {
-      // Si está logueado, eliminar el menú de invitado y redirigir directamente
+      // Si estÃ¡ logueado, eliminar el menÃº de invitado y redirigir directamente
       if (guestMenu) {
         guestMenu.remove();
       }
@@ -285,7 +285,7 @@
       profileBtn.dataset.bound = "1";
       profileBtn.addEventListener("click", (e) => {
         if (isLoggedIn()) {
-          window.location.href = "user.php";
+          window.location.href = "user";
           return;
         }
         e.preventDefault();
@@ -420,7 +420,7 @@
     syncProfileAvatar();
     initSessionTimer();
 
-    // Lógica de sincronización global
+    // LÃ³gica de sincronizaciÃ³n global
     if (isLoggedIn()) {
       getOrCreateUserId();
       restoreFromDB();
@@ -496,14 +496,14 @@
       if (json.success && json.data) {
         const d = json.data;
 
-        // FIX: Conjunto explícito de claves que tienen lógica propia de fusión.
-        // El bucle genérico NUNCA debe procesar estas claves porque cada una
+        // FIX: Conjunto explÃ­cito de claves que tienen lÃ³gica propia de fusiÃ³n.
+        // El bucle genÃ©rico NUNCA debe procesar estas claves porque cada una
         // tiene reglas distintas (MAX, suma sin sufijo, etc.).
         //
-        //  anidex_profile_hours      → Fusión MAX debajo (el mayor gana)
-        //  anidex_user_id            → Es el ID real del servidor; no va con sufijo aislado
+        //  anidex_profile_hours      â†’ FusiÃ³n MAX debajo (el mayor gana)
+        //  anidex_user_id            â†’ Es el ID real del servidor; no va con sufijo aislado
         //  anidex_profile_name/desc/
-        //  color/avatar/member_since → Manejadas por bloque especial debajo
+        //  color/avatar/member_since â†’ Manejadas por bloque especial debajo
         const LOOP_EXCLUSION = new Set([
           "anidex_profile_hours",
           "anidex_user_id",
@@ -514,7 +514,7 @@
           "anidex_profile_member_since"
         ]);
 
-        // Bucle genérico: solo listas/objetos con prefijo anidex_ no excluidos
+        // Bucle genÃ©rico: solo listas/objetos con prefijo anidex_ no excluidos
         Object.keys(d).forEach(key => {
           if (!key.startsWith("anidex_") || LOOP_EXCLUSION.has(key)) return;
 
@@ -530,7 +530,7 @@
             if (!Array.isArray(localArr)) localArr = [];
             const seen = new Set();
             const merged = [];
-            // Locales primero (más recientes que el servidor)
+            // Locales primero (mÃ¡s recientes que el servidor)
             [...localArr, ...serverVal].forEach(item => {
               const id = item.malId || item.id || (item.title ? item.title.toLowerCase() : null);
               if (id && !seen.has(id)) { seen.add(id); merged.push(item); }
@@ -549,8 +549,8 @@
           }
         });
 
-        // ─── Bloque especial: campos de perfil ───────────────────────────────────────
-        // El API los envía con prefijo anidex_ (anidex_profile_name, etc.).
+        // â”€â”€â”€ Bloque especial: campos de perfil â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // El API los envÃ­a con prefijo anidex_ (anidex_profile_name, etc.).
         // profile_name se guarda SIN sufijo; el resto CON sufijo aislado.
         if (d.anidex_profile_name)         localStorage.setItem("anidex_profile_name",                              d.anidex_profile_name);
         if (d.anidex_profile_desc)         localStorage.setItem(getIsolatedKey("anidex_profile_desc"),         d.anidex_profile_desc);
@@ -560,16 +560,16 @@
         if (d.anidex_profile_member_since) localStorage.setItem(getIsolatedKey("anidex_profile_member_since"), d.anidex_profile_member_since);
         if (d.anidex_public_user_id)       localStorage.setItem("anidex_public_user_id", d.anidex_public_user_id);
 
-        // ─── FUSIÓN MAX de horas vistas ──────────────────────────────────────────────
-        // Regla de oro: el contador NUNCA puede retroceder al refrescar la página.
+        // â”€â”€â”€ FUSIÃ“N MAX de horas vistas â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // Regla de oro: el contador NUNCA puede retroceder al refrescar la pÃ¡gina.
         // Se usa Math.max en vez de "if server > local" para garantizar atomicidad.
-        // Clave canónica del API: 'anidex_profile_hours'
+        // Clave canÃ³nica del API: 'anidex_profile_hours'
         const serverHoursRaw = d.anidex_profile_hours;
         if (serverHoursRaw !== undefined && serverHoursRaw !== null) {
           const localKey = getIsolatedKey("anidex_profile_hours");
           const local  = parseFloat(localStorage.getItem(localKey) || "0");
           const server = parseFloat(serverHoursRaw || "0");
-          const winner = Math.max(local, server);  // El mayor gana — sin excepciones
+          const winner = Math.max(local, server);  // El mayor gana â€” sin excepciones
           localStorage.setItem(localKey, winner.toFixed(2));
         }
 
@@ -579,7 +579,7 @@
         }
         syncProfileAvatar();
       } else if (json.success) {
-        // Sin datos previos en el servidor → guardar lo local como punto de partida
+        // Sin datos previos en el servidor â†’ guardar lo local como punto de partida
         saveProfileToDB();
       }
     } catch (e) {
@@ -620,6 +620,7 @@
     formatHours: formatHours
   };
 })();
+
 
 
 

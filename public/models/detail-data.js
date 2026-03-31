@@ -890,8 +890,8 @@ const AniDexDetailDataBoot = () => {
           card.querySelector("h3")?.textContent?.trim() ||
           `Episodio ${ep}`;
         const detailUrl = selectedId
-          ? `detail.php?mal_id=${encodeURIComponent(selectedId)}`
-          : `detail.php?q=${encodeURIComponent(preferredTitle || query || "")}`;
+          ? `detail?mal_id=${encodeURIComponent(selectedId)}`
+          : `detail?q=${encodeURIComponent(preferredTitle || query || "")}`;
         const key = `${selectedId || norm(preferredTitle || "")}-${ep}`;
         continueMap[key] = {
           sourceId: selectedId || null,
@@ -992,7 +992,7 @@ const AniDexDetailDataBoot = () => {
           ? "Activa el modo premium para ver los episodios"
           : "Inicia Sesion y accede al modo premium para ver los episodios";
         const goPremium = () => {
-          window.location.href = isLogged ? "pago.php" : "registro.php";
+          window.location.href = isLogged ? "pago" : "registro";
         };
         const cards = Array.from(episodesSection.querySelectorAll(".episode-card"));
         cards.forEach((card) => {
@@ -1886,7 +1886,7 @@ const AniDexDetailDataBoot = () => {
         if (p) p.textContent = (it.genres || []).map((g) => g.name).slice(0, 2).join(", ");
         if (scoreEl && typeof it.score === "number") scoreEl.textContent = it.score.toFixed(1);
         if (it?.mal_id) a.setAttribute("data-mal-id", String(it.mal_id));
-        a.href = `detail.php?mal_id=${encodeURIComponent(String(it.mal_id || ""))}&q=${encodeURIComponent(it.title || "")}`;
+        a.href = `detail?mal_id=${encodeURIComponent(String(it.mal_id || ""))}&q=${encodeURIComponent(it.title || "")}`;
       });
     }
 

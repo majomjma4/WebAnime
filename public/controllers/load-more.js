@@ -264,9 +264,9 @@
       "anime";
     const title = String(rawTitle || "anime").trim();
     if (malId) {
-      return `detail.php?mal_id=${encodeURIComponent(String(malId))}&q=${encodeURIComponent(title)}`;
+      return `detail?mal_id=${encodeURIComponent(String(malId))}&q=${encodeURIComponent(title)}`;
     }
-    return `detail.php?q=${encodeURIComponent(title)}`;
+    return `detail?q=${encodeURIComponent(title)}`;
   }
 
   let previewModal = null;
@@ -583,9 +583,9 @@
       if (malId) link.setAttribute("data-mal-id", malId);
       // Actualizar el href con mal_id y q para evitar ruteos incorrectos
       if (malId) {
-        link.href = `detail.php?mal_id=${encodeURIComponent(malId)}&q=${encodeURIComponent(title)}`;
+        link.href = `detail?mal_id=${encodeURIComponent(malId)}&q=${encodeURIComponent(title)}`;
       } else {
-        link.href = `detail.php?q=${encodeURIComponent(title)}`;
+        link.href = `detail?q=${encodeURIComponent(title)}`;
       }
     }
     card.setAttribute("data-type", type);

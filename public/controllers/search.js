@@ -142,7 +142,7 @@
   const fetchRelatedByQuery = async (term, mediaType) => {
     const q = (term || "").trim();
     if (!q) return [];
-    const wantMovie = pageForType(mediaType) === "peliculas.php";
+    const wantMovie = pageForType(mediaType) === "peliculas";
     try {
       const url = `${API_BASE}?endpoint=${encodeURIComponent('anime?q=' + encodeURIComponent(q) + '&limit=25&order_by=popularity&sort=asc')}`;
       const res = await fetch(url);
@@ -195,12 +195,12 @@
         if (genres && !HIDE_CARD_GENRES) p.textContent = `Gneros: ${genres}`;
         const y = card.dataset.year || "";
         if (y && !HIDE_CARD_YEARS && !/(19|20)\\d{2}/.test(p.textContent || "")) {
-          const sep = pageForType(mediaType) === "peliculas.php" ? "  " : " ";
+          const sep = pageForType(mediaType) === "peliculas" ? "  " : " ";
           p.textContent = `${p.textContent}${sep}${y}`.trim();
         }
       }
       card.setAttribute("data-title", (item?.title || "").toLowerCase());
-      card.setAttribute("data-type", pageForType(mediaType) === "peliculas.php" ? "PelÃ­cula" : "Anime");
+      card.setAttribute("data-type", pageForType(mediaType) === "peliculas" ? "PelÃ­cula" : "Anime");
       const cleanTitle = (item?.title || "").trim();
       const key = normalize(item?.title || item?.title_english || "");
       const year = YEAR_OVERRIDES[key] || item?.year || item?.aired?.prop?.from?.year || "";
@@ -218,7 +218,7 @@
       if (cardLink && item?.mal_id) {
         cardLink.setAttribute("data-mal-id", String(item.mal_id));
         // Incluir q= para que detail-links y el backend tengan respaldo
-        cardLink.href = `detail.php?mal_id=${item.mal_id}&q=${encodeURIComponent(cleanTitle)}`;
+        cardLink.href = `detail?mal_id=${item.mal_id}&q=${encodeURIComponent(cleanTitle)}`;
       }
       const yearEl = card.querySelector("[data-card-year]");
       if (HIDE_CARD_YEARS) {
@@ -245,15 +245,15 @@
     return true;
   };
 
-  const goToSearchPage = (term, page = "series.php") => {
+  const goToSearchPage = (term, page = "series") => {
     const q = encodeURIComponent(term.trim());
     logActivity("search", `BÃºsqueda: ${term.trim()} en ${page}`);
     window.location.href = `${page}?q=${q}`;
   };
   const pageForType = (mediaType) => {
     const t = normalize(mediaType);
-    if (t.includes("movie") || t.includes("pelÃ­cula")) return "peliculas.php";
-    return "series.php";
+    if (t.includes("movie") || t.includes("pelÃ­cula")) return "peliculas";
+    return "series";
   };
 
   const bindInput = (input) => {
@@ -423,7 +423,7 @@
     };
 
     const resolveSuggestPage = (items) => {
-      if (!items.length) return "series.php";
+      if (!items.length) return "series";
       let movieCount = 0;
       let tvCount = 0;
       items.forEach((it) => {
@@ -431,7 +431,7 @@
         if (t.includes("movie") || t.includes("pelicula") || t.includes("pelÃ­cula")) movieCount += 1;
         else tvCount += 1;
       });
-      return movieCount > tvCount ? "peliculas.php" : "series.php";
+      return movieCount > tvCount ? "peliculas" : "series";
     };
 
     const renderSuggestions = (items, term) => {
@@ -464,7 +464,7 @@
           closeBox();
           logActivity("search_suggestion_click", `Sugerencia clicada: ${it.title} (ID: ${it.malId})`);
           if (it.malId) {
-            window.location.href = `detail.php?mal_id=${it.malId}`;
+            window.location.href = `detail?mal_id=${it.malId}`;
           } else {
             goToSearchPage(it.title, pageForType(it.mediaType));
           }
@@ -537,14 +537,14 @@
         const ok = applyFilter(resolvedTerm);
         if (!ok) {
           if (resolved.malId) {
-            window.location.href = `detail.php?mal_id=${resolved.malId}`;
+            window.location.href = `detail?mal_id=${resolved.malId}`;
           } else {
             goToSearchPage(resolvedTerm, pageForType(resolved.mediaType));
           }
         }
       } else {
         if (resolved.malId) {
-          window.location.href = `detail.php?mal_id=${resolved.malId}`;
+          window.location.href = `detail?mal_id=${resolved.malId}`;
         } else {
           goToSearchPage(resolvedTerm, pageForType(resolved.mediaType));
         }

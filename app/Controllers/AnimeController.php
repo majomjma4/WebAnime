@@ -8,7 +8,7 @@ class AnimeController extends PageController {
     public function detail($id) {
         if (!$id) {
             // Si no hay ID, redirigimos al inicio o mostramos 404
-            header('Location: index.php');
+            header('Location: index');
             exit;
         }
 
@@ -28,7 +28,7 @@ class AnimeController extends PageController {
 
     public function detailByTitle($title) {
         if (!$title) {
-            header('Location: index.php');
+            header('Location: index');
             exit;
         }
 

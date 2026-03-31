@@ -504,7 +504,7 @@
                        data-type="<?= htmlspecialchars($a['tipo']) ?>" 
                        data-status="<?= htmlspecialchars($a['estado'] ?? 'Desconocido') ?>"
                        data-mal-id="<?= htmlspecialchars($a['mal_id'] ?? '') ?>">
-                <a class="block" href="detail.php?mal_id=<?= urlencode((string)($a['mal_id'] ?? $a['id'])) ?>&q=<?= urlencode((string)$a['titulo']) ?>" aria-label="<?= htmlspecialchars($a['titulo']) ?>" data-mal-id="<?= htmlspecialchars((string)($a['mal_id'] ?? $a['id'])) ?>">
+                <a class="block" href="detail?mal_id=<?= urlencode((string)($a['mal_id'] ?? $a['id'])) ?>&q=<?= urlencode((string)$a['titulo']) ?>" aria-label="<?= htmlspecialchars($a['titulo']) ?>" data-mal-id="<?= htmlspecialchars((string)($a['mal_id'] ?? $a['id'])) ?>">
                   <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
                     <img alt="<?= htmlspecialchars($a['titulo']) ?>" 
                          class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" 

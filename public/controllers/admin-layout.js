@@ -4,7 +4,7 @@
     const host = document.querySelector('[data-admin-sidebar]');
     if (!host) return;
     try {
-      const res = await fetch(basePath + "partials/admin-layout.php", { cache: 'no-store' });
+      const res = await fetch(basePath + "partials/admin-layout", { cache: 'no-store' });
       if (!res.ok) return;
       const html = await res.text();
       const container = document.createElement('div');
@@ -61,7 +61,7 @@
               }
             }
           } catch (e) {}
-          window.location.href = 'index.php';
+          window.location.href = 'index';
         });
       }
 

@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
   const GENRE_OPTIONS = window.DB_GENRES || [
     "Acci\u00f3n",
     "Aventura",
@@ -1501,7 +1501,7 @@
 
         const link = card.closest("a") || card.querySelector("a") || card.querySelector("a");
         if (link) {
-          link.href = `detail.php?mal_id=${item.mal_id}&q=${encodeURIComponent(title)}`;
+          link.href = `detail?mal_id=${item.mal_id}&q=${encodeURIComponent(title)}`;
           link.ariaLabel = title;
         }
       });
@@ -1750,7 +1750,7 @@
         row.addEventListener("click", () => {
           const q = encodeURIComponent(title);
           const id = item && item.mal_id ? encodeURIComponent(String(item.mal_id)) : "";
-          window.location.href = id ? `detail.php?mal_id=${id}&q=${q}` : `detail.php?q=${q}`;
+          window.location.href = id ? `detail?mal_id=${id}&q=${q}` : `detail?q=${q}`;
         });
         host.appendChild(row);
       });

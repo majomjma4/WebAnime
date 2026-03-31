@@ -1,4 +1,4 @@
-﻿(() => {
+(() => {
   const pickTitleFromCard = (el) => {
     if (!el) return "";
     const card = el.closest("[data-mal-id], [data-title], [data-anime-card], .group, article, a, button") || el.closest("div") || el;
@@ -24,9 +24,9 @@
     return textual || "";
   };
 
-  const toDetailUrl = (title) => `detail.php?q=${encodeURIComponent((title || "").trim())}`;
+  const toDetailUrl = (title) => `detail?q=${encodeURIComponent((title || "").trim())}`;
   const toDetailById = (malId, title = "", dbId = null) => {
-    let url = "detail.php?";
+    let url = "detail?";
     if (dbId) url += `id=${encodeURIComponent(String(dbId))}&`;
     if (malId) url += `mal_id=${encodeURIComponent(String(malId))}`;
     if (title && !malId && !dbId) url += `q=${encodeURIComponent(title)}`;
@@ -35,7 +35,7 @@
   };
 
   const parseDetailHref = (href) => {
-    if (!href || !href.includes("detail.php")) return null;
+    if (!href || !href.includes("detail")) return null;
     try {
       const url = new URL(href, window.location.origin);
       return {
@@ -49,7 +49,7 @@
   };
 
   const wireLinks = () => {
-    document.querySelectorAll('a[href*="detail.php"]').forEach((a) => {
+    document.querySelectorAll('a[href*="detail"]').forEach((a) => {
       const parsed = parseDetailHref(a.getAttribute("href") || a.href || "");
       if (parsed?.malId || parsed?.dbId) return;
 
@@ -62,7 +62,7 @@
       else if (t) a.href = toDetailUrl(t);
     });
 
-    document.querySelectorAll("[onclick*='detail.php']").forEach((node) => {
+    document.querySelectorAll("[onclick*='detail']").forEach((node) => {
       const malId = node.getAttribute("data-mal-id") || node.closest("[data-mal-id]")?.getAttribute("data-mal-id");
       const t = pickTitleFromCard(node);
       node.onclick = () => {
@@ -76,7 +76,7 @@
       document.addEventListener(
         "click",
         (e) => {
-          const anchor = e.target.closest('a[href*="detail.php"]');
+          const anchor = e.target.closest('a[href*="detail"]');
           if (anchor) {
             const parsed = parseDetailHref(anchor.getAttribute("href") || anchor.href || "");
             if (parsed?.malId || parsed?.dbId) {
@@ -84,7 +84,7 @@
             }
           }
 
-          const target = e.target.closest("[data-mal-id], [onclick*='detail.php'], [data-anime-card]");
+          const target = e.target.closest("[data-mal-id], [onclick*='detail'], [data-anime-card]");
           if (!target) return;
 
           const malId = target.getAttribute("data-mal-id") || target.closest("[data-mal-id]")?.getAttribute("data-mal-id");

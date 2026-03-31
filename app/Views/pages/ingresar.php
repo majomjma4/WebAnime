@@ -135,11 +135,11 @@
   </head>
   <body class="bg-background text-on-background font-body min-h-screen flex flex-col auth-page">
     <div class="fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-6 py-6 pointer-events-none">
-      <a href="user.php" class="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-sky-500/90 px-5 py-3 text-sm font-bold uppercase tracking-widest text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)] shadow-lg shadow-sky-500/35 hover:bg-sky-400/95 transition-all" data-auth-back>
+      <a href="<?= route_path('user') ?>" class="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-sky-500/90 px-5 py-3 text-sm font-bold uppercase tracking-widest text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)] shadow-lg shadow-sky-500/35 hover:bg-sky-400/95 transition-all" data-auth-back>
         <span class="material-symbols-outlined text-base leading-none">arrow_back</span>
         Regresar
       </a>
-      <a href="registro.php" class="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-gradient-to-br from-primary to-primary-container text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)] px-6 py-3 text-sm font-bold uppercase tracking-widest shadow-lg shadow-primary/25 hover:scale-[1.02] active:scale-95 transition-all">
+      <a href="<?= route_path('register') ?>" class="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-gradient-to-br from-primary to-primary-container text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)] px-6 py-3 text-sm font-bold uppercase tracking-widest shadow-lg shadow-primary/25 hover:scale-[1.02] active:scale-95 transition-all">
         Crear cuenta
       </a>
     </div>
@@ -176,7 +176,7 @@
         </form>
 
         <p class="mt-6 text-center text-sm text-on-surface-variant">
-          ¿No tienes cuenta? <a class="text-primary-dim font-bold hover:underline" href="registro.php">Regístrate ahora</a>
+          ¿No tienes cuenta? <a class="text-primary-dim font-bold hover:underline" href="<?= route_path('register') ?>">Regístrate ahora</a>
         </p>
       </section>
     </main>
@@ -185,11 +185,11 @@
         const logged = localStorage.getItem("nekora_logged_in") === "true";
         const backBtn = document.querySelector("[data-auth-back]");
         if (!logged) {
-          if (backBtn) backBtn.href = "index.php";
+          if (backBtn) backBtn.href = "index";
           try {
             history.pushState({ guest: true }, "", location.href);
             window.addEventListener("popstate", () => {
-              window.location.href = "index.php";
+              window.location.href = "index";
             });
           } catch {}
         }
@@ -369,7 +369,7 @@
       closeBtn.addEventListener("click", () => {
         const urlParams = new URLSearchParams(window.location.search);
         const redirect = urlParams.get('redirect');
-        window.location.href = redirect || "index.php";
+        window.location.href = redirect || "index";
       });
     }
 

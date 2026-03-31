@@ -201,7 +201,7 @@ if ($action === 'register') {
     session_destroy();
     setcookie(session_name(), '', time() - 3600, '/');
     if ($wantsRedirect) {
-        header('Location: ../index.php?logout=1');
+        header('Location: ../index?logout=1');
         exit;
     }
     echo json_encode(['success' => true]);

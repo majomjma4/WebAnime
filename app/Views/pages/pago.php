@@ -439,7 +439,7 @@
         const auth = window.AniDexLayout ? await window.AniDexLayout.checkAuth() : { logged: false };
         if (!auth.logged) { 
             log("🔒 Sesión no encontrada.", true); 
-            window.location.href = "ingresar.php?redirect=pago.php";
+            window.location.href = "ingresar?redirect=pago";
             return; 
         }
 
@@ -456,7 +456,7 @@
             localStorage.setItem("nekora_premium", "true");
             document.getElementById("payment-success")?.classList.remove("hidden");
             if (window.AniDexLayout?.checkAuth) await window.AniDexLayout.checkAuth();
-            setTimeout(() => { window.location.href = "index.php"; }, 2500);
+            setTimeout(() => { window.location.href = "index"; }, 2500);
         } else {
             log("❌ Error Servidor: " + (data.error || "Fallo"), true);
             if (btn) { btn.style.pointerEvents = "auto"; btn.innerHTML = 'COMPLETAR COMPRA'; }

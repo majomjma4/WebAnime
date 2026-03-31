@@ -330,7 +330,7 @@
     const article = document.createElement("article");
     article.className = "featured-card group rounded-xl overflow-hidden bg-zinc-900 border border-zinc-800 cursor-pointer transition-transform duration-300 ease-[cubic-bezier(0.2,0,0,1)]";
     if (it?.mal_id) article.setAttribute("data-mal-id", String(it.mal_id));
-    article.setAttribute("onclick", "window.location.href='detail.php'");
+    article.setAttribute("onclick", "window.location.href='detail'");
     const imgSrc = it?.images?.webp?.large_image_url || it?.images?.jpg?.large_image_url || it?.images?.jpg?.image_url || "";
     const title = it?.title || "Anime";
     const genres = (it?.genres || []).map((g) => g?.name).filter(Boolean).slice(0, 2).join(", ");
@@ -422,7 +422,7 @@
 })();
 </script>
       <div class="mt-12 flex justify-center gap-4" id="featured-actions">
-        <a id="featured-back-home" href="index.php" class="rounded-full bg-violet-500/90 px-8 py-4 text-sm font-bold text-white hover:bg-violet-500 transition-colors">Volver al inicio</a>
+        <a id="featured-back-home" href="<?= route_path('home') ?>" class="rounded-full bg-violet-500/90 px-8 py-4 text-sm font-bold text-white hover:bg-violet-500 transition-colors">Volver al inicio</a>
         <button id="featured-reload" type="button" class="hidden rounded-full bg-sky-500/90 px-8 py-4 text-sm font-bold text-white hover:bg-sky-500 transition-colors">Volver a cargar</button>
       </div>
     </main>

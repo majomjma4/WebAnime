@@ -1,0 +1,124 @@
+<?php
+
+use Controllers\AdminController;
+use Controllers\PartialController;
+use Controllers\SiteController;
+use Controllers\UserController;
+
+return [
+    'home' => [
+        'path' => 'index',
+        'controller' => SiteController::class,
+        'action' => 'home',
+        'aliases' => ['', '/', 'index.php'],
+    ],
+    'admin' => [
+        'path' => 'admin',
+        'controller' => AdminController::class,
+        'action' => 'dashboard',
+        'guard' => 'admin',
+        'aliases' => ['admin.php'],
+    ],
+    'add' => [
+        'path' => 'añadir',
+        'controller' => AdminController::class,
+        'action' => 'addAnime',
+        'guard' => 'admin',
+        'aliases' => ['añadir.php', 'anadir', 'anadir.php'],
+    ],
+    'character' => [
+        'path' => 'character',
+        'controller' => SiteController::class,
+        'action' => 'character',
+        'aliases' => ['character.php'],
+    ],
+    'featured' => [
+        'path' => 'destacados',
+        'controller' => SiteController::class,
+        'action' => 'featured',
+        'aliases' => ['destacados.php'],
+    ],
+    'detail' => [
+        'path' => 'detail',
+        'controller' => SiteController::class,
+        'action' => 'detail',
+        'aliases' => ['detail.php'],
+    ],
+    'admin_comments' => [
+        'path' => 'gescom',
+        'controller' => AdminController::class,
+        'action' => 'manageComments',
+        'guard' => 'admin',
+        'aliases' => ['gesCom', 'gesCom.php'],
+    ],
+    'admin_manage' => [
+        'path' => 'gestion',
+        'controller' => AdminController::class,
+        'action' => 'manageCatalog',
+        'guard' => 'admin',
+        'aliases' => ['gestion.php'],
+    ],
+    'admin_users' => [
+        'path' => 'gesus',
+        'controller' => AdminController::class,
+        'action' => 'manageUsers',
+        'guard' => 'admin',
+        'aliases' => ['gesUs', 'gesUs.php'],
+    ],
+    'login' => [
+        'path' => 'ingresar',
+        'controller' => SiteController::class,
+        'action' => 'login',
+        'aliases' => ['ingresar.php'],
+    ],
+    'payment' => [
+        'path' => 'pago',
+        'controller' => SiteController::class,
+        'action' => 'payment',
+        'aliases' => ['pago.php'],
+    ],
+    'movies' => [
+        'path' => 'peliculas',
+        'controller' => SiteController::class,
+        'action' => 'movies',
+        'aliases' => ['peliculas.php'],
+    ],
+    'ranking' => [
+        'path' => 'ranking',
+        'controller' => SiteController::class,
+        'action' => 'ranking',
+        'aliases' => ['ranking.php'],
+    ],
+    'register' => [
+        'path' => 'registro',
+        'controller' => SiteController::class,
+        'action' => 'register',
+        'aliases' => ['registro.php'],
+    ],
+    'series' => [
+        'path' => 'series',
+        'controller' => SiteController::class,
+        'action' => 'series',
+        'aliases' => ['series.php'],
+    ],
+    'user' => [
+        'path' => 'user',
+        'controller' => UserController::class,
+        'action' => 'profile',
+        'guard' => 'auth',
+        'aliases' => ['user.php'],
+    ],
+    'partial_layout' => [
+        'path' => 'partials/layout',
+        'controller' => PartialController::class,
+        'action' => 'layout',
+        'aliases' => ['partials/layout.php'],
+    ],
+    'partial_admin_layout' => [
+        'path' => 'partials/admin-layout',
+        'controller' => PartialController::class,
+        'action' => 'adminLayout',
+        'guard' => 'admin',
+        'aliases' => ['partials/admin-layout.php'],
+    ],
+];

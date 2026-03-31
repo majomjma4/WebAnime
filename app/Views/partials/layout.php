@@ -588,7 +588,7 @@
 <template id="layout-header">
   <nav class="fixed top-0 w-full z-50 bg-neutral-950/70 backdrop-blur-xl shadow-[0px_20px_40px_rgba(0,0,0,0.4)] transition-all duration-300">
     <div class="flex items-center justify-between px-5 h-20 w-full font-['Manrope'] antialiased">
-      <a class="logo-badge" href="index.php" aria-label="NekoraList">
+      <a class="logo-badge" href="<?= route_path('home') ?>" aria-label="NekoraList">
         <img src="img/icon3.png" alt="NekoraList" class="logo-icon" />
         <span class="logo-text-stack">
           <span class="logo-text">NekoraList</span>
@@ -597,7 +597,7 @@
       </a>
 
       <div class="hidden md:flex items-center gap-8" id="main-menu"></div>
-      <a id="admin-mode-btn" href="admin.php" class="hidden md:inline-flex items-center gap-2 rounded-full border border-amber-400/40 bg-amber-500/10 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-amber-200 hover:bg-amber-500/20 hover:border-amber-300/70 transition-colors" style="display:none;">
+      <a id="admin-mode-btn" href="<?= route_path('admin') ?>" class="hidden md:inline-flex items-center gap-2 rounded-full border border-amber-400/40 bg-amber-500/10 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-amber-200 hover:bg-amber-500/20 hover:border-amber-300/70 transition-colors" style="display:none;">
         <span class="material-symbols-outlined text-[16px]">shield_person</span>
         Modo Admin
       </a>
@@ -683,8 +683,8 @@
                 </div>
               </div>
               <div class="mt-4 flex flex-col gap-2">
-                <a href="registro.php" class="rounded-full bg-primary/20 text-primary px-4 py-2 text-xs font-semibold uppercase tracking-widest text-center hover:bg-primary/30">Crear cuenta</a>
-                <a href="ingresar.php" class="rounded-full border border-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-center text-on-surface-variant hover:text-on-surface hover:border-primary/40">Ingresar</a>
+                <a href="<?= route_path('register') ?>" class="rounded-full bg-primary/20 text-primary px-4 py-2 text-xs font-semibold uppercase tracking-widest text-center hover:bg-primary/30">Crear cuenta</a>
+                <a href="<?= route_path('login') ?>" class="rounded-full border border-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-center text-on-surface-variant hover:text-on-surface hover:border-primary/40">Ingresar</a>
               </div>
             </div>
           </div>
@@ -712,23 +712,23 @@
     
     <div class="mt-3 flex flex-col gap-1">
       <div class="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.2em] px-3 py-1">Mi Biblioteca</div>
-      <a href="user.php" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-primary hover:text-white hover:bg-primary/20 transition-all shadow-[0_0_15px_rgba(139,92,246,0.15)] border border-primary/20 bg-primary/10">
+      <a href="<?= route_path('user') ?>" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-primary hover:text-white hover:bg-primary/20 transition-all shadow-[0_0_15px_rgba(139,92,246,0.15)] border border-primary/20 bg-primary/10">
         <span class="material-symbols-outlined text-lg">account_circle</span>
         Mi Perfil
       </a>
-      <a href="user.php?tab=favoritos" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all">
+      <a href="<?= route_path('user', ['tab' => 'favoritos']) ?>" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all">
         <span class="material-symbols-outlined text-lg">favorite</span>
         Favoritos
       </a>
-      <a href="user.php?tab=lista" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all">
+      <a href="<?= route_path('user', ['tab' => 'lista']) ?>" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all">
         <span class="material-symbols-outlined text-lg">format_list_bulleted</span>
         Mi Lista
       </a>
-      <a href="user.php?tab=pendientes" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all">
+      <a href="<?= route_path('user', ['tab' => 'pendientes']) ?>" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all">
         <span class="material-symbols-outlined text-lg">schedule</span>
         Pendientes
       </a>
-      <a href="user.php?tab=completados" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all">
+      <a href="<?= route_path('user', ['tab' => 'completados']) ?>" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all">
         <span class="material-symbols-outlined text-lg">check_circle</span>
         Completados
       </a>
@@ -745,7 +745,7 @@
 
     <div data-admin-only class="mt-2 pt-2 border-t border-white/5 flex flex-col gap-1 hidden">
       <div class="text-[10px] font-bold text-rose-400 uppercase tracking-[0.2em] px-3 py-1">AdministraciÃ³n</div>
-      <a href="admin.php" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-rose-200 hover:text-white hover:bg-rose-500/10 transition-all">
+      <a href="<?= route_path('admin') ?>" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-rose-200 hover:text-white hover:bg-rose-500/10 transition-all">
         <span class="material-symbols-outlined text-lg">admin_panel_settings</span>
         Panel Admin
       </a>
@@ -792,16 +792,16 @@
       </div> 
 <div class="footer-center flex flex-col items-center text-center gap-6">
         <div class="footer-brand-stack flex flex-col items-center gap-2">
-          <a class="footer-brand inline-flex items-center gap-3" href="index.php" aria-label="NekoraList">
+          <a class="footer-brand inline-flex items-center gap-3" href="<?= route_path('home') ?>" aria-label="NekoraList">
             <img src="img/icon3.png" alt="NekoraList" class="footer-logo" />
             <span class="footer-name">NekoraList</span>
           </a>
           <div class="footer-tagline">Tu portal a infinitas historias de anime</div>
         </div>
         <nav class="footer-nav footer-links flex flex-wrap justify-center gap-6 text-sm font-semibold">
-          <a href="index.php">Inicio</a>
-          <a href="destacados.php">Destacados</a>
-          <a href="ranking.php">Ranking</a>
+          <a href="<?= route_path('home') ?>">Inicio</a>
+          <a href="<?= route_path('featured') ?>">Destacados</a>
+          <a href="<?= route_path('ranking') ?>">Ranking</a>
         </nav>
         <div class="footer-copy">@ 2026 NekoraList - Todos los derechos reservados</div>
       </div>
