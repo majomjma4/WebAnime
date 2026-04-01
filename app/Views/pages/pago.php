@@ -9,8 +9,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script src="controllers/layout.js?v=final14"></script>
-    <script src="controllers/shared-utils.js?v=1"></script>
+<script src="assets/js/layout.js?v=final14"></script>
+    <script src="assets/js/shared-utils.js?v=1"></script>
 <script id="tailwind-config">
       tailwind.config = {
         darkMode: "class",
@@ -507,8 +507,8 @@
   });
 </script>
 
-<script src="controllers/i18n.js"></script>
-<script src="controllers/search.js"></script>
+<script src="assets/js/i18n.js"></script>
+<script src="assets/js/search.js"></script>
 </body>
 </html>
 

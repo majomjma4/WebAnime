@@ -21,10 +21,10 @@
         </div>
       </div>
     </main>
-    <script src="../models/character-data.js"></script>
+    <script src="../assets/js/character-data.js"></script>
     <script>document.addEventListener("DOMContentLoaded",()=>window.AniDexCharacterData&&window.AniDexCharacterData.init());</script>
-    <script src="controllers/layout.js?v=final14"></script>
-    <script src="controllers/shared-utils.js?v=1"></script>
+    <script src="assets/js/layout.js?v=final14"></script>
+    <script src="assets/js/shared-utils.js?v=1"></script>
   </body>
 </html>
 

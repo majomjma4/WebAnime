@@ -256,14 +256,14 @@
 
       <!-- Footer Component -->
       <div data-layout="footer"></div>
-      <script src="controllers/layout.js?v=final14"></script>
-    <script src="controllers/shared-utils.js?v=1"></script>
+      <script src="assets/js/layout.js?v=final14"></script>
+    <script src="assets/js/shared-utils.js?v=1"></script>
     </div>
 
-    <script src="controllers/i18n.js"></script>
-    <script src="controllers/search.js"></script>
-    <script src="controllers/detail-links.js"></script>
-    <script src="controllers/load-more.js?v=3"></script>
+    <script src="assets/js/i18n.js"></script>
+    <script src="assets/js/search.js"></script>
+    <script src="assets/js/detail-links.js"></script>
+    <script src="assets/js/load-more.js?v=3"></script>
     <script>
     document.addEventListener("DOMContentLoaded", () => {
       if (window.AniDexI18n) window.AniDexI18n.init();

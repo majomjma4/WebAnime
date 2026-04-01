@@ -2,6 +2,17 @@
 require_once __DIR__ . '/../../app/bootstrap.php';
 header('Content-Type: application/json');
 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+$isAdmin = isset($_SESSION['user_id'], $_SESSION['role']) && $_SESSION['role'] === 'Admin';
+if (!$isAdmin) {
+    http_response_code(403);
+    echo json_encode(['success' => false, 'error' => 'Acceso denegado']);
+    exit;
+}
+
 $action = $_GET['action'] ?? 'list';
 $data = json_decode(file_get_contents('php://input'), true);
 
@@ -14,7 +25,6 @@ if (!$dbConn) {
 try {
     $dbConn->exec("UPDATE usuarios SET activo = 1, bloqueado = 0, bloqueado_en = NULL, motivo_bloqueo = NULL, penalizacion_hasta = NULL WHERE bloqueado = 1 AND penalizacion_hasta IS NOT NULL AND penalizacion_hasta <= NOW()");
 } catch (Exception $e) {
-    // Si falla el mantenimiento automatico, no detenemos el flujo principal.
 }
 
 if ($action === 'list') {
@@ -59,45 +69,13 @@ if ($action === 'list') {
             SELECT
                 SUM(CASE WHEN LOWER(COALESCE(r.nombre, 'registrado')) <> 'admin' THEN 1 ELSE 0 END) AS total_users,
                 SUM(CASE WHEN LOWER(COALESCE(r.nombre, 'registrado')) = 'admin' THEN 1 ELSE 0 END) AS admin_users,
-                SUM(
-                    CASE
-                        WHEN LOWER(COALESCE(r.nombre, 'registrado')) <> 'admin'
-                             AND u.activo = 1
-                             AND (u.bloqueado = 0 OR u.bloqueado IS NULL)
-                        THEN 1
-                        ELSE 0
-                    END
-                ) AS active_accounts,
-                SUM(
-                    CASE
-                        WHEN LOWER(COALESCE(r.nombre, 'registrado')) <> 'admin'
-                             AND (u.activo <> 1 OR u.bloqueado = 1)
-                        THEN 1
-                        ELSE 0
-                    END
-                ) AS blocked_users,
-                SUM(
-                    CASE
-                        WHEN LOWER(COALESCE(r.nombre, 'registrado')) <> 'admin'
-                             AND u.es_premium = 1
-                        THEN 1
-                        ELSE 0
-                    END
-                ) AS premium_users,
-                SUM(
-                    CASE
-                        WHEN LOWER(COALESCE(r.nombre, 'registrado')) <> 'admin'
-                             AND EXISTS (
-                                 SELECT 1
-                                 FROM usuarios_sesiones us
-                                 WHERE us.usuario_id = u.id
-                                   AND us.fin IS NULL
-                                   AND us.inicio >= DATE_SUB(NOW(), INTERVAL 24 HOUR)
-                             )
-                        THEN 1
-                        ELSE 0
-                    END
-                ) AS active_now
+                SUM(CASE WHEN LOWER(COALESCE(r.nombre, 'registrado')) <> 'admin' AND u.activo = 1 AND (u.bloqueado = 0 OR u.bloqueado IS NULL) THEN 1 ELSE 0 END) AS active_accounts,
+                SUM(CASE WHEN LOWER(COALESCE(r.nombre, 'registrado')) <> 'admin' AND (u.activo <> 1 OR u.bloqueado = 1) THEN 1 ELSE 0 END) AS blocked_users,
+                SUM(CASE WHEN LOWER(COALESCE(r.nombre, 'registrado')) <> 'admin' AND u.es_premium = 1 THEN 1 ELSE 0 END) AS premium_users,
+                SUM(CASE WHEN LOWER(COALESCE(r.nombre, 'registrado')) <> 'admin' AND EXISTS (
+                    SELECT 1 FROM usuarios_sesiones us
+                    WHERE us.usuario_id = u.id AND us.fin IS NULL AND us.inicio >= DATE_SUB(NOW(), INTERVAL 24 HOUR)
+                ) THEN 1 ELSE 0 END) AS active_now
             FROM usuarios u
             LEFT JOIN roles r ON r.id = u.rol_id
         ");
@@ -207,5 +185,3 @@ if ($action === 'list') {
 } else {
     echo json_encode(['success' => false, 'error' => 'Accion desconocida']);
 }
-
-

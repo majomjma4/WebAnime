@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once __DIR__ . '/../../app/bootstrap.php';
 
 if (session_status() === PHP_SESSION_NONE) {
@@ -12,13 +12,13 @@ $data = json_decode(file_get_contents('php://input'), true);
 if (!is_array($data)) $data = [];
 
 if (!$action) {
-    echo json_encode(['success' => false, 'error' => 'AcciÃ³n invÃ¡lida']);
+    echo json_encode(['success' => false, 'error' => 'AcciÃƒÂ³n invÃƒÂ¡lida']);
     exit;
 }
 
 $dbConn = (new \Models\Database())->getConnection();
 if (!$dbConn) {
-    echo json_encode(['success' => false, 'error' => 'Error de conexiÃ³n a la base de datos']);
+    echo json_encode(['success' => false, 'error' => 'Error de conexiÃƒÂ³n a la base de datos']);
     exit;
 }
 
@@ -47,18 +47,28 @@ function normalizeSearchTerm(string $value): string
 {
     $value = trim(mb_strtolower($value, 'UTF-8'));
     $map = [
-        'á' => 'a',
-        'é' => 'e',
-        'í' => 'i',
-        'ó' => 'o',
-        'ú' => 'u',
-        'ü' => 'u',
+        'Ã¡' => 'a',
+        'Ã©' => 'e',
+        'Ã­' => 'i',
+        'Ã³' => 'o',
+        'Ãº' => 'u',
+        'Ã¼' => 'u',
     ];
 
     return strtr($value, $map);
 }
 
 ensureRequestsTable($dbConn);
+
+function requireAdmin(): void {
+    $isAdmin = isset($_SESSION['user_id'], $_SESSION['role']) && $_SESSION['role'] === 'Admin';
+    if (!$isAdmin) {
+        http_response_code(403);
+        echo json_encode(['success' => false, 'error' => 'Acceso denegado']);
+        exit;
+    }
+}
+
 
 if ($action === 'create') {
     $titulo = trim($data['titulo'] ?? '');
@@ -102,13 +112,22 @@ if ($action === 'list') {
     $q = trim($_GET['q'] ?? '');
     $mine = ($_GET['mine'] ?? '') === '1';
 
+    if (!$mine) {
+        requireAdmin();
+    }
+    $status = $_GET['status'] ?? 'pendiente';
+    $page = max(1, (int)($_GET['page'] ?? 1));
+    $size = max(1, min(50, (int)($_GET['size'] ?? 4)));
+    $q = trim($_GET['q'] ?? '');
+    $mine = ($_GET['mine'] ?? '') === '1';
+
     $where = "r.estado = ?";
     $params = [$status];
 
     if ($mine) {
         $userId = $_SESSION['user_id'] ?? null;
         if (!$userId) {
-            echo json_encode(['success' => false, 'error' => 'Debes iniciar sesión']);
+            echo json_encode(['success' => false, 'error' => 'Debes iniciar sesiÃ³n']);
             exit;
         }
         $where .= " AND r.user_id = ?";
@@ -188,10 +207,11 @@ if ($action === 'list') {
 }
 
 if ($action === 'decide') {
+    requireAdmin();
     $id = (int)($data['id'] ?? 0);
     $decision = $data['decision'] ?? '';
     if (!$id || !in_array($decision, ['aprobado', 'rechazado'], true)) {
-        echo json_encode(['success' => false, 'error' => 'Datos invÃ¡lidos']);
+        echo json_encode(['success' => false, 'error' => 'Datos invÃƒÂ¡lidos']);
         exit;
     }
 
@@ -211,9 +231,10 @@ if ($action === 'decide') {
 }
 
 if ($action === 'delete') {
+    requireAdmin();
     $id = (int)($data['id'] ?? 0);
     if (!$id) {
-        echo json_encode(['success' => false, 'error' => 'ID inválido']);
+        echo json_encode(['success' => false, 'error' => 'ID invÃ¡lido']);
         exit;
     }
 
@@ -228,6 +249,7 @@ if ($action === 'delete') {
 }
 
 if ($action === 'bulk_approve') {
+    requireAdmin();
     $adminId = $_SESSION['user_id'] ?? null;
     try {
         $stmt = $dbConn->prepare("
@@ -243,5 +265,4 @@ if ($action === 'bulk_approve') {
     exit;
 }
 
-echo json_encode(['success' => false, 'error' => 'AcciÃ³n no soportada']);
-
+echo json_encode(['success' => false, 'error' => 'AcciÃƒÂ³n no soportada']);

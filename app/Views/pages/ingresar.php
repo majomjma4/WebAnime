@@ -196,8 +196,8 @@
       })();
     </script>
 
-    <script src="controllers/layout.js?v=final14"></script>
-    <script src="controllers/shared-utils.js?v=1"></script>
+    <script src="assets/js/layout.js?v=final14"></script>
+    <script src="assets/js/shared-utils.js?v=1"></script>
     <div id="login-success" class="fixed inset-0 z-[80] hidden">
       <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
       <div class="relative mx-auto mt-[20vh] w-[92%] max-w-md rounded-2xl bg-surface-container-high/90 border border-violet-500/30 p-6 shadow-2xl text-center overflow-hidden">
@@ -427,7 +427,7 @@
 
   })();
     </script>
-    <script src="controllers/i18n.js"></script>
+    <script src="assets/js/i18n.js"></script>
     <script>
   document.addEventListener("DOMContentLoaded", () => {
     if (window.AniDexI18n) window.AniDexI18n.init();

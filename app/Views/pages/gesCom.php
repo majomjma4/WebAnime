@@ -797,7 +797,7 @@
     });
   })();
 </script>
-<script src="controllers/admin-layout.js?v=20260330a"></script>
+<script src="assets/js/admin-layout.js?v=20260330a"></script>
 </body></html>
 
 

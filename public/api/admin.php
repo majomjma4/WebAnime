@@ -2,6 +2,17 @@
 require_once __DIR__ . '/../../app/bootstrap.php';
 header('Content-Type: application/json');
 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+$isAdmin = isset($_SESSION['user_id'], $_SESSION['role']) && $_SESSION['role'] === 'Admin';
+if (!$isAdmin) {
+    http_response_code(403);
+    echo json_encode(['success' => false, 'error' => 'Acceso denegado']);
+    exit;
+}
+
 $action = $_GET['action'] ?? '';
 $data = json_decode(file_get_contents('php://input'), true);
 
@@ -15,9 +26,6 @@ if (!$dbConn) {
     echo json_encode(['success' => false, 'error' => 'Error de conexión a la base de datos']);
     exit;
 }
-
-// Security: In a real app, verify admin session here.
-// For now, we trust the frontend request (similar to the js mock).
 
 if ($action === 'add_anime') {
     $titulo = trim($data['titulo'] ?? '');
@@ -47,7 +55,7 @@ if ($action === 'add_anime') {
     $anio = (int)($data['anio'] ?? 0);
     $episodios = (int)($data['episodios'] ?? 0);
     $imagen_url = trim($data['imagen_url'] ?? '');
-    $generos = $data['generos'] ?? []; // Array of string
+    $generos = $data['generos'] ?? [];
 
     if (!$titulo) {
         echo json_encode(['success' => false, 'error' => 'El título es obligatorio']);
@@ -59,26 +67,22 @@ if ($action === 'add_anime') {
 
         $stmt = $dbConn->prepare("INSERT INTO anime (titulo, tipo, estudio, estado, episodios, temporada, anio, sinopsis, imagen_url, puntuacion, activo, creado_por, creado_en) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0.0, 1, 1, NOW())");
         $stmt->execute([$titulo, $tipo, $estudio, $estado, $episodios, $temporada, $anio, $sinopsis, $imagen_url]);
-        
+
         $anime_id = $dbConn->lastInsertId();
 
-        // Handle genres
         foreach ($generos as $g_name) {
-            // Check if genre exists
             $gStmt = $dbConn->prepare("SELECT id FROM generos WHERE nombre = ?");
             $gStmt->execute([$g_name]);
             $g_row = $gStmt->fetch(PDO::FETCH_ASSOC);
-            
+
             if ($g_row) {
                 $g_id = $g_row['id'];
             } else {
-                // Insert genre
                 $iStmt = $dbConn->prepare("INSERT INTO generos (nombre) VALUES (?)");
                 $iStmt->execute([$g_name]);
                 $g_id = $dbConn->lastInsertId();
             }
 
-            // Link genre
             $lStmt = $dbConn->prepare("INSERT INTO anime_generos (anime_id, genero_id) VALUES (?, ?)");
             $lStmt->execute([$anime_id, $g_id]);
         }
@@ -90,7 +94,6 @@ if ($action === 'add_anime') {
         echo json_encode(['success' => false, 'error' => 'Error de BD: ' . $e->getMessage()]);
     }
 }
-
 
 if ($action === 'update_studio') {
     $animeId = (int) ($data['id'] ?? 0);
@@ -110,7 +113,6 @@ if ($action === 'update_studio') {
     }
     exit;
 }
-
 
 if ($action === 'update_anime') {
     $animeId = (int) ($data['id'] ?? 0);
