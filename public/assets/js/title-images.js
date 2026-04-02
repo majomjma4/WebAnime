@@ -379,10 +379,16 @@
     }
     if (!card.hasAttribute("data-anime-card")) return;
     const genres = (item?.genres || []).map((g) => (g?.name || "").toLowerCase()).filter(Boolean);
+    const path = (window.location.pathname || "").toLowerCase();
+    const keepCatalogMovieYear = type === "movie" && path.includes("peliculas");
+    const existingYear = String(card.getAttribute("data-year") || "").trim();
     card.setAttribute("data-title", (item?.title || "").toLowerCase());
     card.setAttribute("data-genres", genres.join(","));
-    const year = item?.year ? String(item.year) : "";
+    const year = keepCatalogMovieYear && existingYear ? existingYear : (item?.year ? String(item.year) : "");
     card.setAttribute("data-year", year);
+    if (year && !card.getAttribute("data-year-original")) {
+      card.setAttribute("data-year-original", year);
+    }
     const yearEl = card.querySelector("[data-card-year]");
     if (yearEl && year) yearEl.textContent = year;
     card.setAttribute("data-type", type === "movie" ? "Película" : "Anime");

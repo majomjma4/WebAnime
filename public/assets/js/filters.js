@@ -541,6 +541,8 @@
 
 
   function setup() {
+    if (window.__aniDexFiltersInitialized) return;
+    window.__aniDexFiltersInitialized = true;
 
     const cards = gatherCards();
 
@@ -1540,12 +1542,19 @@
       if (!host) return;
 
       const sorted = [...visible];
+      const allCards = gatherCards();
+      const hiddenCards = allCards.filter((card) => card.style.display === "none");
+      const sortableYear = (card, direction) => {
+        const year = Number(card.dataset.year || card.dataset.yearOriginal || 0);
+        if (Number.isFinite(year) && year > 0) return year;
+        return direction === "asc" ? Number.MAX_SAFE_INTEGER : Number.MIN_SAFE_INTEGER;
+      };
 
       switch (state.sort) {
 
-        case "year_desc": sorted.sort((a, b) => Number(b.dataset.year || 0) - Number(a.dataset.year || 0)); break;
+        case "year_desc": sorted.sort((a, b) => sortableYear(b, "desc") - sortableYear(a, "desc")); break;
 
-        case "year_asc": sorted.sort((a, b) => Number(a.dataset.year || 0) - Number(b.dataset.year || 0)); break;
+        case "year_asc": sorted.sort((a, b) => sortableYear(a, "asc") - sortableYear(b, "asc")); break;
 
         case "title_asc": sorted.sort((a, b) => normalize(a.dataset.title).localeCompare(normalize(b.dataset.title))); break;
 
@@ -1564,7 +1573,7 @@
 
       }
 
-      sorted.forEach((c) => host.appendChild(c));
+      [...sorted, ...hiddenCards].forEach((c) => host.appendChild(c));
 
     }
 
