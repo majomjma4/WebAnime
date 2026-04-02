@@ -437,64 +437,12 @@
 
             <!-- AnimeCard Component -->
             <section class="mt-[clamp(0.6rem,0.9vw,0.8rem)] grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6" aria-label="Grid de anime">
+              <?php if (isset($dbGenres)) : ?>
+                  <script>window.DB_GENRES = <?= json_encode($dbGenres) ?>;</script>
+              <?php endif; ?>
               <?php
-              $dbConn = (new \Models\Database())->getConnection();
-              if ($dbConn) {
-                  // Fetch dynamic genres excluding +18 for the filter UI
-                  $genreStmt = $dbConn->prepare("SELECT nombre FROM generos WHERE nombre NOT IN ('Hentai', 'Erotica', 'Ecchi', 'Yaoi', 'Yuri', 'Gore', 'Harem', 'Reverse Harem', 'Rx', 'Girls Love', 'Boys Love') ORDER BY nombre ASC");
-                  $genreStmt->execute();
-                  $dbGenres = $genreStmt->fetchAll(PDO::FETCH_COLUMN);
-                  echo "<script>window.DB_GENRES = " . json_encode($dbGenres) . ";</script>";
-
-                  $stmt = $dbConn->prepare("
-                    SELECT *
-                    FROM anime
-                    WHERE tipo != 'Movie'
-                      AND id NOT IN (
-                        SELECT anime_id
-                        FROM anime_generos
-                        WHERE genero_id IN (
-                          SELECT id
-                          FROM generos
-                          WHERE nombre IN ('Hentai', 'Erotica', 'Ecchi', 'Yaoi', 'Yuri', 'Girls Love', 'Boys Love')
-                        )
-                      )
-                    ORDER BY
-                      CASE
-                        WHEN titulo LIKE 'Shingeki no Kyojin%' THEN 0
-                        WHEN titulo = 'Fullmetal Alchemist: Brotherhood' THEN 1
-                        WHEN titulo = 'Steins;Gate' THEN 2
-                        WHEN titulo LIKE 'Hunter x Hunter%' THEN 3
-                        WHEN titulo LIKE 'Kimetsu no Yaiba%' THEN 4
-                        WHEN titulo LIKE 'Jujutsu Kaisen%' THEN 5
-                        WHEN titulo LIKE 'Chainsaw Man%' THEN 6
-                        WHEN titulo LIKE 'Spy x Family%' THEN 7
-                        WHEN titulo LIKE 'Haikyuu!!%' THEN 8
-                        WHEN titulo LIKE 'Boku no Hero Academia%' THEN 9
-                        WHEN titulo LIKE 'One Piece%' THEN 10
-                        WHEN titulo LIKE 'Naruto%' THEN 11
-                        WHEN titulo LIKE 'Bleach%' THEN 12
-                        WHEN titulo LIKE 'Sousou no Frieren%' THEN 13
-                        WHEN titulo = 'Gintama' THEN 80
-                        WHEN titulo LIKE 'Gintama%' THEN 90
-                        ELSE 40
-                      END ASC,
-                      puntuacion DESC,
-                      id DESC
-                  ");
-                  $stmt->execute();
-                  $animes = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                  if (count($animes) > 0) {
+                  if (!empty($animes)) {
                       foreach ($animes as $a) {
-                          $tituloNormalizado = strtolower(trim((string) ($a['titulo'] ?? '')));
-                          if (str_contains($tituloNormalizado, 'does it count if you lose your innocence to an android') || str_contains($tituloNormalizado, 'does it count if') || str_contains($tituloNormalizado, 'futanari')) {
-                              continue;
-                          }
-                          $gStmt = $dbConn->prepare("SELECT g.nombre FROM generos g JOIN anime_generos ag ON g.id = ag.genero_id WHERE ag.anime_id = ?");
-                          $gStmt->execute([$a['id']]);
-                          $generos_arr = $gStmt->fetchAll(PDO::FETCH_COLUMN);
-                          $generos_str = implode(',', array_map('strtolower', $generos_arr));
               ?>
               <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" 
                        data-anime-card 
@@ -527,7 +475,6 @@
                   } else {
                       echo "<p class='col-span-full text-center text-on-surface-variant'>No hay series disponibles.</p>";
                   }
-              }
               ?>
             </section>
 

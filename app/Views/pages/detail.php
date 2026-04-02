@@ -1,9 +1,4 @@
-<?php
-session_start();
-$isLoggedIn = isset($_SESSION['user_id']);
-$sessionRole = $_SESSION['role'] ?? 'Invitado';
-$sessionPremium = !empty($_SESSION['premium']) || $sessionRole === 'Admin';
-?>
+
 <!DOCTYPE html>
 <html class="dark" lang="en"><head>
     <script data-ui-preload>document.documentElement.classList.add("preload-ui");</script>

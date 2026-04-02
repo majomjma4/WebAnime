@@ -215,4 +215,171 @@ class Anime {
             return null;
         }
     }
+
+    /**
+     * Obtiene los nombres de géneros seguros (excluyendo +18)
+     */
+    public function getFilteredGenres() {
+        if (!$this->db) return [];
+        $restricted = ["'Hentai'", "'Erotica'", "'Ecchi'", "'Yaoi'", "'Yuri'", "'Gore'", "'Harem'", "'Reverse Harem'", "'Rx'", "'Girls Love'", "'Boys Love'"];
+        $sql = "SELECT nombre FROM generos 
+                WHERE nombre NOT IN (" . implode(",", $restricted) . ") 
+                ORDER BY nombre ASC";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_COLUMN);
+    }
+
+    /**
+     * Obtiene películas seguras (excluyendo +18)
+     */
+    public function getMovies() {
+        if (!$this->db) return [];
+        $restrictedGenres = ["'Hentai'", "'Erotica'", "'Ecchi'", "'Yaoi'", "'Yuri'", "'Girls Love'", "'Boys Love'"];
+        $restrictedTitles = ["'%does it count if%'", "'%futanari%'"];
+        
+        $sql = "SELECT * FROM anime 
+                WHERE tipo = 'Movie' 
+                  AND id NOT IN (
+                    SELECT anime_id FROM anime_generos 
+                    WHERE genero_id IN (SELECT id FROM generos WHERE nombre IN (" . implode(",", $restrictedGenres) . "))
+                  ) 
+                  AND LOWER(titulo) NOT LIKE " . implode(" AND LOWER(titulo) NOT LIKE ", $restrictedTitles) . "
+                ORDER BY puntuacion DESC, id DESC";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        $animes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($animes as &$a) {
+            $a['generos_str'] = implode(',', array_map('strtolower', $this->getGeneros($a['id'])));
+        }
+        return $animes;
+    }
+
+    /**
+     * Obtiene series seguras (excluyendo +18) con orden de prioridad
+     */
+    public function getSeries() {
+        if (!$this->db) return [];
+        $restrictedGenres = ["'Hentai'", "'Erotica'", "'Ecchi'", "'Yaoi'", "'Yuri'", "'Girls Love'", "'Boys Love'"];
+        $restrictedTitles = ["'%does it count if%'", "'%futanari%'"];
+        
+        $sql = "SELECT * FROM anime 
+                WHERE tipo != 'Movie' 
+                  AND id NOT IN (
+                    SELECT anime_id FROM anime_generos 
+                    WHERE genero_id IN (SELECT id FROM generos WHERE nombre IN (" . implode(",", $restrictedGenres) . "))
+                  ) 
+                  AND LOWER(titulo) NOT LIKE " . implode(" AND LOWER(titulo) NOT LIKE ", $restrictedTitles) . "
+                ORDER BY 
+                  CASE 
+                    WHEN titulo LIKE 'Shingeki no Kyojin%' THEN 0 
+                    WHEN titulo = 'Fullmetal Alchemist: Brotherhood' THEN 1 
+                    WHEN titulo = 'Steins;Gate' THEN 2 
+                    WHEN titulo LIKE 'Hunter x Hunter%' THEN 3 
+                    WHEN titulo LIKE 'Kimetsu no Yaiba%' THEN 4 
+                    WHEN titulo LIKE 'Jujutsu Kaisen%' THEN 5 
+                    WHEN titulo LIKE 'Chainsaw Man%' THEN 6 
+                    WHEN titulo LIKE 'Spy x Family%' THEN 7 
+                    WHEN titulo LIKE 'Haikyuu!!%' THEN 8 
+                    WHEN titulo LIKE 'Boku no Hero Academia%' THEN 9 
+                    WHEN titulo LIKE 'One Piece%' THEN 10 
+                    WHEN titulo LIKE 'Naruto%' THEN 11 
+                    WHEN titulo LIKE 'Bleach%' THEN 12 
+                    WHEN titulo LIKE 'Sousou no Frieren%' THEN 13 
+                    WHEN titulo = 'Gintama' THEN 80 
+                    WHEN titulo LIKE 'Gintama%' THEN 90 
+                    ELSE 40 
+                  END ASC, 
+                  puntuacion DESC, 
+                  id DESC";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        $animes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($animes as &$a) {
+            $a['generos_str'] = implode(',', array_map('strtolower', $this->getGeneros($a['id'])));
+        }
+        return $animes;
+    }
+
+    /**
+     * Obtiene catálogo administrativo aplicando restricciones de seguridad
+     */
+    public function getCatalog($page = 1, $perPage = 50, $search = '', $status = 'ALL', $type = 'ALL', $year = '') {
+        if (!$this->db) return ['data' => [], 'total' => 0];
+
+        $restrictedGenres = ["'Hentai'", "'Erotica'", "'Ecchi'", "'Yaoi'", "'Yuri'", "'Girls Love'", "'Boys Love'"];
+        $restrictedTitles = ["'%does it count if%'", "'%futanari%'"];
+        
+        $where = [
+            "id NOT IN (SELECT anime_id FROM anime_generos WHERE genero_id IN (SELECT id FROM generos WHERE nombre IN (" . implode(",", $restrictedGenres) . ")))",
+            "LOWER(titulo) NOT LIKE " . implode(" AND LOWER(titulo) NOT LIKE ", $restrictedTitles)
+        ];
+        $params = [];
+
+        if (!empty($search)) {
+            $where[] = "(titulo LIKE :search OR tipo LIKE :search OR estado LIKE :search OR CAST(anio AS CHAR) LIKE :search OR estudio LIKE :search)";
+            $params[':search'] = '%' . $search . '%';
+        }
+
+        if ($status !== 'ALL' && !empty($status)) {
+            $statusMap = [
+                'EN EMISION' => ['en emision', 'en emisi?n', 'currently airing'],
+                'FINALIZADO' => ['finished airing', 'finalizado', 'finalizada'],
+                'PROXIMAMENTE' => ['not yet aired', 'proximamente', 'pr?ximamente'],
+            ];
+            $normalizedStatus = strtoupper($status);
+            if (isset($statusMap[$normalizedStatus])) {
+                $parts = [];
+                foreach ($statusMap[$normalizedStatus] as $index => $statusValue) {
+                    $key = ':status_' . $index;
+                    $parts[] = 'LOWER(estado) = ' . $key;
+                    $params[$key] = $statusValue;
+                }
+                $where[] = '(' . implode(' OR ', $parts) . ')';
+            }
+        }
+
+        if ($type !== 'ALL' && !empty($type)) {
+            $where[] = "UPPER(tipo) = :type";
+            $params[':type'] = strtoupper($type);
+        }
+
+        if (!empty($year)) {
+            $where[] = "CAST(anio AS CHAR) LIKE :year";
+            $params[':year'] = '%' . $year . '%';
+        }
+
+        $whereSql = " WHERE " . implode(" AND ", $where);
+
+        // Contar el total
+        $countStmt = $this->db->prepare("SELECT COUNT(*) FROM anime" . $whereSql);
+        foreach ($params as $k => $v) $countStmt->bindValue($k, $v);
+        $countStmt->execute();
+        $total = (int)$countStmt->fetchColumn();
+
+        $totalPages = max(1, (int)ceil($total / $perPage));
+        $page = min(max(1, $page), $totalPages);
+        $offset = ($page - 1) * $perPage;
+
+        // Obtener lista
+        $listStmt = $this->db->prepare("SELECT * FROM anime" . $whereSql . " ORDER BY id DESC LIMIT :limit OFFSET :offset");
+        foreach ($params as $k => $v) $listStmt->bindValue($k, $v);
+        $listStmt->bindValue(':limit', $perPage, PDO::PARAM_INT);
+        $listStmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $listStmt->execute();
+        $animes = $listStmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Conteo rápido de "En emisión" para el dashboard
+        $airingCount = (int)$this->db->query("SELECT COUNT(*) FROM anime WHERE LOWER(estado) IN ('en emision', 'currently airing') AND id NOT IN (SELECT anime_id FROM anime_generos WHERE genero_id IN (SELECT id FROM generos WHERE nombre IN (" . implode(",", $restrictedGenres) . ")))")->fetchColumn();
+
+        return [
+            'data' => $animes,
+            'total' => $total,
+            'totalPages' => $totalPages,
+            'currentPage' => $page,
+            'airingCount' => $airingCount
+        ];
+    }
 }

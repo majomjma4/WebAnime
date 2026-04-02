@@ -20,7 +20,16 @@ class SiteController extends Controller
 
     public function detail(): void
     {
-        $this->render('pages/detail');
+        $this->ensureSessionStarted();
+        $isLoggedIn = isset($_SESSION['user_id']);
+        $sessionRole = $_SESSION['role'] ?? 'Invitado';
+        $sessionPremium = !empty($_SESSION['premium']) || $sessionRole === 'Admin';
+
+        $this->render('pages/detail', [
+            'isLoggedIn' => $isLoggedIn,
+            'sessionRole' => $sessionRole,
+            'sessionPremium' => $sessionPremium,
+        ]);
     }
 
     public function login(): void
@@ -35,7 +44,14 @@ class SiteController extends Controller
 
     public function movies(): void
     {
-        $this->render('pages/peliculas');
+        $animeModel = new \Models\Anime();
+        $dbGenres = $animeModel->getFilteredGenres();
+        $animes = $animeModel->getMovies();
+
+        $this->render('pages/peliculas', [
+            'dbGenres' => $dbGenres,
+            'animes' => $animes,
+        ]);
     }
 
     public function ranking(): void
@@ -50,6 +66,13 @@ class SiteController extends Controller
 
     public function series(): void
     {
-        $this->render('pages/series');
+        $animeModel = new \Models\Anime();
+        $dbGenres = $animeModel->getFilteredGenres();
+        $animes = $animeModel->getSeries();
+
+        $this->render('pages/series', [
+            'dbGenres' => $dbGenres,
+            'animes' => $animes,
+        ]);
     }
 }
