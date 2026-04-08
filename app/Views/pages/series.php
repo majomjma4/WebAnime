@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html class="dark" lang="es">
   <head>
     <script data-ui-preload>document.documentElement.classList.add("preload-ui");</script>
@@ -496,7 +496,7 @@
     </div>
     <script src="<?= asset_path('assets/js/i18n.js') ?>"></script>
     <script src="<?= asset_path('assets/js/title-images.js?v=1774473995,33386') ?>"></script>
-    <script src="<?= asset_path('assets/js/search.js') ?>"></script>
+    <script src="<?= asset_path('assets/js/search.js?v=popular2') ?>"></script>
     <script src="<?= asset_path('assets/js/detail-links.js?v=3') ?>"></script>
     <script src="<?= asset_path('assets/js/filters.js?v=final3') ?>"></script>
     <script src="<?= asset_path('assets/js/load-more.js?v=1774473995,33386') ?>"></script>
@@ -522,6 +522,8 @@
     <script data-ui-unlock>document.documentElement.classList.remove("preload-ui");</script>
   </body>
 </html>
+
+
 
 
 

@@ -138,6 +138,69 @@
 
   const SUGGEST_LIMIT = 6;
   const API_SUGGEST_LIMIT = 12;
+  const popularCache = new Map();
+
+  const pageContext = () => {
+    const path = (window.location.pathname || "").toLowerCase();
+    if (path.includes("peliculas")) return "movies";
+    if (path.includes("series")) return "series";
+    return "mixed";
+  };
+
+  const normalizeSuggestItem = (item) => {
+    const base = item?.title || "";
+    const english = item?.title_english || "";
+    const japanese = item?.title_japanese || "";
+    const safeTitle = hasJapaneseChars(base)
+      ? (english || (hasJapaneseChars(japanese) ? "" : japanese) || base)
+      : base;
+    return {
+      title: safeTitle,
+      titleEn: english,
+      titleJp: "",
+      mediaType: item?.type || "",
+      malId: item?.mal_id || null,
+      image:
+        item?.images?.webp?.image_url ||
+        item?.images?.jpg?.image_url ||
+        ""
+    };
+  };
+
+  const fetchPopularSuggestions = async (mode = "mixed") => {
+    if (popularCache.has(mode)) return popularCache.get(mode);
+    try {
+      let items = [];
+      if (mode === "movies") {
+        const res = await fetch(`${API_BASE}?endpoint=${encodeURIComponent("top/anime?filter=bypopularity&type=movie&limit=5")}`);
+        const json = res.ok ? await res.json() : null;
+        items = (json?.data || []).map(normalizeSuggestItem).slice(0, 5);
+      } else if (mode === "series") {
+        const res = await fetch(`${API_BASE}?endpoint=${encodeURIComponent("top/anime?filter=bypopularity&type=tv&limit=5")}`);
+        const json = res.ok ? await res.json() : null;
+        items = (json?.data || []).map(normalizeSuggestItem).slice(0, 5);
+      } else {
+        const [tvRes, movieRes] = await Promise.all([
+          fetch(`${API_BASE}?endpoint=${encodeURIComponent("top/anime?filter=bypopularity&type=tv&limit=5")}`),
+          fetch(`${API_BASE}?endpoint=${encodeURIComponent("top/anime?filter=bypopularity&type=movie&limit=5")}`)
+        ]);
+        const tvJson = tvRes.ok ? await tvRes.json() : null;
+        const movieJson = movieRes.ok ? await movieRes.json() : null;
+        const tvItems = (tvJson?.data || []).map(normalizeSuggestItem);
+        const movieItems = (movieJson?.data || []).map(normalizeSuggestItem);
+        const mixed = [];
+        for (let i = 0; i < 5; i += 1) {
+          if (tvItems[i]) mixed.push(tvItems[i]);
+          if (movieItems[i]) mixed.push(movieItems[i]);
+        }
+        items = mixed.slice(0, 5);
+      }
+      popularCache.set(mode, items);
+      return items;
+    } catch {
+      return [];
+    }
+  };
 
   const fetchRelatedByQuery = async (term, mediaType) => {
     const q = (term || "").trim();
@@ -487,6 +550,14 @@
       }
       openBox();
     };
+
+    input.addEventListener("focus", async () => {
+      const term = (input.value || "").trim();
+      if (term) return;
+      const isHeaderSearch = input.id !== "filter-search" && input.getAttribute("data-catalog-search") !== "1";
+      const items = await fetchPopularSuggestions(isHeaderSearch ? "mixed" : pageContext());
+      renderSuggestions(items, "");
+    });
 
     input.addEventListener("input", () => {
       const term = (input.value || "").trim();

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html class="dark" lang="es">
   <head>
     <meta charset="UTF-8" />
@@ -282,14 +282,14 @@
       <div class="mb-8 flex items-center justify-between gap-4">
         <div>
           <h1 class="font-['Manrope'] text-3xl md:text-4xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-violet-400 to-purple-400 drop-shadow-[0_6px_18px_rgba(99,102,241,0.35)]">Destacados</h1>
-          <p class="text-zinc-400 mt-2">Animes y películas mas populares.</p>
+          <p class="text-zinc-400 mt-2">Animes y pelÃ­culas mas populares.</p>
         </div>
         <div class="flex items-center gap-2">
           <label class="text-xs uppercase tracking-widest text-zinc-400" for="featured-type">Tipo</label>
           <select id="featured-type" class="rounded-full bg-zinc-900 border border-zinc-800 px-4 py-2 text-sm text-zinc-100">
             <option value="all">Todos</option>
             <option value="anime">Anime</option>
-            <option value="movie">Película</option>
+            <option value="movie">PelÃ­cula</option>
           </select>
         </div>
       </div>
@@ -308,9 +308,9 @@
   const norm = (v) => (v || "").toString().toLowerCase().replace(/\s+/g, " ").trim();
   const fixText = (s) => {
     return (s || "")
-      .replace(/PELÍCULA/gi, "Película")
-      .replace(/Película/gi, "Película")
-      .replace(/Película/gi, "Película");
+      .replace(/PELÃCULA/gi, "PelÃ­cula")
+      .replace(/PelÃ­cula/gi, "PelÃ­cula")
+      .replace(/PelÃ­cula/gi, "PelÃ­cula");
   };
 
   const setBadge = (media, score) => {
@@ -334,14 +334,14 @@
     const imgSrc = it?.images?.webp?.large_image_url || it?.images?.jpg?.large_image_url || it?.images?.jpg?.image_url || "";
     const title = it?.title || "Anime";
     const genres = (it?.genres || []).map((g) => g?.name).filter(Boolean).slice(0, 2).join(", ");
-    const genresText = genres || "Sin categorías";
+    const genresText = genres || "Sin categorÃ­as";
     const type = norm(it?.type).includes("movie") ? "movie" : "anime";
     article.dataset.featuredType = type;
     article.setAttribute("data-type", type);
     article.innerHTML = `
       <div class="relative aspect-[2/3] p-2">
         <img class="w-full h-full object-cover rounded-lg transition-transform duration-500 ease-[cubic-bezier(0.2,0,0,1)]" src="${imgSrc}" alt="${title}" />
-        <span class="absolute top-5 left-4 rounded-full bg-violet-500/90 px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest">${type === "movie" ? "Película" : "Anime"}</span>
+        <span class="absolute top-5 left-4 rounded-full bg-violet-500/90 px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest">${type === "movie" ? "PelÃ­cula" : "Anime"}</span>
       </div>
       <div class="p-4">
         <h3 class="text-lg font-bold">${fixText(title)}</h3>
@@ -431,7 +431,7 @@
     <script src="assets/js/layout.js?v=final14"></script>
     <script src="assets/js/shared-utils.js?v=1"></script>
     <script src="assets/js/i18n.js"></script>
-    <script src="assets/js/search.js"></script>
+    <script src="assets/js/search.js?v=popular2"></script>
     <script src="assets/js/detail-links.js"></script>
     <script>
     document.addEventListener("DOMContentLoaded", () => {
@@ -442,3 +442,5 @@
     </script>
   </body>
 </html>
+
+

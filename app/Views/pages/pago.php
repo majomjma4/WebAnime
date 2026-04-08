@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html class="dark" lang="en"><head>
 <meta charset="utf-8"/>
@@ -340,15 +340,15 @@
   <div class="relative mt-[20vh] inline-flex w-fit max-w-[24rem] flex-col items-center rounded-2xl bg-surface-container-high/90 border border-violet-500/30 p-8 shadow-2xl text-center overflow-hidden">
     <span class="pointer-events-none absolute -top-20 -right-16 h-40 w-40 rounded-full bg-violet-500/20 blur-3xl"></span>
     <span class="pointer-events-none absolute -bottom-24 -left-16 h-44 w-44 rounded-full bg-fuchsia-500/20 blur-3xl"></span>
-    <button type="button" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant hover:text-on-surface flex items-center justify-center transition-all" onclick="document.getElementById('payment-success').classList.add('hidden')">×</button>
+    <button type="button" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant hover:text-on-surface flex items-center justify-center transition-all" onclick="document.getElementById('payment-success').classList.add('hidden')">Ã—</button>
     <div class="relative mb-6">
       <div class="absolute inset-0 blur-xl bg-violet-500/30 animate-pulse rounded-full"></div>
       <img src="img/doraemon.gif" alt="Sucesso" class="relative w-24 h-24 mx-auto rounded-full border-2 border-violet-400/50 shadow-lg" />
     </div>
-    <h3 class="font-headline text-3xl font-extrabold text-white tracking-tighter uppercase italic">¡COMPRA EXITOSA!!!!</h3>
+    <h3 class="font-headline text-3xl font-extrabold text-white tracking-tighter uppercase italic">Â¡COMPRA EXITOSA!!!!</h3>
     <div class="mt-4 space-y-2">
       <h4 class="font-headline text-xl font-bold text-violet-300">Bienvenido, <span id="payment-name" class="text-white">Nekora</span>!</h4>
-      <p class="text-on-surface-variant text-sm font-body max-w-[18rem] mx-auto opacity-80">Tu acceso al modo <span class="text-primary font-bold">Limit Break</span> ya está activo.</p>
+      <p class="text-on-surface-variant text-sm font-body max-w-[18rem] mx-auto opacity-80">Tu acceso al modo <span class="text-primary font-bold">Limit Break</span> ya estÃ¡ activo.</p>
     </div>
     <div class="mt-8 flex items-center gap-3 px-6 py-3 bg-violet-500/10 rounded-full border border-violet-500/20 animate-pulse">
       <span class="material-symbols-outlined text-violet-400 text-sm">sync</span>
@@ -400,7 +400,7 @@
         btn.innerHTML = 'VERIFICANDO...';
     }
 
-    log("Iniciando Verificación Nekora...");
+    log("Iniciando VerificaciÃ³n Nekora...");
 
     try {
         const holder = document.querySelector("[data-field-holder]")?.value.trim() || "";
@@ -411,23 +411,23 @@
         const method = (Array.from(document.querySelectorAll('input[name="method-type"]')).find(r => r.checked))?.value || "visa";
 
         // Paso a paso
-        if (holder.length < 4) log("❌ Error: Nombre demasiado corto.", true); else log("✅ Nombre OK");
+        if (holder.length < 4) log("âŒ Error: Nombre demasiado corto.", true); else log("âœ… Nombre OK");
         
         let codeOk = code.length === cardOptions[method].numDigits && luhnCheck(code);
-        if (!codeOk) log("❌ Error: Tarjeta inválida (" + cardOptions[method].name + ").", true); else log("✅ Tarjeta OK");
+        if (!codeOk) log("âŒ Error: Tarjeta invÃ¡lida (" + cardOptions[method].name + ").", true); else log("âœ… Tarjeta OK");
         
         let dateOk = date.length === 5 && date.includes("/");
-        if (!dateOk) log("❌ Error: Formato de fecha MM/AA.", true); else log("✅ Fecha OK");
+        if (!dateOk) log("âŒ Error: Formato de fecha MM/AA.", true); else log("âœ… Fecha OK");
         
         let pinOk = pin.length === cardOptions[method].pinDigits;
-        if (!pinOk) log("❌ Error: PIN (" + cardOptions[method].pinDigits + " digitos).", true); else log("✅ PIN OK");
+        if (!pinOk) log("âŒ Error: PIN (" + cardOptions[method].pinDigits + " digitos).", true); else log("âœ… PIN OK");
         
-        if (addr.length < 6) log("❌ Error: Dirección incorrecta.", true); else log("✅ Dirección OK");
+        if (addr.length < 6) log("âŒ Error: DirecciÃ³n incorrecta.", true); else log("âœ… DirecciÃ³n OK");
 
         const hasErrors = holder.length < 4 || !codeOk || !dateOk || !pinOk || addr.length < 6;
 
         if (hasErrors) {
-            log("🛑 CORRIGE LOS ERRORES ARRIBA.", true);
+            log("ðŸ›‘ CORRIGE LOS ERRORES ARRIBA.", true);
             if (btn) {
                 btn.style.pointerEvents = "auto";
                 btn.innerHTML = 'COMPLETAR COMPRA <span class="material-symbols-outlined">bolt</span>';
@@ -435,15 +435,15 @@
             return;
         }
 
-        log("🚀 Conectando con servidor...");
+        log("ðŸš€ Conectando con servidor...");
         const auth = window.AniDexLayout ? await window.AniDexLayout.checkAuth() : { logged: false };
         if (!auth.logged) { 
-            log("🔒 Sesión no encontrada.", true); 
+            log("ðŸ”’ SesiÃ³n no encontrada.", true); 
             window.location.href = "ingresar?redirect=pago";
             return; 
         }
 
-        log("💳 Procesando transacción...");
+        log("ðŸ’³ Procesando transacciÃ³n...");
         window.onbeforeunload = () => "Pago en curso...";
 
         const res = await fetch("api/auth.php?action=buy_premium", { method: "POST" });
@@ -451,18 +451,18 @@
         window.onbeforeunload = null;
 
         if (data.success) {
-            log("🎉 ¡PAGO CONFIRMADO!");
+            log("ðŸŽ‰ Â¡PAGO CONFIRMADO!");
             try { new Audio("https://cdn.pixabay.com/audio/2021/11/24/audio_985532d525.mp3").play(); } catch(e){}
             localStorage.setItem("nekora_premium", "true");
             document.getElementById("payment-success")?.classList.remove("hidden");
             if (window.AniDexLayout?.checkAuth) await window.AniDexLayout.checkAuth();
             setTimeout(() => { window.location.href = "index"; }, 2500);
         } else {
-            log("❌ Error Servidor: " + (data.error || "Fallo"), true);
+            log("âŒ Error Servidor: " + (data.error || "Fallo"), true);
             if (btn) { btn.style.pointerEvents = "auto"; btn.innerHTML = 'COMPLETAR COMPRA'; }
         }
     } catch (e) {
-        log("💥 Error: " + e.message, true);
+        log("ðŸ’¥ Error: " + e.message, true);
         if (btn) { btn.style.pointerEvents = "auto"; btn.innerHTML = 'COMPLETAR COMPRA'; }
     }
   };
@@ -508,9 +508,11 @@
 </script>
 
 <script src="assets/js/i18n.js"></script>
-<script src="assets/js/search.js"></script>
+<script src="assets/js/search.js?v=popular2"></script>
 </body>
 </html>
+
+
 
 
 
