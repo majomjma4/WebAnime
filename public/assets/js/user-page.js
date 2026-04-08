@@ -1,4 +1,4 @@
-/* Extracted from app/Views/pages/user.php */
+﻿/* Extracted from app/Views/pages/user.php */
 
 document.addEventListener("DOMContentLoaded", () => {
       if (window.AniDexI18n) window.AniDexI18n.init();
@@ -85,11 +85,27 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
       const paintProfileAvatar = (src) => {
-        if (!src) return;
-        if (avatarImg) avatarImg.src = src;
-        if (previewImg) previewImg.src = src;
+        const safeSrc = src || DEFAULT_PROFILE_AVATAR;
+        if (avatarImg) {
+          avatarImg.src = safeSrc;
+          avatarImg.onerror = () => {
+            avatarImg.onerror = null;
+            avatarImg.src = DEFAULT_PROFILE_AVATAR;
+          };
+        }
+        if (previewImg) {
+          previewImg.src = safeSrc;
+          previewImg.onerror = () => {
+            previewImg.onerror = null;
+            previewImg.src = DEFAULT_PROFILE_AVATAR;
+          };
+        }
         document.querySelectorAll("img[data-profile-avatar]").forEach((img) => {
-          img.src = src;
+          img.src = safeSrc;
+          img.onerror = () => {
+            img.onerror = null;
+            img.src = DEFAULT_PROFILE_AVATAR;
+          };
         });
       };
 
@@ -294,11 +310,27 @@ document.addEventListener("DOMContentLoaded", () => {
       const avatarImg = document.querySelector("img[alt='Foto de perfil']");
       const previewImg = document.querySelector("[data-profile-avatar-preview]");
       const paintProfileAvatar = (src) => {
-        if (!src) return;
-        if (avatarImg) avatarImg.src = src;
-        if (previewImg) previewImg.src = src;
+        const safeSrc = src || DEFAULT_PROFILE_AVATAR;
+        if (avatarImg) {
+          avatarImg.src = safeSrc;
+          avatarImg.onerror = () => {
+            avatarImg.onerror = null;
+            avatarImg.src = DEFAULT_PROFILE_AVATAR;
+          };
+        }
+        if (previewImg) {
+          previewImg.src = safeSrc;
+          previewImg.onerror = () => {
+            previewImg.onerror = null;
+            previewImg.src = DEFAULT_PROFILE_AVATAR;
+          };
+        }
         document.querySelectorAll("img[data-profile-avatar]").forEach((img) => {
-          img.src = src;
+          img.src = safeSrc;
+          img.onerror = () => {
+            img.onerror = null;
+            img.src = DEFAULT_PROFILE_AVATAR;
+          };
         });
       };
       const nameInput = document.getElementById("profile-name-input");
@@ -320,13 +352,13 @@ document.addEventListener("DOMContentLoaded", () => {
       // Constants
       const PREF_KEY = "anidex_profile_prefs";
       const PREF_GROUPS = {
-        "Idioma": ["Sub. español", "Doblaje español", "Japonés", "Inglés"],
-        "Género": ["Acción", "Fantasía", "Drama", "Comedia", "Romance", "Terror", "Sci-Fi"]
+        "Idioma": ["Sub. espa\u00f1ol", "Doblaje espa\u00f1ol", "Japon\u00e9s", "Ingl\u00e9s"],
+        "G\u00e9nero": ["Acci\u00f3n", "Fantas\u00eda", "Drama", "Comedia", "Romance", "Terror", "Sci-Fi"]
       };
-      const PREF_DEFAULTS = { "Idioma": [], "Género": [] };
+      const PREF_DEFAULTS = { "Idioma": [], "G\u00e9nero": [] };
       const PREF_GROUP_STYLES = {
         "Idioma": { baseBorder: "border-blue-400/70", baseBg: "bg-blue-500/45", activeBorder: "border-blue-300/90", activeBg: "bg-blue-500/70", glow: "" },
-        "Género": { baseBorder: "border-violet-400/70", baseBg: "bg-violet-500/45", activeBorder: "border-violet-300/90", activeBg: "bg-violet-500/70", glow: "" }
+        "G\u00e9nero": { baseBorder: "border-violet-400/70", baseBg: "bg-violet-500/45", activeBorder: "border-violet-300/90", activeBg: "bg-violet-500/70", glow: "" }
       };
 
       const getK = (k) => (window.AniDexProfile && window.AniDexProfile.getIsolatedKey) ? window.AniDexProfile.getIsolatedKey(k) : k;
@@ -614,7 +646,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const res = await fetch("api/requests.php?action=create", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ título: title, tipo })
+              body: JSON.stringify({ tÃƒÂ­tulo: title, tipo })
             });
             const json = await res.json();
             if (!json.success) throw new Error(json.error || "No se pudo enviar la solicitud");
@@ -634,11 +666,11 @@ document.addEventListener("DOMContentLoaded", () => {
       // Initial load & Export refresh (Registry pattern)
       if (window.AniDexLayout && typeof window.AniDexLayout.onReady === "function") {
         window.AniDexLayout.onReady(() => {
-          console.log("[NekoraProfile] Autenticación lista. Cargando datos con ID:", localStorage.getItem("anidex_user_id"));
+          console.log("[NekoraProfile] AutenticaciÃƒÂ³n lista. Cargando datos con ID:", localStorage.getItem("anidex_user_id"));
           loadProfile();
         });
         window.AniDexLayout.registerRefresh(() => {
-          console.log("[NekoraProfile] Señal de refresco recibida.");
+          console.log("[NekoraProfile] SeÃƒÂ±al de refresco recibida.");
           loadProfile(true);
         });
       } else {
@@ -709,8 +741,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       };
       const doLogout = async () => {
-        // CRÍTICO: guardar en la BD ANTES de borrar localStorage.
-        // Si no se hace esto, los datos agregados desde el último auto-sync
+        // CRÃƒÂTICO: guardar en la BD ANTES de borrar localStorage.
+        // Si no se hace esto, los datos agregados desde el ÃƒÂºltimo auto-sync
         // (hasta 60 seg) se pierden permanentemente al limpiar el storage.
         try {
           if (window.AniDexProfile && typeof window.AniDexProfile.saveToDB === "function") {
@@ -719,7 +751,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch (e) { console.error("Pre-logout save failed", e); }
 
         try {
-          await fetch("api/auth.php?action=logout", { credentials: "same-origin" });
+          await fetch((window.AniDexLayout?.buildAppUrl ? window.AniDexLayout.buildAppUrl("api/auth?action=logout") : "api/auth?action=logout"), { method: "POST", credentials: "same-origin" });
         } catch (e) { console.error("Logout API failed", e); }
 
         Object.keys(localStorage).forEach((key) => {
@@ -727,7 +759,7 @@ document.addEventListener("DOMContentLoaded", () => {
             localStorage.removeItem(key);
           }
         });
-        window.location.href = "index";
+        window.location.href = (window.AniDexLayout?.buildAppUrl ? window.AniDexLayout.buildAppUrl("index") : "index");
       };
       const openLogoutModal = () => {
         if (!logoutModal) return;

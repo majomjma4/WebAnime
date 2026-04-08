@@ -1,4 +1,4 @@
-<style data-layout-style="layout-logo">
+﻿<style data-layout-style="layout-logo">
   @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&display=swap");
   .logo-badge {
     display: inline-flex;
@@ -589,7 +589,7 @@
   <nav class="fixed top-0 w-full z-50 bg-neutral-950/70 backdrop-blur-xl shadow-[0px_20px_40px_rgba(0,0,0,0.4)] transition-all duration-300">
     <div class="flex items-center justify-between px-5 h-20 w-full font-['Manrope'] antialiased">
       <a class="logo-badge" href="<?= route_path('home') ?>" aria-label="NekoraList">
-        <img src="img/icon3.png" alt="NekoraList" class="logo-icon" />
+        <img src="<?= asset_path('img/icon3.png') ?>" alt="NekoraList" class="logo-icon" />
         <span class="logo-text-stack">
           <span class="logo-text">NekoraList</span>
           <span class="logo-tagline">Tu portal a infinitas historias de anime</span>
@@ -619,7 +619,7 @@
             aria-expanded="false"
             data-lang-toggle
           >
-            <img src="img/espana.png" alt="ES" class="w-4 h-4" />
+            <img src="<?= asset_path('img/espana.png') ?>" alt="ES" class="w-4 h-4" />
             <span class="material-symbols-outlined text-[16px]">expand_more</span>
           </button>
           <div
@@ -633,7 +633,7 @@
               data-lang="es"
               role="menuitem"
             >
-              <img src="img/espana.png" alt="ES" class="w-4 h-4" /><span class="uppercase tracking-widest">ES</span>
+              <img src="<?= asset_path('img/espana.png') ?>" alt="ES" class="w-4 h-4" /><span class="uppercase tracking-widest">ES</span>
             </button>
             <button
               class="flex w-full items-center gap-2 rounded-md px-3 py-2 text-xs font-semibold text-zinc-200 hover:bg-zinc-700 hover:text-white"
@@ -641,7 +641,7 @@
               data-lang="en"
               role="menuitem"
             >
-              <img src="img/reino-unido.png" alt="EN" class="w-4 h-4" /><span class="uppercase tracking-widest">EN</span>
+              <img src="<?= asset_path('img/reino-unido.png') ?>" alt="EN" class="w-4 h-4" /><span class="uppercase tracking-widest">EN</span>
             </button>
           </div>
         </div>
@@ -744,7 +744,7 @@
     </div>
 
     <div data-admin-only class="mt-2 pt-2 border-t border-white/5 flex flex-col gap-1 hidden">
-      <div class="text-[10px] font-bold text-rose-400 uppercase tracking-[0.2em] px-3 py-1">Administración</div>
+      <div class="text-[10px] font-bold text-rose-400 uppercase tracking-[0.2em] px-3 py-1">Administraci&oacute;n</div>
       <a href="<?= route_path('admin') ?>" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-rose-200 hover:text-white hover:bg-rose-500/10 transition-all">
         <span class="material-symbols-outlined text-lg">admin_panel_settings</span>
         Panel Admin
@@ -754,7 +754,7 @@
     <div class="mt-4 pt-4 border-t border-white/5">
       <button id="logout-btn" class="w-full flex items-center justify-center gap-2 rounded-xl border border-white/5 bg-white/5 px-4 py-3 text-xs font-bold uppercase tracking-widest text-on-surface-variant hover:text-error hover:border-error/30 hover:bg-error/5 transition-all">
         <span class="material-symbols-outlined text-sm">logout</span>
-        Cerrar Sesión
+        Cerrar Sesi&oacute;n
       </button>
     </div>
   </div>
@@ -793,7 +793,7 @@
 <div class="footer-center flex flex-col items-center text-center gap-6">
         <div class="footer-brand-stack flex flex-col items-center gap-2">
           <a class="footer-brand inline-flex items-center gap-3" href="<?= route_path('home') ?>" aria-label="NekoraList">
-            <img src="img/icon3.png" alt="NekoraList" class="footer-logo" />
+            <img src="<?= asset_path('img/icon3.png') ?>" alt="NekoraList" class="footer-logo" />
             <span class="footer-name">NekoraList</span>
           </a>
           <div class="footer-tagline">Tu portal a infinitas historias de anime</div>

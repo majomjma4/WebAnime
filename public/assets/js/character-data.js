@@ -1,4 +1,4 @@
-(() => {
+﻿(() => {
   const API = "api/jikan_proxy.php";
   const qp = new URLSearchParams(location.search);
   const animeId = qp.get("anime_id");
@@ -23,12 +23,12 @@
     const info = document.getElementById("char-info");
     if (title) title.textContent = c.name || "Personaje";
     if (img) img.src = c?.images?.jpg?.image_url || "";
-    if (about) about.textContent = c.about || "Sin descripción disponible.";
+    if (about) about.textContent = c.about || "Sin descripci\u00f3n disponible.";
     if (info) {
       info.innerHTML = `
-        <p><strong>Doblaje japonés:</strong> ${jp}</p>
-        <p><strong>Doblaje ingls:</strong> ${en}</p>
-        <p><strong>Doblaje español:</strong> ${es}</p>
+        <p><strong>Doblaje japon\u00e9s:</strong> ${jp}</p>
+        <p><strong>Doblaje ingl\u00e9s:</strong> ${en}</p>
+        <p><strong>Doblaje espa\u00f1ol:</strong> ${es}</p>
         <p><strong>Creador:</strong> N/A (no disponible en endpoint)</p>
       `;
     }

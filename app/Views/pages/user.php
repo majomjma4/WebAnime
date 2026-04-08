@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html class="dark" lang="es">
 
 <head>
@@ -111,7 +111,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NekoraList - Usuario</title>
-  <link rel="icon" href="img/icon3.png" />
+  <link rel="icon" href="<?= asset_path('img/icon3.png') ?>" />
   <link
     href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Inter:wght@400;500;600&display=swap"
     rel="stylesheet" />
@@ -296,7 +296,7 @@
       background: linear-gradient(90deg, rgba(52, 211, 153, 0.95), rgba(16, 185, 129, 0.7));
     }
   </style>
-  <link rel="icon" href="img/icon3.png" />
+  <link rel="icon" href="<?= asset_path('img/icon3.png') ?>" />
 
 
 </head>
@@ -457,7 +457,7 @@
     </div>
 
     <div id="profile-lists" class="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-0">
-      <div class="lg:col-span-8 space-y-8">
+      <div class="lg:col-span-8 space-y-8 mt-3">
         <!-- Favoritos: Movido arriba para mayor relevancia -->
         <section
           class="space-y-6 rounded-3xl border border-white/5 bg-surface-container-low/60 p-6 shadow-[0_18px_40px_rgba(0,0,0,0.35)]">
@@ -529,7 +529,7 @@
 
       </div>
 
-      <aside class="lg:col-span-4 space-y-6">
+      <aside class="lg:col-span-4 space-y-6 mt-3">
         <section
           class="space-y-6 rounded-3xl border border-white/5 bg-gradient-to-b from-surface-container-low to-surface-container-high/70 p-6 shadow-lg">
           <div class="flex items-center justify-between">
@@ -541,7 +541,7 @@
             <!-- Anime 1: FMAB -->
             <button
               class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-2.5 flex items-center gap-4 border border-white/5 hover:border-violet-400/40 transition-all cursor-pointer relative group"
-              onclick="window.location.href='detail?mal_id=5114&q=Fullmetal%20Alchemist%3A%20Brotherhood'">
+              onclick="window.location.href='<?= detail_path('5114', 'Fullmetal Alchemist: Brotherhood') ?>'">
               <span class="absolute top-2.5 right-3 rounded-full bg-violet-500/90 px-3 py-1 text-[8px] font-extrabold uppercase tracking-widest text-white shadow-sm">Anime</span>
               <img src="https://cdn.myanimelist.net/images/anime/1223/96541.jpg" alt="FMAB" class="w-11 h-15 object-cover rounded-lg shadow-md group-hover:scale-105 transition-transform" />
               <div class="text-left flex-1 min-w-0">
@@ -552,7 +552,7 @@
             <!-- Movie 1: Your Name -->
             <button
               class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-2.5 flex items-center gap-4 border border-white/5 hover:border-fuchsia-400/40 transition-all cursor-pointer relative group"
-              onclick="window.location.href='detail?mal_id=32281&q=Kimi%20no%20Na%20wa.'">
+              onclick="window.location.href='<?= detail_path('32281', 'Kimi no Na wa.') ?>'">
               <span class="absolute top-2.5 right-3 rounded-full bg-fuchsia-500/90 px-3 py-1 text-[8px] font-extrabold uppercase tracking-widest text-white shadow-sm">Pel&iacute;cula</span>
               <img src="https://cdn.myanimelist.net/images/anime/5/87048.jpg" alt="Your Name" class="w-11 h-15 object-cover rounded-lg shadow-md group-hover:scale-105 transition-transform" />
               <div class="text-left flex-1 min-w-0">
@@ -563,7 +563,7 @@
             <!-- Anime 2: Hunter x Hunter -->
             <button
               class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-2.5 flex items-center gap-4 border border-white/5 hover:border-violet-400/40 transition-all cursor-pointer relative group"
-              onclick="window.location.href='detail?mal_id=11061&q=Hunter%20x%20Hunter'">
+              onclick="window.location.href='<?= detail_path('11061', 'Hunter x Hunter') ?>'">
               <span class="absolute top-2.5 right-3 rounded-full bg-violet-500/90 px-3 py-1 text-[8px] font-extrabold uppercase tracking-widest text-white shadow-sm">Anime</span>
               <img src="https://cdn.myanimelist.net/images/anime/1337/99013.jpg" alt="HxH" class="w-11 h-15 object-cover rounded-lg shadow-md group-hover:scale-105 transition-transform" />
               <div class="text-left flex-1 min-w-0">
@@ -574,7 +574,7 @@
             <!-- Movie 2: Suzume -->
             <button
               class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-2.5 flex items-center gap-4 border border-white/5 hover:border-fuchsia-400/40 transition-all cursor-pointer relative group"
-              onclick="window.location.href='detail?mal_id=50796&q=Suzume'">
+              onclick="window.location.href='<?= detail_path('50796', 'Suzume') ?>'">
               <span class="absolute top-2.5 right-3 rounded-full bg-fuchsia-500/90 px-3 py-1 text-[8px] font-extrabold uppercase tracking-widest text-white shadow-sm">Pel&iacute;cula</span>
               <img src="https://image.tmdb.org/t/p/w200/m99O9idLpYv4hC8pDAbL68Y6N02.jpg" alt="Suzume" class="w-11 h-15 object-cover rounded-lg shadow-md group-hover:scale-105 transition-transform" />
               <div class="text-left flex-1 min-w-0">
@@ -585,7 +585,7 @@
             <!-- Anime 3: Jujutsu Kaisen -->
             <button
               class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-2.5 flex items-center gap-4 border border-white/5 hover:border-violet-400/40 transition-all cursor-pointer relative group"
-              onclick="window.location.href='detail?mal_id=40748&q=Jujutsu%20Kaisen'">
+              onclick="window.location.href='<?= detail_path('40748', 'Jujutsu Kaisen') ?>'">
               <span class="absolute top-2.5 right-3 rounded-full bg-violet-500/90 px-3 py-1 text-[8px] font-extrabold uppercase tracking-widest text-white shadow-sm">Anime</span>
               <img src="https://cdn.myanimelist.net/images/anime/1171/109222.jpg" alt="JJK" class="w-11 h-15 object-cover rounded-lg shadow-md group-hover:scale-105 transition-transform" />
               <div class="text-left flex-1 min-w-0">
@@ -596,7 +596,7 @@
             <!-- Movie 3: A Silent Voice -->
             <button
               class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-2.5 flex items-center gap-4 border border-white/5 hover:border-fuchsia-400/40 transition-all cursor-pointer relative group"
-              onclick="window.location.href='detail?mal_id=28851&q=Koe%20no%20Katachi'">
+              onclick="window.location.href='<?= detail_path('28851', 'Koe no Katachi') ?>'">
               <span class="absolute top-2.5 right-3 rounded-full bg-fuchsia-500/90 px-3 py-1 text-[8px] font-extrabold uppercase tracking-widest text-white shadow-sm">Pel&iacute;cula</span>
               <img src="https://cdn.myanimelist.net/images/anime/1122/96435.jpg" alt="Silent Voice" class="w-11 h-15 object-cover rounded-lg shadow-md group-hover:scale-105 transition-transform" />
               <div class="text-left flex-1 min-w-0">
@@ -607,7 +607,7 @@
             <!-- Anime 4: Steins;Gate -->
             <button
               class="w-full bg-surface-container-low/80 hover:bg-surface-container-high rounded-2xl p-2.5 flex items-center gap-4 border border-white/5 hover:border-violet-400/40 transition-all cursor-pointer relative group"
-              onclick="window.location.href='detail?mal_id=9253&q=Steins%3BGate'">
+              onclick="window.location.href='<?= detail_path('9253', 'Steins;Gate') ?>'">
               <span class="absolute top-2.5 right-3 rounded-full bg-violet-500/90 px-3 py-1 text-[8px] font-extrabold uppercase tracking-widest text-white shadow-sm">Anime</span>
               <img src="https://cdn.myanimelist.net/images/anime/5/73199.jpg" alt="Steins;Gate" class="w-11 h-15 object-cover rounded-lg shadow-md group-hover:scale-105 transition-transform" />
               <div class="text-left flex-1 min-w-0">
@@ -676,10 +676,10 @@
             type="text" placeholder="Tu nombre" />
         </div>
         <div class="space-y-2 soft-accent p-4 rounded-2xl">
-          <label class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Descripción</label>
+          <label class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Descripci&oacute;n</label>
           <textarea id="profile-desc-input" maxlength="200"
             class="w-full rounded-xl bg-surface-container-low border border-outline-variant/60 px-4 py-3 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/40 min-h-[120px]"
-            placeholder="Escribe una breve descripción (máx. 200 caracteres)"></textarea>
+            placeholder="Escribe una breve descripci&oacute;n (m&aacute;x. 200 caracteres)"></textarea>
           <div class="text-[11px] text-on-surface-variant text-right" id="profile-desc-count">0/200</div>
         </div>
         <div class="space-y-3 soft-accent p-4 rounded-2xl">
@@ -871,15 +871,27 @@
 
   <!-- Footer Component -->
   <div data-layout="footer"></div>
-  <script src="assets/js/layout.js?v=final14"></script>
-    <script src="assets/js/shared-utils.js?v=1"></script>
-  <script src="assets/js/i18n.js"></script>
-  <script src="assets/js/title-images.js?v=3"></script>
-  <script src="assets/js/search.js"></script>
-  <script src="assets/js/favorites.js"></script>
-  <script src="assets/js/detail-links.js"></script>
-  <script src="assets/js/user-page.js?v=1"></script>
+  <script src="<?= asset_path('assets/js/shared-utils.js?v=1') ?>"></script>
+  <script src="<?= asset_path('assets/js/layout.js?v=final14') ?>"></script>
+  <script src="<?= asset_path('assets/js/i18n.js') ?>"></script>
+  <script src="<?= asset_path('assets/js/title-images.js?v=3') ?>"></script>
+  <script src="<?= asset_path('assets/js/search.js') ?>"></script>
+  <script src="<?= asset_path('assets/js/favorites.js') ?>"></script>
+  <script src="<?= asset_path('assets/js/detail-links.js') ?>"></script>
+  <script src="<?= asset_path('assets/js/user-page.js?v=1') ?>"></script>
+  <script src="<?= asset_path('assets/js/user-page-rescue.js?v=9') ?>"></script>
   <script data-ui-unlock>document.documentElement.classList.remove("preload-ui");</script>
 </body>
 
 </html>
+
+
+
+
+
+
+
+
+
+
+

@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
   const appUrl = window.AniDexShared?.buildAppUrl || ((path = "") => String(path || ""));
   const API_BASE = appUrl("api/jikan_proxy");
   const path = window.location.pathname.toLowerCase();
@@ -695,7 +695,6 @@
     }
   };
 })();
-
 
 
 

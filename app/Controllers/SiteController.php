@@ -34,6 +34,18 @@ class SiteController extends Controller
             }
         }
 
+        if ($detailRef !== '' && ctype_digit($detailRef)) {
+            $animeModel = new \Models\Anime();
+            $resolvedAnime = $animeModel->getById((int) $detailRef);
+            if (!$resolvedAnime || empty($resolvedAnime['mal_id'])) {
+                http_response_code(404);
+                $this->render('pages/404', [
+                    'requestedPath' => 'detail/' . $detailRef,
+                ]);
+                return;
+            }
+        }
+
         $isLoggedIn = isset($_SESSION['user_id']);
         $sessionRole = $_SESSION['role'] ?? 'Invitado';
         $sessionPremium = !empty($_SESSION['premium']) || $sessionRole === 'Admin';
@@ -115,4 +127,3 @@ class SiteController extends Controller
         return $slug;
     }
 }
-

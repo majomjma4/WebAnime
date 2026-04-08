@@ -24,7 +24,7 @@
     <div class="inline-flex items-center gap-2 rounded-full border border-cyan-400/25 bg-cyan-400/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-cyan-200">Error 404</div>
     <h1 class="mt-6 text-4xl font-black tracking-tight text-white md:text-6xl">La ruta no existe</h1>
     <p class="mt-4 max-w-2xl text-sm leading-7 text-slate-300 md:text-base">
-      La p·gina que intentaste abrir no fue encontrada. Si agregaste texto extra al enlace o la URL est· mal escrita, te enviamos aquÌ para evitar mostrar contenido incorrecto.
+      La p√°gina que intentaste abrir no fue encontrada. Si agregaste texto extra al enlace o la URL est√° mal escrita, te enviamos aqu√≠ para evitar mostrar contenido incorrecto.
     </p>
 
     <?php if (!empty($requestedPath)): ?>
@@ -36,7 +36,7 @@
     <div class="mt-8 flex flex-wrap gap-4">
       <a href="<?= route_path('home') ?>" class="inline-flex items-center justify-center rounded-full bg-cyan-400 px-6 py-3 text-sm font-bold text-slate-950 transition hover:bg-cyan-300">Volver al inicio</a>
       <a href="<?= route_path('series') ?>" class="inline-flex items-center justify-center rounded-full border border-white/15 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/8">Ir a series</a>
-      <a href="<?= route_path('movies') ?>" class="inline-flex items-center justify-center rounded-full border border-white/15 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/8">Ir a pelÌculas</a>
+      <a href="<?= route_path('movies') ?>" class="inline-flex items-center justify-center rounded-full border border-white/15 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/8">Ir a pel√≠culas</a>
     </div>
   </main>
 </body>

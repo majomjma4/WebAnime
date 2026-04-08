@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // Basic bootstrap (autoload + helpers)
 if (session_status() === PHP_SESSION_NONE) {
     session_name('NekoraSession_V1');
@@ -21,8 +21,14 @@ if (!function_exists('app_send_security_headers')) {
         if ($sent || headers_sent()) {
             return;
         }
+        $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+            || (($_SERVER['SERVER_PORT'] ?? null) === '443');
+        $host = strtolower((string) ($_SERVER['HTTP_HOST'] ?? ''));
+        $isLocalHost = in_array($host, ['localhost', 'localhost:80', 'nekoralist', 'nekoralist:80'], true)
+            || str_starts_with($host, '127.0.0.1')
+            || str_starts_with($host, '::1');
 
-        $csp = implode('; ', [
+        $cspParts = [
             "default-src 'self'",
             "base-uri 'self'",
             "form-action 'self'",
@@ -35,8 +41,12 @@ if (!function_exists('app_send_security_headers')) {
             "connect-src 'self' https://api.jikan.moe https://translate.googleapis.com",
             "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com",
             "media-src 'self' https:",
-            "upgrade-insecure-requests",
-        ]);
+        ];
+
+        if ($isHttps && !$isLocalHost) {
+            $cspParts[] = "upgrade-insecure-requests";
+        }
+        $csp = implode('; ', $cspParts);
 
         header('X-Frame-Options: SAMEORIGIN');
         header('X-Content-Type-Options: nosniff');
@@ -87,7 +97,6 @@ if (!function_exists('app_publish_csrf_cookie')) {
         $token = app_csrf_token();
         $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
             || (($_SERVER['SERVER_PORT'] ?? null) === '443');
-
         setcookie('XSRF-TOKEN', $token, [
             'expires' => 0,
             'path' => '/',
@@ -206,6 +215,28 @@ if (!function_exists('asset_path')) {
     }
 }
 
+
+if (!function_exists('detail_path')) {
+    function detail_path(string $malId = '', string $title = '', string $dbId = ''): string
+    {
+        $candidate = trim($malId) !== '' ? trim($malId) : trim($dbId);
+        if ($candidate !== '' && ctype_digit($candidate)) {
+            return asset_path('detail/' . rawurlencode($candidate));
+        }
+
+        $rawTitle = trim($title);
+        if ($rawTitle !== '') {
+            $slug = strtolower(trim((string) iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $rawTitle)));
+            $slug = preg_replace('/[^a-z0-9]+/', '-', $slug) ?? '';
+            $slug = trim($slug, '-');
+            if ($slug !== '') {
+                return asset_path('detail/' . rawurlencode($slug));
+            }
+        }
+
+        return asset_path('detail');
+    }
+}
 if (!function_exists('route_path')) {
     function route_path(string $name, array $query = []): string
     {

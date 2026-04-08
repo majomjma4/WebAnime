@@ -59,9 +59,17 @@ class FrontController extends Controller
         if (!preg_match('#^detail/([^/]+)$#u', $route, $matches)) {
             return null;
         }
-
         $detailRef = trim((string) urldecode($matches[1]));
         if ($detailRef === '') {
+            return null;
+        }
+
+        $isNumericRef = ctype_digit($detailRef);
+        $isSlugRef = (bool) preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/', $detailRef)
+            && (bool) preg_match('/[a-z]/', $detailRef)
+            && (!preg_match('/^\d/', $detailRef) || str_contains($detailRef, '-'));
+
+        if (!$isNumericRef && !$isSlugRef) {
             return null;
         }
 

@@ -1,15 +1,23 @@
-(() => {
-  const basePath = window.location.pathname.includes('/views/') ? '../' : '';
+﻿(() => {
+  const buildAssetPath = (path) => {
+    const sharedBuilder = window.AniDexShared?.buildAppUrl;
+    if (typeof sharedBuilder === "function") return sharedBuilder(path);
+    const pathname = window.location.pathname.replace(/\\/g, "/");
+    const publicIndex = pathname.toLowerCase().indexOf("/public/");
+    const basePath = publicIndex >= 0 ? pathname.slice(0, publicIndex + 8) : "/";
+    const cleanPath = String(path || "").replace(/^\/+/, "");
+    return cleanPath ? `${basePath}${cleanPath}` : basePath.replace(/\/$/, "");
+  };
 
   const STORAGE_KEY = "anidex_lang";
   const CACHE_KEY = "anidex_en_cache_v1";
   const LANGS = {
-    es: { src: basePath + "img/espana.png", alt: "ES" },
-    en: { src: basePath + "img/reino-unido.png", alt: "EN" }
+    es: { src: buildAssetPath("img/espana.png"), alt: "ES" },
+    en: { src: buildAssetPath("img/reino-unido.png"), alt: "EN" }
   };
 
   const fixedMap = new Map([
-    ["AniDex", "AniDex"],
+    ["AniDex", "NekoraList"],
     ["ES", "ES"],
     ["EN", "EN"],
     ["search", "search"],
@@ -27,17 +35,17 @@
   const forcedMap = new Map([
     ["ani", "Ani"],
     ["dex", "Dex"],
-    ["anidex", "AniDex"],
+    ["anidex", "NekoraList"],
     ["inicio", "Home"],
     ["series", "Animes"],
     ["animes", "Animes"],
     ["populares", "Popular"],
     ["popularidad", "Popularity"],
-    ["películas", "Movies"],
-    ["fantasia", "Fantasy"],
+    ["pelÃ­culas", "Movies"],
+    ["pel\u00edculas", "Movies"],
     ["fantasy", "Fantasy"],
     ["fancy", "Fantasy"],
-    ["películas populares", "Popular Movies"],
+    ["pel\u00edculas populares", "Popular Movies"],
     ["destacados de la temporada", "Season Highlights"],
     ["estreno invierno 2024", "Winter 2024 Premiere"],
     ["ver ahora", "Watch Now"],
@@ -291,8 +299,6 @@
     if (!observerBound) {
       observerBound = true;
       const observer = new MutationObserver(() => {
-  const basePath = window.location.pathname.includes('/views/') ? '../' : '';
-
         if (isApplying) return;
         scheduleApply();
       });
@@ -337,5 +343,4 @@
 
   window.AniDexI18n = { init };
 })();
-
 
