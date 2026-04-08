@@ -1,5 +1,6 @@
-(function () {
-  const API_BASE = "api/jikan_proxy.php";
+﻿(function () {
+  const appUrl = window.AniDexShared?.buildAppUrl || ((path = "") => String(path || ""));
+  const API_BASE = appUrl("api/jikan_proxy");
   const path = window.location.pathname.toLowerCase();
   const isCatalog = path.includes("peliculas");
   const hideCardYears = path.includes("series") || path.includes("peliculas");
@@ -264,9 +265,9 @@
       "anime";
     const title = String(rawTitle || "anime").trim();
     if (malId) {
-      return `detail?mal_id=${encodeURIComponent(String(malId))}&q=${encodeURIComponent(title)}`;
+      return appUrl(`detail?mal_id=${encodeURIComponent(String(malId))}&q=${encodeURIComponent(title)}`);
     }
-    return `detail?q=${encodeURIComponent(title)}`;
+    return appUrl(`detail?q=${encodeURIComponent(title)}`);
   }
 
   let previewModal = null;
@@ -583,9 +584,9 @@
       if (malId) link.setAttribute("data-mal-id", malId);
       // Actualizar el href con mal_id y q para evitar ruteos incorrectos
       if (malId) {
-        link.href = `detail?mal_id=${encodeURIComponent(malId)}&q=${encodeURIComponent(title)}`;
+        link.href = appUrl(`detail?mal_id=${encodeURIComponent(malId)}&q=${encodeURIComponent(title)}`);
       } else {
-        link.href = `detail?q=${encodeURIComponent(title)}`;
+        link.href = appUrl(`detail?q=${encodeURIComponent(title)}`);
       }
     }
     card.setAttribute("data-type", type);
@@ -694,4 +695,7 @@
     }
   };
 })();
+
+
+
 

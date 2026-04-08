@@ -1,0 +1,73 @@
+﻿$files = Get-ChildItem -Recurse app,public -Include *.php,*.js,*.html,*.css -File
+$map = [ordered]@{
+  'ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡' = 'á'
+  'ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©' = 'é'
+  'ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â­' = 'í'
+  'ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³' = 'ó'
+  'ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âº' = 'ú'
+  'ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â±' = 'ñ'
+  'ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â' = 'Á'
+  'ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â‰' = 'É'
+  'ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â' = 'Í'
+  'ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â“' = 'Ó'
+  'ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âš' = 'Ú'
+  'ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â‘' = 'Ñ'
+  'ÃƒÆ’Ã‚Â¡' = 'á'
+  'ÃƒÆ’Ã‚Â©' = 'é'
+  'ÃƒÆ’Ã‚Â­' = 'í'
+  'ÃƒÆ’Ã‚Â³' = 'ó'
+  'ÃƒÆ’Ã‚Âº' = 'ú'
+  'ÃƒÆ’Ã‚Â±' = 'ñ'
+  'ÃƒÂ¡' = 'á'
+  'ÃƒÂ©' = 'é'
+  'ÃƒÂ­' = 'í'
+  'ÃƒÂ³' = 'ó'
+  'ÃƒÂº' = 'ú'
+  'ÃƒÂ±' = 'ñ'
+  'Ã‚Â¿' = '¿'
+  'Ã‚Â¡' = '¡'
+  'Â¿' = '¿'
+  'Â¡' = '¡'
+  'Ã¡' = 'á'
+  'Ã©' = 'é'
+  'Ã­' = 'í'
+  'Ã³' = 'ó'
+  'Ãº' = 'ú'
+  'Ã±' = 'ñ'
+  'Ã' = 'Á'
+  'Ã‰' = 'É'
+  'Ã' = 'Í'
+  'Ã“' = 'Ó'
+  'Ãš' = 'Ú'
+  'Ã‘' = 'Ñ'
+  'Ã¼' = 'ü'
+  'Ãœ' = 'Ü'
+  'Ã' = 'à'
+  'PelÃ­cula' = 'Película'
+  'PelÃ­culas' = 'Películas'
+  'CatÃ¡logo' = 'Catálogo'
+  'PuntuaciÃ³n' = 'Puntuación'
+  'DuraciÃ³n' = 'Duración'
+  'Sinopsis no disponible todavÃ­a' = 'Sinopsis no disponible todavía'
+  'Ver mÃ¡s episodios' = 'Ver más episodios'
+  'Inicia sesiÃ³n' = 'Inicia sesión'
+  'Cerrar sesiÃ³n' = 'Cerrar sesión'
+  'contraseÃ±a' = 'contraseña'
+  'sesion' = 'sesión'
+  'informacion' = 'información'
+  'clasificacion' = 'clasificación'
+  'animacion' = 'animación'
+  'publicacion' = 'publicación'
+  'mas' = 'más'
+  'pelicula' = 'película'
+}
+foreach ($file in $files) {
+  $content = [System.IO.File]::ReadAllText($file.FullName)
+  $updated = $content
+  foreach ($key in $map.Keys) {
+    $updated = $updated.Replace($key, $map[$key])
+  }
+  if ($updated -ne $content) {
+    [System.IO.File]::WriteAllText($file.FullName, $updated, [System.Text.UTF8Encoding]::new($false))
+  }
+}

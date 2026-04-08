@@ -614,7 +614,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const res = await fetch("api/requests.php?action=create", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ titulo: title, tipo })
+              body: JSON.stringify({ título: title, tipo })
             });
             const json = await res.json();
             if (!json.success) throw new Error(json.error || "No se pudo enviar la solicitud");

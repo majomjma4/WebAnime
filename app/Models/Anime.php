@@ -37,7 +37,7 @@ class Anime {
     }
 
     /**
-     * Obtiene un anime por su título aproximado (Soporte Frontend Legacy)
+     * Obtiene un anime por su titulo aproximado (Soporte Frontend Legacy)
      */
     public function getByTitle($title) {
         if (!$this->db) return null;
@@ -165,7 +165,7 @@ class Anime {
         $mal_id = $a['mal_id'] ?? null;
         if (!$mal_id) return null;
 
-        // Verificar si por casualidad alguien ya lo ingresó en este milisegundo o mediante título previamente
+        // Verificar si por casualidad alguien ya lo ingresó en este milisegundo o mediante titulo previamente
         $check = $this->db->prepare("SELECT id FROM anime WHERE mal_id = ?");
         $check->execute([$mal_id]);
         if ($check->fetchColumn()) return $this->getById($mal_id);

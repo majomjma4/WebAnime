@@ -473,7 +473,7 @@
     if (!cards.length) return;
 
     // En series.php conservamos los datos renderizados por la base local
-    // para evitar mezclar portadas, titulos y enlaces al refrescar.
+    // para evitar mezclar portadas, títulos y enlaces al refrescar.
     cards.forEach((card) => {
       const img = card.querySelector("img");
       if (img) applyImageFallback(img);

@@ -250,7 +250,7 @@
         <span class="material-symbols-outlined">close</span>
       </button>
     </div>
-    <p class="mt-5 text-sm leading-6 text-on-surface-variant">Â¿Deseas marcar este comentario como revisado? Luego de hacerlo no se podra cambiar.</p>
+    <p class="mt-5 text-sm leading-6 text-on-surface-variant">¿Deseas marcar este comentario como revisado? Luego de hacerlo no se podrá cambiar.</p>
     <div class="mt-4 rounded-2xl border border-white/8 bg-white/4 px-4 py-4">
       <p class="text-xs uppercase tracking-[0.2em] text-on-surface-variant">Comentario seleccionado</p>
       <p class="mt-2 text-sm font-semibold text-on-surface" data-comments-review-user>@usuario</p>
@@ -272,7 +272,7 @@
         <span class="material-symbols-outlined">close</span>
       </button>
     </div>
-    <p class="mt-5 text-sm leading-6 text-on-surface-variant">¿Deseas eliminar este comentario para siempre? Esta acción borrara el comentario de la base de datos.</p>
+    <p class="mt-5 text-sm leading-6 text-on-surface-variant">¿Deseas eliminar este comentario para siempre? Esta acción borrará el comentario de la base de datos.</p>
     <div class="mt-4 rounded-2xl border border-white/8 bg-white/4 px-4 py-4">
       <p class="text-xs uppercase tracking-[0.2em] text-on-surface-variant">Comentario seleccionado</p>
       <p class="mt-2 text-sm font-semibold text-on-surface" data-comments-delete-user>@usuario</p>
@@ -496,8 +496,8 @@
       statusKicker.textContent = isReviewed ? 'Moderacion aplicada' : 'Historial de reportes';
       statusTitle.textContent = isReviewed ? 'Comentarios revisados' : 'Comentarios reportados';
       statusDescription.textContent = isReviewed
-        ? 'Aqui puedes ver los comentarios que ya fueron revisados por administracion.'
-        : 'Aqui se conserva el historial de usuarios y comentarios reportados.';
+        ? 'Aquí puedes ver los comentarios que ya fueron revisados por administración.'
+        : 'Aquí se conserva el historial de usuarios y comentarios reportados.';
 
       if (statusSearch) statusSearch.value = '';
       if (statusDateFrom) statusDateFrom.value = '';

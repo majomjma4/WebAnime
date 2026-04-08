@@ -1,4 +1,4 @@
-
+﻿
 <!DOCTYPE html>
 <html class="dark" lang="en"><head>
     <script data-ui-preload>document.documentElement.classList.add("preload-ui");</script>
@@ -64,7 +64,7 @@
 </style>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <link rel="icon" href="img/icon3.png" />
+    <link rel="icon" href="<?= asset_path('img/icon3.png') ?>" />
     <title>Solo Leveling | NekoraList</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -234,7 +234,7 @@
       }
     </style>
   </head>
-  <body class="bg-background text-on-background font-body selection:bg-primary-container selection:text-on-primary-container">
+  <body data-detail-ref="<?= e($detailRef ?? "") ?>" data-detail-query="<?= e($detailQuery ?? "") ?>" class="bg-background text-on-background font-body selection:bg-primary-container selection:text-on-primary-container">
     <!-- Navbar Component -->
     <div data-layout="header"></div>
     <main class="pt-20 overflow-x-hidden">
@@ -561,14 +561,15 @@ endif; ?>
     </main>
     <!-- Footer Component -->
     <div data-layout="footer"></div>
-    <script src="assets/js/layout.js?v=final14"></script>
-    <script src="assets/js/shared-utils.js?v=1"></script>
-    <script src="assets/js/i18n.js"></script>
-    <script src="assets/js/title-images.js?v=3"></script>
-    <script src="assets/js/search.js"></script>
-    <script src="assets/js/favorites.js"></script>
-    <script src="assets/js/detail-links.js"></script>
-    <script src="assets/js/detail-data.js?v=33"></script>
+    <script src="<?= asset_path('assets/js/layout.js?v=final14') ?>"></script>
+    <script src="<?= asset_path('assets/js/shared-utils.js?v=3') ?>"></script>
+    <script src="<?= asset_path('assets/js/i18n.js') ?>"></script>
+    <script src="<?= asset_path('assets/js/title-images.js?v=3') ?>"></script>
+    <script src="<?= asset_path('assets/js/search.js') ?>"></script>
+    <script src="<?= asset_path('assets/js/favorites.js') ?>"></script>
+    <script src="<?= asset_path('assets/js/detail-links.js?v=3') ?>"></script>
+    <script>window.__DETAIL_ROUTE_INFO = { ref: <?= json_encode($detailRef ?? "") ?>, query: <?= json_encode($detailQuery ?? "") ?> };</script>
+    <script src="<?= asset_path('assets/js/detail-data.js?v=35') ?>"></script>
     <script>
   document.addEventListener("DOMContentLoaded", () => {
     if (window.AniDexI18n) window.AniDexI18n.init();
@@ -616,8 +617,8 @@ endif; ?>
     // Registrar vista de anime
     const logActivity = async (action, extraData = {}) => {
       if (!isLogged) return;
-      const params = new URLSearchParams(window.location.search);
-      let animeId = params.get("mal_id") || params.get("id");
+      const routeInfo = window.AniDexShared?.getDetailRouteInfo ? window.AniDexShared.getDetailRouteInfo() : { malId: "", query: "" };
+      let animeId = routeInfo.malId || document.body.dataset.detailId || "";
       
       // Si no hay ID en la URL, intentamos obtenerlo del dataset que llena detail-data.js
       if (!animeId && action === "view") {
@@ -627,7 +628,7 @@ endif; ?>
           if (animeId || retries > 10) {
             clearInterval(checkId);
             if (animeId) {
-                fetch("api/activity.php", {
+                fetch("<?= asset_path('api/activity') ?>", {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({ action, anime_id: animeId, ...extraData })
@@ -642,7 +643,7 @@ endif; ?>
       if (!animeId) return;
 
       try {
-        await fetch("api/activity.php", {
+        await fetch("<?= asset_path('api/activity') ?>", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ action, anime_id: animeId, ...extraData })
@@ -727,7 +728,7 @@ endif; ?>
     if (window.AniDexLayout && typeof window.AniDexLayout.onReady === "function") {
       const syncCommentAccess = async () => {
         try {
-          const res = await fetch("api/auth.php?action=check", { cache: "no-store", credentials: "same-origin" });
+          const res = await fetch("<?= asset_path('api/auth') ?>?action=check", { cache: "no-store", credentials: "same-origin" });
           if (!res.ok) return;
           const auth = await res.json();
           isLogged = isLogged || auth.logged === true;
@@ -754,7 +755,7 @@ endif; ?>
     } else {
       const syncCommentAccess = async () => {
         try {
-          const res = await fetch("api/auth.php?action=check", { cache: "no-store", credentials: "same-origin" });
+          const res = await fetch("<?= asset_path('api/auth') ?>?action=check", { cache: "no-store", credentials: "same-origin" });
           if (!res.ok) return;
           const auth = await res.json();
           isLogged = isLogged || auth.logged === true;
@@ -797,10 +798,9 @@ endif; ?>
       });
     }
     const getMalId = () => {
-      const params = new URLSearchParams(window.location.search);
+      const routeInfo = window.AniDexShared?.getDetailRouteInfo ? window.AniDexShared.getDetailRouteInfo() : { malId: "" };
       const candidates = [
-        params.get("mal_id"),
-        params.get("id"),
+        routeInfo.malId,
         document.body?.dataset?.detailId,
         document.documentElement?.dataset?.detailId
       ];
@@ -900,7 +900,7 @@ endif; ?>
       const malId = await waitForMalId();
       if (!malId) return [];
       try {
-        const res = await fetch(`api/comments.php?action=list&anime_mal_id=${encodeURIComponent(malId)}`, {
+        const res = await fetch(`<?= asset_path('api/comments') ?>?action=list&anime_mal_id=${encodeURIComponent(malId)}`, {
           cache: "no-store",
           credentials: "same-origin"
         });
@@ -1145,7 +1145,7 @@ endif; ?>
       deleteCommentConfirm.addEventListener("click", async () => {
         if (pendingDeleteCommentId) {
           try {
-            const res = await fetch("api/comments.php?action=delete", {
+            const res = await fetch("<?= asset_path('api/comments') ?>?action=delete", {
               method: "POST",
               credentials: "same-origin",
               headers: { "Content-Type": "application/json" },
@@ -1232,7 +1232,7 @@ endif; ?>
         if (!reportTargetCommentId && !reportTargetLocalKey) return;
         try {
           if (reportTargetCommentId) {
-            const res = await fetch("api/comments.php?action=report", {
+            const res = await fetch("<?= asset_path('api/comments') ?>?action=report", {
               method: "POST",
               credentials: "same-origin",
               headers: { "Content-Type": "application/json" },
@@ -1339,7 +1339,7 @@ endif; ?>
       }
 
       try {
-        const res = await fetch("api/comments.php?action=add", {
+        const res = await fetch("<?= asset_path('api/comments') ?>?action=add", {
           method: "POST",
           credentials: "same-origin",
           headers: { "Content-Type": "application/json" },
@@ -1392,6 +1392,17 @@ endif; ?>
     </script>
     <script data-ui-unlock>document.documentElement.classList.remove("preload-ui");</script>
   </body></html>
+
+
+
+
+
+
+
+
+
+
+
 
 
 

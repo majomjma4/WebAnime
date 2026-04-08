@@ -200,7 +200,7 @@
         }
       }
       card.setAttribute("data-title", (item?.title || "").toLowerCase());
-      card.setAttribute("data-type", pageForType(mediaType) === "peliculas" ? "PelÃ­cula" : "Anime");
+      card.setAttribute("data-type", pageForType(mediaType) === "peliculas" ? "Película" : "Anime");
       const cleanTitle = (item?.title || "").trim();
       const key = normalize(item?.title || item?.title_english || "");
       const year = YEAR_OVERRIDES[key] || item?.year || item?.aired?.prop?.from?.year || "";
@@ -247,12 +247,12 @@
 
   const goToSearchPage = (term, page = "series") => {
     const q = encodeURIComponent(term.trim());
-    logActivity("search", `BÃºsqueda: ${term.trim()} en ${page}`);
+    logActivity("search", `Búsqueda: ${term.trim()} en ${page}`);
     window.location.href = `${page}?q=${q}`;
   };
   const pageForType = (mediaType) => {
     const t = normalize(mediaType);
-    if (t.includes("movie") || t.includes("pelÃ­cula")) return "peliculas";
+    if (t.includes("movie") || t.includes("película")) return "peliculas";
     return "series";
   };
 
@@ -428,7 +428,7 @@
       let tvCount = 0;
       items.forEach((it) => {
         const t = normalize(it.mediaType || "");
-        if (t.includes("movie") || t.includes("pelicula") || t.includes("pelÃ­cula")) movieCount += 1;
+        if (t.includes("movie") || t.includes("pelicula") || t.includes("película")) movieCount += 1;
         else tvCount += 1;
       });
       return movieCount > tvCount ? "peliculas" : "series";
@@ -477,7 +477,7 @@
         moreBtn.className =
           "w-full text-center px-3 py-2 text-sm font-semibold text-primary hover:bg-zinc-800/70 transition-colors border-t border-zinc-800";
         moreBtn.style.borderRadius = "0";
-        moreBtn.textContent = "Ver mÃ¡s";
+        moreBtn.textContent = "Ver más";
         moreBtn.addEventListener("click", () => {
           closeBox();
           const page = resolveSuggestPage(items);
@@ -565,7 +565,7 @@
         originalTitleText = current;
       } else {
         // Fallback based on page
-        originalTitleText = window.location.pathname.includes("peliculas") ? "PelÃ­culas" : "Descubrimiento";
+        originalTitleText = window.location.pathname.includes("peliculas") ? "Películas" : "Descubrimiento";
       }
     }
 

@@ -7,7 +7,7 @@ abstract class Controller
     {
         $viewPath = __DIR__ . '/../Views/' . $view . '.php';
         if (!file_exists($viewPath)) {
-            $this->abort(404, 'Vista no encontrada: ' . htmlspecialchars($view));
+            $this->abort(404, 'Vista no encontrada: ' . e($view));
             return;
         }
 
@@ -29,9 +29,7 @@ abstract class Controller
 
     protected function ensureSessionStarted(): void
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
+        app_start_session();
     }
 
     public function authorize(?string $guard): void

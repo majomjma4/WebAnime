@@ -11,12 +11,22 @@
     }
   };
 
+  const buildAppUrl = (path = "") => {
+    const sharedBuilder = window.AniDexShared?.buildAppUrl;
+    if (typeof sharedBuilder === "function") return sharedBuilder(path);
+    const pathname = window.location.pathname.replace(/\\/g, "/");
+    const publicIndex = pathname.toLowerCase().indexOf("/public/");
+    const basePath = publicIndex >= 0 ? pathname.slice(0, publicIndex + 8) : "/";
+    const cleanPath = String(path || "").replace(/^\/+/, "");
+    return cleanPath ? `${basePath}${cleanPath}` : basePath.replace(/\/$/, "");
+  };
+
   const menuItems = [
-    { name: "Inicio", href: "index", icon: "home" },
-    { name: "Animes", href: "series", icon: "live_tv" },
-    { name: "Películas", href: "peliculas", icon: "movie" },
-    { name: "Destacados", href: "destacados", icon: "star" },
-    { name: "Ranking", href: "ranking", icon: "leaderboard" }
+    { name: "Inicio", href: buildAppUrl("index"), icon: "home" },
+    { name: "Animes", href: buildAppUrl("series"), icon: "live_tv" },
+    { name: "Películas", href: buildAppUrl("peliculas"), icon: "movie" },
+    { name: "Destacados", href: buildAppUrl("destacados"), icon: "star" },
+    { name: "Ranking", href: buildAppUrl("ranking"), icon: "leaderboard" }
   ];
 
   const readyCallbacks = [];
@@ -47,7 +57,7 @@
     if (!headerTargets.length && !footerTargets.length) return;
 
     const basePath = window.location.pathname.includes("/views/") ? "../" : "";
-    const res = await fetch(`${basePath}partials/layout?v=final2`, { cache: "no-store", credentials: "same-origin" });
+    const res = await fetch(buildAppUrl("partials/layout?v=final2"), { cache: "no-store", credentials: "same-origin" });
     if (!res.ok) {
       throw new Error("No se pudo cargar partials/layout");
     }
@@ -84,15 +94,16 @@
   }
 
   function setActiveMenu() {
-    const currentPage = window.location.pathname.split("/").pop();
+    const currentPath = window.location.pathname.replace(/\\/g, "/");
     const menuEl = document.getElementById("main-menu");
     if (!menuEl) return;
 
     menuEl.innerHTML = menuItems
       .map((item) => {
-        const isActive = item.href === currentPage;
-        const base = "transition-colors";
+        const itemUrl = new URL(item.href, window.location.origin);
+        const isActive = itemUrl.pathname === currentPath || (item.name === "Inicio" && /\/index(?:\.php)?$/.test(currentPath));
         const active = "text-violet-400 font-bold border-b-2 border-violet-500 pb-1";
+        const base = "transition-colors";
         const inactive = "text-neutral-400 hover:text-neutral-100";
         const iconClass = isActive ? "nav-icon nav-icon--active" : "nav-icon";
         const icon = item.icon
@@ -158,7 +169,7 @@
   // FIX: Ahora acepta preReadGuestId para evitar leer el ID YA sobreescrito.
   function migrateGuestData(realUserId, preReadGuestId) {
     try {
-      // IMPORTANTE: usar el ID leÃ­do ANTES de sobrescribir anidex_user_id
+      // IMPORTANTE: usar el ID leido antes de sobrescribir anidex_user_id.
       const guestId = preReadGuestId || localStorage.getItem("anidex_user_id");
       if (!guestId || guestId === realUserId) return;
 
@@ -190,7 +201,7 @@
           return;
         }
 
-        // Para el resto: solo migrar si el valor real estÃ¡ vacÃ­o
+        // Para el resto: solo migrar si el valor real esta vacio.
         if (!realVal || realVal === "0" || realVal === "[]" || realVal === "{}") {
           localStorage.setItem(realKey, guestVal);
           localStorage.removeItem(guestKey);
@@ -203,7 +214,7 @@
 
   async function checkAuth() {
     try {
-      const res = await fetch("api/auth.php?action=check", { cache: "no-store", credentials: "same-origin" });
+      const res = await fetch(buildAppUrl("api/auth?action=check"), { cache: "no-store", credentials: "same-origin" });
       if (!res.ok) throw new Error("HTTP error " + res.status);
       authState = await res.json();
       // Sync legacy localStorage
@@ -275,7 +286,6 @@
     });
 
     if (logged) {
-      // Si estÃ¡ logueado, eliminar el menÃº de invitado y redirigir directamente
       if (guestMenu) {
         guestMenu.remove();
       }
@@ -285,7 +295,7 @@
       profileBtn.dataset.bound = "1";
       profileBtn.addEventListener("click", (e) => {
         if (isLoggedIn()) {
-          window.location.href = "user";
+          window.location.href = buildAppUrl("user");
           return;
         }
         e.preventDefault();
@@ -361,7 +371,7 @@
         const hoursEl = document.querySelector("[data-profile-hours]");
         if (hoursEl) hoursEl.textContent = formatHours(newTotal);
 
-        fetch("api/activity.php", {
+        fetch(buildAppUrl("api/activity"), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ action: "time_sync", delta: deltaHours.toFixed(4) })
@@ -419,8 +429,6 @@
     setupProfileMenu();
     syncProfileAvatar();
     initSessionTimer();
-
-    // LÃ³gica de sincronizaciÃ³n global
     if (isLoggedIn()) {
       getOrCreateUserId();
       restoreFromDB();
@@ -479,7 +487,7 @@
       status_list: JSON.parse(localStorage.getItem(getIsolatedKey("anidex_status_v1")) || "[]")
     };
     try {
-      await fetch("api/profile.php?action=save", {
+      await fetch(buildAppUrl("api/profile?action=save"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
@@ -491,19 +499,13 @@
     if (!authState.logged) return;
     window.__anidex_restoring = true;
     try {
-      const res = await fetch("api/profile.php?action=get");
+      const res = await fetch(buildAppUrl("api/profile?action=get"));
       const json = await res.json();
       if (json.success && json.data) {
         const d = json.data;
-
-        // FIX: Conjunto explÃ­cito de claves que tienen lÃ³gica propia de fusiÃ³n.
-        // El bucle genÃ©rico NUNCA debe procesar estas claves porque cada una
         // tiene reglas distintas (MAX, suma sin sufijo, etc.).
         //
-        //  anidex_profile_hours      â†’ FusiÃ³n MAX debajo (el mayor gana)
-        //  anidex_user_id            â†’ Es el ID real del servidor; no va con sufijo aislado
         //  anidex_profile_name/desc/
-        //  color/avatar/member_since â†’ Manejadas por bloque especial debajo
         const LOOP_EXCLUSION = new Set([
           "anidex_profile_hours",
           "anidex_user_id",
@@ -513,8 +515,6 @@
           "anidex_profile_avatar",
           "anidex_profile_member_since"
         ]);
-
-        // Bucle genÃ©rico: solo listas/objetos con prefijo anidex_ no excluidos
         Object.keys(d).forEach(key => {
           if (!key.startsWith("anidex_") || LOOP_EXCLUSION.has(key)) return;
 
@@ -530,7 +530,6 @@
             if (!Array.isArray(localArr)) localArr = [];
             const seen = new Set();
             const merged = [];
-            // Locales primero (mÃ¡s recientes que el servidor)
             [...localArr, ...serverVal].forEach(item => {
               const id = item.malId || item.id || (item.title ? item.title.toLowerCase() : null);
               if (id && !seen.has(id)) { seen.add(id); merged.push(item); }
@@ -548,9 +547,6 @@
             localStorage.setItem(localKey, valStr);
           }
         });
-
-        // â”€â”€â”€ Bloque especial: campos de perfil â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        // El API los envÃ­a con prefijo anidex_ (anidex_profile_name, etc.).
         // profile_name se guarda SIN sufijo; el resto CON sufijo aislado.
         if (d.anidex_profile_name)         localStorage.setItem("anidex_profile_name",                              d.anidex_profile_name);
         if (d.anidex_profile_desc)         localStorage.setItem(getIsolatedKey("anidex_profile_desc"),         d.anidex_profile_desc);
@@ -559,17 +555,13 @@
         if (d.anidex_profile_avatar)       localStorage.setItem("anidex_profile_avatar", d.anidex_profile_avatar);
         if (d.anidex_profile_member_since) localStorage.setItem(getIsolatedKey("anidex_profile_member_since"), d.anidex_profile_member_since);
         if (d.anidex_public_user_id)       localStorage.setItem("anidex_public_user_id", d.anidex_public_user_id);
-
-        // â”€â”€â”€ FUSIÃ“N MAX de horas vistas â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        // Regla de oro: el contador NUNCA puede retroceder al refrescar la pÃ¡gina.
         // Se usa Math.max en vez de "if server > local" para garantizar atomicidad.
-        // Clave canÃ³nica del API: 'anidex_profile_hours'
         const serverHoursRaw = d.anidex_profile_hours;
         if (serverHoursRaw !== undefined && serverHoursRaw !== null) {
           const localKey = getIsolatedKey("anidex_profile_hours");
           const local  = parseFloat(localStorage.getItem(localKey) || "0");
           const server = parseFloat(serverHoursRaw || "0");
-          const winner = Math.max(local, server);  // El mayor gana â€” sin excepciones
+          const winner = Math.max(local, server);  // El mayor gana ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¾Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¾ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¾Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¦ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¾Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â sin excepciones
           localStorage.setItem(localKey, winner.toFixed(2));
         }
 
@@ -579,7 +571,6 @@
         }
         syncProfileAvatar();
       } else if (json.success) {
-        // Sin datos previos en el servidor â†’ guardar lo local como punto de partida
         saveProfileToDB();
       }
     } catch (e) {
@@ -620,6 +611,9 @@
     formatHours: formatHours
   };
 })();
+
+
+
 
 
 

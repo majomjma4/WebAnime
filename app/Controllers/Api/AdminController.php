@@ -2,44 +2,48 @@
 namespace Controllers\Api;
 
 use Controllers\Controller;
-use PDO;
 use Exception;
-use Throwable;
+use PDO;
+
 class AdminController extends Controller
 {
     public function handle(): void
     {
-        header('Content-Type: application/json');
-        
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
+        header('Content-Type: application/json; charset=UTF-8');
+        app_start_session();
+
+        $action = (string) ($_GET['action'] ?? '');
+        $writeActions = ['add_anime', 'update_studio', 'update_anime', 'delete_anime'];
+        if (in_array($action, $writeActions, true)) {
+            app_require_method('POST');
+            app_verify_csrf();
+        } else {
+            app_require_method(['GET', 'POST']);
         }
-        
+
         $isAdmin = isset($_SESSION['user_id'], $_SESSION['role']) && $_SESSION['role'] === 'Admin';
         if (!$isAdmin) {
             http_response_code(403);
             echo json_encode(['success' => false, 'error' => 'Acceso denegado']);
             exit;
         }
-        
-        $action = $_GET['action'] ?? '';
-        $data = json_decode(file_get_contents('php://input'), true);
-        
-        if (!$action || !$data) {
-            echo json_encode(['success' => false, 'error' => 'Petición inválida']);
+
+        $data = app_get_json_input();
+        if ($action === '' || (!in_array($action, ['list'], true) && empty($data))) {
+            echo json_encode(['success' => false, 'error' => 'Peticion invalida']);
             exit;
         }
-        
+
         $dbConn = (new \Models\Database())->getConnection();
         if (!$dbConn) {
-            echo json_encode(['success' => false, 'error' => 'Error de conexión a la base de datos']);
+            echo json_encode(['success' => false, 'error' => 'Error de conexion a la base de datos']);
             exit;
         }
-        
+
         if ($action === 'add_anime') {
-            $titulo = trim($data['titulo'] ?? '');
-            $sinopsis = trim($data['sinopsis'] ?? '');
-            $estadoRaw = trim($data['estado'] ?? '');
+            $titulo = trim((string) ($data['titulo'] ?? ''));
+            $sinopsis = trim((string) ($data['sinopsis'] ?? ''));
+            $estadoRaw = trim((string) ($data['estado'] ?? ''));
             $estadoLower = strtolower($estadoRaw);
             if ($estadoLower === 'finished airing') {
                 $estado = 'Finalizado';
@@ -50,8 +54,8 @@ class AdminController extends Controller
             } else {
                 $estado = $estadoRaw;
             }
-            $tipoContenido = strtolower(trim((string)($data['tipo_contenido'] ?? 'anime')));
-            $tipoFormato = strtoupper(trim((string)($data['tipo_formato'] ?? 'ALL')));
+            $tipoContenido = strtolower(trim((string) ($data['tipo_contenido'] ?? 'anime')));
+            $tipoFormato = strtoupper(trim((string) ($data['tipo_formato'] ?? 'ALL')));
             if ($tipoContenido === 'pelicula') {
                 $tipo = 'MOVIE';
             } elseif (in_array($tipoFormato, ['TV', 'OVA', 'ONA', 'SPECIAL', 'SHORT'], true)) {
@@ -59,60 +63,56 @@ class AdminController extends Controller
             } else {
                 $tipo = 'TV';
             }
-            $estudio = trim($data['estudio'] ?? '');
-            $temporada = trim($data['temporada'] ?? '');
-            $anio = (int)($data['anio'] ?? 0);
-            $episodios = (int)($data['episodios'] ?? 0);
-            $imagen_url = trim($data['imagen_url'] ?? '');
-            $generos = $data['generos'] ?? [];
-        
-            if (!$titulo) {
-                echo json_encode(['success' => false, 'error' => 'El título es obligatorio']);
+            $estudio = trim((string) ($data['estudio'] ?? ''));
+            $temporada = trim((string) ($data['temporada'] ?? ''));
+            $anio = (int) ($data['anio'] ?? 0);
+            $episodios = (int) ($data['episodios'] ?? 0);
+            $imagen_url = trim((string) ($data['imagen_url'] ?? ''));
+            $generos = is_array($data['generos'] ?? null) ? $data['generos'] : [];
+
+            if ($titulo === '') {
+                echo json_encode(['success' => false, 'error' => 'El titulo es obligatorio']);
                 exit;
             }
-        
+
             try {
                 $dbConn->beginTransaction();
-        
                 $stmt = $dbConn->prepare("INSERT INTO anime (titulo, tipo, estudio, estado, episodios, temporada, anio, sinopsis, imagen_url, puntuacion, activo, creado_por, creado_en) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0.0, 1, 1, NOW())");
                 $stmt->execute([$titulo, $tipo, $estudio, $estado, $episodios, $temporada, $anio, $sinopsis, $imagen_url]);
-        
                 $anime_id = $dbConn->lastInsertId();
-        
+
                 foreach ($generos as $g_name) {
                     $gStmt = $dbConn->prepare("SELECT id FROM generos WHERE nombre = ?");
                     $gStmt->execute([$g_name]);
                     $g_row = $gStmt->fetch(PDO::FETCH_ASSOC);
-        
-                    if ($g_row) {
-                        $g_id = $g_row['id'];
-                    } else {
+                    $g_id = $g_row ? $g_row['id'] : null;
+                    if (!$g_id) {
                         $iStmt = $dbConn->prepare("INSERT INTO generos (nombre) VALUES (?)");
                         $iStmt->execute([$g_name]);
                         $g_id = $dbConn->lastInsertId();
                     }
-        
                     $lStmt = $dbConn->prepare("INSERT INTO anime_generos (anime_id, genero_id) VALUES (?, ?)");
                     $lStmt->execute([$anime_id, $g_id]);
                 }
-        
+
                 $dbConn->commit();
                 echo json_encode(['success' => true]);
             } catch (Exception $e) {
-                $dbConn->rollBack();
+                if ($dbConn->inTransaction()) {
+                    $dbConn->rollBack();
+                }
                 echo json_encode(['success' => false, 'error' => 'Error de BD: ' . $e->getMessage()]);
             }
+            exit;
         }
-        
+
         if ($action === 'update_studio') {
             $animeId = (int) ($data['id'] ?? 0);
             $estudio = trim((string) ($data['estudio'] ?? ''));
-        
             if ($animeId <= 0) {
                 echo json_encode(['success' => false, 'error' => 'ID invalido']);
                 exit;
             }
-        
             try {
                 $stmt = $dbConn->prepare("UPDATE anime SET estudio = ? WHERE id = ?");
                 $stmt->execute([$estudio, $animeId]);
@@ -122,7 +122,7 @@ class AdminController extends Controller
             }
             exit;
         }
-        
+
         if ($action === 'update_anime') {
             $animeId = (int) ($data['id'] ?? 0);
             $titulo = trim((string) ($data['titulo'] ?? ''));
@@ -144,41 +144,28 @@ class AdminController extends Controller
             $sinopsis = trim((string) ($data['sinopsis'] ?? ''));
             $temporada = trim((string) ($data['temporada'] ?? ''));
             $episodios = trim((string) ($data['episodios'] ?? ''));
-        
+
             if ($animeId <= 0 || $titulo === '') {
                 echo json_encode(['success' => false, 'error' => 'Datos invalidos']);
                 exit;
             }
-        
+
             try {
                 $stmt = $dbConn->prepare("UPDATE anime SET titulo = ?, tipo = ?, estudio = ?, anio = ?, estado = ?, imagen_url = ?, sinopsis = ?, temporada = ?, episodios = ? WHERE id = ?");
-                $stmt->execute([
-                    $titulo,
-                    $tipo,
-                    $estudio,
-                    $anio !== '' ? (int) $anio : null,
-                    $estado,
-                    $imagen_url,
-                    $sinopsis,
-                    $temporada,
-                    $episodios !== '' ? (int) $episodios : null,
-                    $animeId
-                ]);
+                $stmt->execute([$titulo, $tipo, $estudio, $anio !== '' ? (int) $anio : null, $estado, $imagen_url, $sinopsis, $temporada, $episodios !== '' ? (int) $episodios : null, $animeId]);
                 echo json_encode(['success' => true]);
             } catch (Exception $e) {
                 echo json_encode(['success' => false, 'error' => 'Error de BD: ' . $e->getMessage()]);
             }
             exit;
         }
-        
+
         if ($action === 'delete_anime') {
             $animeId = (int) ($data['id'] ?? 0);
-        
             if ($animeId <= 0) {
                 echo json_encode(['success' => false, 'error' => 'ID invalido']);
                 exit;
             }
-        
             try {
                 $dbConn->beginTransaction();
                 $dbConn->prepare("DELETE FROM anime_generos WHERE anime_id = ?")->execute([$animeId]);
@@ -196,5 +183,7 @@ class AdminController extends Controller
             }
             exit;
         }
+
+        echo json_encode(['success' => false, 'error' => 'Accion desconocida']);
     }
 }

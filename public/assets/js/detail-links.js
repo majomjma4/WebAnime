@@ -9,7 +9,7 @@
     const heading = card.querySelector?.("h1,h2,h3,h4,h5");
     if (heading?.textContent?.trim()) {
       const hText = heading.textContent.trim();
-      if (!/^(Anime|PelÃ­cula|Movie|TV|OVA|Special|Hoy)$/i.test(hText)) return hText;
+      if (!/^(Anime|Pelicula|Película|Movie|TV|OVA|Special|Hoy)$/i.test(hText)) return hText;
     }
 
     const bolds = Array.from(card.querySelectorAll?.(".font-bold, .font-semibold, .font-headline") || []);
@@ -17,57 +17,61 @@
       .map((n) => (n.textContent || "").trim())
       .find((t) => {
         if (!t || t.length <= 2) return false;
-        if (/^(Anime|PelÃ­cula|Movie|TV|OVA|Special|Finalizado|En emision|En emisiÃ³n|Hoy|Favoritos)$/i.test(t)) return false;
+        if (/^(Anime|Pelicula|Película|Movie|TV|OVA|Special|Finalizado|En emision|En emisión|Hoy|Favoritos)$/i.test(t)) return false;
         return /[a-zA-Z]/.test(t) && !/^\d+([.,]\d+)?$/.test(t);
       });
 
     return textual || "";
   };
 
-  const toDetailUrl = (title) => `detail?q=${encodeURIComponent((title || "").trim())}`;
-  const toDetailById = (malId, title = "", dbId = null) => {
-    let url = "detail?";
-    if (dbId) url += `id=${encodeURIComponent(String(dbId))}&`;
-    if (malId) url += `mal_id=${encodeURIComponent(String(malId))}`;
-    if (title && !malId && !dbId) url += `q=${encodeURIComponent(title)}`;
-    else if (title) url += `&q=${encodeURIComponent(title)}`;
-    return url.replace(/\?$/, "").replace(/&$/, "");
-  };
+  const buildUrl = (malId = "", title = "", dbId = "") =>
+    window.AniDexShared?.buildDetailUrl
+      ? window.AniDexShared.buildDetailUrl(malId, title, dbId)
+      : (malId ? `detail/${encodeURIComponent(String(malId))}` : `detail/${encodeURIComponent(String(title || "anime").trim())}`);
 
-  const parseDetailHref = (href) => {
-    if (!href || !href.includes("detail")) return null;
+  const parseDetailSource = (value) => {
+    if (!value || !String(value).includes("detail")) return null;
     try {
-      const url = new URL(href, window.location.origin);
+      const url = new URL(value, window.location.origin);
+      const routeMatch = url.pathname.match(/\/detail(?:\/([^/?#]+))?$/i);
       return {
-        malId: url.searchParams.get("mal_id"),
-        dbId: url.searchParams.get("id"),
-        q: url.searchParams.get("q") || ""
+        malId: url.searchParams.get("mal_id") || (routeMatch?.[1] && /^\d+$/.test(routeMatch[1]) ? routeMatch[1] : ""),
+        dbId: url.searchParams.get("id") || "",
+        q: url.searchParams.get("q") || (!routeMatch?.[1] || /^\d+$/.test(routeMatch[1]) ? "" : routeMatch[1].replace(/-/g, " "))
       };
     } catch {
       return null;
     }
   };
 
+  const parseInlineOnclick = (node) => {
+    const raw = node.getAttribute("onclick") || "";
+    const malId = raw.match(/[?&]mal_id=([^&'"`]+)/i)?.[1] || "";
+    const dbId = raw.match(/[?&]id=([^&'"`]+)/i)?.[1] || "";
+    const q = raw.match(/[?&]q=([^&'"`]+)/i)?.[1] || "";
+    return {
+      malId: malId ? decodeURIComponent(malId) : "",
+      dbId: dbId ? decodeURIComponent(dbId) : "",
+      q: q ? decodeURIComponent(q) : ""
+    };
+  };
+
   const wireLinks = () => {
     document.querySelectorAll('a[href*="detail"]').forEach((a) => {
-      const parsed = parseDetailHref(a.getAttribute("href") || a.href || "");
-      if (parsed?.malId || parsed?.dbId) return;
-
+      const parsed = parseDetailSource(a.getAttribute("href") || a.href || "") || { malId: "", dbId: "", q: "" };
       const ownMalId = a.getAttribute("data-mal-id");
       const parentMalId = a.closest("[data-mal-id]")?.getAttribute("data-mal-id");
-      const malId = ownMalId || parentMalId;
-      const t = pickTitleFromCard(a);
-
-      if (malId) a.href = toDetailById(malId, t);
-      else if (t) a.href = toDetailUrl(t);
+      const malId = ownMalId || parentMalId || parsed.malId;
+      const title = parsed.q || pickTitleFromCard(a);
+      a.href = buildUrl(malId, title, parsed.dbId);
     });
 
     document.querySelectorAll("[onclick*='detail']").forEach((node) => {
-      const malId = node.getAttribute("data-mal-id") || node.closest("[data-mal-id]")?.getAttribute("data-mal-id");
-      const t = pickTitleFromCard(node);
+      const parsed = parseInlineOnclick(node);
+      const malId = node.getAttribute("data-mal-id") || node.closest("[data-mal-id]")?.getAttribute("data-mal-id") || parsed.malId;
+      const title = parsed.q || pickTitleFromCard(node);
       node.onclick = () => {
-        if (malId) window.location.href = toDetailById(malId, t);
-        else window.location.href = toDetailUrl(t);
+        window.location.href = buildUrl(malId, title, parsed.dbId);
       };
     });
 
@@ -76,32 +80,19 @@
       document.addEventListener(
         "click",
         (e) => {
-          const anchor = e.target.closest('a[href*="detail"]');
-          if (anchor) {
-            const parsed = parseDetailHref(anchor.getAttribute("href") || anchor.href || "");
-            if (parsed?.malId || parsed?.dbId) {
-              return;
-            }
-          }
-
           const target = e.target.closest("[data-mal-id], [onclick*='detail'], [data-anime-card]");
           if (!target) return;
-
-          const malId = target.getAttribute("data-mal-id") || target.closest("[data-mal-id]")?.getAttribute("data-mal-id");
-          const title = pickTitleFromCard(target);
-
-          if (malId) {
-            e.preventDefault();
-            e.stopPropagation();
-            window.location.href = toDetailById(malId, title);
+          const anchor = e.target.closest('a[href*="detail"]');
+          if (anchor) {
             return;
           }
 
-          if (anchor && title) {
-            e.preventDefault();
-            e.stopPropagation();
-            window.location.href = toDetailUrl(title);
-          }
+          const malId = target.getAttribute("data-mal-id") || target.closest("[data-mal-id]")?.getAttribute("data-mal-id") || "";
+          const title = pickTitleFromCard(target);
+          if (!malId && !title) return;
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = buildUrl(malId, title);
         },
         true
       );

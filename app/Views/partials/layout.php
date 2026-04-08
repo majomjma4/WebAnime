@@ -1,4 +1,4 @@
-﻿<style data-layout-style="layout-logo">
+<style data-layout-style="layout-logo">
   @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&display=swap");
   .logo-badge {
     display: inline-flex;
@@ -744,7 +744,7 @@
     </div>
 
     <div data-admin-only class="mt-2 pt-2 border-t border-white/5 flex flex-col gap-1 hidden">
-      <div class="text-[10px] font-bold text-rose-400 uppercase tracking-[0.2em] px-3 py-1">AdministraciÃ³n</div>
+      <div class="text-[10px] font-bold text-rose-400 uppercase tracking-[0.2em] px-3 py-1">Administración</div>
       <a href="<?= route_path('admin') ?>" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-rose-200 hover:text-white hover:bg-rose-500/10 transition-all">
         <span class="material-symbols-outlined text-lg">admin_panel_settings</span>
         Panel Admin
@@ -754,7 +754,7 @@
     <div class="mt-4 pt-4 border-t border-white/5">
       <button id="logout-btn" class="w-full flex items-center justify-center gap-2 rounded-xl border border-white/5 bg-white/5 px-4 py-3 text-xs font-bold uppercase tracking-widest text-on-surface-variant hover:text-error hover:border-error/30 hover:bg-error/5 transition-all">
         <span class="material-symbols-outlined text-sm">logout</span>
-        Cerrar SesiÃ³n
+        Cerrar Sesión
       </button>
     </div>
   </div>
@@ -765,27 +765,27 @@
   <footer class="footer-shell w-full mt-20 font-['Inter'] text-sm tracking-wide">
     <div class="footer-content w-full px-6 md:px-12 py-14">
      <div class="footer-side-left">
-      <button type="button" onclick="window.open('https://discord.com', '_blank')">
+      <button type="button" data-external-url="https://discord.com">
         <img src="img/discord.png" alt="Discord" class="footer-icon" />
       </button>
       <div class="footer-side-row">
-          <button type="button" onclick="window.open('https://facebook.com', '_blank')">
+          <button type="button" data-external-url="https://facebook.com">
             <img src="img/facebook.png" alt="Facebook" class="footer-icon" />
           </button>
-          <button type="button" onclick="window.open('https://instagram.com', '_blank')">
+          <button type="button" data-external-url="https://instagram.com">
             <img src="img/instagram.png" alt="Instagram" class="footer-icon" />
           </button>
         </div>
       </div>
       <div class="footer-side-right">
-        <button type="button" onclick="window.open('https://www.youtube.com', '_blank')">
+        <button type="button" data-external-url="https://www.youtube.com">
           <img src="img/y.png" alt="YouTube" class="footer-icon" />
         </button>
         <div class="footer-side-row">
-          <button type="button" onclick="window.open('https://www.tiktok.com', '_blank')">
+          <button type="button" data-external-url="https://www.tiktok.com">
             <img src="img/tt.png" alt="TikTok" class="footer-icon" />
           </button>
-          <button type="button" onclick="window.open('https://twitter.com', '_blank')">
+          <button type="button" data-external-url="https://twitter.com">
             <img src="img/x.png" alt="X" class="footer-icon" />
           </button>
         </div>
@@ -808,6 +808,7 @@
     </div>
   </footer>
 </template>
+
 
 
 

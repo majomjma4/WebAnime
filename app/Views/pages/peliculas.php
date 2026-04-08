@@ -39,7 +39,7 @@
 </style>
     <meta charset="UTF-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>NekoraList - Catálogo</title>
+    <title>NekoraList - CatÃƒÂ¡logo</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link
     href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap"
@@ -298,7 +298,7 @@
       grid-column: 1 / -1;
     }
     </style>
-    <link rel="icon" href="img/icon3.png" />
+    <link rel="icon" href="<?= asset_path('img/icon3.png') ?>" />
   </head>
   <body class="bg-background text-on-background font-body selection:bg-[#AC85DB]/30 selection:text-[#996AD2]">
     <div class="min-h-screen">
@@ -313,78 +313,50 @@
             <h2 class="font-headline text-xl font-bold text-on-surface">Filtros</h2>
             <div class="space-y-6">
                 <div class="space-y-2">
-                  <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant" for="filter-search"
-                  >Buscar</label
-                  >
+                  <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant" for="filter-search">Buscar</label>
                   <div class="flex items-center gap-2 rounded-xl bg-surface-container-high px-4 py-3">
                     <span class="material-symbols-outlined text-primary">search</span>
-                    <input
-                    id="filter-search"
-                    class="w-full bg-transparent border-none focus:ring-0"
-                    type="search"
-                    placeholder="Ej: Frieren"
-                    aria-label="Buscar anime"
-                    />
+                    <input id="catalog-search-input" name="catalog_search_input" data-catalog-search="1" class="w-full bg-transparent border-none focus:ring-0" type="search" placeholder="Ej: Frieren" aria-label="Buscar anime" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
                   </div>
                 </div>
                 <div class="space-y-2">
-                  <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant">G?neros</label>
-                  <!-- Dropdown de generos renderizado por assets/js/filters.js -->
-          </div>
-          <div class="space-y-4">
-            <div class="space-y-2">
-              <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant" for="filter-year"
-              >A?o</label
-              >
-              <select
-              id="filter-year"
-              class="w-full rounded-xl bg-surface-container-high px-4 py-3 text-on-surface"
-              aria-label="Filtrar por año"
-              >
-              <option>Todos</option>
-              <option>2026</option>
-              <option>2023</option>
-              <option>2022</option>
-            </select>
-          </div>
-          <div class="space-y-2">
-            <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant" for="filter-type"
-            >Tipo</label
-            >
-            <select id="filter-type" class="w-full rounded-xl bg-surface-container-high px-4 py-3 text-on-surface" aria-label="Filtrar por tipo">
-              <option>Todos</option>
-              <option>Serie</option>
-              <option>Película</option>
-              <option>OVA</option>
-            </select>
-        </div>
-        <div class="space-y-2">
-          <label
-          class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant"
-          for="filter-status"
-          >Estado</label
-          >
-          <select
-          id="filter-status"
-          class="w-full rounded-xl bg-surface-container-high px-4 py-3 text-on-surface"
-          aria-label="Filtrar por estado"
-          >
-          <option>Todos</option>
-          <option>En emisión</option>
-          <option>Finalizado</option>
-        </select>
-      </div>
-    </div>
-    <div class="flex gap-3">
-      <button class="flex-1 rounded-full bg-surface-container-high py-3 text-sm font-semibold text-on-surface" type="button">
-        Reiniciar
-      </button>
-      <button class="flex-1 rounded-full bg-primary py-3 text-sm font-bold text-on-primary" type="button">
-        Aplicar
-      </button>
-    </div>
-  </div>
-</section>
+                  <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant">GÃƒÂ©neros</label>
+                  <!-- Dropdown de gÃƒÂ©neros renderizado por assets/js/filters.js -->
+                </div>
+                <div class="space-y-4">
+                  <div class="space-y-2">
+                    <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant" for="filter-year">AÃƒÂ±o</label>
+                    <select id="filter-year" class="w-full rounded-xl bg-surface-container-high px-4 py-3 text-on-surface" aria-label="Filtrar por aÃƒÂ±o">
+                      <option>Todos</option>
+                      <option>2026</option>
+                      <option>2023</option>
+                      <option>2022</option>
+                    </select>
+                  </div>
+                  <div class="space-y-2">
+                    <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant" for="filter-type">Tipo</label>
+                    <select id="filter-type" class="w-full rounded-xl bg-surface-container-high px-4 py-3 text-on-surface" aria-label="Filtrar por tipo">
+                      <option>Todos</option>
+                      <option>Serie</option>
+                      <option>PelÃƒÂ­cula</option>
+                      <option>OVA</option>
+                    </select>
+                  </div>
+                  <div class="space-y-2">
+                    <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant" for="filter-status">Estado</label>
+                    <select id="filter-status" class="w-full rounded-xl bg-surface-container-high px-4 py-3 text-on-surface" aria-label="Filtrar por estado">
+                      <option>Todos</option>
+                      <option>En emisiÃƒÂ³n</option>
+                      <option>Finalizado</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="flex gap-3">
+                  <button class="flex-1 rounded-full bg-surface-container-high py-3 text-sm font-semibold text-on-surface" type="button">Reiniciar</button>
+                  <button class="flex-1 rounded-full bg-primary py-3 text-sm font-bold text-on-primary" type="button">Aplicar</button>
+                </div>
+              </div>
+            </section>
 <section class="mt-6 rounded-lg bg-surface-container-low p-4" aria-label="Ranking">
   <div class="mb-3 flex items-center justify-between gap-3">
     <h3 class="text-sm font-bold uppercase tracking-widest text-on-surface-variant">Top 5 Ranking</h3>
@@ -397,7 +369,7 @@
 </aside>
 
 <!-- Catalog Content -->
-<section class="lg:col-span-10" aria-label="Resultados de catálogo">
+<section class="lg:col-span-10" aria-label="Resultados de catÃƒÂ¡logo">
   <header class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
     <div>
       <h1 class="font-headline text-4xl font-extrabold text-on-surface">Descubrimiento</h1>
@@ -444,14 +416,14 @@
     <div class="hidden" data-state="empty">
       <div class="rounded-lg bg-surface-container-low p-10 text-center">
         <h2 class="text-2xl font-bold text-on-surface">Sin resultados</h2>
-        <p class="mt-2 text-on-surface-variant">Prueba otros filtros para ver más títulos disponibles.</p>
+        <p class="mt-2 text-on-surface-variant">Prueba otros filtros para ver mÃƒÂ¡s titulos disponibles.</p>
       </div>
     </div>
 
     <div class="hidden" data-state="error">
       <div class="rounded-lg bg-error-container/30 p-10 text-center">
-        <h2 class="text-2xl font-bold text-on-error-container">Ocurrió un error</h2>
-        <p class="mt-2 text-on-error-container/80">No pudimos cargar el catálogo. Inténtalo nuevamente</p>
+        <h2 class="text-2xl font-bold text-on-error-container">OcurriÃƒÂ³ un error</h2>
+        <p class="mt-2 text-on-error-container/80">No pudimos cargar el catÃƒÂ¡logo. IntÃƒÂ©ntalo nuevamente</p>
         <button class="mt-6 rounded-full bg-primary px-6 py-3 text-sm font-bold text-on-primary" type="button">
           Reintentar
         </button>
@@ -477,7 +449,7 @@
              data-type="<?= htmlspecialchars($a['tipo']) ?>" 
              data-status="<?= htmlspecialchars($a['estado'] ?? 'Desconocido') ?>"
              data-mal-id="<?= htmlspecialchars($a['mal_id'] ?? '') ?>">
-      <a class="block" href="detail?id=<?= $a['id'] ?>" aria-label="<?= htmlspecialchars($a['titulo']) ?>">
+      <a class="block" href="<?= asset_path('detail') ?>?id=<?= $a['id'] ?>&mal_id=<?= urlencode((string)($a['mal_id'] ?? '')) ?>&q=<?= urlencode((string)$a['titulo']) ?>" aria-label="<?= htmlspecialchars($a['titulo']) ?>" data-mal-id="<?= htmlspecialchars((string)($a['mal_id'] ?? '')) ?>">
         <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
           <img alt="<?= htmlspecialchars($a['titulo']) ?>" 
                class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" 
@@ -498,7 +470,7 @@
     <?php 
             }
         } else {
-            echo "<p class='col-span-full text-center text-on-surface-variant'>No hay películas disponibles.</p>";
+            echo "<p class='col-span-full text-center text-on-surface-variant'>No hay pelÃƒÂ­culas disponibles.</p>";
         }
     ?>
   </section>
@@ -507,10 +479,10 @@
   <button
     class="rounded-full border border-primary/30 bg-primary/10 px-8 py-4 text-sm font-bold text-primary transition-colors hover:bg-primary/20 inline-flex items-center gap-2"
     type="button"
-    aria-label="Cargar más resultados"
+    aria-label="Cargar mÃƒÂ¡s resultados"
     >
     <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">add_circle</span>
-    Cargar más
+    Cargar mÃƒÂ¡s
   </button>
 </div>
 </section>
@@ -519,25 +491,22 @@
 
 <!-- Footer Component -->
 <div data-layout="footer"></div>
-<script src="assets/js/layout.js?v=final14"></script>
-    <script src="assets/js/shared-utils.js?v=1"></script>
+<script src="<?= asset_path('assets/js/layout.js?v=final14') ?>"></script>
+    <script src="<?= asset_path('assets/js/shared-utils.js?v=3') ?>"></script>
 </div>
 
-<script src="assets/js/i18n.js"></script>
-<script src="assets/js/title-images.js?v=1774473995,31197"></script>
-<script src="assets/js/search.js?v=1774473995,31197"></script>
-<script src="assets/js/filters.js?v=final3"></script>
-<script src="assets/js/detail-links.js"></script>
-<script src="assets/js/load-more.js?v=1774473995,31197"></script>
+<script src="<?= asset_path('assets/js/i18n.js') ?>"></script>
+<script src="<?= asset_path('assets/js/title-images.js?v=1774473995,31197') ?>"></script>
+<script src="<?= asset_path('assets/js/search.js?v=1774473995,31197') ?>"></script>
+<script src="<?= asset_path('assets/js/filters.js?v=final4') ?>"></script>
+<script src="<?= asset_path('assets/js/load-more.js?v=1774473995,31197') ?>"></script>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
       // Fix mojibake and duplicated words in peliculas page text
       const fixMap = {
-        "Pel?culas": "Pelí­culas",
-        "Pel?culas": "Pelí­culas",
-        "FantasÃƒÂ­a": "Fantasí­a",
-        "FantasÃƒÂ­a": "Fantasí­a",
-        "AcciÃƒÂ³n": "Acción",
+        "Pel?culas": "Películas",
+        "FantasÃ­a": "Fantasía",
+        "AcciÃ³n": "Acción",
         "m?s": "más"
       };
       const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
@@ -548,9 +517,9 @@
         Object.keys(fixMap).forEach((k) => {
           if (out.includes(k)) out = out.replaceAll(k, fixMap[k]);
         });
-        out = out.replace(/anime\s*peliculas/gi, "Anime y Pelí­culas");
-        out = out.replace(/pel[?i]culas\s*pel[?i]culas/gi, "Pelí­culas");
-        out = out.replace(/pel[i]culas+/gi, "Pelí­culas");
+        out = out.replace(/anime\s*peliculas/gi, "Anime y PelÃƒÂ­culas");
+        out = out.replace(/pel[?i]culas\s*pel[?i]culas/gi, "PelÃƒÂ­culas");
+        out = out.replace(/pel[i]culas+/gi, "PelÃƒÂ­culas");
         out = out.replace(/depeliculastacado/gi, "Destacado");
         if (out !== t) node.nodeValue = out;
       }
@@ -566,7 +535,6 @@
       setTimeout(() => {
         if (window.AniDexFilters) window.AniDexFilters.init();
       }, 1100);
-      if (window.AniDexDetailLinks) window.AniDexDetailLinks.init();
       const purgeBlockedMovies = () => {
         document.querySelectorAll('[data-anime-card]').forEach((card) => {
           const title = ((card.getAttribute('data-title') || '') + ' ' + (card.querySelector('h3,h4,h5')?.textContent || '')).toLowerCase();
@@ -577,7 +545,7 @@
       };
       purgeBlockedMovies();
       new MutationObserver(() => purgeBlockedMovies()).observe(document.body, { childList: true, subtree: true });
-      // En pagina de peliculas: mostrar el año de publicación y abajo a la izquierda.
+      // En pÃƒÂ¡gina de pelÃƒÂ­culas: mostrar el aÃƒÂ±o de publicaciÃƒÂ³n abajo a la izquierda.
       const applyYearBadges = () => {
         document.querySelectorAll("span.absolute.left-3").forEach((badge) => {
           const card = badge.closest("[data-year]");
@@ -596,6 +564,8 @@
 <script data-ui-unlock>document.documentElement.classList.remove("preload-ui");</script>
 </body>
 </html>
+
+
 
 
 

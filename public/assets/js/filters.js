@@ -1352,7 +1352,7 @@
 
       toggleEmptyState(visible.length);
 
-      // FALLBACK: Si no hay resultados locales y hay texto de bÃºsqueda, buscar en Jikan
+      // FALLBACK: Si no hay resultados locales y hay texto de búsqueda, buscar en Jikan
       if (visible.length === 0 && q && q.length > 2) {
         if (!state.isFetchingGlobal) {
           state.isFetchingGlobal = true;
@@ -1672,16 +1672,16 @@
       const statusList = STATUS_OPTIONS_SERIES;
       renderSimple(statusWrap, statusList, "statuses", true);
     } else {
-      const typeList = ["Todos", "Pel\u00edcula original", "Basada en serie", "Recopilatoria", "Secuela", "Precuela", "Spin-off"];
+      const typeList = ["Todos", "Serie de TV", "OVA", "ONA", "Especiales", "Cortos"];
       renderSimple(typeWrap, typeList, "types", true);
-      const statusList = STATUS_OPTIONS_MOVIES;
+
+      const statusList = STATUS_OPTIONS_SERIES;
       if (statusLabel?.parentElement) {
         statusLabel.parentElement.querySelectorAll(".anidex-status-wrap").forEach((n) => n.remove());
         statusLabel.parentElement.appendChild(statusWrap);
       }
       renderSimple(statusWrap, statusList, "statuses", true);
     }
-
     applyFilters();
     renderSidebarRanking();
     if (window.AniDexFilters) window.AniDexFilters.apply = applyFilters;

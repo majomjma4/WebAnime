@@ -253,7 +253,7 @@
       </div>
       <div>
         <h3 class="font-headline text-xl font-bold text-on-surface">Eliminar peticion</h3>
-        <p class="text-sm text-on-surface-variant">Esta accion no se puede deshacer.</p>
+        <p class="text-sm text-on-surface-variant">Esta acción no se puede deshacer.</p>
       </div>
     </div>
     <p class="mb-6 text-sm leading-6 text-on-surface-variant">Deseas eliminar para siempre esta peticion?</p>
@@ -457,7 +457,7 @@
     <span class="inline-flex min-w-[92px] justify-center rounded-full border border-white/10 bg-surface-container-high px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-on-surface">${item.tipo || 'Anime'}</span>
   </td>
   <td class="px-8 py-6">
-    <p class="text-base font-bold font-headline text-on-surface tracking-tight">${item.titulo || ''}</p>
+    <p class="text-base font-bold font-headline text-on-surface tracking-tight">${item.título || ''}</p>
     <p class="text-xs text-on-surface-variant italic">Source: ${item.fuente || 'Sin fuente'}</p>
   </td>
   <td class="px-6 py-6 whitespace-nowrap">
@@ -514,7 +514,7 @@
       const rows = modalItems.map((item, idx) => {
         const user = item.user_display || 'Usuario';
         const tipo = item.tipo || 'Anime';
-        const titulo = item.titulo || '';
+        const título = item.título || '';
         const fecha = formatDate(item.creado_en);
         const actionLabel = targetStatus === 'aprobado' ? 'APROBAR' : 'RECHAZAR';
         const actionClass = targetStatus === 'aprobado' ? 'bg-emerald-400/10 text-emerald-200 hover:bg-emerald-400/20' : 'bg-rose-400/10 text-rose-200 hover:bg-rose-400/20';
@@ -533,7 +533,7 @@
     <span class="inline-flex min-w-[92px] justify-center rounded-full border border-white/10 bg-surface-container-high px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-on-surface">${tipo}</span>
   </td>
   <td class="px-8 py-6">
-    <p class="text-base font-bold font-headline text-on-surface tracking-tight">${titulo}</p>
+    <p class="text-base font-bold font-headline text-on-surface tracking-tight">${título}</p>
   </td>
   <td class="px-6 py-6 whitespace-nowrap">
     <p class="text-xs text-on-surface-variant font-body whitespace-nowrap">${fecha}</p>

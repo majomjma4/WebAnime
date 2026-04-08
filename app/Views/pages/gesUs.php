@@ -263,7 +263,7 @@
       </div>
       <div>
         <label class="text-[10px] font-bold uppercase tracking-[0.22em] text-on-surface-variant" for="users-block-custom-reason">Motivo personalizado</label>
-        <textarea id="users-block-custom-reason" class="mt-3 min-h-[110px] w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-on-surface placeholder:text-on-surface-variant/60 focus:border-amber-300/30 focus:ring-0 resize-none" placeholder="Escribe aqui otra razon si no aparece en las opciones..." data-admin-users-block-custom></textarea>
+        <textarea id="users-block-custom-reason" class="mt-3 min-h-[110px] w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-on-surface placeholder:text-on-surface-variant/60 focus:border-amber-300/30 focus:ring-0 resize-none" placeholder="Escribe aquí otra razon si no aparece en las opciones..." data-admin-users-block-custom></textarea>
       </div>
     </div>
     <div class="flex items-center justify-end gap-3 border-t border-white/8 px-7 py-5">
@@ -284,7 +284,7 @@
       </button>
     </div>
     <div class="space-y-4 px-7 py-6">
-      <p class="text-sm text-on-surface-variant">Â¿Deseas quitar el bloqueo de <span class="font-semibold text-on-surface" data-admin-users-unblock-name>este usuario</span>?</p>
+      <p class="text-sm text-on-surface-variant">¿Deseas quitar el bloqueo de <span class="font-semibold text-on-surface" data-admin-users-unblock-name>este usuario</span>?</p>
       <div class="rounded-2xl border border-white/8 bg-white/[0.03] px-5 py-4">
         <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-on-surface-variant">ID</p>
         <p class="mt-2 text-sm font-medium text-on-surface" data-admin-users-unblock-id></p>
@@ -308,7 +308,7 @@
       </button>
     </div>
     <div class="space-y-4 px-7 py-6">
-      <p class="text-sm leading-7 text-on-surface-variant">Â¿Deseas eliminar para siempre a <span class="font-semibold text-on-surface" data-admin-users-delete-name>este usuario</span>? Esta acción borrara toda su información, incluyendo sus registros en la base de datos.</p>
+      <p class="text-sm leading-7 text-on-surface-variant">¿Deseas eliminar para siempre a <span class="font-semibold text-on-surface" data-admin-users-delete-name>este usuario</span>? Esta acción borrará toda su información, incluyendo sus registros en la base de datos.</p>
       <div class="rounded-2xl border border-white/8 bg-white/[0.03] px-5 py-4">
         <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-on-surface-variant">ID</p>
         <p class="mt-2 text-sm font-medium text-on-surface" data-admin-users-delete-id></p>

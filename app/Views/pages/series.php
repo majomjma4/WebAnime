@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html class="dark" lang="es">
   <head>
     <script data-ui-preload>document.documentElement.classList.add("preload-ui");</script>
@@ -302,7 +302,7 @@
       grid-column: 1 / -1;
     }
     </style>
-    <link rel="icon" href="img/icon3.png" />
+    <link rel="icon" href="<?= asset_path('img/icon3.png') ?>" />
 
 
   </head>
@@ -422,7 +422,7 @@
               <div class="hidden" data-state="empty">
                 <div class="rounded-lg bg-surface-container-low p-10 text-center">
                   <h2 class="text-2xl font-bold text-on-surface">Sin resultados</h2>
-                  <p class="mt-2 text-on-surface-variant">Prueba otros filtros para ver más títulos disponibles.</p>
+                  <p class="mt-2 text-on-surface-variant">Prueba otros filtros para ver más titulos disponibles.</p>
                 </div>
               </div>
 
@@ -452,7 +452,7 @@
                        data-type="<?= htmlspecialchars($a['tipo']) ?>" 
                        data-status="<?= htmlspecialchars($a['estado'] ?? 'Desconocido') ?>"
                        data-mal-id="<?= htmlspecialchars($a['mal_id'] ?? '') ?>">
-                <a class="block" href="detail?mal_id=<?= urlencode((string)($a['mal_id'] ?? $a['id'])) ?>&q=<?= urlencode((string)$a['titulo']) ?>" aria-label="<?= htmlspecialchars($a['titulo']) ?>" data-mal-id="<?= htmlspecialchars((string)($a['mal_id'] ?? $a['id'])) ?>">
+                <a class="block" href="<?= asset_path('detail') ?>?mal_id=<?= urlencode((string)($a['mal_id'] ?? $a['id'])) ?>&q=<?= urlencode((string)$a['titulo']) ?>" aria-label="<?= htmlspecialchars($a['titulo']) ?>" data-mal-id="<?= htmlspecialchars((string)($a['mal_id'] ?? $a['id'])) ?>">
                   <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-high">
                     <img alt="<?= htmlspecialchars($a['titulo']) ?>" 
                          class="h-full w-full object-cover transition-transform duration-500 ease-snappy group-hover:scale-[1.03]" 
@@ -490,22 +490,20 @@
 
       <!-- Footer Component -->
       <div data-layout="footer"></div>
-      <script src="assets/js/layout.js?v=final14"></script>
-    <script src="assets/js/shared-utils.js?v=1"></script>
+      <script src="<?= asset_path('assets/js/layout.js?v=final14') ?>"></script>
+    <script src="<?= asset_path('assets/js/shared-utils.js?v=3') ?>"></script>
     </div>
-    <script src="assets/js/i18n.js"></script>
-    <script src="assets/js/title-images.js?v=1774473995,33386"></script>
-    <script src="assets/js/search.js"></script>
-    <script src="assets/js/filters.js?v=final3"></script>
-    <script src="assets/js/detail-links.js"></script>
-    <script src="assets/js/load-more.js?v=1774473995,33386"></script>
+    <script src="<?= asset_path('assets/js/i18n.js') ?>"></script>
+    <script src="<?= asset_path('assets/js/title-images.js?v=1774473995,33386') ?>"></script>
+    <script src="<?= asset_path('assets/js/search.js') ?>"></script>
+    <script src="<?= asset_path('assets/js/filters.js?v=final3') ?>"></script>
+    <script src="<?= asset_path('assets/js/load-more.js?v=1774473995,33386') ?>"></script>
     <script>
   document.addEventListener("DOMContentLoaded", () => {
     if (window.AniDexI18n) window.AniDexI18n.init();
     if (window.AniDexTitleImages) window.AniDexTitleImages.init();
     if (window.AniDexSearch) window.AniDexSearch.init();
     if (window.AniDexFilters) window.AniDexFilters.init();
-    if (window.AniDexDetailLinks) window.AniDexDetailLinks.init();
     const purgeBlockedSeries = () => {
       document.querySelectorAll('[data-anime-card]').forEach((card) => {
         const title = ((card.getAttribute('data-title') || '') + ' ' + (card.querySelector('h3,h4,h5')?.textContent || '')).toLowerCase();
@@ -521,6 +519,7 @@
     <script data-ui-unlock>document.documentElement.classList.remove("preload-ui");</script>
   </body>
 </html>
+
 
 
 

@@ -1,10 +1,11 @@
 const AniDexDetailDataBoot = () => {
-  const API = "api/jikan_proxy.php";
+  const appUrl = window.AniDexShared?.buildAppUrl || ((path = "") => String(path || ""));
+  const API = appUrl("api/jikan_proxy");
   const DETAIL_OVERRIDES = {
     57658: {
       episodes: 12,
       synopsis:
-        "Tras las masacres de Shibuya, Itadori, cargado de culpa y preocupado por el interes de Sukuna en Fushiguro, decide no volver a la Preparatoria de Hechicería. Se une a Choso para exorcizar los espíritus liberados por Noritoshi Kamo. En medio del caos, la cupula jujutsu reactiva la ejecucion de Itadori y asigna a Yuta Okkotsu como su verdugo. Hechiceros modernos y antiguos, ahora jugadores del Juego de la Exterminación, chocan con motivos opuestos y empujan al mundo hacia una nueva era dominada por la hechicería."
+        "Tras las masacres de Shibuya, Itadori, cargado de culpa y preocupado por el interés de Sukuna en Fushiguro, decide no volver a la Preparatoria de Hechicería. Se une a Choso para exorcizar los espíritus liberados por Noritoshi Kamo. En medio del caos, la cúpula jujutsu reactiva la ejecución de Itadori y asigna a Yuta Okkotsu como su verdugo. Hechiceros modernos y antiguos, ahora jugadores del Juego de la Exterminación, chocan con motivos opuestos y empujan al mundo hacia una nueva era dominada por la hechicería."
     },
     60058: {
       title: "Oshi no Ko Season 3"
@@ -290,7 +291,7 @@ const AniDexDetailDataBoot = () => {
   };
 
   const fetchLocalAnime = async (malId, title, dbId) => {
-    let url = "api/anime_data.php?";
+    let url = `${appUrl("api/anime_data")}?`;
     if (dbId) url += `id=${encodeURIComponent(dbId)}&`;
     if (malId) url += `mal_id=${encodeURIComponent(malId)}&`;
     if (title) url += `q=${encodeURIComponent(title)}`;
@@ -316,11 +317,11 @@ const AniDexDetailDataBoot = () => {
     const isLogged = window.AniDexLayout ? window.AniDexLayout.isLoggedIn() : (localStorage.getItem("nekora_logged_in") === "true");
     const isPremium = window.AniDexLayout ? window.AniDexLayout.isPremium() : (localStorage.getItem("nekora_premium") === "true" || localStorage.getItem("nekora_admin") === "true");
     const canWatchEpisodes = isLogged && isPremium;
-    const params = new URLSearchParams(location.search);
-    const dbIdParam = params.get("id");
-    const malIdParam = params.get("mal_id");
-    const query = params.get("q") || (malIdParam || dbIdParam ? "" : document.querySelector("h1")?.textContent?.trim()) || "";
-    const preTitle = params.get("q");
+    const routeInfo = window.__DETAIL_ROUTE_INFO || (window.AniDexShared?.getDetailRouteInfo ? window.AniDexShared.getDetailRouteInfo() : { malId: "", query: "" });
+    const dbIdParam = "";
+    const malIdParam = String(routeInfo.ref || routeInfo.malId || "").match(/^\d+$/) ? String(routeInfo.ref || routeInfo.malId || "") : "";
+    const query = (document.body?.dataset?.detailQuery || routeInfo.query || (!malIdParam ? String(routeInfo.ref || "").replace(/-/g, " ") : "") || document.querySelector("h1")?.textContent?.trim() || "").trim();
+    const preTitle = query || "";
     if (preTitle && document.querySelector("h1")) {
       document.querySelector("h1").textContent = preTitle;
     }
@@ -399,7 +400,7 @@ const AniDexDetailDataBoot = () => {
         videos: vids,
         pictures: pics
       };
-      fetch("api/save_anime.php", {
+      fetch(appUrl("api/save_anime"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(deepData)
@@ -451,6 +452,18 @@ const AniDexDetailDataBoot = () => {
       sub.textContent = `Título original: ${originalTitle}`;
     }
     document.title = `${preferredTitle} | AniDex`;
+
+    const cleanDetailUrl = window.AniDexShared?.buildDetailUrl
+      ? window.AniDexShared.buildDetailUrl(String(selectedId || ""), preferredTitle || query || "")
+      : "";
+    if (cleanDetailUrl) {
+      const currentUrl = `${window.location.pathname}${window.location.search}`;
+      const cleanUrlObj = new URL(cleanDetailUrl, window.location.origin);
+      const desiredUrl = `${cleanUrlObj.pathname}${cleanUrlObj.search}`;
+      if (currentUrl !== desiredUrl) {
+        window.history.replaceState({ detailId: selectedId || "" }, "", cleanDetailUrl);
+      }
+    }
 
     const poster = document.querySelector("section .aspect-\\[2\\/3\\] img");
     const bg = document.querySelector("section img[alt='Background Art']");
@@ -730,7 +743,7 @@ const AniDexDetailDataBoot = () => {
     const infoBlock = document.getElementById("detail-info-block");
     if (infoBlock) {
       infoBlock.innerHTML = "";
-      renderMetaBlock(infoBlock, "Título Nativo", full.title_japanese || full.title_japanese_full);
+      renderMetaBlock(infoBlock, "Título nativo", full.title_japanese || full.title_japanese_full);
       renderMetaBlock(infoBlock, "Estudio", (full.studios || []).map(s => s.name).join(", "));
       renderMetaBlock(infoBlock, "Fuente", await translateToEs(full.source));
       renderMetaBlock(infoBlock, "Emisión", full.aired?.string || "N/A");
@@ -814,7 +827,7 @@ const AniDexDetailDataBoot = () => {
       );
       const fallbackEpisodeSynopsis = (epNumber) => {
         const animeLabel = preferredTitle || full.title || "este anime";
-        return `Sinopsis no disponible todavia para el episodio ${epNumber} de ${animeLabel}.`;
+        return `Sinopsis no disponible todavía para el episodio ${epNumber} de ${animeLabel}.`;
       };
       const episodeItems = Array.from({ length: episodesTotal }).map((_, index) => {
         const epNumber = index + 1;
@@ -972,7 +985,7 @@ const AniDexDetailDataBoot = () => {
         <div class="space-y-4" data-episodes-list></div>
         <div class="pt-2 flex justify-center">
           <button type="button" data-episodes-more class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full border border-violet-400/40 bg-violet-500/10 px-6 py-3 text-sm font-bold uppercase tracking-widest text-violet-100 shadow-[0_0_14px_rgba(139,92,246,0.25)] transition-all duration-300 hover:bg-violet-500/20 hover:border-violet-300 hover:shadow-[0_0_22px_rgba(139,92,246,0.45)] hover:-translate-y-0.5">
-            Ver ms episodios
+            Ver más episodios
           </button>
         </div>
       `;
@@ -990,7 +1003,7 @@ const AniDexDetailDataBoot = () => {
       const lockEpisodes = () => {
         const lockText = isLogged
           ? "Activa el modo premium para ver los episodios"
-          : "Inicia Sesion y accede al modo premium para ver los episodios";
+          : "Inicia sesión y accede al modo premium para ver los episodios";
         const goPremium = () => {
           window.location.href = isLogged ? "pago" : "registro";
         };
@@ -1061,7 +1074,7 @@ const AniDexDetailDataBoot = () => {
         const payload = Array.from(pendingEpisodeCache.values());
         pendingEpisodeCache.clear();
         try {
-          await fetch("api/save_anime.php", {
+          await fetch(appUrl("api/save_anime"), {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -1501,13 +1514,13 @@ const AniDexDetailDataBoot = () => {
                   const j = await r.json();
                   const rawAbout = (j?.data?.about || "").replace(/\\n/g, " ").replace(/\r\n/g, " ").trim();
                   if (!rawAbout) {
-                      cardMini.textContent = "Sin descripción biográfica resgistrada.";
+                      cardMini.textContent = "Sin descripción biográfica registrada.";
                       await delay(350);
                       continue; 
                   }
                   const miniSummary = await getMiniSummary(rawAbout);
                   if (!miniSummary) {
-                      cardMini.textContent = "Sin descripción biográfica resgistrada.";
+                      cardMini.textContent = "Sin descripción biográfica registrada.";
                       await delay(350);
                       continue; 
                   }
@@ -1607,7 +1620,7 @@ const AniDexDetailDataBoot = () => {
                   <div class="h-px w-16 bg-violet-400/40"></div>
                   <div>
                     <h4 class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Descripción</h4>
-                    <p data-char-info class="text-sm text-on-surface-variant leading-relaxed mt-2">Cargando informacin del personaje...</p>
+                    <p data-char-info class="text-sm text-on-surface-variant leading-relaxed mt-2">Cargando información del personaje...</p>
                   </div>
                   <div class="h-px w-16 bg-violet-400/40"></div>
                   <div data-char-fields-wrap>
@@ -1826,7 +1839,7 @@ const AniDexDetailDataBoot = () => {
     if (mediaBlock) {
       const images = pics.slice(0, 20);
       if (images.length) {
-        mediaBlock.appendChild(slider("Galeria", images, (it) => `
+        mediaBlock.appendChild(slider("Galería", images, (it) => `
           <img data-zoomable src="${it?.jpg?.large_image_url || it?.jpg?.image_url || ""}" class="h-56 w-full object-cover cursor-zoom-in rounded-2xl" />
         `, "detail-images"));
       }
@@ -1886,7 +1899,7 @@ const AniDexDetailDataBoot = () => {
         if (p) p.textContent = (it.genres || []).map((g) => g.name).slice(0, 2).join(", ");
         if (scoreEl && typeof it.score === "number") scoreEl.textContent = it.score.toFixed(1);
         if (it?.mal_id) a.setAttribute("data-mal-id", String(it.mal_id));
-        a.href = `detail?mal_id=${encodeURIComponent(String(it.mal_id || ""))}&q=${encodeURIComponent(it.title || "")}`;
+        a.href = window.AniDexShared?.buildDetailUrl ? window.AniDexShared.buildDetailUrl(String(it.mal_id || ""), it.title || "") : `detail/${encodeURIComponent(String(it.mal_id || ""))}`;
       });
     }
 
@@ -1906,6 +1919,13 @@ const AniDexDetailDataBoot = () => {
 };
 
 AniDexDetailDataBoot();
+
+
+
+
+
+
+
 
 
 

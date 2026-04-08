@@ -101,7 +101,7 @@
 </div>
 <div class="space-y-2">
 <label class="text-sm font-bold uppercase tracking-wider text-primary">Título del Anime</label>
-<input id="in-titulo" required class="w-full bg-surface-container-lowest border-none rounded-lg p-4 focus:ring-2 focus:ring-primary/40 text-on-surface" placeholder="Ej: Neon Genesis Evangelion" type="text"/>
+<input id="in-título" required class="w-full bg-surface-container-lowest border-none rounded-lg p-4 focus:ring-2 focus:ring-primary/40 text-on-surface" placeholder="Ej: Neon Genesis Evangelion" type="text"/>
 </div>
 <div class="space-y-2">
 <label class="text-sm font-bold uppercase tracking-wider text-primary">Sinopsis / Descripción</label>
@@ -181,7 +181,7 @@
 </div>
 <div class="grid grid-cols-2 gap-4">
 <div id="duration-wrap" class="space-y-2">
-<label id="label-duracion" class="text-sm font-bold uppercase tracking-wider text-primary">Episodios</label>
+<label id="label-duración" class="text-sm font-bold uppercase tracking-wider text-primary">Episodios</label>
 <input id="in-episodios" class="w-full bg-surface-container-lowest border-none rounded-lg p-4 focus:ring-2 focus:ring-primary/40 text-on-surface" placeholder="0" type="number"/>
 </div>
 </div>
@@ -295,13 +295,13 @@
     const typeButtons = Array.from(document.querySelectorAll('[data-type-option]'));
     const pageTitle = document.getElementById('add-page-title');
     const pageSubtitle = document.getElementById('add-page-subtitle');
-    const labelTitulo = document.getElementById('label-titulo');
-    const tituloInput = document.getElementById('in-titulo');
+    const labelTítulo = document.getElementById('label-título');
+    const títuloInput = document.getElementById('in-título');
     const submitLabel = document.getElementById('submit-label');
     const tipoFormatoSelect = document.getElementById('in-tipo-formato');
     const estadoSelect = document.getElementById('in-estado');
     const temporadaWrap = document.getElementById('temporada-wrap');
-    const durationLabel = document.getElementById('label-duracion');
+    const durationLabel = document.getElementById('label-duración');
     const durationInput = document.getElementById('in-episodios');
     let isDirty = false;
     let isSubmitting = false;
@@ -430,8 +430,8 @@
       });
       if (pageTitle) pageTitle.textContent = isMovie ? 'A?adir Nueva Película' : 'A?adir Nuevo Anime';
       if (pageSubtitle) pageSubtitle.textContent = isMovie ? 'Completa los detalles para catalogar una nueva película.' : 'Completa los detalles para catalogar una nueva obra maestra.';
-      if (labelTitulo) labelTitulo.textContent = isMovie ? 'T?tulo de la Película' : 'T?tulo del Anime';
-      if (tituloInput) tituloInput.placeholder = isMovie ? 'Ej: Koe no Katachi' : 'Ej: Neon Genesis Evangelion';
+      if (labelTítulo) labelTítulo.textContent = isMovie ? 'T?tulo de la Película' : 'T?tulo del Anime';
+      if (títuloInput) títuloInput.placeholder = isMovie ? 'Ej: Koe no Katachi' : 'Ej: Neon Genesis Evangelion';
       if (submitLabel) submitLabel.textContent = isMovie ? 'Subir Película' : 'Subir Anime';
 
       if (tipoFormatoSelect) {
@@ -557,7 +557,7 @@
 
       const payload = {
         tipo_contenido: typeInput?.value || 'anime',
-        titulo: document.getElementById('in-titulo').value,
+        título: document.getElementById('in-título').value,
         sinopsis: document.getElementById('in-sinopsis').value,
         tipo_formato: document.getElementById('in-tipo-formato').value,
         estado: document.getElementById('in-estado').value,

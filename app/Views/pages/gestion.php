@@ -69,7 +69,7 @@
 <main class="ml-64 flex-1 flex flex-col min-h-screen bg-surface">
   <header class="fixed top-0 right-0 z-40 flex h-20 w-[calc(100%-16rem)] items-center justify-between bg-[#0e0e0e]/85 px-12 backdrop-blur-xl border-b border-outline-variant/10">
     <div class="flex items-center gap-4">
-      <h1 class="font-headline text-lg font-semibold text-on-surface">Gestionar Catalogo</h1>
+      <h1 class="font-headline text-lg font-semibold text-on-surface">Gestionar Catálogo</h1>
           </div>
     <div></div>
   </header>
@@ -77,9 +77,9 @@
   <section class="mt-20 p-12 space-y-10">
     <div class="flex flex-wrap items-end justify-between gap-6">
       <div>
-        <p class="mb-2 text-xs font-bold uppercase tracking-[0.25em] text-primary">Vista General Del Catalogo</p>
+        <p class="mb-2 text-xs font-bold uppercase tracking-[0.25em] text-primary">Vista General Del Catálogo</p>
         <h2 class="font-headline text-5xl font-extrabold tracking-tight text-on-surface">Administrar Anime</h2>
-        <p class="mt-3 max-w-2xl text-sm text-on-surface-variant">Organiza el catalogo, revisa estados y mantén la lista limpia desde un solo lugar.</p>
+        <p class="mt-3 max-w-2xl text-sm text-on-surface-variant">Organiza el catálogo, revisa estados y mantén la lista limpia desde un solo lugar.</p>
       </div>
       <div class="flex flex-wrap gap-3">
         <button class="flex items-center gap-2 rounded-full border border-[#9a8cff]/35 bg-gradient-to-r from-[#9a8cff] to-[#74d8ff] px-6 py-3 text-sm font-bold text-slate-950 shadow-xl shadow-[#7f8cff]/20 transition hover:brightness-110" data-admin-link="a%C3%B1adir.php">
@@ -91,9 +91,9 @@
 
     <div class="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(360px,1.35fr)]">
       <div class="rounded-[28px] border border-outline-variant/10 bg-gradient-to-br from-surface-container-low to-surface-container-high p-8 shadow-2xl text-center min-h-[220px] flex flex-col items-center justify-center">
-        <p class="text-[11px] font-bold uppercase tracking-[0.28em] text-on-surface-variant">Titulos Totales</p>
+        <p class="text-[11px] font-bold uppercase tracking-[0.28em] text-on-surface-variant">Títulos Totales</p>
         <h3 class="mt-5 font-headline text-5xl font-extrabold tracking-tight text-on-surface"><?= $totalAnimes ?></h3>
-        <p class="mt-4 text-sm text-on-surface-variant">Catalogo visible en esta vista.</p>
+        <p class="mt-4 text-sm text-on-surface-variant">Catálogo visible en esta vista.</p>
       </div>
       <div class="rounded-[28px] border border-outline-variant/10 bg-gradient-to-br from-surface-container-low to-surface-container-high p-8 shadow-2xl text-center min-h-[220px] flex flex-col items-center justify-center">
         <p class="text-[11px] font-bold uppercase tracking-[0.28em] text-on-surface-variant">En Emision</p>
@@ -212,7 +212,7 @@
         </table>
       </div>
       <div class="flex items-center justify-between border-t border-outline-variant/10 bg-surface-container-high/20 px-8 py-6">
-        <p class="text-xs text-on-surface-variant" data-admin-manage-footer>Mostrando <span class="font-bold text-on-surface" data-admin-manage-total><?= $rangeEnd ?></span> de <span class="font-bold text-on-surface"><?= $totalAnimes ?></span> titulos</p>
+        <p class="text-xs text-on-surface-variant" data-admin-manage-footer>Mostrando <span class="font-bold text-on-surface" data-admin-manage-total><?= $rangeEnd ?></span> de <span class="font-bold text-on-surface"><?= $totalAnimes ?></span> títulos</p>
         <div class="flex items-center gap-2">
           <a class="flex h-10 min-w-10 items-center justify-center rounded-full border border-outline-variant/20 px-3 text-xs font-bold text-on-surface-variant transition <?= $page <= 1 ? 'pointer-events-none opacity-30' : 'hover:border-primary hover:text-primary' ?>" href="<?= htmlspecialchars($buildPageUrl(max(1, $page - 1))) ?>">&lt;</a>
           <?php for ($i = $pageStart; $i <= $pageEnd; $i++): ?>
@@ -233,7 +233,7 @@
   <div class="w-[min(720px,92vw)] rounded-3xl border border-outline-variant/20 bg-surface-container-low p-6 shadow-2xl">
     <div class="flex items-center justify-between">
       <div>
-        <p class="text-[10px] uppercase tracking-[0.3em] text-on-surface-variant">Editar titulo</p>
+        <p class="text-[10px] uppercase tracking-[0.3em] text-on-surface-variant">Editar título</p>
         <h3 class="font-headline text-2xl font-bold text-on-surface">Detalles del anime</h3>
       </div>
       <button class="flex h-9 w-9 items-center justify-center rounded-full bg-surface-container-high text-on-surface-variant hover:text-on-surface" data-admin-edit-close>
@@ -244,7 +244,7 @@
       <label class="text-xs text-on-surface-variant">ID
         <input class="mt-2 w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-2 text-sm text-on-surface" data-admin-field="id" readonly/>
       </label>
-      <label class="text-xs text-on-surface-variant">Titulo
+      <label class="text-xs text-on-surface-variant">Título
         <input class="mt-2 w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-2 text-sm text-on-surface" data-admin-field="title"/>
       </label>
       <label class="text-xs text-on-surface-variant">Tipo
@@ -278,7 +278,7 @@
       </label>
     </div>
     <div class="mt-6 flex flex-wrap items-center justify-between gap-3">
-      <button class="rounded-full border border-error/40 px-4 py-2 text-xs uppercase tracking-widest text-error" data-admin-edit-delete>Eliminar titulo</button>
+      <button class="rounded-full border border-error/40 px-4 py-2 text-xs uppercase tracking-widest text-error" data-admin-edit-delete>Eliminar título</button>
       <div class="flex gap-2">
         <button class="rounded-full border border-outline-variant/30 px-4 py-2 text-xs uppercase tracking-widest text-on-surface-variant" data-admin-edit-cancel>Cancelar</button>
         <button class="rounded-full bg-primary px-5 py-2 text-xs font-bold uppercase tracking-widest text-on-primary" data-admin-edit-save>Guardar cambios</button>
@@ -293,7 +293,7 @@
       <div>
         <p class="text-[10px] uppercase tracking-[0.3em] text-on-surface-variant">Eliminar anime</p>
         <h3 class="mt-2 font-headline text-2xl font-bold text-on-surface">Confirmar eliminacion</h3>
-        <p class="mt-3 text-sm text-on-surface-variant">Deseas eliminar para siempre <span class="font-semibold text-on-surface" data-admin-delete-name>este anime</span>? Esta accion tambien lo borra de la base de datos.</p>
+        <p class="mt-3 text-sm text-on-surface-variant">Deseas eliminar para siempre <span class="font-semibold text-on-surface" data-admin-delete-name>este anime</span>? Esta acción también lo borra de la base de datos.</p>
       </div>
       <button class="flex h-9 w-9 items-center justify-center rounded-full bg-surface-container-high text-on-surface-variant hover:text-on-surface" data-admin-delete-cancel>
         <span class="material-symbols-outlined text-lg">close</span>
@@ -473,7 +473,7 @@
         const animeId = Number(currentRow.getAttribute('data-anime-id') || field('id').value || 0);
         const payload = {
           id: animeId,
-          titulo: field('title').value.trim(),
+          título: field('title').value.trim(),
           tipo: field('type').value.trim(),
           estudio: field('studio').value.trim(),
           anio: field('date').value.trim(),
