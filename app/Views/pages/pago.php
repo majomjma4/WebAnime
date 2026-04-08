@@ -508,9 +508,11 @@
 </script>
 
 <script src="assets/js/i18n.js"></script>
-<script src="assets/js/search.js?v=popular2"></script>
+<script src="assets/js/search.js?v=popular4"></script>
 </body>
 </html>
+
+
 
 
 

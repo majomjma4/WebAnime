@@ -321,7 +321,6 @@
 
   const bindInput = (input) => {
     if (!input || input.dataset.searchBound === "1") return;
-    if (input.dataset.noSuggest === "1") return;
     if (input.dataset.genreSearch === "1") return;
     if (input.closest("[data-genre-dropdown],[data-genre-panel]")) return;
     input.dataset.searchBound = "1";
@@ -641,7 +640,7 @@
     }
 
     if (filterInput) {
-      filterInput.dataset.noSuggest = "1";
+      bindInput(filterInput);
       const handleFilter = () => applyFilter(filterInput.value);
       filterInput.addEventListener("input", handleFilter);
       filterInput.addEventListener("search", handleFilter);

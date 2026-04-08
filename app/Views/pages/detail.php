@@ -565,7 +565,7 @@ endif; ?>
     <script src="<?= asset_path('assets/js/shared-utils.js?v=3') ?>"></script>
     <script src="<?= asset_path('assets/js/i18n.js') ?>"></script>
     <script src="<?= asset_path('assets/js/title-images.js?v=3') ?>"></script>
-    <script src="<?= asset_path('assets/js/search.js?v=popular2') ?>"></script>
+    <script src="<?= asset_path('assets/js/search.js?v=popular4') ?>"></script>
     <script src="<?= asset_path('assets/js/favorites.js') ?>"></script>
     <script src="<?= asset_path('assets/js/detail-links.js?v=3') ?>"></script>
     <script>window.__DETAIL_ROUTE_INFO = { ref: <?= json_encode($detailRef ?? "") ?>, query: <?= json_encode($detailQuery ?? "") ?> };</script>
@@ -1392,6 +1392,8 @@ endif; ?>
     </script>
     <script data-ui-unlock>document.documentElement.classList.remove("preload-ui");</script>
   </body></html>
+
+
 
 
 

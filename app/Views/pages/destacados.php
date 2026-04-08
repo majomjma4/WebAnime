@@ -431,7 +431,7 @@
     <script src="assets/js/layout.js?v=final14"></script>
     <script src="assets/js/shared-utils.js?v=1"></script>
     <script src="assets/js/i18n.js"></script>
-    <script src="assets/js/search.js?v=popular2"></script>
+    <script src="assets/js/search.js?v=popular4"></script>
     <script src="assets/js/detail-links.js"></script>
     <script>
     document.addEventListener("DOMContentLoaded", () => {
@@ -442,5 +442,7 @@
     </script>
   </body>
 </html>
+
+
 
 
