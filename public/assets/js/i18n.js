@@ -1,4 +1,4 @@
-﻿(() => {
+(() => {
   const buildAssetPath = (path) => {
     const sharedBuilder = window.AniDexShared?.buildAppUrl;
     if (typeof sharedBuilder === "function") return sharedBuilder(path);
@@ -41,7 +41,7 @@
     ["animes", "Animes"],
     ["populares", "Popular"],
     ["popularidad", "Popularity"],
-    ["pelÃ­culas", "Movies"],
+    ["películas", "Movies"],
     ["pel\u00edculas", "Movies"],
     ["fantasy", "Fantasy"],
     ["fancy", "Fantasy"],

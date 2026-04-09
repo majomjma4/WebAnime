@@ -1,4 +1,4 @@
-﻿/* Extracted from app/Views/pages/user.php */
+/* Extracted from app/Views/pages/user.php */
 
 document.addEventListener("DOMContentLoaded", () => {
       if (window.AniDexI18n) window.AniDexI18n.init();
@@ -646,7 +646,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const res = await fetch("api/requests.php?action=create", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ tÃƒÂ­tulo: title, tipo })
+              body: JSON.stringify({ t\u00edtulo: title, tipo })
             });
             const json = await res.json();
             if (!json.success) throw new Error(json.error || "No se pudo enviar la solicitud");
@@ -666,11 +666,11 @@ document.addEventListener("DOMContentLoaded", () => {
       // Initial load & Export refresh (Registry pattern)
       if (window.AniDexLayout && typeof window.AniDexLayout.onReady === "function") {
         window.AniDexLayout.onReady(() => {
-          console.log("[NekoraProfile] AutenticaciÃƒÂ³n lista. Cargando datos con ID:", localStorage.getItem("anidex_user_id"));
+          console.log("[NekoraProfile] Autenticaci\u00f3n lista. Cargando datos con ID:", localStorage.getItem("anidex_user_id"));
           loadProfile();
         });
         window.AniDexLayout.registerRefresh(() => {
-          console.log("[NekoraProfile] SeÃƒÂ±al de refresco recibida.");
+          console.log("[NekoraProfile] Se\u00f1al de refresco recibida.");
           loadProfile(true);
         });
       } else {
@@ -741,8 +741,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       };
       const doLogout = async () => {
-        // CRÃƒÂTICO: guardar en la BD ANTES de borrar localStorage.
-        // Si no se hace esto, los datos agregados desde el ÃƒÂºltimo auto-sync
+        // CRITICO: guardar en la BD ANTES de borrar localStorage.
+        // Si no se hace esto, los datos agregados desde el \u00faltimo auto-sync
         // (hasta 60 seg) se pierden permanentemente al limpiar el storage.
         try {
           if (window.AniDexProfile && typeof window.AniDexProfile.saveToDB === "function") {

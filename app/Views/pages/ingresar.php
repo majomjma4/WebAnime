@@ -149,7 +149,7 @@
           <h1 class="font-headline font-extrabold text-[clamp(1.5rem,3.6vw,2.8rem)] tracking-tight leading-tight whitespace-nowrap">
             Bienvenido a <span class="inline-flex whitespace-nowrap"><span class="text-white">Nekora</span><span class="text-violet-400">List</span></span>
           </h1>
-          <p class="text-on-surface-variant">Accede a tu perfil para guardar y organizar tus títulos.</p>
+          <p class="text-on-surface-variant">Accede a tu perfil para guardar y organizar tus t&iacute;tulos.</p>
         </div>
 
         <form id="login-form" class="mt-8 flex flex-col gap-6" autocomplete="off">
@@ -196,7 +196,7 @@
       })();
     </script>
 
-    <script src="assets/js/layout.js?v=final14"></script>
+    <script src="assets/js/layout.js?v=theme1"></script>
     <script src="assets/js/shared-utils.js?v=1"></script>
     <div id="login-success" class="fixed inset-0 z-[80] hidden">
       <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
@@ -209,7 +209,7 @@
           ¡Bienvenido de nuevo, <span id="login-name">Usuario</span>!
         </h3>
         <p id="login-subtitle" class="text-white/80 text-sm leading-relaxed mt-4">
-          Tu colección de animes te estaba esperando. 🌟
+          Tu colección de animes te estaba esperando.
         </p>
       </div>
     </div>
@@ -258,8 +258,8 @@
         <div class="w-16 h-16 bg-emerald-500/10 text-emerald-400 rounded-full flex items-center justify-center mx-auto mb-4 border border-emerald-500/20">
           <span class="material-symbols-outlined text-3xl">check_circle</span>
         </div>
-        <h3 class="font-headline text-xl font-extrabold text-emerald-400 tracking-wider">¡Correo enviado!</h3>
-        <p class="text-on-surface-variant text-sm mt-3 leading-relaxed">Se ha enviado un mensaje al correo asociado a tu cuenta con las instrucciones para restablecer tu contraseña.</p>
+        <h3 class="font-headline text-xl font-extrabold text-emerald-400 tracking-wider">?Correo enviado!</h3>
+        <p class="text-on-surface-variant text-sm mt-3 leading-relaxed">Se ha enviado un mensaje al correo asociado a tu cuenta con las instrucciones para restablecer tu contrase?a.</p>
         <button type="button" id="forgot-success-btn" class="mt-6 w-full py-3 rounded-full bg-surface-container-low border border-white/5 text-on-surface font-bold text-sm hover:bg-surface-container-highest transition-colors uppercase tracking-widest">Aceptar</button>
       </div>
     </div>
@@ -329,11 +329,11 @@
             
             if (nameEl) nameEl.textContent = name;
             if (isAdmin) {
-                if (titleEl) titleEl.textContent = "Bienvenido, administrador 👑";
+                if (titleEl) titleEl.textContent = "Bienvenido, administrador ðŸ‘‘";
                 if (subtitleEl) subtitleEl.textContent = "Tienes el control total de NekoraList";
             } else {
-                if (titleEl) titleEl.innerHTML = `¡Bienvenido de nuevo, <span id="login-name">${name}</span>!`;
-                if (subtitleEl) subtitleEl.textContent = "Tu colección de animes te estaba esperando. 🌟";
+                if (titleEl) titleEl.innerHTML = `?Bienvenido de nuevo, <span id="login-name">${name}</span>!`;
+                if (subtitleEl) subtitleEl.textContent = "Tu colección de animes te estaba esperando.";
             }
             
             try {
@@ -413,7 +413,7 @@
             }
           } catch (err) {
             hideForgot();
-            showError('Error de conexión al enviar el correo.');
+            showError('Error de conexi?n al enviar el correo.');
           } finally {
             btn.innerText = origText;
             btn.disabled = false;
@@ -435,5 +435,9 @@
     </script>
   </body>
 </html>
+
+
+
+
 
 

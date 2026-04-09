@@ -428,9 +428,9 @@
         btn.classList.toggle('bg-surface-container-lowest', !active);
         btn.classList.toggle('text-on-surface-variant', !active);
       });
-      if (pageTitle) pageTitle.textContent = isMovie ? 'A?adir Nueva Película' : 'A?adir Nuevo Anime';
+      if (pageTitle) pageTitle.textContent = isMovie ? 'A&ntilde;adir Nueva Película' : 'A&ntilde;adir Nuevo Anime';
       if (pageSubtitle) pageSubtitle.textContent = isMovie ? 'Completa los detalles para catalogar una nueva película.' : 'Completa los detalles para catalogar una nueva obra maestra.';
-      if (labelTítulo) labelTítulo.textContent = isMovie ? 'T?tulo de la Película' : 'T?tulo del Anime';
+      if (labelTítulo) labelTítulo.textContent = isMovie ? 'T&iacute;tulo de la Película' : 'T&iacute;tulo del Anime';
       if (títuloInput) títuloInput.placeholder = isMovie ? 'Ej: Koe no Katachi' : 'Ej: Neon Genesis Evangelion';
       if (submitLabel) submitLabel.textContent = isMovie ? 'Subir Película' : 'Subir Anime';
 
@@ -442,8 +442,8 @@
 
       if (estadoSelect) {
         estadoSelect.innerHTML = isMovie
-          ? `<option value="Upcoming">Proximamente</option><option value="In Theaters">En cartelera</option><option value="Finished">Finalizado</option><option value="Cancelled">Cancelado</option>`
-          : `<option value="ALL">Todos</option><option value="Airing">En emisión</option><option value="Finished">Finalizado</option><option value="Upcoming">Proximamente</option><option value="Cancelled">Cancelado</option>`;
+          ? `<option value="Upcoming">Pr&oacute;ximamente</option><option value="In Theaters">En cartelera</option><option value="Finished">Finalizado</option><option value="Cancelled">Cancelado</option>`
+          : `<option value="ALL">Todos</option><option value="Airing">En emisión</option><option value="Finished">Finalizado</option><option value="Upcoming">Pr&oacute;ximamente</option><option value="Cancelled">Cancelado</option>`;
       }
 
       if (temporadaWrap) {

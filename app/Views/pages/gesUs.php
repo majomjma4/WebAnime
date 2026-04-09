@@ -450,9 +450,9 @@
     }
 
     function updateStats(users, stats) {
-        document.getElementById('stat-active').textContent = stats.active_now ?? 0;
-        document.getElementById('stat-banned').textContent = stats.blocked_users ?? users.filter(u => u.status === 'BLOQUEADO').length;
-        document.getElementById('stat-admin').textContent = stats.admin_users ?? 0;
+        document.getElementById('stat-active').textContent = stats.active_now &iquest; 0;
+        document.getElementById('stat-banned').textContent = stats.blocked_users &iquest; users.filter(u => u.status === 'BLOQUEADO').length;
+        document.getElementById('stat-admin').textContent = stats.admin_users &iquest; 0;
         document.getElementById('stat-new').textContent = users.length;
     }
 

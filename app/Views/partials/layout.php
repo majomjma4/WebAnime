@@ -1,16 +1,13 @@
 ﻿<style data-layout-style="layout-logo">
-  @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&display=swap");
   .logo-badge {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    padding: 0.35rem 0.8rem;
     gap: 0.8rem;
-    border-radius: 9999px;
-    background: transparent;
-    border: none;
-    box-shadow: none;
+    text-decoration: none;
   }
+
+
+
 
   .logo-icon {
     width: 44px;
@@ -39,6 +36,8 @@
   .logo-text-stack {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
     line-height: 1.1;
   }
 
@@ -587,7 +586,7 @@
 <!-- Navbar Component -->
 <template id="layout-header">
   <nav class="fixed top-0 w-full z-50 bg-neutral-950/70 backdrop-blur-xl shadow-[0px_20px_40px_rgba(0,0,0,0.4)] transition-all duration-300">
-    <div class="flex items-center justify-between px-5 h-20 w-full font-['Manrope'] antialiased">
+    <div class="flex items-center justify-between px-5 h-[5.6rem] pt-2 w-full font-['Manrope'] antialiased">
       <a class="logo-badge" href="<?= route_path('home') ?>" aria-label="NekoraList">
         <img src="<?= asset_path('img/icon3.png') ?>" alt="NekoraList" class="logo-icon" />
         <span class="logo-text-stack">
@@ -611,7 +610,7 @@
             type="text"
           />
         </div>
-        <div class="relative">
+<div class="relative">
           <button
             class="flex items-center gap-2 rounded-full bg-surface-container-high px-3 py-2 text-xs font-semibold text-on-surface-variant hover:text-on-surface transition-colors"
             type="button"
@@ -808,6 +807,19 @@
     </div>
   </footer>
 </template>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

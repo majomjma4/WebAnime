@@ -9,7 +9,7 @@
     const heading = card.querySelector?.("h1,h2,h3,h4,h5");
     if (heading?.textContent?.trim()) {
       const hText = heading.textContent.trim();
-      if (!/^(Anime|Pelicula|Película|Movie|TV|OVA|Special|Hoy)$/i.test(hText)) return hText;
+      if (!/^(Anime|Pelicula|Pelcula|Movie|TV|OVA|Special|Hoy)$/i.test(hText)) return hText;
     }
 
     const bolds = Array.from(card.querySelectorAll?.(".font-bold, .font-semibold, .font-headline") || []);
@@ -17,7 +17,7 @@
       .map((n) => (n.textContent || "").trim())
       .find((t) => {
         if (!t || t.length <= 2) return false;
-        if (/^(Anime|Pelicula|Película|Movie|TV|OVA|Special|Finalizado|En emision|En emisión|Hoy|Favoritos)$/i.test(t)) return false;
+        if (/^(Anime|Pelicula|Pelcula|Movie|TV|OVA|Special|Finalizado|En emision|En emisin|Hoy|Favoritos)$/i.test(t)) return false;
         return /[a-zA-Z]/.test(t) && !/^\d+([.,]\d+)?$/.test(t);
       });
 
@@ -87,6 +87,16 @@
             return;
           }
 
+          const cardAnchor = target.matches("a[href*='detail']")
+            ? target
+            : target.querySelector?.("a[href*='detail']") || target.closest("article, .group, [data-anime-card]")?.querySelector?.("a[href*='detail']");
+          if (cardAnchor?.href) {
+            e.preventDefault();
+            e.stopPropagation();
+            window.location.href = cardAnchor.href;
+            return;
+          }
+
           const malId = target.getAttribute("data-mal-id") || target.closest("[data-mal-id]")?.getAttribute("data-mal-id") || "";
           const title = pickTitleFromCard(target);
           if (!malId && !title) return;
@@ -100,4 +110,10 @@
   };
 
   window.AniDexDetailLinks = { init: wireLinks };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", wireLinks, { once: true });
+  } else {
+    wireLinks();
+  }
 })();

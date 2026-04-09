@@ -1,11 +1,11 @@
-﻿const AniDexDetailDataBoot = () => {
+const AniDexDetailDataBoot = () => {
   const appUrl = window.AniDexShared?.buildAppUrl || ((path = "") => String(path || ""));
   const API = appUrl("api/jikan_proxy");
   const DETAIL_OVERRIDES = {
     57658: {
       episodes: 12,
       synopsis:
-        "Tras las masacres de Shibuya, Itadori, cargado de culpa y preocupado por el interÃ©s de Sukuna en Fushiguro, decide no volver a la Preparatoria de HechicerÃ­a. Se une a Choso para exorcizar los espÃ­ritus liberados por Noritoshi Kamo. En medio del caos, la cÃºpula jujutsu reactiva la ejecuciÃ³n de Itadori y asigna a Yuta Okkotsu como su verdugo. Hechiceros modernos y antiguos, ahora jugadores del Juego de la ExterminaciÃ³n, chocan con motivos opuestos y empujan al mundo hacia una nueva era dominada por la hechicerÃ­a."
+        "Tras las masacres de Shibuya, Itadori, cargado de culpa y preocupado por el inter?s de Sukuna en Fushiguro, decide no volver a la Preparatoria de Hechicer?a. Se une a Choso para exorcizar los esp?ritus liberados por Noritoshi Kamo. En medio del caos, la c?pula jujutsu reactiva la ejecuci?n de Itadori y asigna a Yuta Okkotsu como su verdugo. Hechiceros modernos y antiguos, ahora jugadores del Juego de la Exterminaci?n, chocan con motivos opuestos y empujan al mundo hacia una nueva era dominada por la hechicer?a."
     },
     60058: {
       title: "Oshi no Ko Season 3"
@@ -20,8 +20,8 @@
     Romance: "Romance",
     Suspense: "Suspenso",
     Mystery: "Misterio",
-    SciFi: "Ciencia ficciÃ³n",
-    "Sci-Fi": "Ciencia ficciÃ³n",
+    SciFi: "Ciencia ficci?n",
+    "Sci-Fi": "Ciencia ficci?n",
     Horror: "Terror",
     Sports: "Deportes",
     "Slice of Life": "Recuentos de la vida",
@@ -139,8 +139,8 @@
   const toSpanishStatus = (value) => {
     const v = (value || "").toLowerCase();
     if (v.includes("finished")) return "Finalizado";
-    if (v.includes("currently")) return "En emisiÃ³n";
-    if (v.includes("not yet")) return "PrÃ³ximamente";
+    if (v.includes("currently")) return "En emisiÃƒÆ’Ã‚Â³n";
+    if (v.includes("not yet")) return "PrÃƒÆ’Ã‚Â³ximamente";
     return value || "N/A";
   };
 
@@ -160,9 +160,9 @@
   const toSpanishRating = (value) => {
     const v = value || "";
     return v
-      .replace("R - 17+ (violence & profanity)", "R - 17+ (violencia y lenguaje explÃ­cito)")
-      .replace("PG-13 - Teens 13 or older", "PG-13 - Mayores de 13 aÃ±os")
-      .replace("PG - Children", "PG - PÃºblico general")
+      .replace("R - 17+ (violence & profanity)", "R - 17+ (violencia y lenguaje explÃƒÆ’Ã‚Â­cito)")
+      .replace("PG-13 - Teens 13 or older", "PG-13 - Mayores de 13 aÃƒÆ’Ã‚Â±os")
+      .replace("PG - Children", "PG - PÃƒÆ’Ã‚Âºblico general")
       .replace("G - All Ages", "G - Todas las edades")
       .replace("Rx - Hentai", "Rx - Adultos");
   };
@@ -449,6 +449,9 @@
         sub.className = "text-sm text-on-surface-variant font-medium mt-1";
         titleMain.insertAdjacentElement("afterend", sub);
       }
+      sub.textContent = originalTitle && originalTitle !== preferredTitle ? originalTitle : "";
+      sub.style.display = sub.textContent ? "block" : "none";
+    }
     document.title = `${preferredTitle} | NekoraList`;
     const cleanDetailUrl = window.AniDexShared?.buildDetailUrl
       ? window.AniDexShared.buildDetailUrl(String(selectedId || ""), preferredTitle || query || "")
@@ -724,7 +727,7 @@
         <span class="text-outline-variant">&gt;&lt;</span>
         <span>Episodios: ${epsText}</span>
         <span class="text-outline-variant">&gt;&lt;</span>
-        <span>DuraciÃ³n: ${durText}</span>
+        <span>Duraci?n: ${durText}</span>
       `;
     }
 
@@ -743,9 +746,9 @@
       renderMetaBlock(infoBlock, "T\u00edtulo nativo", full.title_japanese || full.title_japanese_full);
       renderMetaBlock(infoBlock, "Estudio", (full.studios || []).map(s => s.name).join(", "));
       renderMetaBlock(infoBlock, "Fuente", await translateToEs(full.source));
-      renderMetaBlock(infoBlock, "EmisiÃ³n", full.aired?.string || "N/A");
-      renderMetaBlock(infoBlock, "ClasificaciÃ³n", toSpanishRating(full.rating));
-      if (full.score) renderMetaBlock(infoBlock, "PuntuaciÃ³n", `${full.score} (${full.scored_by || 0} votos)`);
+      renderMetaBlock(infoBlock, "Emisi?n", full.aired?.string || "N/A");
+      renderMetaBlock(infoBlock, "Clasificaci?n", toSpanishRating(full.rating));
+      if (full.score) renderMetaBlock(infoBlock, "Puntuaci?n", `${full.score} (${full.scored_by || 0} votos)`);
     }
 
     const synopsisBlockEl = Array.from(document.querySelectorAll("h2"))
@@ -824,7 +827,7 @@
       );
       const fallbackEpisodeSynopsis = (epNumber) => {
         const animeLabel = preferredTitle || full.title || "este anime";
-        return `Sinopsis no disponible todavÃ­a para el episodio ${epNumber} de ${animeLabel}.`;
+        return `Sinopsis no disponible todav?a para el episodio ${epNumber} de ${animeLabel}.`;
       };
       const episodeItems = Array.from({ length: episodesTotal }).map((_, index) => {
         const epNumber = index + 1;
@@ -982,7 +985,7 @@
         <div class="space-y-4" data-episodes-list></div>
         <div class="pt-2 flex justify-center">
           <button type="button" data-episodes-more class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full border border-violet-400/40 bg-violet-500/10 px-6 py-3 text-sm font-bold uppercase tracking-widest text-violet-100 shadow-[0_0_14px_rgba(139,92,246,0.25)] transition-all duration-300 hover:bg-violet-500/20 hover:border-violet-300 hover:shadow-[0_0_22px_rgba(139,92,246,0.45)] hover:-translate-y-0.5">
-            Ver mÃ¡s episodios
+            Ver m?s episodios
           </button>
         </div>
       `;
@@ -1000,7 +1003,7 @@
       const lockEpisodes = () => {
         const lockText = isLogged
           ? "Activa el modo premium para ver los episodios"
-          : "Inicia sesiÃ³n y accede al modo premium para ver los episodios";
+          : "Inicia sesiÃƒÆ’Ã‚Â³n y accede al modo premium para ver los episodios";
         const goPremium = () => {
           window.location.href = isLogged ? "pago" : "registro";
         };
@@ -1353,7 +1356,7 @@
       const episodesValue = full.episodes || "";
       statusLine.className = "text-on-surface-variant font-medium space-y-2 text-sm lg:text-base";
       const yearBlock = (!isMovie || yearValue)
-        ? `<span class="flex flex-col"><span class="text-primary-dim text-xs uppercase tracking-wider">AÃ±o</span><span>${yearValue || "N/A"}</span></span>`
+        ? `<span class="flex flex-col"><span class="text-primary-dim text-xs uppercase tracking-wider">AÃƒÆ’Ã‚Â±o</span><span>${yearValue || "N/A"}</span></span>`
         : "";
       const episodesBlock = !isMovie
         ? `<div><span class="flex flex-col"><span class="text-primary-dim text-xs uppercase tracking-wider">Episodios</span><span>${episodesValue || "N/A"}</span></span></div>`
@@ -1376,14 +1379,14 @@
 
     const synopsisBlock = Array.from(document.querySelectorAll("h2"))
       .find((x) => /sinopsis/i.test(x.textContent || ""))?.parentElement;
-    const infoBox = Array.from(document.querySelectorAll("h3")).find((x) => /informaci/i.test(x.textContent || ""));
-    const infoList = infoBox?.parentElement?.querySelector(".space-y-6");
+    const infoBox = document.getElementById("detail-info-block");
+    const infoList = infoBox;
     if (infoList) {
-      infoList.innerHTML = "";
-      renderMetaBlock(infoList, "T\u00edtulo (EN)", full.title_english || "N/A");
-      renderMetaBlock(infoList, "T\u00edtulo (JP)", full.title_japanese || "N/A");
-      renderMetaBlock(infoList, "DuraciÃ³n", toSpanishDuration(full.duration) || "N/A");
-      renderMetaBlock(infoList, "ClasificaciÃ³n", toSpanishRating(full.rating) || "N/A");
+      infoList.innerHTML = `<h3 class="font-headline text-xl font-bold border-b border-outline-variant/10 pb-4">Informaci&oacute;n</h3>`;
+      renderMetaBlock(infoList, "T\u00edtulo (EN)", full.title_english || preferredTitle || "N/A");
+      renderMetaBlock(infoList, "T\u00edtulo (JP)", full.title_japanese || originalTitle || "N/A");
+      renderMetaBlock(infoList, "Duraci&oacute;n", toSpanishDuration(full.duration) || "N/A");
+      renderMetaBlock(infoList, "Clasificaci&oacute;n", toSpanishRating(full.rating) || "N/A");
       renderMetaBlock(infoList, "Ranking", full.rank ? `# ${full.rank}` : "N/A");
       renderMetaBlock(infoList, "Estudio", full.studios?.[0]?.name || "N/A");
     }
@@ -1470,7 +1473,7 @@
       window.addEventListener("resize", alignMediaToInfo);
     });
 
-    const charsRow = document.querySelector(".hide-scrollbar");
+    const charsRow = document.getElementById("chars-row") || document.querySelector(".hide-scrollbar");
     if (charsRow) {
       const mains = chars.filter((c) => /main/i.test(c?.role || ""));
       const supports = chars.filter((c) => !/main/i.test(c?.role || ""));
@@ -1483,7 +1486,7 @@
       charsRow.innerHTML = topChars.map((c, idx) => {
         const cleanName = (c.character?.name || "Personaje").replace(/,/g, "");
         const roleLabel = /main/i.test(c?.role || "") ? "principal" : "secundario";
-        const fallbackMini = "Cargando biografÃ­a...";
+        const fallbackMini = "Cargando biografÃƒÆ’Ã‚Â­a...";
         const desc = fallbackMini;
         const charId = c.character?.mal_id || "";
         const charImg = c.character?.images?.jpg?.image_url || "";
@@ -1511,23 +1514,23 @@
                   const j = await r.json();
                   const rawAbout = (j?.data?.about || "").replace(/\\n/g, " ").replace(/\r\n/g, " ").trim();
                   if (!rawAbout) {
-                      cardMini.textContent = "Sin descripciÃ³n biogrÃ¡fica registrada.";
+                      cardMini.textContent = "Sin descripci?n biogr?fica registrada.";
                       await delay(350);
                       continue; 
                   }
                   const miniSummary = await getMiniSummary(rawAbout);
                   if (!miniSummary) {
-                      cardMini.textContent = "Sin descripciÃ³n biogrÃ¡fica registrada.";
+                      cardMini.textContent = "Sin descripci?n biogr?fica registrada.";
                       await delay(350);
                       continue; 
                   }
                   cardMini.textContent = miniSummary;
                } else {
-                  cardMini.textContent = "Sin descripciÃ³n biogrÃ¡fica registrada.";
+                  cardMini.textContent = "Sin descripci?n biogr?fica registrada.";
                }
                await delay(450);
             } catch {
-               cardMini.textContent = "Error de conexiÃ³n temporal.";
+               cardMini.textContent = "Error de conexi?n temporal.";
             }
          }
       };
@@ -1617,7 +1620,7 @@
                   <div class="h-px w-16 bg-violet-400/40"></div>
                   <div>
                     <h4 class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Descripci\u00f3n</h4>
-                    <p data-char-info class="text-sm text-on-surface-variant leading-relaxed mt-2">Cargando informaciÃ³n del personaje...</p>
+                    <p data-char-info class="text-sm text-on-surface-variant leading-relaxed mt-2">Cargando informaciÃƒÆ’Ã‚Â³n del personaje...</p>
                   </div>
                   <div class="h-px w-16 bg-violet-400/40"></div>
                   <div data-char-fields-wrap>
@@ -1687,7 +1690,7 @@
           const data = json?.data || {};
           
           const fieldMap = {
-            "Birthday": "CumpleaÃ±os",
+            "Birthday": "CumpleaÃƒÆ’Ã‚Â±os",
             "Height": "Altura"
           };
           const fields = [];
@@ -1710,7 +1713,7 @@
             if (fields.some((f) => f.label === label)) return;
             fields.push({ label, value: clean });
           };
-          // addField("CumpleaÃ±os", data?.birthday);
+          // addField("CumpleaÃƒÆ’Ã‚Â±os", data?.birthday);
           // addField("Altura", data?.height);
           if (typeof data?.favorites === "number") {
              addField("Popularidad", ` ${data.favorites} favoritos`);
@@ -1724,8 +1727,8 @@
               .filter(Boolean)
               .join(" ");
           const voiceJp = voiceNames("japanese");
-          const voiceEs = voiceNames("spanish") || voiceNames("espaÃ±ol");
-          addField("Doblaje japonÃ©s", voiceJp);
+          const voiceEs = voiceNames("spanish") || voiceNames("espa?ol");
+          addField("Doblaje japon?s", voiceJp);
           addField("Doblaje espa\u00f1ol", voiceEs);
 
           const escapeHtml = (value) =>
@@ -1836,7 +1839,7 @@
     if (mediaBlock) {
       const images = pics.slice(0, 20);
       if (images.length) {
-        mediaBlock.appendChild(slider("GalerÃ­a", images, (it) => `
+        mediaBlock.appendChild(slider("Galer?a", images, (it) => `
           <img data-zoomable src="${it?.jpg?.large_image_url || it?.jpg?.image_url || ""}" class="h-56 w-full object-cover cursor-zoom-in rounded-2xl" />
         `, "detail-images"));
       }
@@ -1879,7 +1882,7 @@
     document.body.dataset.detailType = (full.type || "").toLowerCase() === "movie" ? "Pel\u00edcula" : "Anime";
     if (window.AniDexFavorites) window.AniDexFavorites.refresh();
 
-    // Recomendados: si es pelÃ­cula, mostrar pelÃ­culas; si no, series.
+    // Recomendados: si es pelÃƒÆ’Ã‚Â­cula, mostrar pel&iacute;culas; si no, series.
     const recCards = Array.from(document.querySelectorAll("section a.group.cursor-pointer"));
     if (recCards.length) {
       const recType = (full.type || "").toLowerCase() === "movie" ? "movie" : "tv";
@@ -1916,6 +1919,7 @@
 };
 
 AniDexDetailDataBoot();
+
 
 
 

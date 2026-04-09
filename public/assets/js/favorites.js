@@ -15,7 +15,7 @@
   
   const isLoggedIn = () => getIsLoggedIn();
 
-  // ── Clave aislada por usuario ────────────────────────────────────────────────
+  // â”€â”€ Clave aislada por usuario â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   // Delega en AniDexProfile.getIsolatedKey para garantizar que la clave ES
   // exactamente la misma que usa layout.js al salvar/restaurar desde la BD.
   // Para invitados usa la clave base (sin sufijo) como fallback.
@@ -26,7 +26,7 @@
     return baseKey;
   };
 
-  // Getters de clave dinámica (se evalúan en tiempo de llamada, no al inicio)
+  // Getters de clave din?mica (se eval?an en tiempo de llamada, no al inicio)
   const KEY_MY_LIST   = () => resolveKey(BASE_MY_LIST);
   const KEY_FAVORITES = () => resolveKey(BASE_FAVORITES);
   const KEY_STATUS    = () => resolveKey(BASE_STATUS);
@@ -444,7 +444,7 @@
       grid.innerHTML = `
         <div class="col-span-full bg-surface-container-low rounded-2xl p-6 flex flex-col items-center text-center gap-3 w-full max-w-md mx-auto justify-self-center">
           <img src="https://media1.tenor.com/m/2jDTzP6EqAwAAAAd/doraemon-cries.gif" alt="Doraemon triste" class="w-20 h-20 rounded-full opacity-90" />
-          <p class="text-sm text-on-surface-variant font-semibold">No hay nada an agregado.</p>
+          <p class="text-sm text-on-surface-variant font-semibold">No hay nada agregado.</p>
         </div>`;
       return;
     }
@@ -571,7 +571,7 @@
       grid.innerHTML = `
         <div class="col-span-full bg-surface-container-low rounded-2xl p-6 flex flex-col items-center text-center gap-3 w-full max-w-md mx-auto justify-self-center">
           <img src="https://media1.tenor.com/m/2jDTzP6EqAwAAAAd/doraemon-cries.gif" alt="Doraemon triste" class="w-20 h-20 rounded-full opacity-90" />
-          <p class="text-sm text-on-surface-variant font-semibold">No hay nada an agregado.</p>
+          <p class="text-sm text-on-surface-variant font-semibold">No hay nada agregado.</p>
         </div>`;
       return;
     }
@@ -698,7 +698,7 @@
       grid.innerHTML = `
         <div class="col-span-full bg-surface-container-low rounded-2xl p-6 flex flex-col items-center text-center gap-3">
           <img src="https://media1.tenor.com/m/2jDTzP6EqAwAAAAd/doraemon-cries.gif" alt="Doraemon triste" class="w-20 h-20 rounded-full opacity-90" />
-          <p class="text-sm text-on-surface-variant font-semibold">No hay nada an agregado.</p>
+          <p class="text-sm text-on-surface-variant font-semibold">No hay nada agregado.</p>
         </div>`;
       return;
     }
@@ -790,3 +790,5 @@
     }
   };
 })();
+
+

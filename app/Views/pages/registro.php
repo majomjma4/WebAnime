@@ -210,7 +210,7 @@
       })();
     </script>
 
-    <script src="assets/js/layout.js?v=final14"></script>
+    <script src="assets/js/layout.js?v=theme1"></script>
     <script src="assets/js/shared-utils.js?v=1"></script>
     <div id="register-success" class="fixed inset-0 z-[80] hidden">
       <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
@@ -219,12 +219,12 @@
         <span class="pointer-events-none absolute -bottom-24 -left-16 h-44 w-44 rounded-full bg-fuchsia-500/20 blur-3xl"></span>
         <button type="button" id="register-close" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant hover:text-on-surface flex items-center justify-center">x</button>
         <img src="img/doraemon.gif" alt="Doraemon feliz" class="w-20 h-20 mx-auto mb-4 rounded-full" />
-        <h3 class="font-headline text-3xl font-extrabold text-white">¡Bienvenido a</h3>
+        <h3 class="font-headline text-3xl font-extrabold text-white">&iexcl;Bienvenido a</h3>
         <h4 class="font-headline text-2xl font-extrabold text-violet-400 mt-2">
           NekoraList, <span id="register-name">Usuario</span>!
         </h4>
         <p class="text-white/80 text-sm leading-relaxed mt-4">
-          Tu viaje por el mundo del anime comienza ahora. 🌟<br/>
+          Tu viaje por el mundo del anime comienza ahora. ðŸŒŸ<br/>
           Agrega tus favoritos, organiza tu lista y descubre nuevas aventuras cada día.
         </p>
       </div>
@@ -239,7 +239,7 @@
         <div class="w-16 h-16 bg-error/10 text-error rounded-full flex items-center justify-center mx-auto mb-4 border border-error/20">
           <span class="material-symbols-outlined text-3xl">warning</span>
         </div>
-        <h3 class="font-headline text-xl font-extrabold text-error italic uppercase tracking-wider">¡Ups! Algo salió mal</h3>
+        <h3 class="font-headline text-xl font-extrabold text-error italic uppercase tracking-wider">?Ups! Algo sali? mal</h3>
         <p id="error-message" class="text-on-surface-variant text-sm mt-3 leading-relaxed"></p>
         <button type="button" id="error-btn" class="mt-6 w-full py-3 rounded-full bg-surface-container-low border border-white/5 text-on-surface font-bold text-sm hover:bg-surface-container-highest transition-colors uppercase tracking-widest">Aceptar</button>
       </div>
@@ -282,7 +282,7 @@
       const pass = document.getElementById("register-pass");
       const passConfirm = document.getElementById("register-pass-confirm");
       if (pass && passConfirm && pass.value !== passConfirm.value) {
-        showError("Las contraseñas no coinciden.");
+        showError("Las contrase?as no coinciden.");
         btn.innerText = textOrig;
         btn.disabled = false;
         return;
@@ -338,5 +338,7 @@
     </script>
   </body>
 </html>
+
+
 
 

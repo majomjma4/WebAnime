@@ -1,4 +1,4 @@
-﻿
+
 <!DOCTYPE html>
 <html class="dark" lang="en"><head>
     <script data-ui-preload>document.documentElement.classList.add("preload-ui");</script>
@@ -278,25 +278,25 @@
                 <span class="flex items-center gap-1 text-primary-dim">
                   <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
                   <span class="font-bold text-lg">8.7</span>
-                  <span class="text-on-surface-variant text-sm font-normal ml-1">PuntuaciÃ³n</span>
+                  <span class="text-on-surface-variant text-sm font-normal ml-1">Puntuaci&oacute;n</span>
                 </span>
               </div>
               <h1 class="font-headline text-5xl lg:text-7xl font-extrabold tracking-tighter text-on-surface">Solo Leveling</h1>
               <p id="detail-status-meta" class="text-on-surface-variant font-medium flex gap-4 text-sm lg:text-base">
-                <span>Estado: En emisiÃ³n</span>
+                <span>Estado: En emisi&oacute;n</span>
                 <span class="text-outline-variant">&gt;&lt;</span>
                 <span>Episodios: 12/24</span>
                 <span class="text-outline-variant">&gt;&lt;</span>
-                <span>DuraciÃ³n: 24m</span>
+                <span>Duraci&oacute;n: 24m</span>
               </p>
             </div>
             <div id="detail-genres" class="flex flex-wrap gap-2">
-              <span class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant text-sm rounded-full border border-outline-variant/10">AcciÃ³n</span>
-              <span class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant text-sm rounded-full border border-outline-variant/10">FantasÃ­a</span>
+              <span class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant text-sm rounded-full border border-outline-variant/10">Acci&oacute;n</span>
+              <span class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant text-sm rounded-full border border-outline-variant/10">Fantas&iacute;a</span>
               <span class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant text-sm rounded-full border border-outline-variant/10">Aventura</span>
             </div>
             <div class="flex flex-wrap gap-4 pt-2 items-center">
-              <a data-add-my-list class="px-8 py-3.5 bg-transparent border border-sky-400/40 text-on-surface font-bold rounded-full hover:border-sky-400/70 hover:bg-surface-container-high transition-all flex items-center gap-2 shadow-[0_0_14px_rgba(56,189,248,0.25)] hover:shadow-[0_0_22px_rgba(56,189,248,0.45)]" href="<?= route_path('user') ?>"><span class="material-symbols-outlined">add</span><span data-add-label>AÃ±adir a Mi Lista</span></a>
+              <a data-add-my-list class="px-8 py-3.5 bg-transparent border border-sky-400/40 text-on-surface font-bold rounded-full hover:border-sky-400/70 hover:bg-surface-container-high transition-all flex items-center gap-2 shadow-[0_0_14px_rgba(56,189,248,0.25)] hover:shadow-[0_0_22px_rgba(56,189,248,0.45)]" href="<?= route_path('user') ?>"><span class="material-symbols-outlined">add</span><span data-add-label>A&ntilde;adir a Mi Lista</span></a>
 <?php if ($isLoggedIn): ?>
               <button data-add-favorite class="hidden group w-12 h-12 p-0 bg-transparent border border-rose-400/40 text-on-surface-variant rounded-full hover:border-rose-400/70 hover:bg-surface-container-high transition-all flex items-center justify-center relative shadow-[0_0_14px_rgba(244,63,94,0.3)] hover:shadow-[0_0_22px_rgba(244,63,94,0.55)]" type="button"><span class="material-symbols-outlined text-[20px]">favorite</span><span data-fav-label class="pointer-events-none absolute left-1/2 top-full mt-2 -translate-x-1/2 whitespace-nowrap rounded-full bg-surface-container-high px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-on-surface opacity-0 transition-opacity duration-200 group-hover:opacity-100">Agregar a Favoritos</span></button>
               <button data-detail-status="completed" class="hidden group w-12 h-12 p-0 bg-transparent border border-emerald-400/40 text-on-surface-variant rounded-full hover:border-emerald-400/70 hover:bg-surface-container-high transition-all flex items-center justify-center relative shadow-[0_0_14px_rgba(16,185,129,0.3)] hover:shadow-[0_0_22px_rgba(16,185,129,0.55)]" type="button">
@@ -315,7 +315,7 @@ endif; ?>
       </section>
       <!-- Detailed Content Area -->
       <section class="max-w-7xl mx-auto px-8 py-20 grid grid-cols-1 lg:grid-cols-3 gap-16">
-        <!-- Left Column: Sinopsis, GalerÃ­a y Personajes -->
+        <!-- Left Column: Sinopsis, Galer?a y Personajes -->
         <div class="lg:col-span-2 space-y-12 detail-left-col">
           <!-- Synopsis -->
           <div class="space-y-6">
@@ -327,13 +327,13 @@ endif; ?>
             </p>
           </div>
         </div>
-        <!-- Right Column: InformaciÃ³n -->
+        <!-- Right Column: Informaci?n -->
         <div class="space-y-10">
           <div class="bg-surface-container-low rounded-lg p-8 border border-outline-variant/5 space-y-8">
-        <!-- Right Column: InformaciÃ³n -->
+        <!-- Right Column: Informaci?n -->
             <div id="detail-info-block" class="space-y-6">
               <div class="flex flex-col gap-1">
-            <h3 class="font-headline text-xl font-bold border-b border-outline-variant/10 pb-4">InformaciÃ³n</h3>
+            <h3 class="font-headline text-xl font-bold border-b border-outline-variant/10 pb-4">Informaci?n</h3>
                 <span class="text-on-surface font-medium">...</span>
               </div>
               <div class="flex flex-col gap-1">
@@ -412,7 +412,7 @@ endif; ?>
         <div class="flex items-end justify-between">
           <div>
             <h2 class="font-headline text-4xl font-extrabold tracking-tight">Recomendado para Ti</h2>
-            <p class="text-on-surface-variant mt-2">Otros tÃ­tulos que te pueden interesar</p>
+            <p class="text-on-surface-variant mt-2">Otros t&iacute;tulos que te pueden interesar</p>
           </div>
         </div>
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
@@ -433,7 +433,7 @@ endif; ?>
         <div class="flex flex-wrap items-end justify-between gap-4">
           <div>
             <h2 class="font-headline text-4xl font-extrabold tracking-tight">Comentarios</h2>
-            <p class="text-on-surface-variant mt-2">Comparte tu opiniÃ³n y califica el tÃ­tulo con estrellitas.</p>
+            <p class="text-on-surface-variant mt-2">Comparte tu opini&oacute;n y califica el t&iacute;tulo con estrellitas.</p>
           </div>
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-[1.1fr,0.9fr] gap-8">
@@ -447,7 +447,7 @@ endif; ?>
                       <span class="material-symbols-outlined text-4xl">lock</span>
                     </div>
                     <div class="text-center px-4">
-                      <span class="block text-white font-bold text-lg tracking-tight mb-1" id="lock-message">INICIA SESIÃ“N PARA COMENTAR</span>
+                      <span class="block text-white font-bold text-lg tracking-tight mb-1" id="lock-message">INICIA SESI&Oacute;N PARA COMENTAR</span>
                       <span class="text-[11px] text-on-surface-variant/70 uppercase tracking-widest leading-none">DISPONIBLE PARA MIEMBROS NEKORA PREMIUM</span>
                     </div>
                  </div>
@@ -456,11 +456,11 @@ endif; ?>
 
             <div>
               <h3 class="font-headline text-2xl font-bold">Deja tu comentario</h3>
-              <p class="text-sm text-on-surface-variant mt-1">SÃ© breve, claro y respetuoso.</p>
+              <p class="text-sm text-on-surface-variant mt-1">S&eacute; breve, claro y respetuoso.</p>
             </div>
             <div class="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-3">
               <div class="flex items-center justify-between gap-3">
-                <span class="text-xs uppercase tracking-[0.3em] text-on-surface-variant">PuntuaciÃ³n</span>
+                <span class="text-xs uppercase tracking-[0.3em] text-on-surface-variant">Puntuaci&oacute;n</span>
                 <span id="rating-value" class="text-sm font-semibold text-on-surface">0/5</span>
               </div>
               <div class="flex items-center gap-2" id="rating-stars">
@@ -480,19 +480,19 @@ endif; ?>
                   <span class="material-symbols-outlined text-[24px] transition-transform duration-200" style="font-variation-settings: 'FILL' 1;">star</span>
                 </button>
               </div>
-              <p id="rating-help" class="text-xs text-on-surface-variant">Selecciona tu calificaciÃ³n antes de comentar.</p>
+              <p id="rating-help" class="text-xs text-on-surface-variant">Selecciona tu calificaci&oacute;n antes de comentar.</p>
             </div>
             <div class="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-2">
               <label for="comment-text" class="text-xs uppercase tracking-[0.3em] text-on-surface-variant">Tu comentario</label>
               <textarea id="comment-text" rows="4" maxlength="400" class="w-full bg-transparent border border-white/10 rounded-2xl px-4 py-3 text-sm text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:ring-2 focus:ring-primary/40" placeholder="Escribe algo que ayude a otros fans..."></textarea>
               <div class="flex items-center justify-between text-xs text-on-surface-variant">
-                <span id="comment-error" class="hidden text-rose-300">Agrega una puntuaciÃ³n y un comentario.</span>
+                <span id="comment-error" class="hidden text-rose-300">Agrega una puntuaci?n y un comentario.</span>
                 <span id="comment-count">0/400</span>
               </div>
             </div>
             <div class="flex flex-wrap items-center gap-4">
               <button type="submit" id="comment-submit" class="rounded-full bg-gradient-to-br from-sky-500 to-violet-500 px-6 py-3 text-sm font-bold uppercase tracking-widest text-white shadow-lg hover:scale-105 active:scale-95 transition-transform">Publicar</button>
-              <span class="text-xs text-on-surface-variant">Tu opiniÃ³n ayuda a la comunidad.</span>
+              <span class="text-xs text-on-surface-variant">Tu opini&oacute;n ayuda a la comunidad.</span>
             </div>
           </form>
           <div class="rounded-3xl border border-white/10 bg-surface-container-low/60 p-6 md:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.4)] space-y-4">
@@ -515,7 +515,7 @@ endif; ?>
             </div>
             <div id="comments-list" class="space-y-4"></div>
             <div id="comments-more-wrap" class="hidden pt-2 flex justify-center">
-              <button id="comments-more" type="button" class="rounded-full border border-white/10 bg-white/5 px-5 py-2 text-xs font-semibold uppercase tracking-widest text-on-surface-variant hover:border-primary/50 hover:text-primary transition-all">Ver mÃ¡s comentarios</button>
+              <button id="comments-more" type="button" class="rounded-full border border-white/10 bg-white/5 px-5 py-2 text-xs font-semibold uppercase tracking-widest text-on-surface-variant hover:border-primary/50 hover:text-primary transition-all">Ver m&aacute;s comentarios</button>
             </div>
           </div>
           <div id="delete-comment-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 px-6">
@@ -524,7 +524,7 @@ endif; ?>
                 <h4 class="text-lg font-semibold">Eliminar comentario</h4>
                 <button id="delete-comment-close" type="button" class="w-8 h-8 rounded-full border border-white/10 bg-white/5 text-on-surface-variant hover:text-on-surface">X</button>
               </div>
-              <p class="text-sm text-on-surface-variant leading-6">Â¿EstÃ¡s seguro de que deseas borrar este comentario? Esta acciÃ³n no se puede deshacer.</p>
+              <p class="text-sm text-on-surface-variant leading-6">&iquest;Est&aacute;s seguro de que deseas borrar este comentario? Esta acci&oacute;n no se puede deshacer.</p>
               <div class="flex items-center justify-end gap-2 pt-2">
                 <button id="delete-comment-cancel" type="button" class="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs uppercase tracking-widest text-on-surface-variant hover:text-on-surface">Cancelar</button>
                 <button id="delete-comment-confirm" type="button" class="rounded-full bg-gradient-to-br from-rose-500 to-red-500 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white">Eliminar</button>
@@ -547,7 +547,7 @@ endif; ?>
               </div>
               <div id="report-other-wrap" class="hidden space-y-2">
                 <label for="report-other-text" class="text-xs uppercase tracking-widest text-on-surface-variant">Escribe el motivo</label>
-                <textarea id="report-other-text" rows="3" maxlength="220" class="w-full rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:ring-2 focus:ring-primary/40" placeholder="CuÃ©ntanos por quÃ© quieres reportar este comentario..."></textarea>
+                <textarea id="report-other-text" rows="3" maxlength="220" class="w-full rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:ring-2 focus:ring-primary/40" placeholder="Cu&eacute;ntanos por qu&eacute; quieres reportar este comentario..."></textarea>
                 <p id="report-other-error" class="hidden text-xs text-rose-300">Escribe un motivo para continuar.</p>
               </div>
               <div class="flex items-center justify-end gap-2 pt-2">
@@ -561,15 +561,15 @@ endif; ?>
     </main>
     <!-- Footer Component -->
     <div data-layout="footer"></div>
-    <script src="<?= asset_path('assets/js/layout.js?v=final14') ?>"></script>
+    <script src="<?= asset_path('assets/js/layout.js?v=theme1') ?>"></script>
     <script src="<?= asset_path('assets/js/shared-utils.js?v=3') ?>"></script>
     <script src="<?= asset_path('assets/js/i18n.js') ?>"></script>
     <script src="<?= asset_path('assets/js/title-images.js?v=3') ?>"></script>
     <script src="<?= asset_path('assets/js/search.js?v=popular4') ?>"></script>
     <script src="<?= asset_path('assets/js/favorites.js') ?>"></script>
-    <script src="<?= asset_path('assets/js/detail-links.js?v=3') ?>"></script>
+    <script src="<?= asset_path('assets/js/detail-links.js?v=5') ?>"></script>
     <script>window.__DETAIL_ROUTE_INFO = { ref: <?= json_encode($detailRef ?? "") ?>, query: <?= json_encode($detailQuery ?? "") ?> };</script>
-    <script src="<?= asset_path('assets/js/detail-data.js?v=35') ?>"></script>
+    <script src="<?= asset_path('assets/js/detail-data.js?v=36') ?>"></script>
     <script>
   document.addEventListener("DOMContentLoaded", () => {
     if (window.AniDexI18n) window.AniDexI18n.init();
@@ -1018,11 +1018,11 @@ endif; ?>
         });
         for (const item of mapped) {
           if (!item.text) {
-            item.text = "Comentario no disponible en espaÃ±ol.";
+            item.text = "Comentario no disponible en espa&ntilde;ol.";
             continue;
           }
           const translated = await translateToSpanish(item.text);
-          item.text = translated ? truncate(translated) : "Comentario no disponible en espaÃ±ol.";
+          item.text = translated ? truncate(translated) : "Comentario no disponible en espa&ntilde;ol.";
         }
         return mapped;
       } catch {
@@ -1050,7 +1050,7 @@ endif; ?>
       const filtered = filterRating ? items.filter((item) => Number(item.rating) === filterRating) : items;
       total.textContent = `${filtered.length} comentario${filtered.length === 1 ? "" : "s"}`;
       if (!filtered.length) {
-        list.innerHTML = '<div class="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-on-surface-variant">TodavÃ­a no hay comentarios para este filtro.</div>';
+        list.innerHTML = '<div class="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-on-surface-variant">Todav&iacute;a no hay comentarios para este filtro.</div>';
         if (moreWrap) moreWrap.classList.add("hidden");
         return;
       }
@@ -1317,7 +1317,7 @@ endif; ?>
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       if (!checkCanComment()) {
-        alert(isLogged ? "Necesitas Premium para comentar." : "Debes iniciar sesiÃ³n para comentar.");
+        alert(isLogged ? "Necesitas Premium para comentar." : "Debes iniciar sesiÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³n para comentar.");
         return;
       }
       const malId = await waitForMalId();
@@ -1385,13 +1385,15 @@ endif; ?>
     
     // Initialize detail data if object is present
     const initDetail = () => {
-      // Movido a la inicializaciÃ³n global en la parte superior
+      // Movido a la inicializaci?n global en la parte superior
     };
     initDetail();
   })();
     </script>
     <script data-ui-unlock>document.documentElement.classList.remove("preload-ui");</script>
   </body></html>
+
+
 
 
 
