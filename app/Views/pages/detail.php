@@ -612,7 +612,7 @@ endif; ?>
     let isLogged = serverLogged || (window.AniDexLayout ? window.AniDexLayout.isLoggedIn() : (localStorage.getItem("nekora_logged_in") === "true"));
     let isPremium = serverPremium || (window.AniDexLayout 
       ? window.AniDexLayout.isPremium() 
-      : (localStorage.getItem("nekora_premium") === "true" || localStorage.getItem("nekora_admin") === "true" || localStorage.getItem("nekora_user") === "Admin99"));
+      : (isLogged && (localStorage.getItem("nekora_premium") === "true" || localStorage.getItem("nekora_admin") === "true" || localStorage.getItem("nekora_user") === "Admin99")));
 
     // Registrar vista de anime
     const logActivity = async (action, extraData = {}) => {
@@ -657,11 +657,11 @@ endif; ?>
     const hasPremiumAccess = () => {
       const layoutPremium = !!window.AniDexLayout?.isPremium?.();
       const layoutLogged = !!window.AniDexLayout?.isLoggedIn?.();
-      const localPremium = localStorage.getItem("nekora_premium") === "true";
-      const localAdmin = localStorage.getItem("nekora_admin") === "true";
-      const localRoleAdmin = ["Admin99", "Admin", "Administrador"].includes(localStorage.getItem("nekora_user") || "");
+      const logged = isLogged || layoutLogged || localStorage.getItem("nekora_logged_in") === "true";
+      const localPremium = logged && localStorage.getItem("nekora_premium") === "true";
+      const localAdmin = logged && localStorage.getItem("nekora_admin") === "true";
+      const localRoleAdmin = logged && ["Admin99", "Admin", "Administrador"].includes(localStorage.getItem("nekora_user") || "");
       const premium = isPremium || layoutPremium || localPremium || localAdmin || localRoleAdmin;
-      const logged = isLogged || layoutLogged || localStorage.getItem("nekora_logged_in") === "true" || premium;
       isLogged = logged;
       isPremium = premium;
       return { logged, premium };

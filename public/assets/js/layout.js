@@ -232,6 +232,7 @@
         }
       } else {
         localStorage.removeItem("nekora_logged_in");
+        localStorage.removeItem("nekora_user");
         localStorage.removeItem("nekora_admin");
         localStorage.removeItem("nekora_premium");
         localStorage.removeItem("anidex_profile_name");
@@ -240,6 +241,7 @@
       console.error("Auth check failed:", e);
       authState = { logged: false, username: "", userId: null, role: "Invitado", isAdmin: false, isPremium: false };
       localStorage.removeItem("nekora_logged_in");
+      localStorage.removeItem("nekora_user");
       localStorage.removeItem("nekora_admin");
       localStorage.removeItem("nekora_premium");
       localStorage.removeItem("anidex_profile_name");
