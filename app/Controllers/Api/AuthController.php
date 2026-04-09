@@ -113,14 +113,19 @@ class AuthController extends Controller
                 exit;
             }
 
-            $stmt = $dbConn->prepare("SELECT id, codigo_publico, hash_password, nombre_mostrar, es_premium, premium_vence_en, activo, bloqueado, motivo_bloqueo, penalizacion_hasta FROM usuarios WHERE correo = ? OR nombre_mostrar = ?");
+            $stmt = $dbConn->prepare("SELECT id, codigo_publico, hash_password, nombre_mostrar, es_premium, premium_vence_en, activo, bloqueado, motivo_bloqueo, penalizacion_hasta, password_actualizado_en FROM usuarios WHERE correo = ? OR nombre_mostrar = ?");
             $stmt->execute([$userOrEmail, $userOrEmail]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if (!$user) {
                 echo json_encode(['success' => false, 'error' => 'Usuario no encontrado.']);
             } elseif (!password_verify($pass, $user['hash_password'])) {
-                echo json_encode(['success' => false, 'error' => 'La contraseña es incorrecta.']);
+                $lastPasswordChange = !empty($user['password_actualizado_en']) ? date('d/m/Y H:i', strtotime((string) $user['password_actualizado_en'])) : '';
+                $errorMessage = 'La contraseña es incorrecta.';
+                if ($lastPasswordChange !== '') {
+                    $errorMessage .= ' La contraseña fue cambiada el ' . $lastPasswordChange . '.';
+                }
+                echo json_encode(['success' => false, 'error' => $errorMessage]);
             } elseif (((int) ($user['bloqueado'] ?? 0) === 1) || ((int) ($user['activo'] ?? 1) !== 1)) {
                 $penaltyUntil = $user['penalizacion_hasta'] ? date('d/m/Y H:i', strtotime($user['penalizacion_hasta'])) : 'Permanente';
                 $reason = trim((string) ($user['motivo_bloqueo'] ?? '')) ?: 'Sin motivo registrado';
@@ -242,3 +247,5 @@ class AuthController extends Controller
         echo json_encode(['success' => false, 'error' => 'Accion desconocida']);
     }
 }
+
+
