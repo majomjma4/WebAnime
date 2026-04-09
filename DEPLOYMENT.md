@@ -23,12 +23,12 @@ La prioridad actual es:
 
 ## cPanel
 
-Opcion 1:
+Opción 1:
 - Subir todo el proyecto dentro de `public_html/WebAnime`
 - Mantener el `index.php` de la raiz y el `.htaccess` actual
 - Configurar `APP_URL=https://tu-dominio.com/WebAnime`
 
-Opcion 2:
+Opción 2:
 - Apuntar el dominio o subdominio directamente a la carpeta `public/`
 - En ese caso `APP_URL` puede ser `https://tu-dominio.com`
 
@@ -44,4 +44,4 @@ Opcion 2:
 
 - La app detecta HTTPS incluso detras de proxy con encabezados reenviados comunes.
 - No se modifico el flujo actual de rutas ni la estructura de vistas/controladores.
-- Para migracion futura, lo ideal es que el document root termine apuntando a `public/`.
+- Para una migracion futura, lo ideal es que el document root termine apuntando a `public/`.
