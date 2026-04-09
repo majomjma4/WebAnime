@@ -754,11 +754,11 @@ const AniDexDetailDataBoot = () => {
     const synopsisBlockEl = Array.from(document.querySelectorAll("h2"))
       .find((x) => /sinopsis/i.test(x.textContent || ""))?.parentElement;
     const titleKey = [preferredTitle, query, preTitle].filter(Boolean).join(" ");
-    const isFrieren = /Frieren:\s*Beyond Journey's End Season 2/i.test(titleKey);
-    const isJujutsuZenpen = /Jujutsu Kaisen:\s*Shimetsu Kaiyuu\s*-\s*Zenpen/i.test(titleKey);
-    const isHellsParadise = /Hell's Paradise Season 2/i.test(titleKey);
-    const isSentencedHero = /Sentenced to\s*Be a Hero/i.test(titleKey);
-    const isOshiNoKo = /Oshi no Ko Season 3/i.test(titleKey);
+    const isFrieren = selectedId === 59978 || /Frieren:\s*Beyond Journey's End Season 2/i.test(titleKey);
+    const isJujutsuZenpen = selectedId === 57658 || /Jujutsu Kaisen:\s*Shimetsu Kaiyuu\s*-\s*Zenpen|Jujutsu Kaisen:\s*The Culling Game Part 1/i.test(titleKey);
+    const isHellsParadise = selectedId === 55825 || /Hell's Paradise Season 2/i.test(titleKey);
+    const isSentencedHero = selectedId === 56009 || /Sentenced to\s*Be a Hero/i.test(titleKey);
+    const isOshiNoKo = selectedId === 60058 || /Oshi no Ko Season 3/i.test(titleKey);
     if (
       !isMovie &&
       synopsisBlockEl &&
@@ -783,7 +783,7 @@ const AniDexDetailDataBoot = () => {
                 : "1";
       const linksForTitle = isFrieren
         ? {
-            1: "https://uqload.is/2eeexv9bzxa9.html",
+            1: "hhttps://uqload.is/2eeexv9bzxa9.html",
             2: "https://uqload.is/5teq2c61tck5.html",
             3: "https://uqload.is/7us4sel7kyxu.html"
           }
@@ -957,7 +957,7 @@ const AniDexDetailDataBoot = () => {
           : `data-episode-image="${src}" data-episode-title="${item.epTitle}"`;
         const seenBtnClass = canWatchEpisodes ? "" : "hidden";
         return `
-          <div class="episode-card flex flex-col gap-4 rounded-2xl border border-white/5 bg-surface-container-low/70 p-4 transition-all duration-300 hover:border-violet-400/70 hover:shadow-[0_0_18px_rgba(139,92,246,0.35)] hover:-translate-y-0.5 cursor-pointer md:flex-row md:items-start">
+          <div class="episode-card flex flex-col gap-4 rounded-2xl border border-white/5 bg-surface-container-low/70 p-4 transition-all duration-300 hover:border-violet-400/70 hover:shadow-[0_0_18px_rgba(139,92,246,0.35)] hover:-translate-y-0.5 cursor-pointer md:flex-row md:items-start" data-episode="${item.epNumber}" ${episodeAttrs}>
             <div class="flex items-center gap-4 flex-shrink-0 md:w-[9.5rem]">
               <div class="w-20 h-20 rounded-[6px] overflow-hidden bg-surface-container-high">
                 <img src="${src}" alt="Episodio ${item.epCode}" class="w-full h-full object-cover" />
@@ -1147,6 +1147,9 @@ const AniDexDetailDataBoot = () => {
         }
         if (!isLogged || !isPremium) {
           lockEpisodes();
+          if (typeof bindEpisodeCards === "function") {
+            bindEpisodeCards();
+          }
           return;
         }
         const freshCards = Array.from(episodesSection.querySelectorAll(".episode-card"));
@@ -1253,11 +1256,32 @@ const AniDexDetailDataBoot = () => {
           linkModal.classList.add("hidden");
         };
         const openLink = (card) => {
-          const link = card.getAttribute("data-episode-embed") || card.getAttribute("data-episode-link");
+          const embedLink = card.getAttribute("data-episode-embed") || "";
+          const directLink = card.getAttribute("data-episode-link") || "";
+          const link = embedLink || directLink;
           if (!link || !linkFrame) return;
           markSeenByCard(card);
+          const isUqload = /:\/\/(?:www\.)?uqload\.is\//i.test(directLink || link);
+          if (isUqload && directLink) {
+            window.location.href = directLink;
+            return;
+          }
           linkFrame.src = link;
           linkModal.classList.remove("hidden");
+          // Uqload sometimes blocks iframe embeds; fall back to the direct page.
+          if (directLink) {
+            const fallbackTimer = window.setTimeout(() => {
+              if (!linkModal.classList.contains("hidden") && linkFrame.src === link) {
+                window.open(directLink, "_blank", "noopener,noreferrer");
+              }
+            }, 1800);
+            const clearFallback = () => window.clearTimeout(fallbackTimer);
+            linkFrame.addEventListener("load", clearFallback, { once: true });
+            linkFrame.addEventListener("error", () => {
+              clearFallback();
+              window.open(directLink, "_blank", "noopener,noreferrer");
+            }, { once: true });
+          }
         };
         const imageFrame = imageModal.querySelector("[data-image-frame]");
         const imageCloseBtn = imageModal.querySelector("[data-image-close]");

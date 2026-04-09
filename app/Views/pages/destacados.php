@@ -82,6 +82,8 @@
     .featured-card {
       position: relative;
       isolation: isolate;
+      border-radius: 0.9rem;
+      overflow: hidden;
       box-shadow: 0 18px 40px rgba(0,0,0,0.35), 0 0 18px rgba(99,102,241,0.45);
       will-change: transform;
       transform: translateZ(0);
@@ -328,7 +330,7 @@
 
   const renderCard = (it) => {
     const article = document.createElement("article");
-    article.className = "featured-card group rounded-xl overflow-hidden bg-zinc-900 border border-zinc-800 cursor-pointer transition-transform duration-300 ease-[cubic-bezier(0.2,0,0,1)]";
+    article.className = "featured-card group rounded-[0.9rem] overflow-hidden bg-zinc-900 border border-zinc-800 cursor-pointer transition-transform duration-300 ease-[cubic-bezier(0.2,0,0,1)]";
     if (it?.mal_id) article.setAttribute("data-mal-id", String(it.mal_id));
     article.setAttribute("onclick", "window.location.href='detail'");
     const imgSrc = it?.images?.webp?.large_image_url || it?.images?.jpg?.large_image_url || it?.images?.jpg?.image_url || "";
@@ -340,7 +342,7 @@
     article.setAttribute("data-type", type);
     article.innerHTML = `
       <div class="relative aspect-[2/3] p-2">
-        <img class="w-full h-full object-cover rounded-lg transition-transform duration-500 ease-[cubic-bezier(0.2,0,0,1)]" src="${imgSrc}" alt="${title}" />
+        <img class="w-full h-full object-cover rounded-[0.7rem] transition-transform duration-500 ease-[cubic-bezier(0.2,0,0,1)]" src="${imgSrc}" alt="${title}" />
         <span class="absolute top-5 left-4 rounded-full bg-violet-500/90 px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest">${type === "movie" ? "Película" : "Anime"}</span>
       </div>
       <div class="p-4">
@@ -442,6 +444,9 @@
     </script>
   </body>
 </html>
+
+
+
 
 
 
