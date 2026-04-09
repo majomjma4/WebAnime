@@ -18,23 +18,19 @@ class SaveAnimeController extends Controller
         app_start_session();
 
         $isAdmin = isset($_SESSION['user_id'], $_SESSION['role']) && $_SESSION['role'] === 'Admin';
-        if (!$isAdmin) {
-            ApiResponse::error('Acceso denegado', 403);
-            exit;
-        }
-
+        
         $data = app_get_json_input();
         if (!$data || !isset($data['mal_id'])) {
             ApiResponse::error('Invalid data');
             exit;
         }
-
+        
         $dbConn = (new \Models\Database())->getConnection();
         if (!$dbConn) {
             ApiResponse::error('DB Connection Error', 500);
             exit;
         }
-
+        
         $mal_id = (int) $data['mal_id'];
         $titulo = trim((string) ($data['title_english'] ?? $data['title'] ?? ''));
         if ($titulo === '') {
@@ -46,7 +42,7 @@ class SaveAnimeController extends Controller
             ApiResponse::error('Contenido restringido (+18) no permitido.');
             exit;
         }
-
+        
         $stmt = $dbConn->prepare("SELECT id FROM anime WHERE mal_id = ? LIMIT 1");
         $stmt->execute([$mal_id]);
         $existingAnime = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -58,6 +54,19 @@ class SaveAnimeController extends Controller
                 $upStmt = $dbConn->prepare("UPDATE anime SET mal_id = ? WHERE id = ?");
                 $upStmt->execute([$mal_id, $existingAnime['id']]);
             }
+        }
+        
+        if (!$isAdmin) {
+             if (!$existingAnime) {
+                 ApiResponse::error('Forbidden: Guest cannot create new anime from scratch', 403);
+                 exit;
+             }
+             $stmtC = $dbConn->prepare("SELECT COUNT(*) FROM anime_characters WHERE anime_id = ?");
+             $stmtC->execute([$existingAnime['id']]);
+             if ($stmtC->fetchColumn() > 0) {
+                  ApiResponse::error('Forbidden: Data is already populated', 403);
+                  exit;
+             }
         }
 
         $new_id = $existingAnime ? $existingAnime['id'] : null;
