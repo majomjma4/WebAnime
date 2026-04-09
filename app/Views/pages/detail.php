@@ -560,7 +560,7 @@ endif; ?>
       </section>
     </main>
     <!-- Footer Component -->
-    <div data-layout="footer"></div>
+    <div data-layout="footer" class="relative z-20"></div>
     <script src="<?= asset_path('assets/js/layout.js?v=theme1') ?>"></script>
     <script src="<?= asset_path('assets/js/shared-utils.js?v=3') ?>"></script>
     <script src="<?= asset_path('assets/js/i18n.js') ?>"></script>

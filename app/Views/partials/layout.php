@@ -1,4 +1,4 @@
-﻿<style data-layout-style="layout-logo">
+<style data-layout-style="layout-logo">
   .logo-badge {
     display: inline-flex;
     align-items: center;
@@ -97,7 +97,7 @@
     content: "";
     position: absolute;
     inset: 0;
-    background-image: url("img/footer.png");
+    background-image: url("<?= asset_path('img/footer.png') ?>");
     background-repeat: no-repeat;
     background-size: 100% auto;
     background-position: center bottom;
@@ -765,27 +765,27 @@
     <div class="footer-content w-full px-6 md:px-12 py-14">
      <div class="footer-side-left">
       <button type="button" data-external-url="https://discord.com">
-        <img src="img/discord.png" alt="Discord" class="footer-icon" />
+        <img src="<?= asset_path('img/discord.png') ?>" alt="Discord" class="footer-icon" />
       </button>
       <div class="footer-side-row">
           <button type="button" data-external-url="https://facebook.com">
-            <img src="img/facebook.png" alt="Facebook" class="footer-icon" />
+            <img src="<?= asset_path('img/facebook.png') ?>" alt="Facebook" class="footer-icon" />
           </button>
           <button type="button" data-external-url="https://instagram.com">
-            <img src="img/instagram.png" alt="Instagram" class="footer-icon" />
+            <img src="<?= asset_path('img/instagram.png') ?>" alt="Instagram" class="footer-icon" />
           </button>
         </div>
       </div>
       <div class="footer-side-right">
         <button type="button" data-external-url="https://www.youtube.com">
-          <img src="img/y.png" alt="YouTube" class="footer-icon" />
+          <img src="<?= asset_path('img/y.png') ?>" alt="YouTube" class="footer-icon" />
         </button>
         <div class="footer-side-row">
           <button type="button" data-external-url="https://www.tiktok.com">
-            <img src="img/tt.png" alt="TikTok" class="footer-icon" />
+            <img src="<?= asset_path('img/tt.png') ?>" alt="TikTok" class="footer-icon" />
           </button>
           <button type="button" data-external-url="https://twitter.com">
-            <img src="img/x.png" alt="X" class="footer-icon" />
+            <img src="<?= asset_path('img/x.png') ?>" alt="X" class="footer-icon" />
           </button>
         </div>
       </div> 
