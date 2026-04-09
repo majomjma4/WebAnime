@@ -27,21 +27,14 @@ class SiteController extends Controller
         $legacyTitle = trim((string) ($_GET['q'] ?? ''));
 
         if ($detailRef === '') {
-            if ($legacyId !== '' && ctype_digit($legacyId)) {
-                $detailRef = $legacyId;
-            } elseif ($legacyTitle !== '') {
-                $detailRef = $this->slugifyDetailRef($legacyTitle);
-            }
+            $detailRef = app_detail_ref_from_input($legacyId, $legacyTitle);
         }
 
         if ($detailRef !== '' && ctype_digit($detailRef)) {
             $animeModel = new \Models\Anime();
             $resolvedAnime = $animeModel->getById((int) $detailRef);
             if (!$resolvedAnime || empty($resolvedAnime['mal_id'])) {
-                http_response_code(404);
-                $this->render('pages/404', [
-                    'requestedPath' => 'detail/' . $detailRef,
-                ]);
+                $this->renderNotFound('detail/' . $detailRef);
                 return;
             }
         }
@@ -102,28 +95,5 @@ class SiteController extends Controller
             'dbGenres' => $dbGenres,
             'animes' => $animes,
         ]);
-    }
-
-    private function buildDetailPath(string $value): string
-    {
-        $trimmed = trim($value);
-        if ($trimmed !== '' && ctype_digit($trimmed)) {
-            return asset_path('detail/' . $trimmed);
-        }
-
-        return asset_path('detail/' . $this->slugifyDetailRef($trimmed));
-    }
-
-    private function slugifyDetailRef(string $value): string
-    {
-        $trimmed = trim($value);
-        $slug = strtolower(trim((string) iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $trimmed)));
-        $slug = preg_replace('/[^a-z0-9]+/', '-', $slug) ?? '';
-        $slug = trim($slug, '-');
-        if ($slug === '') {
-            $slug = 'anime';
-        }
-
-        return $slug;
     }
 }

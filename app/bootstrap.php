@@ -91,6 +91,52 @@ if (!function_exists('app_base_url')) {
     }
 }
 
+if (!function_exists('app_slugify')) {
+    function app_slugify(string $value, string $fallback = ''): string
+    {
+        $trimmed = trim($value);
+        if ($trimmed === '') {
+            return $fallback;
+        }
+
+        $slug = strtolower(trim((string) iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $trimmed)));
+        $slug = preg_replace('/[^a-z0-9]+/', '-', $slug) ?? '';
+        $slug = trim($slug, '-');
+
+        return $slug !== '' ? $slug : $fallback;
+    }
+}
+
+if (!function_exists('app_is_valid_detail_ref')) {
+    function app_is_valid_detail_ref(string $detailRef): bool
+    {
+        $trimmed = trim($detailRef);
+        if ($trimmed === '') {
+            return false;
+        }
+
+        if (ctype_digit($trimmed)) {
+            return true;
+        }
+
+        return (bool) preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/', $trimmed)
+            && (bool) preg_match('/[a-z]/', $trimmed)
+            && (!preg_match('/^\d/', $trimmed) || str_contains($trimmed, '-'));
+    }
+}
+
+if (!function_exists('app_detail_ref_from_input')) {
+    function app_detail_ref_from_input(string $malId = '', string $title = '', string $dbId = ''): string
+    {
+        $candidate = trim($malId) !== '' ? trim($malId) : trim($dbId);
+        if ($candidate !== '' && ctype_digit($candidate)) {
+            return $candidate;
+        }
+
+        return app_slugify($title, 'anime');
+    }
+}
+
 if (session_status() === PHP_SESSION_NONE) {
     session_name('NekoraSession_V1');
     $isHttps = app_is_https();
@@ -307,22 +353,12 @@ if (!function_exists('asset_path')) {
 if (!function_exists('detail_path')) {
     function detail_path(string $malId = '', string $title = '', string $dbId = ''): string
     {
-        $candidate = trim($malId) !== '' ? trim($malId) : trim($dbId);
-        if ($candidate !== '' && ctype_digit($candidate)) {
-            return asset_path('detail/' . rawurlencode($candidate));
+        $detailRef = app_detail_ref_from_input($malId, $title, $dbId);
+        if ($detailRef === '') {
+            return asset_path('detail');
         }
 
-        $rawTitle = trim($title);
-        if ($rawTitle !== '') {
-            $slug = strtolower(trim((string) iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $rawTitle)));
-            $slug = preg_replace('/[^a-z0-9]+/', '-', $slug) ?? '';
-            $slug = trim($slug, '-');
-            if ($slug !== '') {
-                return asset_path('detail/' . rawurlencode($slug));
-            }
-        }
-
-        return asset_path('detail');
+        return asset_path('detail/' . rawurlencode($detailRef));
     }
 }
 if (!function_exists('route_path')) {

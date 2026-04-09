@@ -7,22 +7,11 @@ class FrontController extends Controller
 {
     public function handle(string $route): void
     {
-        $trimmedRoute = trim($route, '/');
-
-        if ($trimmedRoute === 'detail' || str_starts_with($trimmedRoute, 'detail/')) {
-            $detailResolved = $this->resolveDetailRoute($trimmedRoute);
-            if (!$detailResolved) {
-                $this->renderNotFound($route);
-                return;
-            }
-            $resolved = $detailResolved;
-        } else {
-            $router = new Router(app_routes());
-            $resolved = $router->match($route);
-            if (!$resolved) {
-                $this->renderNotFound($route);
-                return;
-            }
+        $router = new Router(app_routes());
+        $resolved = $router->match($route);
+        if (!$resolved) {
+            $this->renderNotFound($route);
+            return;
         }
 
         $controllerClass = $resolved['controller'] ?? null;
@@ -39,6 +28,7 @@ class FrontController extends Controller
             return;
         }
 
+        $this->publishRouteParams($resolved['params'] ?? []);
         $controller->authorize($resolved['guard'] ?? null);
 
         if (!method_exists($controller, $action)) {
@@ -49,40 +39,22 @@ class FrontController extends Controller
         $controller->{$action}();
     }
 
-    private function resolveDetailRoute(string $route): ?array
+    private function publishRouteParams(array $params): void
     {
-        if ($route === 'detail') {
-            unset($_GET['_detail_ref']);
-            return app_routes()['detail'] ?? null;
-        }
+        unset($_GET['_detail_ref']);
 
-        if (!preg_match('#^detail/([^/]+)$#u', $route, $matches)) {
-            return null;
-        }
-        $detailRef = trim((string) urldecode($matches[1]));
-        if ($detailRef === '') {
-            return null;
-        }
+        foreach ($params as $name => $value) {
+            if (!is_string($name)) {
+                continue;
+            }
 
-        $isNumericRef = ctype_digit($detailRef);
-        $isSlugRef = (bool) preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/', $detailRef)
-            && (bool) preg_match('/[a-z]/', $detailRef)
-            && (!preg_match('/^\d/', $detailRef) || str_contains($detailRef, '-'));
-
-        if (!$isNumericRef && !$isSlugRef) {
-            return null;
+            if ($name === 'detail_ref') {
+                $detailRef = trim((string) $value);
+                if ($detailRef !== '' && app_is_valid_detail_ref($detailRef)) {
+                    $_GET['_detail_ref'] = $detailRef;
+                }
+            }
         }
-
-        $_GET['_detail_ref'] = $detailRef;
-        return app_routes()['detail'] ?? null;
     }
 
-    private function renderNotFound(string $route): void
-    {
-        http_response_code(404);
-        $requestedPath = trim($route, '/');
-        $this->render('pages/404', [
-            'requestedPath' => $requestedPath,
-        ]);
-    }
 }

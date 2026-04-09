@@ -27,6 +27,14 @@ abstract class Controller
         echo $message;
     }
 
+    protected function renderNotFound(string $requestedPath = ''): void
+    {
+        http_response_code(404);
+        $this->render('pages/404', [
+            'requestedPath' => trim($requestedPath, '/'),
+        ]);
+    }
+
     protected function ensureSessionStarted(): void
     {
         app_start_session();

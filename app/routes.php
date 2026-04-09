@@ -40,6 +40,7 @@ return [
     ],
     'detail' => [
         'path' => 'detail',
+        'patterns' => ['detail/{detail_ref}'],
         'controller' => SiteController::class,
         'action' => 'detail',
         'aliases' => ['detail.php'],
