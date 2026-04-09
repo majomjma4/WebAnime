@@ -783,7 +783,7 @@ const AniDexDetailDataBoot = () => {
                 : "1";
       const linksForTitle = isFrieren
         ? {
-            1: "hhttps://uqload.is/2eeexv9bzxa9.html",
+            1: "https://uqload.is/2eeexv9bzxa9.html",
             2: "https://uqload.is/5teq2c61tck5.html",
             3: "https://uqload.is/7us4sel7kyxu.html"
           }
@@ -951,22 +951,36 @@ const AniDexDetailDataBoot = () => {
         updateSeenUI(card, true);
       };
 
+      const escapeHtml = (value) =>
+        String(value ?? "").replace(/[&<>"']/g, (char) => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;"
+        }[char] || char));
+
       const renderEpisodeCard = (item) => {
+        const safeLinkUrl = escapeHtml(item.linkUrl || "");
+        const safeEmbedUrl = escapeHtml(item.linkUrl ? toEmbed(item.linkUrl) : "");
+        const safeEpisodeTitle = escapeHtml(item.epTitle);
+        const safeEpisodeSynopsis = escapeHtml(item.epSynopsis);
+        const safeImageSrc = escapeHtml(src);
         const episodeAttrs = item.linkUrl
-          ? `data-episode-link="${item.linkUrl}" data-episode-embed="${toEmbed(item.linkUrl)}" data-episode-title="${item.epTitle}"`
-          : `data-episode-image="${src}" data-episode-title="${item.epTitle}"`;
+          ? `data-episode-link="${safeLinkUrl}" data-episode-embed="${safeEmbedUrl}" data-episode-title="${safeEpisodeTitle}"`
+          : `data-episode-image="${safeImageSrc}" data-episode-title="${safeEpisodeTitle}"`;
         const seenBtnClass = canWatchEpisodes ? "" : "hidden";
         return `
           <div class="episode-card flex flex-col gap-4 rounded-2xl border border-white/5 bg-surface-container-low/70 p-4 transition-all duration-300 hover:border-violet-400/70 hover:shadow-[0_0_18px_rgba(139,92,246,0.35)] hover:-translate-y-0.5 cursor-pointer md:flex-row md:items-start" data-episode="${item.epNumber}" ${episodeAttrs}>
             <div class="flex items-center gap-4 flex-shrink-0 md:w-[9.5rem]">
               <div class="w-20 h-20 rounded-[6px] overflow-hidden bg-surface-container-high">
-                <img src="${src}" alt="Episodio ${item.epCode}" class="w-full h-full object-cover" />
+                <img src="${safeImageSrc}" alt="Episodio ${escapeHtml(item.epCode)}" class="w-full h-full object-cover" />
               </div>
-              <span class="min-w-[3.75rem] whitespace-nowrap text-center px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-[0.18em] leading-none text-violet-100 bg-violet-500/25 border border-violet-400/50">${episodePrefix}-${item.epNumber}</span>
+              <span class="min-w-[3.75rem] whitespace-nowrap text-center px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-[0.18em] leading-none text-violet-100 bg-violet-500/25 border border-violet-400/50">${escapeHtml(`${episodePrefix}-${item.epNumber}`)}</span>
             </div>
             <div class="min-w-0 flex-1 flex flex-col justify-center">
-              <h3 class="font-semibold text-white text-base" data-episode-title-text>${item.epTitle}</h3>
-              <p class="text-on-surface-variant text-sm mt-2" data-episode-synopsis>${item.epSynopsis}</p>
+              <h3 class="font-semibold text-white text-base" data-episode-title-text>${safeEpisodeTitle}</h3>
+              <p class="text-on-surface-variant text-sm mt-2" data-episode-synopsis>${safeEpisodeSynopsis}</p>
             </div>
             <div class="flex items-center justify-end md:ml-auto">
               <button type="button" class="episode-seen-btn ${seenBtnClass} w-12 h-12 rounded-full border border-white/10 bg-white/5 text-white/60 flex items-center justify-center transition-all duration-200 hover:text-emerald-200 hover:border-emerald-300/50 hover:bg-emerald-500/10" data-episode-seen aria-pressed="false" title="Marcar como visto">

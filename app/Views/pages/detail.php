@@ -569,7 +569,7 @@ endif; ?>
     <script src="<?= asset_path('assets/js/favorites.js?v=4') ?>"></script>
     <script src="<?= asset_path('assets/js/detail-links.js?v=6') ?>"></script>
     <script>window.__DETAIL_ROUTE_INFO = { ref: <?= json_encode($detailRef ?? "") ?>, query: <?= json_encode($detailQuery ?? "") ?> };</script>
-    <script src="<?= asset_path('assets/js/detail-data.js?v=41') ?>"></script>
+    <script src="<?= asset_path('assets/js/detail-data.js?v=42') ?>"></script>
     <script>
   document.addEventListener("DOMContentLoaded", () => {
     if (window.AniDexI18n) window.AniDexI18n.init();
