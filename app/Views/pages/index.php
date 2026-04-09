@@ -730,7 +730,7 @@
     <script src="assets/js/i18n.js"></script>
     <script src="assets/js/title-images.js?v=3"></script>
     <script src="assets/js/search.js?v=popular4"></script>
-    <script src="assets/js/favorites.js"></script>
+    <script src="assets/js/favorites.js?v=4"></script>
     <script src="assets/js/detail-links.js?v=5"></script>
     <script>
   document.addEventListener("DOMContentLoaded", () => {
@@ -1603,6 +1603,7 @@
     </script>
     <script data-ui-unlock>document.documentElement.classList.remove("preload-ui");</script>
   </body></html>
+
 
 
 
