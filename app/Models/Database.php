@@ -18,23 +18,11 @@ class Database {
         $this->username = "root";
         $this->password = "";
 
-        // Intenta cargar configuraciones desde un archivo .env si existe en la raiz del proyecto
-        $envPath = __DIR__ . '/../../.env';
-        if (file_exists($envPath)) {
-            $envVars = parse_ini_file($envPath);
-            if ($envVars !== false) {
-                $this->host = $envVars['DB_HOST'] ?? $this->host;
-                $this->db_name = $envVars['DB_NAME'] ?? $this->db_name;
-                $this->username = $envVars['DB_USER'] ?? $this->username;
-                $this->password = $envVars['DB_PASS'] ?? $this->password;
-            }
-        }
-
-        // Finalmente se reemplaza con Variables de Entorno del sistema (superando a .env) si el Servidor de Hosting las provee
-        $this->host = getenv('DB_HOST') ?: $this->host;
-        $this->db_name = getenv('DB_NAME') ?: $this->db_name;
-        $this->username = getenv('DB_USER') ?: $this->username;
-        $this->password = getenv('DB_PASS') !== false ? getenv('DB_PASS') : $this->password;
+        // Prioridad: variables del sistema > .env > defaults locales.
+        $this->host = (string) app_env('DB_HOST', $this->host);
+        $this->db_name = (string) app_env('DB_NAME', $this->db_name);
+        $this->username = (string) app_env('DB_USER', $this->username);
+        $this->password = (string) app_env('DB_PASS', $this->password);
     }
 
     /**

@@ -1,9 +1,99 @@
 <?php
 // Basic bootstrap (autoload + helpers)
+if (!function_exists('app_load_env')) {
+    function app_load_env(?string $envPath = null): void
+    {
+        static $loaded = false;
+        static $loadedPath = null;
+
+        $path = $envPath ?? dirname(__DIR__) . DIRECTORY_SEPARATOR . '.env';
+        if ($loaded && $loadedPath === $path) {
+            return;
+        }
+
+        if (!is_file($path) || !is_readable($path)) {
+            $loaded = true;
+            $loadedPath = $path;
+            return;
+        }
+
+        $envVars = parse_ini_file($path, false, INI_SCANNER_RAW);
+        if (!is_array($envVars)) {
+            $loaded = true;
+            $loadedPath = $path;
+            return;
+        }
+
+        foreach ($envVars as $key => $value) {
+            if (!is_string($key) || $key === '') {
+                continue;
+            }
+
+            $normalizedValue = is_scalar($value) ? (string) $value : '';
+
+            if (getenv($key) === false) {
+                putenv($key . '=' . $normalizedValue);
+            }
+
+            if (!array_key_exists($key, $_ENV)) {
+                $_ENV[$key] = $normalizedValue;
+            }
+
+            if (!array_key_exists($key, $_SERVER)) {
+                $_SERVER[$key] = $normalizedValue;
+            }
+        }
+
+        $loaded = true;
+        $loadedPath = $path;
+    }
+}
+
+app_load_env();
+
+if (!function_exists('app_env')) {
+    function app_env(string $key, mixed $default = null): mixed
+    {
+        $value = $_ENV[$key] ?? $_SERVER[$key] ?? getenv($key);
+        return $value === false || $value === null ? $default : $value;
+    }
+}
+
+if (!function_exists('app_is_https')) {
+    function app_is_https(): bool
+    {
+        $https = strtolower((string) ($_SERVER['HTTPS'] ?? ''));
+        $forwardedProto = strtolower((string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? ''));
+        $forwardedSsl = strtolower((string) ($_SERVER['HTTP_X_FORWARDED_SSL'] ?? ''));
+        $forwardedPort = (string) ($_SERVER['HTTP_X_FORWARDED_PORT'] ?? '');
+
+        return $https !== '' && $https !== 'off'
+            || (($_SERVER['SERVER_PORT'] ?? null) === '443')
+            || $forwardedProto === 'https'
+            || $forwardedSsl === 'on'
+            || $forwardedPort === '443';
+    }
+}
+
+if (!function_exists('app_base_url')) {
+    function app_base_url(): string
+    {
+        $configured = trim((string) app_env('APP_URL', ''));
+        if ($configured !== '') {
+            return rtrim($configured, '/');
+        }
+
+        $host = trim((string) ($_SERVER['HTTP_HOST'] ?? 'localhost'));
+        $scheme = app_is_https() ? 'https' : 'http';
+        $basePath = trim(app_base_path(), '/');
+
+        return rtrim($scheme . '://' . $host . ($basePath !== '' ? '/' . $basePath : ''), '/');
+    }
+}
+
 if (session_status() === PHP_SESSION_NONE) {
     session_name('NekoraSession_V1');
-    $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-        || (($_SERVER['SERVER_PORT'] ?? null) === '443');
+    $isHttps = app_is_https();
     session_set_cookie_params([
         'lifetime' => 0,
         'path' => '/',
@@ -21,8 +111,7 @@ if (!function_exists('app_send_security_headers')) {
         if ($sent || headers_sent()) {
             return;
         }
-        $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-            || (($_SERVER['SERVER_PORT'] ?? null) === '443');
+        $isHttps = app_is_https();
         $host = strtolower((string) ($_SERVER['HTTP_HOST'] ?? ''));
         $isLocalHost = in_array($host, ['localhost', 'localhost:80', 'nekoralist', 'nekoralist:80'], true)
             || str_starts_with($host, '127.0.0.1')
@@ -95,8 +184,7 @@ if (!function_exists('app_publish_csrf_cookie')) {
         }
 
         $token = app_csrf_token();
-        $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-            || (($_SERVER['SERVER_PORT'] ?? null) === '443');
+        $isHttps = app_is_https();
         setcookie('XSRF-TOKEN', $token, [
             'expires' => 0,
             'path' => '/',
