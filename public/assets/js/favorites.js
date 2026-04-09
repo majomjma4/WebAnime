@@ -26,7 +26,7 @@
     return baseKey;
   };
 
-  // Getters de clave din?mica (se eval?an en tiempo de llamada, no al inicio)
+  // Getters de clave dinámica (se evalúan en tiempo de llamada, no al inicio)
   const KEY_MY_LIST   = () => resolveKey(BASE_MY_LIST);
   const KEY_FAVORITES = () => resolveKey(BASE_FAVORITES);
   const KEY_STATUS    = () => resolveKey(BASE_STATUS);
@@ -129,6 +129,7 @@
     return { completed, pending };
   };
   const updateListCounters = () => {
+    const logged = isLoggedIn();
     const myCount = readKey(KEY_MY_LIST).length;
     const favCount = readKey(KEY_FAVORITES).length;
     document.querySelectorAll("[data-count-mylist]").forEach((el) => {
@@ -138,12 +139,14 @@
       el.textContent = String(favCount);
     });
     document.querySelectorAll('[data-open-list="my-list"]').forEach((btn) => {
-      btn.disabled = myCount === 0;
-      btn.classList.toggle("is-disabled", myCount === 0);
+      const shouldDisable = logged && myCount === 0;
+      btn.disabled = shouldDisable;
+      btn.classList.toggle("is-disabled", shouldDisable);
     });
     document.querySelectorAll('[data-open-list="favorites"]').forEach((btn) => {
-      btn.disabled = favCount === 0;
-      btn.classList.toggle("is-disabled", favCount === 0);
+      const shouldDisable = logged && favCount === 0;
+      btn.disabled = shouldDisable;
+      btn.classList.toggle("is-disabled", shouldDisable);
     });
     return { myCount, favCount };
   };
@@ -177,6 +180,7 @@
     }
   };
   const updateStatusCounters = () => {
+    const logged = isLoggedIn();
     const { completed, pending } = calcStatusCounts();
     document.querySelectorAll("[data-count-completed]").forEach((el) => {
       el.textContent = String(completed);
@@ -185,12 +189,14 @@
       el.textContent = String(pending);
     });
     document.querySelectorAll('[data-open-status="completed"]').forEach((btn) => {
-      btn.disabled = completed === 0;
-      btn.classList.toggle("is-disabled", completed === 0);
+      const shouldDisable = logged && completed === 0;
+      btn.disabled = shouldDisable;
+      btn.classList.toggle("is-disabled", shouldDisable);
     });
     document.querySelectorAll('[data-open-status="pending"]').forEach((btn) => {
-      btn.disabled = pending === 0;
-      btn.classList.toggle("is-disabled", pending === 0);
+      const shouldDisable = logged && pending === 0;
+      btn.disabled = shouldDisable;
+      btn.classList.toggle("is-disabled", shouldDisable);
     });
     const { myCount, favCount } = updateListCounters();
     closeEmptyModals({ myCount, favCount, completed, pending });
@@ -387,7 +393,9 @@
         btn.classList.remove("hidden");
         btn.addEventListener("click", (e) => {
           e.preventDefault();
-          window.location.href = "registro";
+          const appUrl = window.AniDexShared?.buildAppUrl;
+          try { sessionStorage.setItem("anidex_auth_back", window.location.href); } catch {}
+          window.location.href = appUrl ? appUrl("registro") : "/registro";
         });
         return;
       }
@@ -790,5 +798,6 @@
     }
   };
 })();
+
 
 

@@ -1,4 +1,4 @@
-ï»¿(() => {
+(() => {
   const defaultAvatar = "https://upload.wikimedia.org/wikipedia/en/b/bd/Doraemon_character.png";
 
   const buildAppUrl = (path = "") => {
@@ -117,8 +117,8 @@
     setCount("[data-count-pending]", pending.length);
     const completedGrid = document.getElementById("completed-grid");
     const pendingGrid = document.getElementById("pending-grid");
-    if (completedGrid) completedGrid.innerHTML = completed.length ? completed.map(renderCard).join("") : emptyCard("AÃºn no tienes tÃ­tulos completados.");
-    if (pendingGrid) pendingGrid.innerHTML = pending.length ? pending.map(renderCard).join("") : emptyCard("AÃºn no tienes tÃ­tulos pendientes.");
+    if (completedGrid) completedGrid.innerHTML = completed.length ? completed.map(renderCard).join("") : emptyCard("Aún no tienes títulos completados.");
+    if (pendingGrid) pendingGrid.innerHTML = pending.length ? pending.map(renderCard).join("") : emptyCard("Aún no tienes títulos pendientes.");
   };
 
   const renderContinueEmpty = () => {
@@ -190,8 +190,23 @@
     if (!modal || modal.dataset.rescueOpenBound === "1") return;
     modal.dataset.rescueOpenBound = "1";
 
+    const isLoggedIn = () => window.AniDexLayout?.isLoggedIn
+      ? window.AniDexLayout.isLoggedIn()
+      : (localStorage.getItem("nekora_logged_in") === "true");
+
+    const getRegisterUrl = () => window.AniDexLayout?.buildAppUrl
+      ? window.AniDexLayout.buildAppUrl("registro")
+      : "registro";
+
     document.querySelectorAll("[data-open-list]").forEach((btn) => {
       btn.addEventListener("click", (event) => {
+        event.stopPropagation();
+        if (!isLoggedIn()) {
+          event.preventDefault();
+          window.location.href = getRegisterUrl();
+          return;
+        }
+
         const which = btn.getAttribute("data-open-list");
         const total = which === "favorites" ? readJson("anidex_favorites_v1").filter(Boolean).length : readJson("anidex_my_list_v1").filter(Boolean).length;
         if (total === 0) {
@@ -217,8 +232,8 @@
 
   const init = () => {
     renderProfile();
-    renderCollection({ baseKey: "anidex_favorites_v1", gridId: "favorites-grid", fullGridId: "favorites-grid-full", countSelector: "[data-count-favorites]", emptyMessage: "AÃºn no tienes tÃ­tulos en favoritos." });
-    renderCollection({ baseKey: "anidex_my_list_v1", gridId: "my-list-grid", fullGridId: "my-list-grid-full", countSelector: "[data-count-mylist]", emptyMessage: "AÃºn no tienes tÃ­tulos en tu lista." });
+    renderCollection({ baseKey: "anidex_favorites_v1", gridId: "favorites-grid", fullGridId: "favorites-grid-full", countSelector: "[data-count-favorites]", emptyMessage: "Aún no tienes títulos en favoritos." });
+    renderCollection({ baseKey: "anidex_my_list_v1", gridId: "my-list-grid", fullGridId: "my-list-grid-full", countSelector: "[data-count-mylist]", emptyMessage: "Aún no tienes títulos en tu lista." });
     renderStatuses();
     renderContinueEmpty();
     bindLogout();
@@ -231,3 +246,4 @@
   else if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", () => setTimeout(init, 80));
   else setTimeout(init, 80);
 })();
+

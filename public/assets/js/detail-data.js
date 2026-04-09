@@ -5,7 +5,7 @@ const AniDexDetailDataBoot = () => {
     57658: {
       episodes: 12,
       synopsis:
-        "Tras las masacres de Shibuya, Itadori, cargado de culpa y preocupado por el inter?s de Sukuna en Fushiguro, decide no volver a la Preparatoria de Hechicer?a. Se une a Choso para exorcizar los esp?ritus liberados por Noritoshi Kamo. En medio del caos, la c?pula jujutsu reactiva la ejecuci?n de Itadori y asigna a Yuta Okkotsu como su verdugo. Hechiceros modernos y antiguos, ahora jugadores del Juego de la Exterminaci?n, chocan con motivos opuestos y empujan al mundo hacia una nueva era dominada por la hechicer?a."
+        "Tras las masacres de Shibuya, Itadori, cargado de culpa y preocupado por el inter\u00e9s de Sukuna en Fushiguro, decide no volver a la Preparatoria de Hechicer\u00eda. Se une a Choso para exorcizar los esp\u00edritus liberados por Noritoshi Kamo. En medio del caos, la c\u00fapula jujutsu reactiva la ejecuci\u00f3n de Itadori y asigna a Yuta Okkotsu como su verdugo. Hechiceros modernos y antiguos, ahora jugadores del Juego de la Exterminaci\u00f3n, chocan con motivos opuestos y empujan al mundo hacia una nueva era dominada por la hechicer\u00eda."
     },
     60058: {
       title: "Oshi no Ko Season 3"
@@ -20,8 +20,8 @@ const AniDexDetailDataBoot = () => {
     Romance: "Romance",
     Suspense: "Suspenso",
     Mystery: "Misterio",
-    SciFi: "Ciencia ficci?n",
-    "Sci-Fi": "Ciencia ficci?n",
+    SciFi: "Ciencia ficci\u00f3n",
+    "Sci-Fi": "Ciencia ficci\u00f3n",
     Horror: "Terror",
     Sports: "Deportes",
     "Slice of Life": "Recuentos de la vida",
@@ -139,8 +139,8 @@ const AniDexDetailDataBoot = () => {
   const toSpanishStatus = (value) => {
     const v = (value || "").toLowerCase();
     if (v.includes("finished")) return "Finalizado";
-    if (v.includes("currently")) return "En emisiÃƒÆ’Ã‚Â³n";
-    if (v.includes("not yet")) return "PrÃƒÆ’Ã‚Â³ximamente";
+    if (v.includes("currently")) return "En emisión";
+    if (v.includes("not yet")) return "Próximamente";
     return value || "N/A";
   };
 
@@ -160,9 +160,9 @@ const AniDexDetailDataBoot = () => {
   const toSpanishRating = (value) => {
     const v = value || "";
     return v
-      .replace("R - 17+ (violence & profanity)", "R - 17+ (violencia y lenguaje explÃƒÆ’Ã‚Â­cito)")
-      .replace("PG-13 - Teens 13 or older", "PG-13 - Mayores de 13 aÃƒÆ’Ã‚Â±os")
-      .replace("PG - Children", "PG - PÃƒÆ’Ã‚Âºblico general")
+      .replace("R - 17+ (violence & profanity)", "R - 17+ (violencia y lenguaje explícito)")
+      .replace("PG-13 - Teens 13 or older", "PG-13 - Mayores de 13 años")
+      .replace("PG - Children", "PG - Público general")
       .replace("G - All Ages", "G - Todas las edades")
       .replace("Rx - Hentai", "Rx - Adultos");
   };
@@ -727,7 +727,7 @@ const AniDexDetailDataBoot = () => {
         <span class="text-outline-variant">&gt;&lt;</span>
         <span>Episodios: ${epsText}</span>
         <span class="text-outline-variant">&gt;&lt;</span>
-        <span>Duraci?n: ${durText}</span>
+        <span>Duraci\u00f3n: ${durText}</span>
       `;
     }
 
@@ -746,9 +746,9 @@ const AniDexDetailDataBoot = () => {
       renderMetaBlock(infoBlock, "T\u00edtulo nativo", full.title_japanese || full.title_japanese_full);
       renderMetaBlock(infoBlock, "Estudio", (full.studios || []).map(s => s.name).join(", "));
       renderMetaBlock(infoBlock, "Fuente", await translateToEs(full.source));
-      renderMetaBlock(infoBlock, "Emisi?n", full.aired?.string || "N/A");
-      renderMetaBlock(infoBlock, "Clasificaci?n", toSpanishRating(full.rating));
-      if (full.score) renderMetaBlock(infoBlock, "Puntuaci?n", `${full.score} (${full.scored_by || 0} votos)`);
+      renderMetaBlock(infoBlock, "Emisi\u00f3n", full.aired?.string || "N/A");
+      renderMetaBlock(infoBlock, "Clasificaci\u00f3n", toSpanishRating(full.rating));
+      if (full.score) renderMetaBlock(infoBlock, "Puntuaci\u00f3n", `${full.score} (${full.scored_by || 0} votos)`);
     }
 
     const synopsisBlockEl = Array.from(document.querySelectorAll("h2"))
@@ -827,7 +827,7 @@ const AniDexDetailDataBoot = () => {
       );
       const fallbackEpisodeSynopsis = (epNumber) => {
         const animeLabel = preferredTitle || full.title || "este anime";
-        return `Sinopsis no disponible todav?a para el episodio ${epNumber} de ${animeLabel}.`;
+        return `Sinopsis no disponible todav\u00eda para el episodio ${epNumber} de ${animeLabel}.`;
       };
       const episodeItems = Array.from({ length: episodesTotal }).map((_, index) => {
         const epNumber = index + 1;
@@ -957,18 +957,18 @@ const AniDexDetailDataBoot = () => {
           : `data-episode-image="${src}" data-episode-title="${item.epTitle}"`;
         const seenBtnClass = canWatchEpisodes ? "" : "hidden";
         return `
-          <div class="episode-card flex gap-6 items-center rounded-2xl border border-white/5 bg-surface-container-low/70 p-4 transition-all duration-300 hover:border-violet-400/70 hover:shadow-[0_0_18px_rgba(139,92,246,0.35)] hover:-translate-y-0.5 cursor-pointer" data-episode="${item.epNumber}" ${episodeAttrs}>
-            <div class="flex items-center gap-4 flex-shrink-0">
+          <div class="episode-card flex flex-col gap-4 rounded-2xl border border-white/5 bg-surface-container-low/70 p-4 transition-all duration-300 hover:border-violet-400/70 hover:shadow-[0_0_18px_rgba(139,92,246,0.35)] hover:-translate-y-0.5 cursor-pointer md:flex-row md:items-start">
+            <div class="flex items-center gap-4 flex-shrink-0 md:w-[9.5rem]">
               <div class="w-20 h-20 rounded-[6px] overflow-hidden bg-surface-container-high">
                 <img src="${src}" alt="Episodio ${item.epCode}" class="w-full h-full object-cover" />
               </div>
-              <span class="min-w-[3.5rem] text-center px-4 py-2 rounded-full text-sm font-bold uppercase tracking-widest text-violet-100 bg-violet-500/25 border border-violet-400/50">${episodePrefix}-${item.epNumber}</span>
+              <span class="min-w-[3.75rem] whitespace-nowrap text-center px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-[0.18em] leading-none text-violet-100 bg-violet-500/25 border border-violet-400/50">${episodePrefix}-${item.epNumber}</span>
             </div>
-            <div class="min-w-0 ml-2 flex flex-col justify-center">
+            <div class="min-w-0 flex-1 flex flex-col justify-center">
               <h3 class="font-semibold text-white text-base" data-episode-title-text>${item.epTitle}</h3>
               <p class="text-on-surface-variant text-sm mt-2" data-episode-synopsis>${item.epSynopsis}</p>
             </div>
-            <div class="ml-auto flex items-center justify-center">
+            <div class="flex items-center justify-end md:ml-auto">
               <button type="button" class="episode-seen-btn ${seenBtnClass} w-12 h-12 rounded-full border border-white/10 bg-white/5 text-white/60 flex items-center justify-center transition-all duration-200 hover:text-emerald-200 hover:border-emerald-300/50 hover:bg-emerald-500/10" data-episode-seen aria-pressed="false" title="Marcar como visto">
                 <span class="material-symbols-outlined text-[28px]">visibility</span>
               </button>
@@ -985,7 +985,7 @@ const AniDexDetailDataBoot = () => {
         <div class="space-y-4" data-episodes-list></div>
         <div class="pt-2 flex justify-center">
           <button type="button" data-episodes-more class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full border border-violet-400/40 bg-violet-500/10 px-6 py-3 text-sm font-bold uppercase tracking-widest text-violet-100 shadow-[0_0_14px_rgba(139,92,246,0.25)] transition-all duration-300 hover:bg-violet-500/20 hover:border-violet-300 hover:shadow-[0_0_22px_rgba(139,92,246,0.45)] hover:-translate-y-0.5">
-            Ver m?s episodios
+            Ver m\u00e1s episodios
           </button>
         </div>
       `;
@@ -1003,9 +1003,12 @@ const AniDexDetailDataBoot = () => {
       const lockEpisodes = () => {
         const lockText = isLogged
           ? "Activa el modo premium para ver los episodios"
-          : "Inicia sesiÃƒÆ’Ã‚Â³n y accede al modo premium para ver los episodios";
+          : "Inicia sesión y accede al modo premium para ver los episodios";
         const goPremium = () => {
-          window.location.href = isLogged ? "pago" : "registro";
+                    const appUrl = window.AniDexShared?.buildAppUrl;
+          window.location.href = appUrl
+            ? appUrl(isLogged ? "pago" : "registro")
+            : (isLogged ? "/pago" : "/registro");
         };
         const cards = Array.from(episodesSection.querySelectorAll(".episode-card"));
         cards.forEach((card) => {
@@ -1015,7 +1018,7 @@ const AniDexDetailDataBoot = () => {
           card.classList.add("relative", "overflow-hidden", "cursor-not-allowed", "transition-transform", "duration-300", "hover:-translate-y-1", "hover:shadow-[0_10px_26px_rgba(0,0,0,0.4)]");
           card.insertAdjacentHTML(
             "beforeend",
-            `<div class="absolute inset-0 bg-black/60 backdrop-blur-[1px] flex flex-col items-center justify-center gap-2 text-center px-4">
+            `<div class="absolute inset-0 z-20 bg-black/72 backdrop-blur-[3.5px] flex flex-col items-center justify-center gap-2 text-center px-4">
               <span class="material-symbols-outlined text-[28px] text-white">lock</span>
               <button type="button" class="text-xs font-semibold uppercase tracking-widest text-on-surface hover:text-white transition-colors" data-episode-login>
                 ${lockText}
@@ -1025,9 +1028,14 @@ const AniDexDetailDataBoot = () => {
           const loginBtn = card.querySelector("[data-episode-login]");
           const overlay = card.querySelector(".absolute.inset-0");
           const goRegister = (e) => {
-            e.stopPropagation();
+            if (e) {
+              e.preventDefault();
+              e.stopPropagation();
+              if (typeof e.stopImmediatePropagation === "function") e.stopImmediatePropagation();
+            }
             goPremium();
           };
+          card.addEventListener("click", goRegister, true);
           if (loginBtn) loginBtn.addEventListener("click", goRegister);
           if (overlay) overlay.addEventListener("click", goRegister);
         });
@@ -1356,7 +1364,7 @@ const AniDexDetailDataBoot = () => {
       const episodesValue = full.episodes || "";
       statusLine.className = "text-on-surface-variant font-medium space-y-2 text-sm lg:text-base";
       const yearBlock = (!isMovie || yearValue)
-        ? `<span class="flex flex-col"><span class="text-primary-dim text-xs uppercase tracking-wider">AÃƒÆ’Ã‚Â±o</span><span>${yearValue || "N/A"}</span></span>`
+        ? `<span class="flex flex-col"><span class="text-primary-dim text-xs uppercase tracking-wider">Año</span><span>${yearValue || "N/A"}</span></span>`
         : "";
       const episodesBlock = !isMovie
         ? `<div><span class="flex flex-col"><span class="text-primary-dim text-xs uppercase tracking-wider">Episodios</span><span>${episodesValue || "N/A"}</span></span></div>`
@@ -1486,7 +1494,7 @@ const AniDexDetailDataBoot = () => {
       charsRow.innerHTML = topChars.map((c, idx) => {
         const cleanName = (c.character?.name || "Personaje").replace(/,/g, "");
         const roleLabel = /main/i.test(c?.role || "") ? "principal" : "secundario";
-        const fallbackMini = "Cargando biografÃƒÆ’Ã‚Â­a...";
+        const fallbackMini = "Cargando biografía...";
         const desc = fallbackMini;
         const charId = c.character?.mal_id || "";
         const charImg = c.character?.images?.jpg?.image_url || "";
@@ -1514,23 +1522,23 @@ const AniDexDetailDataBoot = () => {
                   const j = await r.json();
                   const rawAbout = (j?.data?.about || "").replace(/\\n/g, " ").replace(/\r\n/g, " ").trim();
                   if (!rawAbout) {
-                      cardMini.textContent = "Sin descripci?n biogr?fica registrada.";
+                      cardMini.textContent = "Sin descripci\u00f3n biogr\u00e1fica registrada.";
                       await delay(350);
                       continue; 
                   }
                   const miniSummary = await getMiniSummary(rawAbout);
                   if (!miniSummary) {
-                      cardMini.textContent = "Sin descripci?n biogr?fica registrada.";
+                      cardMini.textContent = "Sin descripci\u00f3n biogr\u00e1fica registrada.";
                       await delay(350);
                       continue; 
                   }
                   cardMini.textContent = miniSummary;
                } else {
-                  cardMini.textContent = "Sin descripci?n biogr?fica registrada.";
+                  cardMini.textContent = "Sin descripci\u00f3n biogr\u00e1fica registrada.";
                }
                await delay(450);
             } catch {
-               cardMini.textContent = "Error de conexi?n temporal.";
+               cardMini.textContent = "Error de conexi\u00f3n temporal.";
             }
          }
       };
@@ -1620,7 +1628,7 @@ const AniDexDetailDataBoot = () => {
                   <div class="h-px w-16 bg-violet-400/40"></div>
                   <div>
                     <h4 class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Descripci\u00f3n</h4>
-                    <p data-char-info class="text-sm text-on-surface-variant leading-relaxed mt-2">Cargando informaciÃƒÆ’Ã‚Â³n del personaje...</p>
+                    <p data-char-info class="text-sm text-on-surface-variant leading-relaxed mt-2">Cargando información del personaje...</p>
                   </div>
                   <div class="h-px w-16 bg-violet-400/40"></div>
                   <div data-char-fields-wrap>
@@ -1690,7 +1698,7 @@ const AniDexDetailDataBoot = () => {
           const data = json?.data || {};
           
           const fieldMap = {
-            "Birthday": "CumpleaÃƒÆ’Ã‚Â±os",
+            "Birthday": "Cumpleaños",
             "Height": "Altura"
           };
           const fields = [];
@@ -1713,7 +1721,7 @@ const AniDexDetailDataBoot = () => {
             if (fields.some((f) => f.label === label)) return;
             fields.push({ label, value: clean });
           };
-          // addField("CumpleaÃƒÆ’Ã‚Â±os", data?.birthday);
+          // addField("Cumpleaños", data?.birthday);
           // addField("Altura", data?.height);
           if (typeof data?.favorites === "number") {
              addField("Popularidad", ` ${data.favorites} favoritos`);
@@ -1727,8 +1735,8 @@ const AniDexDetailDataBoot = () => {
               .filter(Boolean)
               .join(" ");
           const voiceJp = voiceNames("japanese");
-          const voiceEs = voiceNames("spanish") || voiceNames("espa?ol");
-          addField("Doblaje japon?s", voiceJp);
+          const voiceEs = voiceNames("spanish") || voiceNames("espa\u00f1ol");
+          addField("Doblaje japon\u00e9s", voiceJp);
           addField("Doblaje espa\u00f1ol", voiceEs);
 
           const escapeHtml = (value) =>
@@ -1839,7 +1847,7 @@ const AniDexDetailDataBoot = () => {
     if (mediaBlock) {
       const images = pics.slice(0, 20);
       if (images.length) {
-        mediaBlock.appendChild(slider("Galer?a", images, (it) => `
+        mediaBlock.appendChild(slider("Galer\u00eda", images, (it) => `
           <img data-zoomable src="${it?.jpg?.large_image_url || it?.jpg?.image_url || ""}" class="h-56 w-full object-cover cursor-zoom-in rounded-2xl" />
         `, "detail-images"));
       }
@@ -1882,7 +1890,7 @@ const AniDexDetailDataBoot = () => {
     document.body.dataset.detailType = (full.type || "").toLowerCase() === "movie" ? "Pel\u00edcula" : "Anime";
     if (window.AniDexFavorites) window.AniDexFavorites.refresh();
 
-    // Recomendados: si es pelÃƒÆ’Ã‚Â­cula, mostrar pel&iacute;culas; si no, series.
+    // Recomendados: si es película, mostrar películas; si no, series.
     const recCards = Array.from(document.querySelectorAll("section a.group.cursor-pointer"));
     if (recCards.length) {
       const recType = (full.type || "").toLowerCase() === "movie" ? "movie" : "tv";
@@ -1919,6 +1927,8 @@ const AniDexDetailDataBoot = () => {
 };
 
 AniDexDetailDataBoot();
+
+
 
 
 

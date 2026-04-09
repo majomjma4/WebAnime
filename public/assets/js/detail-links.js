@@ -75,11 +75,23 @@
       };
     });
 
-    if (!document.body.dataset.detailLiveBound) {
+    const isDetailPage = /\/detail(\/|$|\?)/i.test(window.location.pathname || "");
+    if (!isDetailPage && !document.body.dataset.detailLiveBound) {
       document.body.dataset.detailLiveBound = "1";
       document.addEventListener(
         "click",
         (e) => {
+          const ignoredTrigger = e.target.closest(
+            "[data-open-list], [data-open-status], [data-lists-close], [data-status-close], " +
+            "[data-scroll-left], [data-scroll-right], #premium-access-btn, #profile-settings-btn, " +
+            "#request-title-btn, #profile-logout-btn, [data-profile-close], [data-request-close], " +
+            "[data-avatar-close], [data-avatar-src], [data-logout-confirm], [data-logout-cancel]"
+          );
+          if (ignoredTrigger) return;
+
+          const interactiveTarget = e.target.closest("button, input, textarea, select, label");
+          if (interactiveTarget && !interactiveTarget.matches("[onclick*='detail']")) return;
+
           const target = e.target.closest("[data-mal-id], [onclick*='detail'], [data-anime-card]");
           if (!target) return;
           const anchor = e.target.closest('a[href*="detail"]');

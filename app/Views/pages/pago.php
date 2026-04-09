@@ -411,23 +411,23 @@
         const method = (Array.from(document.querySelectorAll('input[name="method-type"]')).find(r => r.checked))?.value || "visa";
 
         // Paso a paso
-        if (holder.length < 4) log("âŒ Error: Nombre demasiado corto.", true); else log("âœ… Nombre OK");
+        if (holder.length < 4) log("Error: nombre demasiado corto.", true); else log("Nombre OK");
         
         let codeOk = code.length === cardOptions[method].numDigits && luhnCheck(code);
-        if (!codeOk) log("âŒ Error: Tarjeta inv?lida (" + cardOptions[method].name + ").", true); else log("âœ… Tarjeta OK");
+        if (!codeOk) log("Error: tarjeta inválida (" + cardOptions[method].name + ").", true); else log("Tarjeta OK");
         
         let dateOk = date.length === 5 && date.includes("/");
-        if (!dateOk) log("âŒ Error: Formato de fecha MM/AA.", true); else log("âœ… Fecha OK");
+        if (!dateOk) log("Error: formato de fecha MM/AA.", true); else log("Fecha OK");
         
         let pinOk = pin.length === cardOptions[method].pinDigits;
-        if (!pinOk) log("âŒ Error: PIN (" + cardOptions[method].pinDigits + " d?gitos).", true); else log("âœ… PIN OK");
+        if (!pinOk) log("Error: PIN (" + cardOptions[method].pinDigits + " dígitos).", true); else log("PIN OK");
         
-        if (addr.length < 6) log("âŒ Error: Direcci?n incorrecta.", true); else log("âœ… Direcci?n OK");
+        if (addr.length < 6) log("Error: dirección incorrecta.", true); else log("Dirección OK");
 
         const hasErrors = holder.length < 4 || !codeOk || !dateOk || !pinOk || addr.length < 6;
 
         if (hasErrors) {
-            log("ðŸ›‘ CORRIGE LOS ERRORES ARRIBA.", true);
+            log("CORRIGE LOS ERRORES ARRIBA.", true);
             if (btn) {
                 btn.style.pointerEvents = "auto";
                 btn.innerHTML = 'COMPLETAR COMPRA <span class="material-symbols-outlined">bolt</span>';
@@ -435,15 +435,15 @@
             return;
         }
 
-        log("ðŸš€ Conectando con servidor...");
+        log("Conectando con el servidor...");
         const auth = window.AniDexLayout ? await window.AniDexLayout.checkAuth() : { logged: false };
         if (!auth.logged) { 
-            log("ðŸ”’ Sesi?n no encontrada.", true); 
+            log("Sesión no encontrada.", true); 
             window.location.href = "ingresar?redirect=pago";
             return; 
         }
 
-        log("ðŸ’³ Procesando transacci?n...");
+        log("Procesando transacción...");
         window.onbeforeunload = () => "Pago en curso...";
 
         const res = await fetch("api/auth.php?action=buy_premium", { method: "POST" });
@@ -451,18 +451,18 @@
         window.onbeforeunload = null;
 
         if (data.success) {
-            log("?PAGO CONFIRMADO!");
+            log("¡PAGO CONFIRMADO!");
             try { new Audio("https://cdn.pixabay.com/audio/2021/11/24/audio_985532d525.mp3").play(); } catch(e){}
             localStorage.setItem("nekora_premium", "true");
             document.getElementById("payment-success")?.classList.remove("hidden");
             if (window.AniDexLayout?.checkAuth) await window.AniDexLayout.checkAuth();
             setTimeout(() => { window.location.href = "index"; }, 2500);
-        } else {
-            log("âŒ Error Servidor: " + (data.error || "Fallo"), true);
+            log("Error del servidor: " + (data.error || "Fallo"), true);
+            log("Error del servidor: " + (data.error || "Fallo"), true);
             if (btn) { btn.style.pointerEvents = "auto"; btn.innerHTML = 'COMPLETAR COMPRA'; }
         }
-    } catch (e) {
-        log("ðŸ’¥ Error: " + e.message, true);
+        log("Error: " + e.message, true);
+        log("Error: " + e.message, true);
         if (btn) { btn.style.pointerEvents = "auto"; btn.innerHTML = 'COMPLETAR COMPRA'; }
     }
   };

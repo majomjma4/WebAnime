@@ -156,6 +156,14 @@ document.addEventListener("DOMContentLoaded", () => {
       const countFav = document.getElementById("lists-count-favorites");
       if (!modal || !title || !myWrap || !favWrap) return;
 
+      const getRegisterUrl = () => (window.AniDexLayout && typeof window.AniDexLayout.buildAppUrl === "function")
+        ? window.AniDexLayout.buildAppUrl("registro")
+        : "registro";
+
+      const isLoggedIn = () => (window.AniDexLayout && typeof window.AniDexLayout.isLoggedIn === "function")
+        ? window.AniDexLayout.isLoggedIn()
+        : (localStorage.getItem("nekora_logged_in") === "true");
+
       const openModal = (which) => {
         modal.classList.remove("theme-mylist", "theme-favorites");
         modal.classList.add(which === "my-list" ? "theme-mylist" : "theme-favorites");
@@ -185,6 +193,11 @@ document.addEventListener("DOMContentLoaded", () => {
       document.querySelectorAll("[data-open-list]").forEach((btn) => {
         btn.addEventListener("click", (event) => {
           event.preventDefault();
+          event.stopPropagation();
+          if (!isLoggedIn()) {
+            window.location.href = getRegisterUrl();
+            return;
+          }
           if (btn.disabled) return;
           openModal(btn.getAttribute("data-open-list"));
         });
@@ -193,6 +206,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const trigger = event.target.closest("[data-open-list]");
         if (!trigger) return;
         event.preventDefault();
+        event.stopPropagation();
+        if (!isLoggedIn()) {
+          window.location.href = getRegisterUrl();
+          return;
+        }
         if (trigger.disabled) return;
         openModal(trigger.getAttribute("data-open-list"));
       });
@@ -207,6 +225,14 @@ document.addEventListener("DOMContentLoaded", () => {
       const countCompleted = document.getElementById("status-count-completed");
       const countPending = document.getElementById("status-count-pending");
       if (!modal || !title || !completed || !pending) return;
+
+      const getRegisterUrl = () => (window.AniDexLayout && typeof window.AniDexLayout.buildAppUrl === "function")
+        ? window.AniDexLayout.buildAppUrl("registro")
+        : "registro";
+
+      const isLoggedIn = () => (window.AniDexLayout && typeof window.AniDexLayout.isLoggedIn === "function")
+        ? window.AniDexLayout.isLoggedIn()
+        : (localStorage.getItem("nekora_logged_in") === "true");
 
       const openModal = (which) => {
         modal.classList.remove("theme-completed", "theme-pending");
@@ -233,7 +259,13 @@ document.addEventListener("DOMContentLoaded", () => {
       };
 
       document.querySelectorAll("[data-open-status]").forEach((btn) => {
-        btn.addEventListener("click", () => {
+        btn.addEventListener("click", (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          if (!isLoggedIn()) {
+            window.location.href = getRegisterUrl();
+            return;
+          }
           if (btn.disabled) return;
           openModal(btn.getAttribute("data-open-status"));
         });
@@ -945,3 +977,4 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       window.renderContinueWatching();
     }
+

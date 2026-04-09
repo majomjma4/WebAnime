@@ -315,7 +315,7 @@ endif; ?>
       </section>
       <!-- Detailed Content Area -->
       <section class="max-w-7xl mx-auto px-8 py-20 grid grid-cols-1 lg:grid-cols-3 gap-16">
-        <!-- Left Column: Sinopsis, Galer?a y Personajes -->
+        <!-- Left Column: Sinopsis, Galería y Personajes -->
         <div class="lg:col-span-2 space-y-12 detail-left-col">
           <!-- Synopsis -->
           <div class="space-y-6">
@@ -327,13 +327,13 @@ endif; ?>
             </p>
           </div>
         </div>
-        <!-- Right Column: Informaci?n -->
+        <!-- Right Column: Información -->
         <div class="space-y-10">
           <div class="bg-surface-container-low rounded-lg p-8 border border-outline-variant/5 space-y-8">
-        <!-- Right Column: Informaci?n -->
+        <!-- Right Column: Información -->
             <div id="detail-info-block" class="space-y-6">
               <div class="flex flex-col gap-1">
-            <h3 class="font-headline text-xl font-bold border-b border-outline-variant/10 pb-4">Informaci?n</h3>
+            <h3 class="font-headline text-xl font-bold border-b border-outline-variant/10 pb-4">Información</h3>
                 <span class="text-on-surface font-medium">...</span>
               </div>
               <div class="flex flex-col gap-1">
@@ -486,7 +486,7 @@ endif; ?>
               <label for="comment-text" class="text-xs uppercase tracking-[0.3em] text-on-surface-variant">Tu comentario</label>
               <textarea id="comment-text" rows="4" maxlength="400" class="w-full bg-transparent border border-white/10 rounded-2xl px-4 py-3 text-sm text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:ring-2 focus:ring-primary/40" placeholder="Escribe algo que ayude a otros fans..."></textarea>
               <div class="flex items-center justify-between text-xs text-on-surface-variant">
-                <span id="comment-error" class="hidden text-rose-300">Agrega una puntuaci?n y un comentario.</span>
+                <span id="comment-error" class="hidden text-rose-300">Agrega una puntuación y un comentario.</span>
                 <span id="comment-count">0/400</span>
               </div>
             </div>
@@ -566,10 +566,10 @@ endif; ?>
     <script src="<?= asset_path('assets/js/i18n.js') ?>"></script>
     <script src="<?= asset_path('assets/js/title-images.js?v=3') ?>"></script>
     <script src="<?= asset_path('assets/js/search.js?v=popular4') ?>"></script>
-    <script src="<?= asset_path('assets/js/favorites.js') ?>"></script>
-    <script src="<?= asset_path('assets/js/detail-links.js?v=5') ?>"></script>
+    <script src="<?= asset_path('assets/js/favorites.js?v=4') ?>"></script>
+    <script src="<?= asset_path('assets/js/detail-links.js?v=6') ?>"></script>
     <script>window.__DETAIL_ROUTE_INFO = { ref: <?= json_encode($detailRef ?? "") ?>, query: <?= json_encode($detailQuery ?? "") ?> };</script>
-    <script src="<?= asset_path('assets/js/detail-data.js?v=36') ?>"></script>
+    <script src="<?= asset_path('assets/js/detail-data.js?v=37') ?>"></script>
     <script>
   document.addEventListener("DOMContentLoaded", () => {
     if (window.AniDexI18n) window.AniDexI18n.init();
@@ -710,11 +710,12 @@ endif; ?>
         forceUnlockComments();
       } else {
         lockOverlay.style.display = "";
-        lockOverlay.style.pointerEvents = "auto";
-        lockOverlay.removeAttribute("aria-hidden");
-        lockOverlay.classList.remove("hidden");
+                const targetUrl = isLogged
+          ? "<?= route_path('payment') ?>"
+          : "<?= route_path('register') ?>";
+        lockOverlay.href = targetUrl;
+        lockOverlay.onclick = (event) => { event.preventDefault(); event.stopPropagation(); window.location.href = targetUrl; };
         lockOverlay.classList.add("flex");
-        lockOverlay.href = "pago";
         textarea.setAttribute("disabled", "true");
         if (submitBtn) {
           submitBtn.setAttribute("disabled", "true");
@@ -1317,7 +1318,7 @@ endif; ?>
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       if (!checkCanComment()) {
-        alert(isLogged ? "Necesitas Premium para comentar." : "Debes iniciar sesiÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³n para comentar.");
+        alert(isLogged ? "Necesitas Premium para comentar." : "Debes iniciar sesión para comentar.");
         return;
       }
       const malId = await waitForMalId();
@@ -1385,13 +1386,17 @@ endif; ?>
     
     // Initialize detail data if object is present
     const initDetail = () => {
-      // Movido a la inicializaci?n global en la parte superior
+      // Movido a la inicialización global en la parte superior
     };
     initDetail();
   })();
     </script>
     <script data-ui-unlock>document.documentElement.classList.remove("preload-ui");</script>
   </body></html>
+
+
+
+
 
 
 

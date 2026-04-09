@@ -329,10 +329,10 @@
             
             if (nameEl) nameEl.textContent = name;
             if (isAdmin) {
-                if (titleEl) titleEl.textContent = "Bienvenido, administrador ðŸ‘‘";
+                if (titleEl) titleEl.textContent = "Bienvenido, administrador";
                 if (subtitleEl) subtitleEl.textContent = "Tienes el control total de NekoraList";
             } else {
-                if (titleEl) titleEl.innerHTML = `?Bienvenido de nuevo, <span id="login-name">${name}</span>!`;
+                if (titleEl) titleEl.innerHTML = `¡Bienvenido de nuevo, <span id="login-name">${name}</span>!`;
                 if (subtitleEl) subtitleEl.textContent = "Tu colección de animes te estaba esperando.";
             }
             

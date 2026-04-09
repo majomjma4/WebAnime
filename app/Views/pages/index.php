@@ -437,7 +437,7 @@
                 </div>
               </div>
               <div data-spotlight-type class="absolute top-4 left-4 z-10 bg-primary/80 text-white text-[11px] font-bold uppercase tracking-widest px-3 py-1 rounded-full shadow-lg">Anime</div>
-              <img data-spotlight-rotating="1" alt="Spotlight de temporada" class="w-full h-full object-cover transition-transform duration-1000 ease-[cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.04]" data-alt="Escena dram?tica de batalla anime con efectos de energ?a brillante" data-fallback="img/fondoanime.png" loading="lazy" referrerpolicy="no-referrer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfEs1IvGWNIZxiSWnnh8wCUr59ea4njuZckziZXqicnQPNvJkan5uFN_-BmFdNvpNSE7c6Gy-mHlJOyMU4hG1QNd2nk5WYUB4_uFh5jJL-K6arAlskDJ_8qihvbrLMvZNDOsSiBXcBUPHNcfenZNrmyKDhpAa0TRP_9gxyxTMIHLtWKcJBfTyyYK2OT7w8mggHKLEv6KE0h3MMHguW46V5ghR79auKbPcZFbiWP4qDRaPBSBDdTGBjWbacwEx2LnRwcBnZnp4l3j-4"/>
+              <img data-spotlight-rotating="1" alt="Spotlight de temporada" class="w-full h-full object-cover transition-transform duration-1000 ease-[cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.04]" data-alt="Escena dramática de batalla anime con efectos de energía brillante" data-fallback="img/fondoanime.png" loading="lazy" referrerpolicy="no-referrer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfEs1IvGWNIZxiSWnnh8wCUr59ea4njuZckziZXqicnQPNvJkan5uFN_-BmFdNvpNSE7c6Gy-mHlJOyMU4hG1QNd2nk5WYUB4_uFh5jJL-K6arAlskDJ_8qihvbrLMvZNDOsSiBXcBUPHNcfenZNrmyKDhpAa0TRP_9gxyxTMIHLtWKcJBfTyyYK2OT7w8mggHKLEv6KE0h3MMHguW46V5ghR79auKbPcZFbiWP4qDRaPBSBDdTGBjWbacwEx2LnRwcBnZnp4l3j-4"/>
               <div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-90"></div>
               <div class="absolute inset-0 bg-primary-container/0 group-hover:bg-primary-container/20 transition-colors"></div>
               <div class="absolute bottom-0 left-0 p-8">
@@ -480,7 +480,7 @@
                 </div>
               </div>
               <div data-spotlight-type class="absolute top-4 left-4 z-10 bg-primary/80 text-white text-[11px] font-bold uppercase tracking-widest px-3 py-1 rounded-full shadow-lg">Anime</div>
-              <img data-spotlight-rotating="1" alt="Spotlight de temporada" class="w-full h-full object-cover transition-transform duration-1000 ease-[cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.04]" data-alt="Escena de acci?n deportiva anime a ritmo fren?tico" data-fallback="img/fondoanime.png" loading="lazy" referrerpolicy="no-referrer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJ5qAXtvlxTvCn09vDY4wAIFQ0pSixDM-EZ1_G2ikLShfPSIVgjE6BRxgPZEX_LsVn_WN_zHvw3ynIuf2qN3IVoT3ni8MkH0QMTcMI974YwQFJtcJeBMyvGHjDidzk9ppyNm3ysCA4gFA2aUBroWZ3GLFWIcpCLnxsJwGwJtIli6M5os4aZ5oTC_I4oEIhYCuZ55qZQomDSUFsexP297sinHqj50nQvCWlkqo4afO3JcqzF1tr5BSCvjidzOAnoBQUw-a_ATVuBrXKq"/>
+              <img data-spotlight-rotating="1" alt="Spotlight de temporada" class="w-full h-full object-cover transition-transform duration-1000 ease-[cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.04]" data-alt="Escena de acción deportiva anime a ritmo frenético" data-fallback="img/fondoanime.png" loading="lazy" referrerpolicy="no-referrer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJ5qAXtvlxTvCn09vDY4wAIFQ0pSixDM-EZ1_G2ikLShfPSIVgjE6BRxgPZEX_LsVn_WN_zHvw3ynIuf2qN3IVoT3ni8MkH0QMTcMI974YwQFJtcJeBMyvGHjDidzk9ppyNm3ysCA4gFA2aUBroWZ3GLFWIcpCLnxsJwGwJtIli6M5os4aZ5oTC_I4oEIhYCuZ55qZQomDSUFsexP297sinHqj50nQvCWlkqo4afO3JcqzF1tr5BSCvjidzOAnoBQUw-a_ATVuBrXKq"/>
               <div class="absolute inset-0 bg-black/40 group-hover:bg-primary-container/20 transition-colors flex flex-col justify-end p-4">
                 <h4 class="font-bold spotlight-subtitle">Haikyuu!! Final</h4>
               </div>
@@ -526,7 +526,7 @@
             </div>
             <div class="carousel-card group cursor-pointer" onclick="window.location.href='detail'">
               <div class="relative aspect-[2/3] rounded-lg overflow-hidden bg-surface-container-high mb-4 transition-all duration-500 ease-[cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.04] shadow-xl">
-                <img alt="P&oacute;ster de anime" class="w-full h-full object-cover" data-alt="Ilustraci?n din?mica de personaje anime con l?neas definidas" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAG7j1khN7oa42GFgVO0GGKUGrbVAHUi69ljVSoVZw2JzGhXLGZPmMJVg-fuQthZ2BjRmQPHtiljA6oG5wD0e2QgsOauHs8rHo6CfVW_-qbdDPyc6WFV6NSVCR2bXYGfJANdbVZu3JCvQHDHUgQb-65j6hS6Sxh3KsQpp8TrqHwC-smxyfYY2kHVMRaba4VaaF-d0mASZkln-xJrLjreN-5Eryk7As7G1yYpz_0v5C6rK-TlGmV91TVOYBi2hNx43byaOojLl2FHhT9"/>
+                <img alt="P&oacute;ster de anime" class="w-full h-full object-cover" data-alt="Ilustración dinámica de personaje anime con líneas definidas" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAG7j1khN7oa42GFgVO0GGKUGrbVAHUi69ljVSoVZw2JzGhXLGZPmMJVg-fuQthZ2BjRmQPHtiljA6oG5wD0e2QgsOauHs8rHo6CfVW_-qbdDPyc6WFV6NSVCR2bXYGfJANdbVZu3JCvQHDHUgQb-65j6hS6Sxh3KsQpp8TrqHwC-smxyfYY2kHVMRaba4VaaF-d0mASZkln-xJrLjreN-5Eryk7As7G1yYpz_0v5C6rK-TlGmV91TVOYBi2hNx43byaOojLl2FHhT9"/>
                 <div class="absolute inset-0 bg-primary-container/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
                   <div class="flex flex-wrap gap-1 mb-2">
                     <span class="text-[10px] bg-background/80 px-2 py-0.5 rounded-full">Psicol&oacute;gico</span>
@@ -541,7 +541,7 @@
             </div>
             <div class="carousel-card group cursor-pointer" onclick="window.location.href='detail'">
               <div class="relative aspect-[2/3] rounded-lg overflow-hidden bg-surface-container-high mb-4 transition-all duration-500 ease-[cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.04] shadow-xl">
-                <img alt="P&oacute;ster de anime" class="w-full h-full object-cover" data-alt="Ciudad anime detallada de noche con luces de ne?n" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWK6GEmMfgg6EfbuobMqKnAGEoBR-JDGiUg00ci-kmNlIZtDkYI6Kn2Ke0sXVPIgNQCXFd-IsHB0kiCe8S2Zky7Vx8s8Yv0q9tzs5HYMvwxzBr6cc0oZ2o_86dXwOsGkjr4PDjv3ULdj9hX4Eanz5BPS7V2PEEqNSKPjrv61ZaMxz7RmFHx1Ah01hoqVReWKva7mpYkiw9VwRTTlov4AGu-uJhSG3Bln2hIug_IIGpsqGQXkCpk6x8T2qTeXcy2R7y7otUdEHtPV9T"/>
+                <img alt="P&oacute;ster de anime" class="w-full h-full object-cover" data-alt="Ciudad anime detallada de noche con luces de neón" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWK6GEmMfgg6EfbuobMqKnAGEoBR-JDGiUg00ci-kmNlIZtDkYI6Kn2Ke0sXVPIgNQCXFd-IsHB0kiCe8S2Zky7Vx8s8Yv0q9tzs5HYMvwxzBr6cc0oZ2o_86dXwOsGkjr4PDjv3ULdj9hX4Eanz5BPS7V2PEEqNSKPjrv61ZaMxz7RmFHx1Ah01hoqVReWKva7mpYkiw9VwRTTlov4AGu-uJhSG3Bln2hIug_IIGpsqGQXkCpk6x8T2qTeXcy2R7y7otUdEHtPV9T"/>
                 <div class="absolute inset-0 bg-primary-container/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
                   <div class="flex flex-wrap gap-1 mb-2">
                     <span class="text-[10px] bg-background/80 px-2 py-0.5 rounded-full">Ciberpunk</span>
@@ -556,7 +556,7 @@
             </div>
             <div class="carousel-card group cursor-pointer" onclick="window.location.href='detail'">
               <div class="relative aspect-[2/3] rounded-lg overflow-hidden bg-surface-container-high mb-4 transition-all duration-500 ease-[cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.04] shadow-xl">
-                <img alt="P&oacute;ster de anime" class="w-full h-full object-cover" data-alt="Silueta de espadach?n anime contra una luna roja" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAR9x5iy6NpAOvezWnwzK2vesTKLBp29cvFNXUtwXht6dD1l_D5gxqns-j0rTWWHrKxrDe_gNz2hRv_bp72i7d3-B1XfbVcKL9UOdKUyxhkn7PVkTFK6gvR6FYot0OR1ZFv5kxq0aRiZ5uP-MPaYLYP3NbHMNLEF22YktmuRvb3820xC4ub0dVEhj3jZVy7-ZDMJBIgRaWhSUwsjWpaA_FPrQNkZspeF-urqaKWFj1HOZJbRz951KKRSdvfM9UeaS3zgtT822TzJSbT"/>
+                <img alt="P&oacute;ster de anime" class="w-full h-full object-cover" data-alt="Silueta de espadachín anime contra una luna roja" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAR9x5iy6NpAOvezWnwzK2vesTKLBp29cvFNXUtwXht6dD1l_D5gxqns-j0rTWWHrKxrDe_gNz2hRv_bp72i7d3-B1XfbVcKL9UOdKUyxhkn7PVkTFK6gvR6FYot0OR1ZFv5kxq0aRiZ5uP-MPaYLYP3NbHMNLEF22YktmuRvb3820xC4ub0dVEhj3jZVy7-ZDMJBIgRaWhSUwsjWpaA_FPrQNkZspeF-urqaKWFj1HOZJbRz951KKRSdvfM9UeaS3zgtT822TzJSbT"/>
                 <div class="absolute inset-0 bg-primary-container/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
                   <div class="flex flex-wrap gap-1 mb-2">
                     <span class="text-[10px] bg-background/80 px-2 py-0.5 rounded-full">Aventura</span>
@@ -622,7 +622,7 @@
         <section class="px-8 md:px-16">
           <div class="flex items-end justify-between mb-8">
             <div>
-              <h2 class="text-3xl font-bold font-headline tracking-tight"><span class="section-title-em movie">PelÃ­culas</span> Populares</h2>
+              <h2 class="text-3xl font-bold font-headline tracking-tight"><span class="section-title-em movie">Películas</span> Populares</h2>
               <div class="h-1 w-12 bg-primary mt-2 rounded-full"></div>
             </div>
             <a class="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-4 py-2 text-sm font-bold text-primary shadow-[0_0_12px_rgba(168,85,247,0.25)] transition-all hover:border-primary hover:bg-primary/20 hover:text-primary" href="<?= route_path('movies') ?>">
@@ -963,7 +963,7 @@
         episodes: 12,
         image: "img/jjk.webp",
         synopsis:
-          "Tras las masacres de Shibuya, Itadori se aleja de la escuela mientras la cupula jujutsu reactiva su ejecucion y pone a Yuta Okkotsu tras el. Con el Juego de la Exterminaci?n en marcha, hechiceros de distintas eras chocan y el destino de Fushiguro se vuelve el centro de la tormenta."
+          "Tras las masacres de Shibuya, Itadori se aleja de la escuela mientras la cúpula jujutsu reactiva su ejecución y pone a Yuta Okkotsu tras él. Con el Juego de la Exterminación en marcha, hechiceros de distintas eras chocan y el destino de Fushiguro se vuelve el centro de la tormenta."
       },
       { id: 55825, displayTitle: "Hell's Paradise Season 2", image: "img/HPS.webp" },
       { id: 56009, displayTitle: "Sentenced to Be a Hero", image: "img/Sbh.webp" },
@@ -1190,7 +1190,7 @@
           "Comedy": "Comedia",
           "Drama": "Drama",
           "Fantasy": "Fantas&iacute;a",
-          "Sci-Fi": "Ciencia ficci?n",
+          "Sci-Fi": "Ciencia ficción",
           "Slice of Life": "Recuentos de la vida",
           "Supernatural": "Sobrenatural",
           "Romance": "Romance",
@@ -1199,9 +1199,9 @@
           "Psychological": "Psicol&oacute;gico",
           "Horror": "Terror",
           "Sports": "Deportes",
-          "Music": "M?sica",
+          "Music": "Música",
           "School": "Escolar",
-          "Historical": "Hist?rico",
+          "Historical": "Histórico",
           "Military": "Militar",
           "Space": "Espacio",
           "Mecha": "Mecha",
@@ -1209,11 +1209,11 @@
           "Vampire": "Vampiros",
           "Demons": "Demonios",
           "Samurai": "Samurai",
-          "Police": "Polic?a",
+          "Police": "Policía",
           "Super Power": "Superpoderes",
           "Harem": "Harem",
           "Reverse Harem": "Harem inverso",
-          "Magical Girl": "Chica m?gica",
+          "Magical Girl": "Chica mágica",
           "Kids": "Infantil",
           "Seinen": "Seinen",
           "Shounen": "Shounen",
@@ -1280,7 +1280,7 @@
           const genres = Array.isArray(item?.genres)
             ? item.genres.map((g) => g?.name).filter(Boolean)
             : [];
-          const fallbackLabel = type === "movie" ? "PelÃ­cula" : "Anime";
+          const fallbackLabel = type === "movie" ? "Película" : "Anime";
           if (media) updateGenreBadges(media, genres, fallbackLabel);
         }
         if (media) {
@@ -1325,7 +1325,7 @@
           (it?.producers && it.producers[0] && it.producers[0].name) ||
           "";
         const typeKey = normalize(it?.type).includes("movie") ? "movie" : "anime";
-        const typeLabel = typeKey === "movie" ? "PelÃ­cula" : "Anime";
+        const typeLabel = typeKey === "movie" ? "Película" : "Anime";
         pool.push({
           title,
           image: imageOf(it) || "img/fondoanime.png",
@@ -1424,7 +1424,7 @@
             (detail?.studios && detail.studios[0] && detail.studios[0].name) ||
             (detail?.producers && detail.producers[0] && detail.producers[0].name) ||
             "";
-          const typeLabel = normalize(detail?.type).includes("movie") ? "PelÃ­cula" : "Anime";
+          const typeLabel = normalize(detail?.type).includes("movie") ? "Película" : "Anime";
           if (slot.scoreEl) {
             const scoreValue = slot.scoreEl.querySelector("[data-score-value]");
             if (scoreValue) scoreValue.textContent = score;

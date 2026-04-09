@@ -147,7 +147,7 @@
       <section class="relative mx-auto w-[min(94vw,38rem)] max-w-none bg-surface-container-low/70 glass-effect border border-white/10 rounded-2xl p-[clamp(1.5rem,3vw,2.5rem)] shadow-2xl">
         <div class="space-y-2">
           <h1 class="font-headline font-extrabold text-[clamp(1.5rem,3.6vw,2.8rem)] tracking-tight leading-tight whitespace-nowrap">
-            Unete a <span class="inline-flex whitespace-nowrap"><span class="text-white">Nekora</span><span class="text-violet-400">List</span></span>
+            Únete a <span class="inline-flex whitespace-nowrap"><span class="text-white">Nekora</span><span class="text-violet-400">List</span></span>
           </h1>
           <p class="text-on-surface-variant max-w-md">Crea tu perfil y organiza, sigue o consulta la información de tus animes favoritos.</p>
         </div>
@@ -196,16 +196,27 @@
     </main>
     <script>
       (function () {
-        const logged = localStorage.getItem("nekora_logged_in") === "true";
         const backBtn = document.querySelector("[data-auth-back]");
-        if (!logged) {
-          if (backBtn) backBtn.href = "index";
+        const referrer = document.referrer || "";
+        const isSameOriginReferrer = (() => {
           try {
-            history.pushState({ guest: true }, "", location.href);
-            window.addEventListener("popstate", () => {
-              window.location.href = "index";
-            });
-          } catch {}
+            return !!referrer && new URL(referrer).origin === window.location.origin;
+          } catch {
+            return false;
+          }
+        })();
+        const fallbackHref = "<?= route_path('home') ?>";
+        const storedHref = (() => { try { return sessionStorage.getItem("anidex_auth_back") || ""; } catch { return ""; } })();
+        const previousHref = storedHref || (isSameOriginReferrer && referrer !== window.location.href ? referrer : fallbackHref);
+
+        if (backBtn) {
+          backBtn.href = previousHref;
+          backBtn.addEventListener("click", (event) => {
+            if ((storedHref || isSameOriginReferrer) && window.history.length > 1) {
+              event.preventDefault();
+              window.history.back();
+            }
+          });
         }
       })();
     </script>
@@ -224,7 +235,7 @@
           NekoraList, <span id="register-name">Usuario</span>!
         </h4>
         <p class="text-white/80 text-sm leading-relaxed mt-4">
-          Tu viaje por el mundo del anime comienza ahora. ðŸŒŸ<br/>
+          Tu viaje por el mundo del anime comienza ahora.<br/>
           Agrega tus favoritos, organiza tu lista y descubre nuevas aventuras cada día.
         </p>
       </div>
@@ -239,7 +250,7 @@
         <div class="w-16 h-16 bg-error/10 text-error rounded-full flex items-center justify-center mx-auto mb-4 border border-error/20">
           <span class="material-symbols-outlined text-3xl">warning</span>
         </div>
-        <h3 class="font-headline text-xl font-extrabold text-error italic uppercase tracking-wider">?Ups! Algo sali? mal</h3>
+        <h3 class="font-headline text-xl font-extrabold text-error italic uppercase tracking-wider">¡Ups! Algo salió mal</h3>
         <p id="error-message" class="text-on-surface-variant text-sm mt-3 leading-relaxed"></p>
         <button type="button" id="error-btn" class="mt-6 w-full py-3 rounded-full bg-surface-container-low border border-white/5 text-on-surface font-bold text-sm hover:bg-surface-container-highest transition-colors uppercase tracking-widest">Aceptar</button>
       </div>
@@ -282,7 +293,7 @@
       const pass = document.getElementById("register-pass");
       const passConfirm = document.getElementById("register-pass-confirm");
       if (pass && passConfirm && pass.value !== passConfirm.value) {
-        showError("Las contrase?as no coinciden.");
+        showError("Las contraseñas no coinciden.");
         btn.innerText = textOrig;
         btn.disabled = false;
         return;
@@ -338,6 +349,8 @@
     </script>
   </body>
 </html>
+
+
 
 
 
