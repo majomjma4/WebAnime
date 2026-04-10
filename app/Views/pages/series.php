@@ -451,6 +451,8 @@
                               } else {
                                   $generos_str = (string) $a['generos'];
                               }
+                          } elseif (!empty($a['generos_str'])) {
+                              $generos_str = (string) $a['generos_str'];
                           }
               ?>
               <article class="group rounded-lg bg-surface-container-low p-4 transition-transform duration-300 ease-snappy hover:scale-[1.02]" 
@@ -506,7 +508,7 @@
     <script src="<?= asset_path('assets/js/title-images.js?v=1774473995,33386') ?>"></script>
     <script src="<?= asset_path('assets/js/search.js?v=popular4') ?>"></script>
     <script src="<?= asset_path('assets/js/detail-links.js?v=5') ?>"></script>
-    <script src="<?= asset_path('assets/js/filters.js?v=final3') ?>"></script>
+    <script src="<?= asset_path('assets/js/filters.js?v=final5') ?>"></script>
     <script src="<?= asset_path('assets/js/load-more.js?v=1774473995,33386') ?>"></script>
     <script>
   document.addEventListener("DOMContentLoaded", () => {

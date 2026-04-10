@@ -1,5 +1,5 @@
 (function () {
-  const GENRE_OPTIONS = window.DB_GENRES || [
+  let GENRE_OPTIONS = window.DB_GENRES || [
     "Acci\u00f3n",
     "Aventura",
     "Comedia",
@@ -194,6 +194,18 @@
     if (key.includes("magic") || key.includes("magia")) return "Magia";
     if (key.includes("psych") || key.includes("psico")) return "Psicol\u00f3gico";
     return "";
+  }
+
+
+
+  // Si vienen g\u00e9neros desde DB (Jikan suele traerlos en ingl\u00e9s),
+  // los normalizamos a una etiqueta can\u00f3nica para que el dropdown se vea en espa\u00f1ol
+  // y el matching sea consistente.
+  if (Array.isArray(GENRE_OPTIONS) && GENRE_OPTIONS.length) {
+    const normalized = GENRE_OPTIONS
+      .map((g) => canonicalGenre(g) || String(g || "").trim())
+      .filter(Boolean);
+    GENRE_OPTIONS = Array.from(new Set(normalized));
   }
 
 
@@ -1804,7 +1816,6 @@
   }
 
 })();
-
 
 
 
