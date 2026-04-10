@@ -554,11 +554,14 @@
       const term = (input.value || "").trim();
       if (term) return;
       const isHeaderSearch = input.id !== "filter-search" && input.getAttribute("data-catalog-search") !== "1";
-      const items = await fetchPopularSuggestions(isHeaderSearch ? "mixed" : pageContext());
+      if (!isHeaderSearch) return;
+      const items = await fetchPopularSuggestions("mixed");
       renderSuggestions(items, "");
     });
 
     input.addEventListener("input", () => {
+      const isHeaderSearch = input.id !== "filter-search" && input.getAttribute("data-catalog-search") !== "1";
+      if (!isHeaderSearch) return;
       const term = (input.value || "").trim();
       if (!term) {
         closeBox();
