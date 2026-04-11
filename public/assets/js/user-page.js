@@ -10,6 +10,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 /* MVC: User Profile (Model / View / Controller) */
     (function () {
+      const buildAppUrl = window.AniDexLayout?.buildAppUrl
+        || window.AniDexShared?.buildAppUrl
+        || ((path = "") => String(path || ""));
       // ========================
       // MODEL: Data & Storage
       // ========================
@@ -675,7 +678,7 @@ document.addEventListener("DOMContentLoaded", () => {
           const tipo = (requestType?.value || "Anime").trim();
           if (!title) return;
           try {
-            const res = await fetch("api/requests.php?action=create", {
+            const res = await fetch(buildAppUrl("api/requests?action=create"), {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ t\u00edtulo: title, tipo })

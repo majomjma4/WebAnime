@@ -1,4 +1,11 @@
 (function () {
+  const appUrl = window.AniDexShared?.buildAppUrl || ((path = "") => String(path || ""));
+  const buildDetailUrl = window.AniDexShared?.buildDetailUrl || ((malId = "", title = "") => {
+    const numericId = String(malId || "").trim();
+    if (/^\d+$/.test(numericId)) return appUrl(`detail/${encodeURIComponent(numericId)}`);
+    const cleanTitle = String(title || "").trim();
+    return cleanTitle ? appUrl(`detail?q=${encodeURIComponent(cleanTitle)}`) : appUrl("detail");
+  });
   let GENRE_OPTIONS = window.DB_GENRES || [
     "Acci\u00f3n",
     "Aventura",
@@ -1376,7 +1383,7 @@
             if (msg) msg.textContent = "Buscando en el cat?logo global...";
           }
 
-          fetch(`api/jikan_proxy.php?endpoint=${encodeURIComponent(`anime?q=${encodeURIComponent(state.search)}&type=${mediaType}&limit=12&order_by=popularity&sort=asc`)}`)
+          fetch(`${appUrl("api/jikan_proxy")}?endpoint=${encodeURIComponent(`anime?q=${encodeURIComponent(state.search)}&type=${mediaType}&limit=12&order_by=popularity&sort=asc`)}`)
             .then(r => r.ok ? r.json() : null)
             .then(json => {
               state.isFetchingGlobal = false;
@@ -1515,7 +1522,7 @@
 
         const link = card.closest("a") || card.querySelector("a") || card.querySelector("a");
         if (link) {
-          link.href = `detail?mal_id=${item.mal_id}&q=${encodeURIComponent(title)}`;
+          link.href = buildDetailUrl(item.mal_id, title);
           link.ariaLabel = title;
         }
       });
@@ -1729,7 +1736,7 @@
 
     const type = host.dataset.rankingType || "anime";
     const jikanEndpoint = type === "movie" ? "top/anime?type=movie&limit=5" : "top/anime?type=tv&limit=5";
-    const endpoint = `api/jikan_proxy.php?endpoint=${encodeURIComponent(jikanEndpoint)}`;
+    const endpoint = `${appUrl("api/jikan_proxy")}?endpoint=${encodeURIComponent(jikanEndpoint)}`;
 
     host.innerHTML = `<div class="text-xs text-on-surface-variant">Cargando ranking...</div>`;
 
@@ -1816,7 +1823,6 @@
   }
 
 })();
-
 
 
 

@@ -354,7 +354,7 @@
       if (row.dataset.studioLoading === '1') return;
       row.dataset.studioLoading = '1';
       try {
-        const res = await fetch(`api/jikan_proxy.php?endpoint=${encodeURIComponent(`anime/${malId}/full`)}`);
+        const res = await fetch(`<?= asset_path('api/jikan_proxy') ?>?endpoint=${encodeURIComponent(`anime/${malId}/full`)}`);
         if (!res.ok) return;
         const json = await res.json();
         const studios = Array.isArray(json?.data?.studios) ? json.data.studios : [];
@@ -362,7 +362,7 @@
         if (!studioNames.length) return;
         const estudio = studioNames.join(', ');
         studioCell.textContent = estudio;
-        await fetch('api/admin.php?action=update_studio', {
+        await fetch("<?= asset_path('api/admin') ?>?action=update_studio", {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ id: animeId, estudio })
@@ -485,7 +485,7 @@
         };
 
         try {
-          const res = await fetch('api/admin.php?action=update_anime', {
+          const res = await fetch("<?= asset_path('api/admin') ?>?action=update_anime", {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
@@ -527,7 +527,7 @@
         const animeId = Number(currentDeleteRow.getAttribute('data-anime-id') || 0);
 
         try {
-          const res = await fetch('api/admin.php?action=delete_anime', {
+          const res = await fetch("<?= asset_path('api/admin') ?>?action=delete_anime", {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ id: animeId })

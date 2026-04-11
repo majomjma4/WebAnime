@@ -303,7 +303,7 @@
       const email = form.querySelector('[name="register-email"]').value.trim();
       
       try {
-        const res = await fetch('api/auth.php?action=register', {
+        const res = await fetch("<?= asset_path('api/auth') ?>?action=register", {
           method: 'POST',
           credentials: 'same-origin',
           headers: { 'Content-Type': 'application/json' },

@@ -1,10 +1,10 @@
 (() => {
-  const basePath = window.location.pathname.includes('/views/') ? '../' : '';
+  const buildAppUrl = window.AniDexShared?.buildAppUrl || ((path = "") => String(path || ""));
   async function loadAdminSidebar() {
     const host = document.querySelector('[data-admin-sidebar]');
     if (!host) return;
     try {
-      const res = await fetch(basePath + "partials/admin-layout", { cache: 'no-store' });
+      const res = await fetch(buildAppUrl("partials/admin-layout"), { cache: 'no-store' });
       if (!res.ok) return;
       const html = await res.text();
       const container = document.createElement('div');
@@ -26,7 +26,7 @@
         logout.addEventListener('click', async (event) => {
           event.preventDefault();
           try {
-            const res = await fetch('api/auth.php?action=check', { cache: 'no-store', credentials: 'same-origin' });
+            const res = await fetch(buildAppUrl('api/auth?action=check'), { cache: 'no-store', credentials: 'same-origin' });
             if (res.ok) {
               const auth = await res.json();
               if (auth && auth.logged) {
@@ -43,7 +43,7 @@
                 else localStorage.removeItem('nekora_admin');
 
                 try {
-                  const profileRes = await fetch('api/profile.php?action=get', { cache: 'no-store', credentials: 'same-origin' });
+                  const profileRes = await fetch(buildAppUrl('api/profile?action=get'), { cache: 'no-store', credentials: 'same-origin' });
                   if (profileRes.ok) {
                     const profileJson = await profileRes.json();
                     const d = profileJson?.data || null;
@@ -61,7 +61,7 @@
               }
             }
           } catch (e) {}
-          window.location.href = 'index';
+          window.location.href = buildAppUrl('index');
         });
       }
 

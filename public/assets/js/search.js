@@ -1,5 +1,12 @@
 (() => {
-  const API_BASE = "api/jikan_proxy.php";
+  const appUrl = window.AniDexShared?.buildAppUrl || ((path = "") => String(path || ""));
+  const buildDetailUrl = window.AniDexShared?.buildDetailUrl || ((malId = "", title = "") => {
+    const numericId = String(malId || "").trim();
+    if (/^\d+$/.test(numericId)) return appUrl(`detail/${encodeURIComponent(numericId)}`);
+    const cleanTitle = String(title || "").trim();
+    return cleanTitle ? appUrl(`detail?q=${encodeURIComponent(cleanTitle)}`) : appUrl("detail");
+  });
+  const API_BASE = appUrl("api/jikan_proxy");
   const suggestCache = new Map();
   const hasJapaneseChars = (v) => /[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff]/.test(v || "");
 
@@ -9,7 +16,7 @@
   const logActivity = async (action, details = "") => {
     if (!isLoggedIn) return;
     try {
-      await fetch("api/activity.php", {
+      await fetch(appUrl("api/activity"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action, details })
@@ -281,7 +288,7 @@
       if (cardLink && item?.mal_id) {
         cardLink.setAttribute("data-mal-id", String(item.mal_id));
         // Incluir q= para que detail-links y el backend tengan respaldo
-        cardLink.href = `detail?mal_id=${item.mal_id}&q=${encodeURIComponent(cleanTitle)}`;
+        cardLink.href = buildDetailUrl(item.mal_id, cleanTitle);
       }
       const yearEl = card.querySelector("[data-card-year]");
       if (HIDE_CARD_YEARS) {
@@ -311,7 +318,7 @@
   const goToSearchPage = (term, page = "series") => {
     const q = encodeURIComponent(term.trim());
     logActivity("search", `B?squeda: ${term.trim()} en ${page}`);
-    window.location.href = `${page}?q=${q}`;
+    window.location.href = `${appUrl(page)}?q=${q}`;
   };
   const pageForType = (mediaType) => {
     const t = normalize(mediaType);
@@ -526,7 +533,7 @@
           closeBox();
           logActivity("search_suggestion_click", `Sugerencia clicada: ${it.title} (ID: ${it.malId})`);
           if (it.malId) {
-            window.location.href = `detail?mal_id=${it.malId}`;
+            window.location.href = buildDetailUrl(it.malId, it.title);
           } else {
             goToSearchPage(it.title, pageForType(it.mediaType));
           }
@@ -610,14 +617,14 @@
         const ok = applyFilter(resolvedTerm);
         if (!ok) {
           if (resolved.malId) {
-            window.location.href = `detail?mal_id=${resolved.malId}`;
+            window.location.href = buildDetailUrl(resolved.malId, resolvedTerm);
           } else {
             goToSearchPage(resolvedTerm, pageForType(resolved.mediaType));
           }
         }
       } else {
         if (resolved.malId) {
-          window.location.href = `detail?mal_id=${resolved.malId}`;
+          window.location.href = buildDetailUrl(resolved.malId, resolvedTerm);
         } else {
           goToSearchPage(resolvedTerm, pageForType(resolved.mediaType));
         }
@@ -669,7 +676,6 @@
 
   window.AniDexSearch = { init };
 })();
-
 
 
 

@@ -446,7 +446,7 @@
         log("Procesando transacción...");
         window.onbeforeunload = () => "Pago en curso...";
 
-        const res = await fetch("api/auth.php?action=buy_premium", { method: "POST" });
+        const res = await fetch("<?= asset_path('api/auth') ?>?action=buy_premium", { method: "POST" });
         const data = await res.json();
         window.onbeforeunload = null;
 

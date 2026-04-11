@@ -1,4 +1,11 @@
 (() => {
+  const appUrl = window.AniDexShared?.buildAppUrl || ((path = "") => String(path || ""));
+  const buildDetailUrl = window.AniDexShared?.buildDetailUrl || ((malId = "", title = "") => {
+    const numericId = String(malId || "").trim();
+    if (/^\d+$/.test(numericId)) return appUrl(`detail/${encodeURIComponent(numericId)}`);
+    const cleanTitle = String(title || "").trim();
+    return cleanTitle ? appUrl(`detail?q=${encodeURIComponent(cleanTitle)}`) : appUrl("detail");
+  });
   const BASE_MY_LIST   = "anidex_my_list_v1";
   const BASE_FAVORITES = "anidex_favorites_v1";
   const BASE_STATUS    = "anidex_status_v1";
@@ -39,7 +46,7 @@
   const logActivity = async (action, item, details = "") => {
     if (!isLoggedIn()) return;
     try {
-      await fetch("api/activity.php", {
+      await fetch(appUrl("api/activity"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
@@ -393,7 +400,6 @@
         btn.classList.remove("hidden");
         btn.addEventListener("click", (e) => {
           e.preventDefault();
-          const appUrl = window.AniDexShared?.buildAppUrl;
           try { sessionStorage.setItem("anidex_auth_back", window.location.href); } catch {}
           window.location.href = appUrl ? appUrl("registro") : "/registro";
         });
@@ -529,14 +535,7 @@
         if (e.target.closest("button")) return;
         const title = card.getAttribute("data-detail-title") || "";
         const id = card.getAttribute("data-detail-id") || "";
-        let url = "detail";
-        if (id) {
-          url += `?mal_id=${encodeURIComponent(id)}`;
-          if (title) url += `&q=${encodeURIComponent(title)}`;
-        } else if (title) {
-          url += `?q=${encodeURIComponent(title)}`;
-        }
-        window.location.href = url;
+        window.location.href = buildDetailUrl(id, title);
       });
     });
     grid.querySelectorAll("[data-set-status]").forEach((b) => {
@@ -656,14 +655,7 @@
         if (e.target.closest("button")) return;
         const title = card.getAttribute("data-detail-title") || "";
         const id = card.getAttribute("data-detail-id") || "";
-        let url = "detail";
-        if (id) {
-          url += `?mal_id=${encodeURIComponent(id)}`;
-          if (title) url += `&q=${encodeURIComponent(title)}`;
-        } else if (title) {
-          url += `?q=${encodeURIComponent(title)}`;
-        }
-        window.location.href = url;
+        window.location.href = buildDetailUrl(id, title);
       });
     });
     grid.querySelectorAll("[data-set-status]").forEach((b) => {
@@ -748,14 +740,7 @@
         if (e.target.closest("button")) return;
         const title = card.getAttribute("data-detail-title") || "";
         const id = card.getAttribute("data-detail-id") || "";
-        let url = "detail";
-        if (id) {
-          url += `?mal_id=${encodeURIComponent(id)}`;
-          if (title) url += `&q=${encodeURIComponent(title)}`;
-        } else if (title) {
-          url += `?q=${encodeURIComponent(title)}`;
-        }
-        window.location.href = url;
+        window.location.href = buildDetailUrl(id, title);
       });
     });
   };

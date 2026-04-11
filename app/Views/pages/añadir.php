@@ -570,7 +570,7 @@
       };
 
       try {
-        const res = await fetch('api/admin.php?action=add_anime', {
+        const res = await fetch("<?= asset_path('api/admin') ?>?action=add_anime", {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)

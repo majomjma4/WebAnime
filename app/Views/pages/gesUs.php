@@ -418,7 +418,7 @@
 
     // Cargar Usuarios
     try {
-        const res = await fetch('api/users.php?action=list');
+        const res = await fetch("<?= asset_path('api/users') ?>?action=list");
         const data = await res.json();
         if (data.success) {
             renderUsers(data.data);
@@ -625,7 +625,7 @@
         return;
       }
       try {
-        const res = await fetch('api/users.php?action=reset_password', {
+        const res = await fetch("<?= asset_path('api/users') ?>?action=reset_password", {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ id: modalState.id, password })
@@ -646,7 +646,7 @@
       if (!modalState.id || !modalState.row) return;
       const makeAdmin = !modalState.isAdmin;
       try {
-        const res = await fetch('api/users.php?action=toggle_admin', {
+        const res = await fetch("<?= asset_path('api/users') ?>?action=toggle_admin", {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ id: modalState.id, make_admin: makeAdmin })
@@ -860,7 +860,7 @@
         if (!deleteState.id || !deleteState.row) return;
 
         try {
-          const res = await fetch('api/users.php?action=delete', {
+          const res = await fetch("<?= asset_path('api/users') ?>?action=delete", {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ id: deleteState.id })
@@ -885,7 +885,7 @@
         if (!unblockState.id || !unblockState.row) return;
 
         try {
-          const res = await fetch('api/users.php?action=toggle_status', {
+          const res = await fetch("<?= asset_path('api/users') ?>?action=toggle_status", {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ id: unblockState.id, activo: 1 })
@@ -922,7 +922,7 @@
         }
 
         try {
-          const res = await fetch('api/users.php?action=block', {
+          const res = await fetch("<?= asset_path('api/users') ?>?action=block", {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

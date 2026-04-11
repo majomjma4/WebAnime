@@ -24,9 +24,9 @@ La prioridad actual es:
 ## cPanel
 
 Opción 1:
-- Subir todo el proyecto dentro de `public_html/WebAnime`
+- Subir todo el proyecto dentro de `public_html/WebAnime` o `public_html/WebAnime-master`
 - Mantener el `index.php` de la raiz y el `.htaccess` actual
-- Configurar `APP_URL=https://tu-dominio.com/WebAnime`
+- Configurar `APP_URL=https://tu-dominio.com/WebAnime` o `APP_URL=https://tu-dominio.com/WebAnime-master` segun el nombre final de la carpeta
 
 Opción 2:
 - Apuntar el dominio o subdominio directamente a la carpeta `public/`

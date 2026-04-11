@@ -10,6 +10,12 @@ if ($baseDir !== '' && $baseDir !== '/' && str_starts_with($path, $baseDir)) {
     $path = substr($path, strlen($baseDir));
 }
 
+$configuredBasePath = (string) parse_url(app_base_url(), PHP_URL_PATH);
+$configuredBasePath = rtrim(str_replace('\\', '/', $configuredBasePath), '/');
+if ($configuredBasePath !== '' && $configuredBasePath !== '/' && str_starts_with($path, $configuredBasePath)) {
+    $path = substr($path, strlen($configuredBasePath));
+}
+
 $route = trim($path, '/');
 if ($route === 'index.php') {
     $route = '';

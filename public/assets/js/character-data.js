@@ -1,5 +1,6 @@
 ﻿(() => {
-  const API = "api/jikan_proxy.php";
+  const appUrl = window.AniDexShared?.buildAppUrl || ((path = "") => String(path || ""));
+  const API = appUrl("api/jikan_proxy");
   const qp = new URLSearchParams(location.search);
   const animeId = qp.get("anime_id");
   const charId = qp.get("char_id");

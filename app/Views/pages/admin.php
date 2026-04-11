@@ -272,6 +272,7 @@
 <script data-admin-pagination-script>
 (function () {
   function initAdmin() {
+    const requestsApi = "<?= asset_path('api/requests') ?>";
     const tbody = document.querySelector('tbody');
     if (!tbody) return;
 
@@ -403,7 +404,7 @@
     const requestDelete = async (id) => {
       const confirmed = await confirmDelete();
       if (!confirmed) return false;
-      const res = await fetch('api/requests.php?action=delete', {
+      const res = await fetch(`${requestsApi}?action=delete`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id })
@@ -423,7 +424,7 @@
       if (searchQuery) params.set('q', searchQuery);
 
       try {
-        const res = await fetch(`api/requests.php?${params.toString()}`);
+        const res = await fetch(`${requestsApi}?${params.toString()}`);
         const json = await res.json();
         if (!json.success) throw new Error(json.error || 'Error al cargar solicitudes');
         total = json.total || 0;
@@ -575,7 +576,7 @@
         const state = modalState.aprobado;
         if (resetPage) state.page = 1;
         renderModalList(approvedList, [], 'Cargando solicitudes aprobadas...', 'rechazado');
-        const res = await fetch(`api/requests.php?action=list&status=aprobado&page=${state.page}&size=${state.size}&q=${encodeURIComponent(approvedSearchQuery)}`, { credentials: 'same-origin' });
+        const res = await fetch(`${requestsApi}?action=list&status=aprobado&page=${state.page}&size=${state.size}&q=${encodeURIComponent(approvedSearchQuery)}`, { credentials: 'same-origin' });
         const json = await res.json();
         if (!json.success) throw new Error(json.error || 'No se pudieron cargar las solicitudes aprobadas.');
         state.total = json.total || 0;
@@ -596,7 +597,7 @@
         const state = modalState.rechazado;
         if (resetPage) state.page = 1;
         renderModalList(rejectedList, [], 'Cargando solicitudes rechazadas...', 'aprobado');
-        const res = await fetch(`api/requests.php?action=list&status=rechazado&page=${state.page}&size=${state.size}&q=${encodeURIComponent(rejectedSearchQuery)}`, { credentials: 'same-origin' });
+        const res = await fetch(`${requestsApi}?action=list&status=rechazado&page=${state.page}&size=${state.size}&q=${encodeURIComponent(rejectedSearchQuery)}`, { credentials: 'same-origin' });
         const json = await res.json();
         if (!json.success) throw new Error(json.error || 'No se pudieron cargar las solicitudes rechazadas.');
         state.total = json.total || 0;
@@ -648,7 +649,7 @@
           if (!deleted) return;
         } else {
           if (!target) return;
-          await fetch('api/requests.php?action=decide', {
+          await fetch(`${requestsApi}?action=decide`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ id, decision: target })
@@ -706,7 +707,7 @@
           return;
         }
         const decision = approveBtn ? 'aprobado' : 'rechazado';
-        await fetch('api/requests.php?action=decide', {
+        await fetch(`${requestsApi}?action=decide`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ id, decision })
@@ -720,7 +721,7 @@
     const quick = document.querySelector('[data-admin-quick-action]');
     if (quick) {
       quick.addEventListener('click', () => {
-        fetch('api/requests.php?action=bulk_approve', {
+        fetch(`${requestsApi}?action=bulk_approve`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({})

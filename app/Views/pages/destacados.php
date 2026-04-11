@@ -302,11 +302,18 @@
 <script src="assets/js/load-more.js?v=3"></script>
 <script>
 (function () {
+  const appUrl = window.AniDexShared?.buildAppUrl || ((path = "") => String(path || ""));
+  const buildDetailUrl = window.AniDexShared?.buildDetailUrl || ((malId = "", title = "") => {
+    const numericId = String(malId || "").trim();
+    if (/^\d+$/.test(numericId)) return appUrl(`detail/${encodeURIComponent(numericId)}`);
+    const cleanTitle = String(title || "").trim();
+    return cleanTitle ? appUrl(`detail?q=${encodeURIComponent(cleanTitle)}`) : appUrl("detail");
+  });
   const select = document.getElementById("featured-type");
   const grid = document.getElementById("featured-grid");
   if (!grid) return;
 
-  const API = "api/jikan_proxy.php";
+  const API = appUrl("api/jikan_proxy");
   const norm = (v) => (v || "").toString().toLowerCase().replace(/\s+/g, " ").trim();
   const fixText = (s) => {
     return (s || "")
@@ -332,7 +339,6 @@
     const article = document.createElement("article");
     article.className = "featured-card group rounded-[0.9rem] overflow-hidden bg-zinc-900 border border-zinc-800 cursor-pointer transition-transform duration-300 ease-[cubic-bezier(0.2,0,0,1)]";
     if (it?.mal_id) article.setAttribute("data-mal-id", String(it.mal_id));
-    article.setAttribute("onclick", "window.location.href='detail'");
     const imgSrc = it?.images?.webp?.large_image_url || it?.images?.jpg?.large_image_url || it?.images?.jpg?.image_url || "";
     const title = it?.title || "Anime";
     const genres = (it?.genres || []).map((g) => g?.name).filter(Boolean).slice(0, 2).join(", ");
@@ -353,6 +359,9 @@
     const media = article.querySelector(".relative");
     const score = typeof it?.score === "number" ? it.score.toFixed(1) : "";
     setBadge(media, score);
+    article.addEventListener("click", () => {
+      window.location.href = buildDetailUrl(it?.mal_id || "", title);
+    });
     return article;
   };
 

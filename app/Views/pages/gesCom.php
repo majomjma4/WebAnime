@@ -664,7 +664,7 @@
     }
 
     try {
-      const res = await fetch('api/comments.php?action=list');
+      const res = await fetch("<?= asset_path('api/comments') ?>?action=list");
       const data = await res.json();
       if (data.success) {
         allComments = Array.isArray(data.data) ? data.data : [];
@@ -731,7 +731,7 @@
         if (!reviewTarget) return;
 
         try {
-          const res = await fetch('api/comments.php?action=moderate', {
+          const res = await fetch("<?= asset_path('api/comments') ?>?action=moderate", {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'same-origin',
@@ -743,7 +743,7 @@
             return;
           }
 
-          const refreshed = await fetch('api/comments.php?action=list', { credentials: 'same-origin' });
+          const refreshed = await fetch("<?= asset_path('api/comments') ?>?action=list", { credentials: 'same-origin' });
           const refreshedData = await refreshed.json();
           allComments = Array.isArray(refreshedData.data) ? refreshedData.data : allComments;
           closeReviewModal();
@@ -773,7 +773,7 @@
         if (!deleteTarget) return;
 
         try {
-          const res = await fetch('api/comments.php?action=moderate', {
+          const res = await fetch("<?= asset_path('api/comments') ?>?action=moderate", {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'same-origin',
@@ -785,7 +785,7 @@
             return;
           }
 
-          const refreshed = await fetch('api/comments.php?action=list', { credentials: 'same-origin' });
+          const refreshed = await fetch("<?= asset_path('api/comments') ?>?action=list", { credentials: 'same-origin' });
           const refreshedData = await refreshed.json();
           allComments = Array.isArray(refreshedData.data) ? refreshedData.data : allComments;
           closeDeleteModal();
