@@ -16,6 +16,25 @@
 
   const getBasePath = () => {
     const path = window.location.pathname.replace(/\\/g, "/");
+    const scriptCandidates = Array.from(document.scripts || []);
+    const sharedUtilsScript = scriptCandidates.find((script) =>
+      typeof script.src === "string" && /\/assets\/js\/shared-utils\.js(?:\?|$)/i.test(script.src)
+    );
+
+    if (sharedUtilsScript?.src) {
+      try {
+        const scriptUrl = new URL(sharedUtilsScript.src, window.location.href);
+        const assetPath = scriptUrl.pathname.replace(/\\/g, "/");
+        const assetIndex = assetPath.toLowerCase().lastIndexOf("/assets/js/shared-utils.js");
+        if (assetIndex >= 0) {
+          const derivedBase = assetPath.slice(0, assetIndex + 1);
+          if (derivedBase) {
+            return derivedBase;
+          }
+        }
+      } catch {}
+    }
+
     const publicIndex = path.toLowerCase().indexOf("/public/");
     if (publicIndex >= 0) {
       return path.slice(0, publicIndex + "/public/".length);
