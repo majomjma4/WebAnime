@@ -1186,7 +1186,7 @@ const AniDexDetailDataBoot = () => {
         episodeModal.className = "fixed inset-0 z-[110] hidden flex items-center justify-center p-4 sm:p-6";
         episodeModal.innerHTML = `
           <div class="absolute inset-0 bg-black/80 backdrop-blur-md"></div>
-          <div class="relative w-[min(92vw,720px)] rounded-2xl bg-black shadow-2xl border border-white/10" data-episode-shell>
+          <div class="relative w-[min(92vw,720px)] rounded-2xl bg-black shadow-2xl border border-white/10 transform translate-y-6 sm:translate-y-8" data-episode-shell>
             <button type="button" data-episode-close class="absolute -top-5 -right-5 sm:-top-6 sm:-right-6 w-11 h-11 rounded-full bg-violet-600 text-white hover:bg-violet-500 flex items-center justify-center z-50 transition-all duration-300 shadow-[0_0_20px_rgba(139,92,246,0.5)] border border-white/20" aria-label="Cerrar">
               <span class="material-symbols-outlined text-[28px]">close</span>
             </button>
@@ -1207,7 +1207,7 @@ const AniDexDetailDataBoot = () => {
           linkModal.className = "fixed inset-0 z-[110] hidden flex items-center justify-center p-4 sm:p-6";
           linkModal.innerHTML = `
             <div class="absolute inset-0 bg-black/80 backdrop-blur-md" data-link-backdrop></div>
-            <div class="relative w-[min(94vw,1100px)] h-[min(80vh,720px)] rounded-2xl bg-black shadow-2xl border border-white/10" data-link-shell>
+            <div class="relative w-[min(94vw,1100px)] h-[min(80vh,720px)] rounded-2xl bg-black shadow-2xl border border-white/10 transform translate-y-6 sm:translate-y-8" data-link-shell>
               <button type="button" data-link-close class="absolute -top-5 -right-5 sm:-top-7 sm:-right-7 w-12 h-12 rounded-full bg-violet-600 text-white hover:bg-violet-500 flex items-center justify-center z-50 transition-all duration-300 shadow-[0_0_25px_rgba(139,92,246,0.5)] border border-white/20" aria-label="Cerrar">
                 <span class="material-symbols-outlined text-[32px]">close</span>
               </button>
