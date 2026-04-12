@@ -70,7 +70,7 @@ class Anime
         if (!$this->db)
             return array();
         $restrictedGenres = array("'Hentai'", "'Erotica'", "'Ecchi'", "'Yaoi'", "'Yuri'", "'Girls Love'", "'Boys Love'");
-        $restrictedTitles = array("'%does it count if%'", "'%futanari%'");
+        $restrictedTitles = array("'%does it count if%'", "'%futanari%'", "'%test%'");
 
         $sql = "SELECT * FROM anime 
                 WHERE tipo = 'Movie' 
@@ -79,6 +79,7 @@ class Anime
                     WHERE genero_id IN (SELECT id FROM generos WHERE nombre IN (" . implode(",", $restrictedGenres) . "))
                   ) 
                   AND LOWER(titulo) NOT LIKE " . implode(" AND LOWER(titulo) NOT LIKE ", $restrictedTitles) . "
+                  AND imagen_url IS NOT NULL AND imagen_url != ''
                 ORDER BY puntuacion DESC, id DESC";
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
@@ -95,7 +96,7 @@ class Anime
         if (!$this->db)
             return array();
         $restrictedGenres = array("'Hentai'", "'Erotica'", "'Ecchi'", "'Yaoi'", "'Yuri'", "'Girls Love'", "'Boys Love'");
-        $restrictedTitles = array("'%does it count if%'", "'%futanari%'");
+        $restrictedTitles = array("'%does it count if%'", "'%futanari%'", "'%test%'");
 
         $sql = "SELECT * FROM anime 
                 WHERE tipo != 'Movie' 
@@ -104,6 +105,7 @@ class Anime
                     WHERE genero_id IN (SELECT id FROM generos WHERE nombre IN (" . implode(",", $restrictedGenres) . "))
                   ) 
                   AND LOWER(titulo) NOT LIKE " . implode(" AND LOWER(titulo) NOT LIKE ", $restrictedTitles) . "
+                  AND imagen_url IS NOT NULL AND imagen_url != ''
                 ORDER BY 
                   CASE 
                     WHEN titulo LIKE 'Shingeki no Kyojin%' THEN 0 
