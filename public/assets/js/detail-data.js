@@ -413,6 +413,26 @@ const AniDexDetailDataBoot = () => {
       localStorage.setItem(mapKey, JSON.stringify(map));
     } catch {}
 
+    // 1. PERSISTENCIA INMEDIATA (FASE 1: Datos Básicos)
+    // Guardamos lo esencial primero para que el contador de la web suba de inmediato
+    if (full && full.mal_id) {
+      const saveUrl = appUrl("api/save_anime");
+      console.log("NekoraDetail: Enviando persistencia rápida (Fase 1) para:", full.title);
+      
+      nativeFetch(saveUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(full)
+      })
+      .then(r => r.json())
+      .then(res => {
+          if (res.success) console.log("NekoraDetail: Registro inicial exitoso (ID " + selectedId + ")");
+      })
+      .catch(e => console.error("NekoraDetail: Error en persistencia rápida:", e));
+    }
+
+    // 2. CARGA PROFUNDA (FASE 2: Personajes, Videos, Fotos)
+    // Esto se puede demorar por los timeouts del servidor (504), así que lo hacemos por separado
     const [chars, vids, pics] = await Promise.all([
       (isLocal && full.characters && full.characters.length > 0) ? Promise.resolve(full.characters) : byId(selectedId, "characters").then((data) => data || []),
       (isLocal && full.videos && (full.videos.promo?.length > 0)) ? Promise.resolve(full.videos) : byId(selectedId, "videos").then((data) => data || {}),
@@ -428,7 +448,7 @@ const AniDexDetailDataBoot = () => {
       };
       
       const saveUrl = appUrl("api/save_anime");
-      console.log("NekoraDetail: Enviando persistencia a:", saveUrl);
+      console.log("NekoraDetail: Enviando persistencia profunda (Fase 2)...");
 
       window.fetch(saveUrl, {
         method: "POST",
@@ -438,13 +458,13 @@ const AniDexDetailDataBoot = () => {
       .then(r => r.json())
       .then(res => {
         if (!res.success) {
-          console.error("NekoraDetail: Error al persistir anime:", res.error);
+          console.error("NekoraDetail: Error al persistir datos profundos:", res.error);
         } else {
-          console.log("NekoraDetail: Datos sincronizados exitosamente.", res.message);
+          console.log("NekoraDetail: Datos profundos sincronizados exitosamente.");
         }
       })
       .catch(err => {
-        console.error("NekoraDetail: Fallo de red en persistencia:", err);
+        console.error("NekoraDetail: Fallo de red en persistencia profunda:", err);
       });
     }
     const forceTitles = [

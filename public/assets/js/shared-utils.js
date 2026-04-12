@@ -184,7 +184,8 @@
   const translateAutoToEs = async (text) => {
     if (!text || !/[a-zA-Z]/.test(text)) return text;
     try {
-      const q = encodeURIComponent(text);
+      const safeText = text.substring(0, 1500); // Evitar error 400 por URL larga
+      const q = encodeURIComponent(safeText);
       const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=es&dt=t&q=${q}`;
       const res = await nativeFetch(url);
       if (res.ok) {
