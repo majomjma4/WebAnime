@@ -6,187 +6,200 @@ use Exception;
 use Helpers\ApiResponse;
 use PDO;
 use Services\EpisodeCacheService;
-use Throwable;
 
 class SaveAnimeController extends Controller
 {
-    public function handle(): void
+    public function handle()
     {
         header('Content-Type: application/json; charset=UTF-8');
-        app_require_method('POST');
-        app_verify_csrf();
+
+        // Verificamos método POST
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            ApiResponse::error('Method not allowed', 405);
+            exit;
+        }
+
         app_start_session();
 
-        $isAdmin = isset($_SESSION['user_id'], $_SESSION['role']) && $_SESSION['role'] === 'Admin';
-        
+        // Verificamos permisos (Admin puede guardar todo, invitados solo completar)
+        $isAdmin = isset($_SESSION['user_id'], $_SESSION['role']) && ($_SESSION['role'] === 'Admin' || $_SESSION['role'] === 'Admin99');
+
         $data = app_get_json_input();
         if (!$data || !isset($data['mal_id'])) {
             ApiResponse::error('Invalid data');
             exit;
         }
-        
+
         $dbConn = (new \Models\Database())->getConnection();
         if (!$dbConn) {
             ApiResponse::error('DB Connection Error', 500);
             exit;
         }
-        
-        $mal_id = (int) $data['mal_id'];
-        $titulo = trim((string) ($data['title_english'] ?? $data['title'] ?? ''));
-        if ($titulo === '') {
-            $titulo = (string) ($data['title'] ?? 'Unknown');
-        }
 
-        $rating = (string) ($data['rating'] ?? '');
-        if (stripos($rating, 'Rx') !== false || stripos($rating, 'Hentai') !== false || stripos($rating, 'Erotica') !== false) {
-            ApiResponse::error('Contenido restringido (+18) no permitido.');
-            exit;
-        }
-        
-        $stmt = $dbConn->prepare("SELECT id FROM anime WHERE mal_id = ? LIMIT 1");
-        $stmt->execute([$mal_id]);
-        $existingAnime = $stmt->fetch(PDO::FETCH_ASSOC);
-        if (!$existingAnime) {
-            $stmt = $dbConn->prepare("SELECT id FROM anime WHERE titulo = ? LIMIT 1");
-            $stmt->execute([$titulo]);
-            $existingAnime = $stmt->fetch(PDO::FETCH_ASSOC);
-            if ($existingAnime) {
-                $upStmt = $dbConn->prepare("UPDATE anime SET mal_id = ? WHERE id = ?");
-                $upStmt->execute([$mal_id, $existingAnime['id']]);
+        $mal_id = (int) $data['mal_id'];
+        $titulo = isset($data['title_english']) ? $data['title_english'] : (isset($data['title']) ? $data['title'] : 'Unknown');
+        $titulo = trim((string) $titulo);
+
+        // Bloqueo de contenido +18
+        $rating = isset($data['rating']) ? (string) $data['rating'] : '';
+        $restrictedKeywords = array('Rx', 'Hentai', 'Erotica', 'Adults');
+        foreach ($restrictedKeywords as $kw) {
+            if (stripos($rating, $kw) !== false) {
+                ApiResponse::error('Contenido restringido (+18) no permitido.');
+                exit;
             }
         }
-        
+
+        $stmt = $dbConn->prepare("SELECT id FROM anime WHERE mal_id = ? LIMIT 1");
+        $stmt->execute(array($mal_id));
+        $existingAnime = $stmt->fetch(PDO::FETCH_ASSOC);
+
         if (!$isAdmin) {
-             if (!$existingAnime) {
-                 ApiResponse::error('Forbidden: Guest cannot create new anime from scratch', 403);
-                 exit;
-             }
-             $stmtC = $dbConn->prepare("SELECT COUNT(*) FROM anime_characters WHERE anime_id = ?");
-             $stmtC->execute([$existingAnime['id']]);
-             if ($stmtC->fetchColumn() > 0) {
-                  ApiResponse::error('Forbidden: Data is already populated', 403);
-                  exit;
-             }
+            if (!$existingAnime) {
+                ApiResponse::error('Forbidden: Guest cannot create new anime from scratch', 403);
+                exit;
+            }
+            // Solo permitimos guardar si no tiene personajes (para completar data)
+            $stmtC = $dbConn->prepare("SELECT COUNT(*) FROM anime_characters WHERE anime_id = ?");
+            $stmtC->execute(array($existingAnime['id']));
+            if ($stmtC->fetchColumn() > 0 && !isset($data['force_update'])) {
+                ApiResponse::error('Forbidden: Data is already populated', 403);
+                exit;
+            }
         }
 
         $new_id = $existingAnime ? $existingAnime['id'] : null;
         $episodeCacheService = new EpisodeCacheService($dbConn);
 
-        if ($new_id && isset($data['episodes_data']) && is_array($data['episodes_data']) && !isset($data['type']) && !isset($data['status']) && !isset($data['genres'])) {
-            try {
-                $episodeCacheService->saveForAnime((int) $new_id, $data['episodes_data']);
-                ApiResponse::success(['message' => 'Episode cache saved']);
-            } catch (Throwable $e) {
-                ApiResponse::error($e->getMessage(), 500);
-            }
-            exit;
-        }
-
-        $tipo = $data['type'] ?? 'TV';
+        // 1. Datos básicos
+        $tipo = isset($data['type']) ? $data['type'] : 'TV';
         $estudio = '';
         if (!empty($data['studios']) && is_array($data['studios'])) {
-            $studioNames = array_filter(array_map(static fn ($studio) => trim((string) ($studio['name'] ?? '')), $data['studios']));
+            $studioNames = array();
+            foreach ($data['studios'] as $studio) {
+                if (!empty($studio['name']))
+                    $studioNames[] = trim($studio['name']);
+            }
             $estudio = implode(', ', $studioNames);
         }
-        $estadoRaw = trim((string) ($data['status'] ?? 'Unknown'));
+
+        $estadoRaw = isset($data['status']) ? trim((string) $data['status']) : 'Unknown';
         $estadoLower = strtolower($estadoRaw);
-        if ($estadoLower === 'finished airing') {
+        if ($estadoLower === 'finished airing')
             $estado = 'Finalizado';
-        } elseif ($estadoLower === 'currently airing' || $estadoLower === 'en emision') {
+        elseif ($estadoLower === 'currently airing' || $estadoLower === 'en emision')
             $estado = 'En emision';
-        } elseif ($estadoLower === 'not yet aired') {
+        elseif ($estadoLower === 'not yet aired')
             $estado = 'Proximamente';
-        } else {
+        else
             $estado = $estadoRaw;
-        }
-        $episodios = (int) ($data['episodes'] ?? 0);
-        $temporada = $data['season'] ?? 'Unknown';
-        $anio = (int) ($data['year'] ?? 0);
-        if ($anio === 0 && isset($data['aired']['prop']['from']['year'])) {
-            $anio = (int) $data['aired']['prop']['from']['year'];
-        }
-        $sinopsis = $data['synopsis'] ?? '';
-        $imagen_url = $data['images']['jpg']['large_image_url'] ?? $data['images']['jpg']['image_url'] ?? '';
-        $puntuacion = (float) ($data['score'] ?? 0.0);
-        $titulo_ingles = trim((string) ($data['title_english'] ?? ''));
-        $clasificacion = trim((string) ($data['rating'] ?? ''));
-        $trailer_url = (string) ($data['trailer']['url'] ?? '');
+
+        $episodios = (int) (isset($data['episodes']) ? $data['episodes'] : 0);
+        $temporada = isset($data['season']) ? $data['season'] : 'Unknown';
+        $anio = (int) (isset($data['year']) ? $data['year'] :
+            (isset($data['aired']['prop']['from']['year']) ? $data['aired']['prop']['from']['year'] : 0));
+
+        $sinopsis = isset($data['synopsis']) ? $data['synopsis'] : '';
+        $imagen_url = isset($data['images']['jpg']['large_image_url']) ? $data['images']['jpg']['large_image_url'] :
+            (isset($data['images']['jpg']['image_url']) ? $data['images']['jpg']['image_url'] : '');
+        $puntuacion = (float) (isset($data['score']) ? $data['score'] : 0.0);
+        $titulo_ingles = isset($data['title_english']) ? trim((string) $data['title_english']) : '';
+        $clasificacion = isset($data['rating']) ? trim((string) $data['rating']) : '';
+        $trailer_url = isset($data['trailer']['url']) ? (string) $data['trailer']['url'] : '';
 
         $dbConn->beginTransaction();
         try {
             if (!$new_id) {
-                $stmt = $dbConn->prepare("INSERT INTO anime (mal_id, titulo, titulo_ingles, tipo, estudio, estado, episodios, temporada, anio, clasificacion, sinopsis, imagen_url, trailer_url, puntuacion, activo, creado_en) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, NOW())");
-                $stmt->execute([$mal_id, $titulo, $titulo_ingles, $tipo, $estudio, $estado, $episodios, $temporada, $anio, $clasificacion, $sinopsis, $imagen_url, $trailer_url, $puntuacion]);
+                $sql = "INSERT INTO anime (mal_id, titulo, titulo_ingles, tipo, estudio, estado, episodios, temporada, anio, clasificacion, sinopsis, imagen_url, trailer_url, puntuacion, activo, creado_en) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, NOW())";
+                $stmt = $dbConn->prepare($sql);
+                $stmt->execute(array($mal_id, $titulo, $titulo_ingles, $tipo, $estudio, $estado, $episodios, $temporada, $anio, $clasificacion, $sinopsis, $imagen_url, $trailer_url, $puntuacion));
                 $new_id = $dbConn->lastInsertId();
             } else {
-                $stmt = $dbConn->prepare("UPDATE anime SET mal_id = ?, titulo = ?, titulo_ingles = ?, tipo = ?, estudio = ?, estado = ?, episodios = ?, temporada = ?, anio = ?, clasificacion = ?, sinopsis = ?, imagen_url = ?, trailer_url = ?, puntuacion = ? WHERE id = ?");
-                $stmt->execute([$mal_id, $titulo, $titulo_ingles, $tipo, $estudio, $estado, $episodios, $temporada, $anio, $clasificacion, $sinopsis, $imagen_url, $trailer_url, $puntuacion, $new_id]);
-                $dbConn->prepare("DELETE FROM anime_generos WHERE anime_id = ?")->execute([$new_id]);
+                $sql = "UPDATE anime SET mal_id = ?, titulo = ?, titulo_ingles = ?, tipo = ?, estudio = ?, estado = ?, episodios = ?, temporada = ?, anio = ?, clasificacion = ?, sinopsis = ?, imagen_url = ?, trailer_url = ?, puntuacion = ? WHERE id = ?";
+                $stmt = $dbConn->prepare($sql);
+                $stmt->execute(array($mal_id, $titulo, $titulo_ingles, $tipo, $estudio, $estado, $episodios, $temporada, $anio, $clasificacion, $sinopsis, $imagen_url, $trailer_url, $puntuacion, $new_id));
+
+                // Limpiar géneros previos para actualizar
+                $dbConn->prepare("DELETE FROM anime_generos WHERE anime_id = ?")->execute(array($new_id));
             }
 
-            $generos = is_array($data['genres'] ?? null) ? $data['genres'] : [];
+            // Guardar Géneros
+            $generos = isset($data['genres']) && is_array($data['genres']) ? $data['genres'] : array();
             foreach ($generos as $g) {
-                $g_name = (string) ($g['name'] ?? '');
-                if ($g_name === '') {
+                $g_name = isset($g['name']) ? (string) $g['name'] : '';
+                if ($g_name === '')
                     continue;
-                }
+
                 $gStmt = $dbConn->prepare("SELECT id FROM generos WHERE nombre = ?");
-                $gStmt->execute([$g_name]);
+                $gStmt->execute(array($g_name));
                 $g_row = $gStmt->fetch(PDO::FETCH_ASSOC);
                 $g_id = $g_row ? $g_row['id'] : null;
+
                 if (!$g_id) {
                     $iStmt = $dbConn->prepare("INSERT INTO generos (nombre) VALUES (?)");
-                    $iStmt->execute([$g_name]);
+                    $iStmt->execute(array($g_name));
                     $g_id = $dbConn->lastInsertId();
                 }
-                $lStmt = $dbConn->prepare("INSERT INTO anime_generos (anime_id, genero_id) VALUES (?, ?)");
-                $lStmt->execute([$new_id, $g_id]);
+                $dbConn->prepare("INSERT INTO anime_generos (anime_id, genero_id) VALUES (?, ?)")->execute(array($new_id, $g_id));
             }
 
             $dbConn->commit();
 
+            // Guardar Personajes (Solo los primeros 10)
             if (isset($data['characters']) && is_array($data['characters'])) {
-                $characters = array_slice(array_values(array_filter($data['characters'], static fn ($character) => !empty($character['character']['mal_id']))), 0, 10);
-                $dbConn->prepare("DELETE FROM anime_characters WHERE anime_id = ?")->execute([$new_id]);
+                $dbConn->prepare("DELETE FROM anime_characters WHERE anime_id = ?")->execute(array($new_id));
                 $charStmt = $dbConn->prepare("INSERT INTO anime_characters (anime_id, mal_id, name, role, image_url) VALUES (?, ?, ?, ?, ?)");
-                foreach ($characters as $c) {
-                    $charStmt->execute([(int) $new_id, (int) ($c['character']['mal_id'] ?? 0), trim((string) ($c['character']['name'] ?? 'Unknown')), trim((string) ($c['role'] ?? 'Supporting')), (string) ($c['character']['images']['jpg']['image_url'] ?? '')]);
+                $count = 0;
+                foreach ($data['characters'] as $c) {
+                    if ($count >= 10)
+                        break;
+                    $c_mal_id = isset($c['character']['mal_id']) ? (int) $c['character']['mal_id'] : 0;
+                    $c_name = isset($c['character']['name']) ? trim((string) $c['character']['name']) : 'Unknown';
+                    $c_role = isset($c['role']) ? trim((string) $c['role']) : 'Supporting';
+                    $c_img = isset($c['character']['images']['jpg']['image_url']) ? (string) $c['character']['images']['jpg']['image_url'] : '';
+
+                    if ($c_mal_id) {
+                        $charStmt->execute(array($new_id, $c_mal_id, $c_name, $c_role, $c_img));
+                        $count++;
+                    }
                 }
             }
 
+            // Guardar Imágenes
             if (isset($data['pictures']) && is_array($data['pictures'])) {
-                $dbConn->prepare("DELETE FROM anime_pictures WHERE anime_id = ?")->execute([$new_id]);
+                $dbConn->prepare("DELETE FROM anime_pictures WHERE anime_id = ?")->execute(array($new_id));
                 $picStmt = $dbConn->prepare("INSERT INTO anime_pictures (anime_id, image_url) VALUES (?, ?)");
                 foreach ($data['pictures'] as $p) {
-                    $p_url = $p['jpg']['large_image_url'] ?? $p['jpg']['image_url'] ?? '';
-                    if ($p_url) {
-                        $picStmt->execute([$new_id, $p_url]);
-                    }
+                    $p_url = isset($p['jpg']['large_image_url']) ? $p['jpg']['large_image_url'] : (isset($p['jpg']['image_url']) ? $p['jpg']['image_url'] : '');
+                    if ($p_url)
+                        $picStmt->execute(array($new_id, $p_url));
                 }
             }
 
-            if (isset($data['videos']) && is_array($data['videos']['promo'] ?? null)) {
-                $dbConn->prepare("DELETE FROM anime_videos WHERE anime_id = ?")->execute([$new_id]);
+            // Guardar Promos/Trailers
+            if (isset($data['videos']) && is_array($data['videos']['promo'])) {
+                $dbConn->prepare("DELETE FROM anime_videos WHERE anime_id = ?")->execute(array($new_id));
                 $vidStmt = $dbConn->prepare("INSERT INTO anime_videos (anime_id, youtube_id, url, image_url) VALUES (?, ?, ?, ?)");
                 foreach ($data['videos']['promo'] as $v) {
-                    $v_yt = $v['trailer']['youtube_id'] ?? '';
-                    $v_url = $v['trailer']['url'] ?? '';
-                    $v_img = $v['trailer']['images']['maximum_image_url'] ?? $v['trailer']['images']['large_image_url'] ?? '';
-                    if ($v_yt || $v_url) {
-                        $vidStmt->execute([$new_id, $v_yt, $v_url, $v_img]);
-                    }
+                    $v_yt = isset($v['trailer']['youtube_id']) ? $v['trailer']['youtube_id'] : '';
+                    $v_url = isset($v['trailer']['url']) ? $v['trailer']['url'] : '';
+                    $v_img = isset($v['trailer']['images']['maximum_image_url']) ? $v['trailer']['images']['maximum_image_url'] :
+                        (isset($v['trailer']['images']['large_image_url']) ? $v['trailer']['images']['large_image_url'] : '');
+                    if ($v_yt || $v_url)
+                        $vidStmt->execute(array($new_id, $v_yt, $v_url, $v_img));
                 }
             }
 
+            // Guardar Episodios
             if (isset($data['episodes_data']) && is_array($data['episodes_data'])) {
                 $episodeCacheService->saveForAnime((int) $new_id, $data['episodes_data']);
             }
 
-            ApiResponse::success(['message' => 'Inserted new anime with deep data']);
+            ApiResponse::success(array('message' => 'Anime and deep data updated successfully', 'id' => $new_id));
+
         } catch (Exception $e) {
-            if ($dbConn->inTransaction()) {
+            if ($dbConn->inTransaction())
                 $dbConn->rollBack();
-            }
             ApiResponse::error($e->getMessage(), 500);
         }
     }
