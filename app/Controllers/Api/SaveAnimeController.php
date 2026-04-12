@@ -155,6 +155,7 @@ class SaveAnimeController extends Controller
         $clasificacion = $data['rating'] ?? ($data['clasificacion'] ?? '');
         $trailer_url = $data['trailer']['url'] ?? ($data['trailer_url'] ?? '');
 
+        $action = 'none';
         $dbConn->beginTransaction();
         try {
             if (!$new_id) {
@@ -162,10 +163,13 @@ class SaveAnimeController extends Controller
                 $stmt = $dbConn->prepare($sql);
                 $stmt->execute(array($mal_id, $titulo, $titulo_ingles, $tipo, $estudio, $estado, $episodios, $temporada, $anio, $clasificacion, $sinopsis, $imagen_url, $trailer_url, $puntuacion));
                 $new_id = $dbConn->lastInsertId();
+                if (!$new_id || $new_id == 0) throw new Exception("Error al obtener ID de inserción para MAL " . $mal_id);
+                $action = 'insert';
             } else {
                 $sql = "UPDATE anime SET mal_id = ?, titulo = ?, titulo_ingles = ?, tipo = ?, estudio = ?, estado = ?, episodios = ?, temporada = ?, anio = ?, clasificacion = ?, sinopsis = ?, imagen_url = ?, trailer_url = ?, puntuacion = ?, activo = 1 WHERE id = ?";
                 $stmt = $dbConn->prepare($sql);
                 $stmt->execute(array($mal_id, $titulo, $titulo_ingles, $tipo, $estudio, $estado, $episodios, $temporada, $anio, $clasificacion, $sinopsis, $imagen_url, $trailer_url, $puntuacion, $new_id));
+                $action = 'update';
 
                 // Limpiar géneros previos para actualizar
                 $dbConn->prepare("DELETE FROM anime_generos WHERE anime_id = ?")->execute(array($new_id));
@@ -243,7 +247,7 @@ class SaveAnimeController extends Controller
                 $episodeCacheService->saveForAnime((int) $new_id, $data['episodes_data']);
             }
 
-            ApiResponse::success(array('message' => 'Anime and deep data updated successfully', 'id' => $new_id));
+            ApiResponse::success(array('message' => 'Anime processed successfully', 'id' => $new_id, 'action' => $action));
 
         } catch (Exception $e) {
             if (isset($dbConn) && $dbConn->inTransaction()) {

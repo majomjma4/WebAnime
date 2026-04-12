@@ -426,7 +426,9 @@ const AniDexDetailDataBoot = () => {
       })
       .then(r => r.json())
       .then(res => {
-          if (res.success) console.log("NekoraDetail: Registro inicial exitoso (ID " + selectedId + ")");
+          if (res.success) {
+            console.log(`NekoraDetail: Fase 1 [${res.action}] exitosa. DB_ID: ${res.id} | MAL_ID: ${selectedId}`);
+          }
       })
       .catch(e => console.error("NekoraDetail: Error en persistencia rápida:", e));
     }
@@ -460,7 +462,7 @@ const AniDexDetailDataBoot = () => {
         if (!res.success) {
           console.error("NekoraDetail: Error al persistir datos profundos:", res.error);
         } else {
-          console.log("NekoraDetail: Datos profundos sincronizados exitosamente.");
+          console.log(`NekoraDetail: Fase 2 [${res.action}] exitosa. DB_ID: ${res.id}`);
         }
       })
       .catch(err => {
