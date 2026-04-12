@@ -1,4 +1,4 @@
-﻿(() => {
+(() => {
   const getCookie = (name) => {
     const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     const match = document.cookie.match(new RegExp(`(?:^|; )${escaped}=([^;]*)`));
@@ -15,7 +15,9 @@
   };
 
   const getBasePath = () => {
+    if (window.CI_BASE_URL) return window.CI_BASE_URL;
     const path = window.location.pathname.replace(/\\/g, "/");
+
     const scriptCandidates = Array.from(document.scripts || []);
     const sharedUtilsScript = scriptCandidates.find((script) =>
       typeof script.src === "string" && /\/assets\/js\/shared-utils\.js(?:\?|$)/i.test(script.src)
@@ -39,6 +41,15 @@
     if (publicIndex >= 0) {
       return path.slice(0, publicIndex + "/public/".length);
     }
+    
+    // Fallback para subdirectorios de producción (como cPanel)
+    if (path.toLowerCase().includes("/webanime-master/")) {
+      return "/WebAnime-master/";
+    }
+    if (path.toLowerCase().includes("/replica/")) {
+      return "/replica/";
+    }
+
     if (path.toLowerCase().endsWith("/public")) {
       return `${path}/`;
     }
@@ -201,4 +212,3 @@
     fetchJson
   };
 })();
-
