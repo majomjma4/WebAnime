@@ -165,27 +165,32 @@ class AuthController extends Controller
         }
 
         if ($action === 'check') {
-            if (isset($_SESSION['user_id'])) {
-                $username = $_SESSION['username'] ?? 'Usuario';
-                $role = $_SESSION['role'] ?? 'Registrado';
+            $isLogged = isset($_SESSION['user_id']);
+            $userId = $_SESSION['user_id'] ?? null;
+            $username = $_SESSION['username'] ?? 'Usuario';
+            $role = $_SESSION['role'] ?? 'Registrado';
 
+            if ($isLogged) {
                 $stmt = $dbConn->prepare("SELECT codigo_publico, es_premium, premium_vence_en FROM usuarios WHERE id = ?");
-                $stmt->execute([$_SESSION['user_id']]);
+                $stmt->execute([$userId]);
                 $uInfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
                 $isPremium = ($role === 'Admin' || ($uInfo && $uInfo['es_premium'] == 1 && (is_null($uInfo['premium_vence_en']) || strtotime($uInfo['premium_vence_en']) > time())));
                 $_SESSION['premium'] = $isPremium;
 
+                session_write_close();
+
                 echo json_encode([
                     'logged' => true,
                     'username' => $username,
-                    'userId' => $_SESSION['user_id'],
+                    'userId' => $userId,
                     'publicUserId' => ($uInfo['codigo_publico'] ?? null),
                     'role' => $role,
                     'isAdmin' => ($role === 'Admin'),
                     'isPremium' => $isPremium,
                 ]);
             } else {
+                session_write_close();
                 echo json_encode(['logged' => false, 'role' => 'Invitado', 'isPremium' => false]);
             }
             exit;

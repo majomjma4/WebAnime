@@ -454,8 +454,7 @@
 
   async function initLayout() {
     try {
-      await checkAuth();
-      await loadLayout();
+      await Promise.all([checkAuth(), loadLayout()]);
     } catch (err) {
       console.warn("No se pudo cargar header/footer:", err);
     } finally {

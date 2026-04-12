@@ -4,18 +4,22 @@ namespace Models;
 use PDO;
 use Exception;
 
-class Anime {
+class Anime
+{
     private $db;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->db = (new Database())->getConnection();
     }
 
     /**
      * Obtiene un anime por su ID (interno o mal_id)
      */
-    public function getById($id) {
-        if (!$this->db) return null;
+    public function getById($id)
+    {
+        if (!$this->db)
+            return null;
 
         // Intentar primero por mal_id, si no por id interno
         $stmt = $this->db->prepare("SELECT * FROM anime WHERE mal_id = :id OR id = :id LIMIT 1");
@@ -39,14 +43,16 @@ class Anime {
     /**
      * Obtiene un anime por su titulo aproximado (Soporte Frontend Legacy)
      */
-    public function getByTitle($title) {
-        if (!$this->db) return null;
-        
+    public function getByTitle($title)
+    {
+        if (!$this->db)
+            return null;
+
         $stmt = $this->db->prepare("SELECT * FROM anime WHERE titulo = :title OR titulo_ingles = :title LIMIT 1");
         $stmt->bindParam(':title', $title, PDO::PARAM_STR);
         $stmt->execute();
         $anime = $stmt->fetch(PDO::FETCH_ASSOC);
-        
+
         if (!$anime) {
             $stmt = $this->db->prepare("SELECT * FROM anime WHERE titulo LIKE :liketitle OR titulo_ingles LIKE :liketitle LIMIT 1");
             $likeStr = "%" . $title . "%";
@@ -67,7 +73,8 @@ class Anime {
     /**
      * Obtiene los géneros asociados a un anime_id
      */
-    public function getGeneros($anime_id) {
+    public function getGeneros($anime_id)
+    {
         $stmt = $this->db->prepare("
             SELECT g.nombre 
             FROM generos g 
@@ -76,7 +83,7 @@ class Anime {
         ");
         $stmt->bindParam(':anime_id', $anime_id, PDO::PARAM_INT);
         $stmt->execute();
-        
+
         $generos = [];
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $generos[] = $row['nombre'];
@@ -87,16 +94,20 @@ class Anime {
     /**
      * Traduce texto usando Google Translate (gratuito)
      */
-    private function translateToSpanish($text) {
-        if (empty($text)) return '';
+    private function translateToSpanish($text)
+    {
+        if (empty($text))
+            return '';
         $url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=es&dt=t&q=" . urlencode($text);
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0");
+        curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 6);
         $res = curl_exec($ch);
         curl_close($ch);
-        
+
         $translated = '';
         if ($res) {
             $json = json_decode($res, true);
@@ -112,11 +123,14 @@ class Anime {
     /**
      * Importa desde Jikan por MAL_ID con soporte para Rate Limit
      */
-    private function importFromJikanByMalId($mal_id, $retries = 2) {
-        $url = "https://api.jikan.moe/v4/anime/" . (int)$mal_id . "/full";
+    private function importFromJikanByMalId($mal_id, $retries = 2)
+    {
+        $url = "https://api.jikan.moe/v4/anime/" . (int) $mal_id . "/full";
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_USERAGENT, "WebAnimeAuto/1.0");
+        curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 12);
         $res = curl_exec($ch);
         $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
@@ -126,9 +140,11 @@ class Anime {
             return $this->importFromJikanByMalId($mal_id, $retries - 1);
         }
 
-        if ($status !== 200 || !$res) return null;
+        if ($status !== 200 || !$res)
+            return null;
         $data = json_decode($res, true);
-        if (!isset($data['data'])) return null;
+        if (!isset($data['data']))
+            return null;
 
         return $this->saveJikanDataToDB($data['data']);
     }
@@ -136,11 +152,14 @@ class Anime {
     /**
      * Importa desde Jikan por Título con soporte para Rate Limit
      */
-    private function importFromJikanByTitle($title, $retries = 2) {
+    private function importFromJikanByTitle($title, $retries = 2)
+    {
         $url = "https://api.jikan.moe/v4/anime?q=" . urlencode($title) . "&limit=1";
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_USERAGENT, "WebAnimeAuto/1.0");
+        curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 12);
         $res = curl_exec($ch);
         $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
@@ -150,9 +169,11 @@ class Anime {
             return $this->importFromJikanByTitle($title, $retries - 1);
         }
 
-        if ($status !== 200 || !$res) return null;
+        if ($status !== 200 || !$res)
+            return null;
         $data = json_decode($res, true);
-        if (empty($data['data'][0])) return null;
+        if (empty($data['data'][0]))
+            return null;
 
         return $this->saveJikanDataToDB($data['data'][0]);
     }
@@ -160,15 +181,18 @@ class Anime {
     /**
      * Guarda la data de Jikan en la base de datos y la devuelve formateada
      */
-    private function saveJikanDataToDB($a) {
+    private function saveJikanDataToDB($a)
+    {
         // Formatear campos
         $mal_id = $a['mal_id'] ?? null;
-        if (!$mal_id) return null;
+        if (!$mal_id)
+            return null;
 
         // Verificar si por casualidad alguien ya lo ingresó en este milisegundo o mediante titulo previamente
         $check = $this->db->prepare("SELECT id FROM anime WHERE mal_id = ?");
         $check->execute([$mal_id]);
-        if ($check->fetchColumn()) return $this->getById($mal_id);
+        if ($check->fetchColumn())
+            return $this->getById($mal_id);
 
         $titulo = substr($a['title'] ?? 'Desconocido', 0, 255);
         $titulo_ingles = substr($a['title_english'] ?? '', 0, 255);
@@ -178,10 +202,10 @@ class Anime {
         $episodes = $a['episodes'] ?? null;
         $anio = $a['year'] ?? $a['aired']['prop']['from']['year'] ?? null;
         $rating = substr($a['rating'] ?? '', 0, 50);
-        
+
         $synopsisEn = $a['synopsis'] ?? null;
         $synopsisEs = $this->translateToSpanish($synopsisEn);
-        
+
         $img = $a['images']['webp']['large_image_url'] ?? $a['images']['jpg']['large_image_url'] ?? null;
         $trailer_url = $a['trailer']['url'] ?? null;
         $score = $a['score'] ?? null;
@@ -189,14 +213,15 @@ class Anime {
         try {
             $insert = $this->db->prepare("INSERT INTO anime (mal_id, titulo, titulo_ingles, tipo, estado, episodios, anio, clasificacion, sinopsis, imagen_url, trailer_url, puntuacion, activo) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,1)");
             $insert->execute([$mal_id, $titulo, $titulo_ingles, $tipo, $estado, $episodes, $anio, $rating, $synopsisEs, $img, $trailer_url, $score]);
-            
+
             $internal_id = $this->db->lastInsertId();
-            
+
             // Géneros
             if (isset($a['genres']) && is_array($a['genres'])) {
                 foreach ($a['genres'] as $g) {
                     $gName = substr($g['name'] ?? '', 0, 50);
-                    if (!$gName) continue;
+                    if (!$gName)
+                        continue;
                     $s = $this->db->prepare("SELECT id FROM generos WHERE nombre = ?");
                     $s->execute([$gName]);
                     $gId = $s->fetchColumn();
@@ -207,9 +232,9 @@ class Anime {
                     $this->db->prepare("INSERT INTO anime_generos (anime_id, genero_id) VALUES (?, ?)")->execute([$internal_id, $gId]);
                 }
             }
-            
+
             return $this->getById($mal_id);
-            
+
         } catch (Exception $e) {
             file_put_contents(__DIR__ . '/../../db_import_error.log', "JIKAN IMPORT ERROR: " . $e->getMessage() . "\n", FILE_APPEND);
             return null;
@@ -219,8 +244,10 @@ class Anime {
     /**
      * Obtiene los nombres de géneros seguros (excluyendo +18)
      */
-    public function getFilteredGenres() {
-        if (!$this->db) return [];
+    public function getFilteredGenres()
+    {
+        if (!$this->db)
+            return [];
         $restricted = ["'Hentai'", "'Erotica'", "'Ecchi'", "'Yaoi'", "'Yuri'", "'Gore'", "'Harem'", "'Reverse Harem'", "'Rx'", "'Girls Love'", "'Boys Love'"];
         $sql = "SELECT nombre FROM generos 
                 WHERE nombre NOT IN (" . implode(",", $restricted) . ") 
@@ -233,11 +260,13 @@ class Anime {
     /**
      * Obtiene películas seguras (excluyendo +18)
      */
-    public function getMovies() {
-        if (!$this->db) return [];
+    public function getMovies()
+    {
+        if (!$this->db)
+            return [];
         $restrictedGenres = ["'Hentai'", "'Erotica'", "'Ecchi'", "'Yaoi'", "'Yuri'", "'Girls Love'", "'Boys Love'"];
         $restrictedTitles = ["'%does it count if%'", "'%futanari%'"];
-        
+
         $sql = "SELECT * FROM anime 
                 WHERE tipo = 'Movie' 
                   AND id NOT IN (
@@ -259,11 +288,13 @@ class Anime {
     /**
      * Obtiene series seguras (excluyendo +18) con orden de prioridad
      */
-    public function getSeries() {
-        if (!$this->db) return [];
+    public function getSeries()
+    {
+        if (!$this->db)
+            return [];
         $restrictedGenres = ["'Hentai'", "'Erotica'", "'Ecchi'", "'Yaoi'", "'Yuri'", "'Girls Love'", "'Boys Love'"];
         $restrictedTitles = ["'%does it count if%'", "'%futanari%'"];
-        
+
         $sql = "SELECT * FROM anime 
                 WHERE tipo != 'Movie' 
                   AND id NOT IN (
@@ -306,12 +337,14 @@ class Anime {
     /**
      * Obtiene catálogo administrativo aplicando restricciones de seguridad
      */
-    public function getCatalog($page = 1, $perPage = 50, $search = '', $status = 'ALL', $type = 'ALL', $year = '') {
-        if (!$this->db) return ['data' => [], 'total' => 0];
+    public function getCatalog($page = 1, $perPage = 50, $search = '', $status = 'ALL', $type = 'ALL', $year = '')
+    {
+        if (!$this->db)
+            return ['data' => [], 'total' => 0];
 
         $restrictedGenres = ["'Hentai'", "'Erotica'", "'Ecchi'", "'Yaoi'", "'Yuri'", "'Girls Love'", "'Boys Love'"];
         $restrictedTitles = ["'%does it count if%'", "'%futanari%'"];
-        
+
         $where = [
             "id NOT IN (SELECT anime_id FROM anime_generos WHERE genero_id IN (SELECT id FROM generos WHERE nombre IN (" . implode(",", $restrictedGenres) . ")))",
             "LOWER(titulo) NOT LIKE " . implode(" AND LOWER(titulo) NOT LIKE ", $restrictedTitles)
@@ -355,24 +388,26 @@ class Anime {
 
         // Contar el total
         $countStmt = $this->db->prepare("SELECT COUNT(*) FROM anime" . $whereSql);
-        foreach ($params as $k => $v) $countStmt->bindValue($k, $v);
+        foreach ($params as $k => $v)
+            $countStmt->bindValue($k, $v);
         $countStmt->execute();
-        $total = (int)$countStmt->fetchColumn();
+        $total = (int) $countStmt->fetchColumn();
 
-        $totalPages = max(1, (int)ceil($total / $perPage));
+        $totalPages = max(1, (int) ceil($total / $perPage));
         $page = min(max(1, $page), $totalPages);
         $offset = ($page - 1) * $perPage;
 
         // Obtener lista
         $listStmt = $this->db->prepare("SELECT * FROM anime" . $whereSql . " ORDER BY id DESC LIMIT :limit OFFSET :offset");
-        foreach ($params as $k => $v) $listStmt->bindValue($k, $v);
+        foreach ($params as $k => $v)
+            $listStmt->bindValue($k, $v);
         $listStmt->bindValue(':limit', $perPage, PDO::PARAM_INT);
         $listStmt->bindValue(':offset', $offset, PDO::PARAM_INT);
         $listStmt->execute();
         $animes = $listStmt->fetchAll(PDO::FETCH_ASSOC);
 
         // Conteo rápido de "En emisión" para el dashboard
-        $airingCount = (int)$this->db->query("SELECT COUNT(*) FROM anime WHERE LOWER(estado) IN ('en emision', 'currently airing') AND id NOT IN (SELECT anime_id FROM anime_generos WHERE genero_id IN (SELECT id FROM generos WHERE nombre IN (" . implode(",", $restrictedGenres) . ")))")->fetchColumn();
+        $airingCount = (int) $this->db->query("SELECT COUNT(*) FROM anime WHERE LOWER(estado) IN ('en emision', 'currently airing') AND id NOT IN (SELECT anime_id FROM anime_generos WHERE genero_id IN (SELECT id FROM generos WHERE nombre IN (" . implode(",", $restrictedGenres) . ")))")->fetchColumn();
 
         return [
             'data' => $animes,
