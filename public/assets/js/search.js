@@ -497,10 +497,10 @@
       let tvCount = 0;
       items.forEach((it) => {
         const t = normalize(it.mediaType || "");
-        if (t.includes("movie") || t.includes("pelicula") || t.includes("película")) movieCount += 1;
+        if (t.includes("movie") || t.includes("pelicula") || t.includes("pel\u00edcula")) movieCount += 1;
         else tvCount += 1;
       });
-      // Si hay mezcla, vamos a la búsqueda general (home/index)
+      // Si hay mezcla, vamos a la b\u00fasqueda general (home/index)
       if (movieCount > 0 && tvCount > 0) return "index";
       return movieCount > tvCount ? "peliculas" : "series";
     };
@@ -548,7 +548,7 @@
         moreBtn.className =
           "w-full text-center px-3 py-2 text-sm font-semibold text-primary hover:bg-zinc-800/70 transition-colors border-t border-zinc-800";
         moreBtn.style.borderRadius = "0";
-        moreBtn.textContent = "Ver m?s";
+        moreBtn.textContent = "Ver m\u00e1s";
         moreBtn.addEventListener("click", () => {
           closeBox();
           const page = resolveSuggestPage(items);

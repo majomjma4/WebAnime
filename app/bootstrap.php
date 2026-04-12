@@ -4,7 +4,15 @@
  * Compatible con PHP 5.6, 7.0, 7.4 y 8.x
  */
 
-// 1. Mostrar errores si index.php lo activó
+// 1. Configuración de Codificación Global (UTF-8)
+if (!headers_sent()) {
+    header('Content-Type: text/html; charset=UTF-8');
+}
+if (function_exists('mb_internal_encoding')) {
+    mb_internal_encoding('UTF-8');
+}
+
+// 2. Mostrar errores si index.php lo activó
 if (ini_get('display_errors')) {
     error_reporting(E_ALL);
 }

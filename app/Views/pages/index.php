@@ -425,7 +425,7 @@
             </div>
             <a class="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-4 py-2 text-sm font-bold text-primary shadow-[0_0_12px_rgba(168,85,247,0.25)] transition-all hover:border-primary hover:bg-primary/20 hover:text-primary" href="<?= route_path('featured') ?>">
               <span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1;">arrow_forward</span>
-              Ver mas
+              Ver m&aacute;s
             </a>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-6 h-[min(60vh,37.5rem)] spotlight-grid spotlight-grid--compact">
@@ -622,7 +622,7 @@
         <section class="px-8 md:px-16">
           <div class="flex items-end justify-between mb-8">
             <div>
-              <h2 class="text-3xl font-bold font-headline tracking-tight"><span class="section-title-em movie">Películas</span> Populares</h2>
+              <h2 class="text-3xl font-bold font-headline tracking-tight"><span class="section-title-em movie">Pel&iacute;culas</span> Populares</h2>
               <div class="h-1 w-12 bg-primary mt-2 rounded-full"></div>
             </div>
             <a class="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-4 py-2 text-sm font-bold text-primary shadow-[0_0_12px_rgba(168,85,247,0.25)] transition-all hover:border-primary hover:bg-primary/20 hover:text-primary" href="<?= route_path('movies') ?>">
