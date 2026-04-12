@@ -154,6 +154,7 @@ return [
     ],
     'api_jikan_proxy' => [
         'path' => 'api/jikan_proxy',
+        'patterns' => ['api/jikan_proxy/{any}'],
         'controller' => Controllers\Api\JikanProxyController::class,
         'action' => 'handle',
         'aliases' => ['api/jikan_proxy.php'],

@@ -129,13 +129,17 @@ function app_get_json_input() {
 }
 
 function app_verify_csrf() {
-    // Versión simplificada para compatibilidad legacy
-    // En producción idealmente verificar tokens, aquí al menos validamos origen básico
     $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
     $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
-    if (!empty($referer) && strpos($referer, $host) === false) {
+    if (empty($referer) || empty($host)) return;
+
+    // Normalizar: quitar protocolo y www.
+    $refDomain = strtolower(preg_replace('/^https?:\/\/(www\.)?/', '', parse_url($referer, PHP_URL_HOST)));
+    $hostDomain = strtolower(preg_replace('/^www\./', '', $host));
+
+    if ($refDomain !== $hostDomain && strpos($refDomain, $hostDomain) === false) {
         header("HTTP/1.1 403 Forbidden");
-        echo json_encode(array('error' => 'CSRF validation failed'));
+        echo json_encode(array('error' => 'CSRF validation failed', 'ref' => $refDomain, 'host' => $hostDomain));
         exit;
     }
 }
