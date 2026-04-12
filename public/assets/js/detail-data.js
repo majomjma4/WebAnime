@@ -1880,7 +1880,7 @@ const AniDexDetailDataBoot = () => {
             continue;
           }
           try {
-            const res = await fetch(`${API}/characters/${charId}/full`);
+            const res = await fetch(`${API}?endpoint=${encodeURIComponent('characters/' + charId + '/full')}`);
             if (!res.ok) throw new Error("fetch failed");
             const json = await res.json();
             const data = json?.data || {};

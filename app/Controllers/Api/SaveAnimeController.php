@@ -14,6 +14,10 @@ class SaveAnimeController extends Controller
 
     public function handle()
     {
+        // Silenciamos advertencias para evitar corromper la respuesta JSON con HTML de errores PHP
+        @error_reporting(0);
+        @ini_set('display_errors', 0);
+
         header('Content-Type: application/json; charset=UTF-8');
 
         // Verificamos método POST
@@ -28,7 +32,7 @@ class SaveAnimeController extends Controller
         $isAdmin = isset($_SESSION['user_id'], $_SESSION['role']) && ($_SESSION['role'] === 'Admin' || $_SESSION['role'] === 'Admin99');
 
         $data = app_get_json_input();
-        if (!$data || !isset($data['mal_id'])) {
+        if (!$data || (!isset($data['mal_id']) && !isset($data['id_anime']))) {
             ApiResponse::error('Invalid data');
             exit;
         }
@@ -39,8 +43,10 @@ class SaveAnimeController extends Controller
             exit;
         }
 
-        $mal_id = (int) ($data['mal_id'] ?? 0);
-        $titulo = isset($data['title_english']) ? $data['title_english'] : (isset($data['title']) ? $data['title'] : 'Unknown');
+        $mal_id = (int) ($data['mal_id'] ?? ($data['id_anime'] ?? 0));
+        
+        // Mapeo Híbrido: Jikan (title) vs Local (titulo)
+        $titulo = $data['title_english'] ?? ($data['titulo_ingles'] ?? ($data['title'] ?? ($data['titulo'] ?? 'Unknown')));
         $titulo = trim((string) $titulo);
 
         // LOG DE DEPURACIÓN (Temporal) enviando a la raíz
@@ -54,7 +60,7 @@ class SaveAnimeController extends Controller
         }
 
         // Bloqueo de contenido +18
-        $rating = isset($data['rating']) ? (string) $data['rating'] : '';
+        $rating = (string) ($data['rating'] ?? ($data['clasificacion'] ?? ''));
         $restrictedRating = array('Rx', 'Hentai', 'Erotica', 'Adults');
         foreach ($restrictedRating as $kw) {
             if (stripos($rating, $kw) !== false) {
@@ -64,7 +70,8 @@ class SaveAnimeController extends Controller
         }
 
         // Bloqueo por Título
-        $fullTitle = strtolower($titulo . ' ' . (isset($data['title_japanese']) ? $data['title_japanese'] : ''));
+        $title_ja = $data['title_japanese'] ?? ($data['titulo_japones'] ?? '');
+        $fullTitle = strtolower($titulo . ' ' . $title_ja);
         foreach ($this->restrictedTitles as $rt) {
             if (strpos($fullTitle, $rt) !== false) {
                 ApiResponse::error('Contenido restringido (Título) no permitido.');
@@ -73,12 +80,14 @@ class SaveAnimeController extends Controller
         }
 
         // Bloqueo por Género
-        $genres = isset($data['genres']) && is_array($data['genres']) ? $data['genres'] : array();
-        foreach ($genres as $g) {
-            $gn = isset($g['name']) ? (string)$g['name'] : '';
-            if (in_array($gn, $this->restrictedGenres)) {
-                ApiResponse::error('Contenido restringido (Género) no permitido.');
-                exit;
+        $genres = $data['genres'] ?? ($data['generos'] ?? array());
+        if (is_array($genres)) {
+            foreach ($genres as $g) {
+                $gn = isset($g['name']) ? (string)$g['name'] : (is_string($g) ? $g : '');
+                if (in_array($gn, $this->restrictedGenres)) {
+                    ApiResponse::error('Contenido restringido (Género) no permitido.');
+                    exit;
+                }
             }
         }
 
@@ -93,13 +102,10 @@ class SaveAnimeController extends Controller
         $existingAnime = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$isAdmin) {
-            // Permitimos CREACIÓN automática (Silent Cache) para invitados.
-            // Solo restringimos si ya existe y tiene datos completos (para evitar spam o sobreescritura de datos curados)
             if ($existingAnime) {
                 $stmtC = $dbConn->prepare("SELECT COUNT(*) FROM anime_characters WHERE anime_id = ?");
                 $stmtC->execute(array($existingAnime['id']));
                 if ($stmtC->fetchColumn() > 0 && !isset($data['force_update'])) {
-                    // Si ya tiene personajes, asumimos que está completo y no dejamos que un invitado lo sobreescriba
                     ApiResponse::success(array('message' => 'Anime already populated, no update needed by guest', 'id' => $existingAnime['id']));
                     exit;
                 }
@@ -109,8 +115,8 @@ class SaveAnimeController extends Controller
         $new_id = $existingAnime ? $existingAnime['id'] : null;
         $episodeCacheService = new EpisodeCacheService($dbConn);
 
-        // 1. Datos básicos
-        $tipo = isset($data['type']) ? $data['type'] : 'TV';
+        // 1. Datos básicos - SOPORTE HÍBRIDO
+        $tipo = $data['type'] ?? ($data['tipo'] ?? 'TV');
         $estudio = '';
         if (!empty($data['studios']) && is_array($data['studios'])) {
             $studioNames = array();
@@ -119,31 +125,35 @@ class SaveAnimeController extends Controller
                     $studioNames[] = trim($studio['name']);
             }
             $estudio = implode(', ', $studioNames);
+        } else {
+            $estudio = $data['estudio'] ?? '';
         }
 
-        $estadoRaw = isset($data['status']) ? trim((string) $data['status']) : 'Unknown';
-        $estadoLower = strtolower($estadoRaw);
-        if ($estadoLower === 'finished airing')
+        $estadoRaw = $data['status'] ?? ($data['estado'] ?? 'Unknown');
+        $estadoLower = strtolower(trim((string)$estadoRaw));
+        if ($estadoLower === 'finished airing' || $estadoLower === 'finalizado')
             $estado = 'Finalizado';
-        elseif ($estadoLower === 'currently airing' || $estadoLower === 'en emision')
+        elseif (strpos($estadoLower, 'emision') !== false || strpos($estadoLower, 'emisi') !== false)
             $estado = 'En emision';
-        elseif ($estadoLower === 'not yet aired')
+        elseif (strpos($estadoLower, 'proximamente') !== false || strpos($estadoLower, 'pr') !== false)
             $estado = 'Proximamente';
         else
             $estado = $estadoRaw;
 
-        $episodios = (int) (isset($data['episodes']) ? $data['episodes'] : 0);
-        $temporada = isset($data['season']) ? $data['season'] : 'Unknown';
-        $anio = (int) (isset($data['year']) ? $data['year'] :
-            (isset($data['aired']['prop']['from']['year']) ? $data['aired']['prop']['from']['year'] : 0));
+        $episodios = (int) ($data['episodes'] ?? ($data['episodios'] ?? 0));
+        $temporada = $data['season'] ?? ($data['temporada'] ?? 'Unknown');
+        $anio = (int) ($data['year'] ?? ($data['anio'] ?? 
+             ($data['aired']['prop']['from']['year'] ?? 0)));
 
-        $sinopsis = isset($data['synopsis']) ? $data['synopsis'] : '';
-        $imagen_url = isset($data['images']['jpg']['large_image_url']) ? $data['images']['jpg']['large_image_url'] :
-            (isset($data['images']['jpg']['image_url']) ? $data['images']['jpg']['image_url'] : '');
-        $puntuacion = (float) (isset($data['score']) ? $data['score'] : 0.0);
-        $titulo_ingles = isset($data['title_english']) ? trim((string) $data['title_english']) : '';
-        $clasificacion = isset($data['rating']) ? trim((string) $data['rating']) : '';
-        $trailer_url = isset($data['trailer']['url']) ? (string) $data['trailer']['url'] : '';
+        $sinopsis = $data['synopsis'] ?? ($data['sinopsis'] ?? '');
+        $imagen_url = $data['images']['jpg']['large_image_url'] ?? 
+                     ($data['images']['jpg']['image_url'] ?? 
+                     ($data['imagen_url'] ?? ''));
+        
+        $puntuacion = (float) ($data['score'] ?? ($data['puntuacion'] ?? 0.0));
+        $titulo_ingles = $data['title_english'] ?? ($data['titulo_ingles'] ?? '');
+        $clasificacion = $data['rating'] ?? ($data['clasificacion'] ?? '');
+        $trailer_url = $data['trailer']['url'] ?? ($data['trailer_url'] ?? '');
 
         $dbConn->beginTransaction();
         try {

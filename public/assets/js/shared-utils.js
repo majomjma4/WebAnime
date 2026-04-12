@@ -100,9 +100,15 @@
         headers: { "X-Requested-With": "XMLHttpRequest" }
       });
       clearTimeout(timeoutId);
+
       if (serverRes && serverRes.ok) {
         const data = await serverRes.json();
         if (data && !data.error) return data;
+      }
+      
+      // Si el servidor responde con 504, 503 o 500, forzamos el catch para usar el puente directo
+      if (serverRes && serverRes.status >= 500) {
+        throw new Error("Server Error " + serverRes.status);
       }
     } catch (e) {
       console.warn("Proxy falló o tardó demasiado, usando puente directo a Jikan...");
