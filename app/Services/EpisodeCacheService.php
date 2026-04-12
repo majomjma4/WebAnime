@@ -29,7 +29,6 @@ class EpisodeCacheService
             return [];
         }
 
-        $this->ensureTable();
         $stmt = $this->db->prepare('SELECT episode_number, title, synopsis FROM anime_episodes WHERE anime_id = ? ORDER BY episode_number ASC');
         $stmt->execute([$animeId]);
 

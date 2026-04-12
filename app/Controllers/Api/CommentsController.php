@@ -20,6 +20,7 @@ class CommentsController extends Controller
         } else {
             app_require_method('GET');
             app_start_session();
+            session_write_close();
         }
 
         $data = app_get_json_input();

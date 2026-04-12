@@ -5,6 +5,8 @@ class SiteController extends Controller
 {
     public function home(): void
     {
+        app_start_session();
+        session_write_close();
         $this->render('pages/index');
     }
 
@@ -15,6 +17,8 @@ class SiteController extends Controller
 
     public function featured(): void
     {
+        app_start_session();
+        session_write_close();
         $this->render('pages/destacados');
     }
 
@@ -44,6 +48,9 @@ class SiteController extends Controller
         $sessionPremium = !empty($_SESSION['premium']) || $sessionRole === 'Admin';
         $detailQuery = $detailRef !== '' && !ctype_digit($detailRef) ? str_replace('-', ' ', $detailRef) : '';
 
+        // Release session lock before view if feasible
+        session_write_close();
+
         $this->render('pages/detail', [
             'isLoggedIn' => $isLoggedIn,
             'sessionRole' => $sessionRole,
@@ -69,6 +76,9 @@ class SiteController extends Controller
         $dbGenres = $animeModel->getFilteredGenres();
         $animes = $animeModel->getMovies();
 
+        app_start_session();
+        session_write_close();
+
         $this->render('pages/peliculas', [
             'dbGenres' => $dbGenres,
             'animes' => $animes,
@@ -77,6 +87,8 @@ class SiteController extends Controller
 
     public function ranking(): void
     {
+        app_start_session();
+        session_write_close();
         $this->render('pages/ranking');
     }
 
@@ -90,6 +102,9 @@ class SiteController extends Controller
         $animeModel = new \Models\Anime();
         $dbGenres = $animeModel->getFilteredGenres();
         $animes = $animeModel->getSeries();
+
+        app_start_session();
+        session_write_close();
 
         $this->render('pages/series', [
             'dbGenres' => $dbGenres,

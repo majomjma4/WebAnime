@@ -20,6 +20,10 @@ class ProfileController extends Controller
         $dbConn = (new \Models\Database())->getConnection();
         $action = $_GET['action'] ?? 'get';
 
+        if ($action === 'get') {
+            session_write_close();
+        }
+
         try {
             if ($action === 'get') {
                 app_require_method('GET');

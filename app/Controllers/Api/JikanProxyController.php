@@ -19,6 +19,9 @@ class JikanProxyController extends Controller
          * jikan_proxy.php
          * Refactored to use MySQL jikan_cache instead of filesystem.
          */
+        app_start_session();
+        session_write_close();
+
         error_reporting(0);
         ini_set('display_errors', 0);
         header('Content-Type: application/json');
@@ -40,7 +43,7 @@ class JikanProxyController extends Controller
 
         $cacheKey = md5($endpoint);
 
-        // 1. Check DB Cache (48 hours expiry)
+        // 1. Check DB Cache FIRST (48 hours expiry) - No waiting if cached
         $stmt = $db->prepare("SELECT response, updated_at FROM jikan_cache WHERE cache_key = ? LIMIT 1");
         $stmt->execute([$cacheKey]);
         $cached = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -53,10 +56,11 @@ class JikanProxyController extends Controller
             }
         }
 
-        // 2. Rate Limiting (Using temp files for atomicity across processes)
-        $lockDir = sys_get_temp_dir() . '/webanime_locks';
-        if (!is_dir($lockDir))
+        // 2. Rate Limiting (Only if we REALLY need to fetch from Jikan)
+        $lockDir = __DIR__ . '/../../Storage/locks';
+        if (!is_dir($lockDir)) {
             @mkdir($lockDir, 0777, true);
+        }
 
         $lockFile = $lockDir . '/jikan.lock';
         $lastReqFile = $lockDir . '/last_req.txt';

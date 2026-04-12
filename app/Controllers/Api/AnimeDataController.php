@@ -16,31 +16,34 @@ class AnimeDataController extends Controller
 
     public function handle(): void
     {
+        app_start_session();
+        session_write_close();
+
         $q = trim($_GET['q'] ?? '');
         $mal_id = trim($_GET['mal_id'] ?? '');
         $id = trim($_GET['id'] ?? '');
-        
+
         $dbConn = (new \Models\Database())->getConnection();
         if (!$dbConn) {
             ApiResponse::error('DB Connection Error', 500);
             exit;
         }
-        
+
         $animeItem = null;
-        
+
         if ($id) {
             // Si tenemos un ID interno, es la fuente más confiable
             $stmt = $dbConn->prepare("SELECT * FROM anime WHERE id = ? LIMIT 1");
             $stmt->execute([$id]);
             $animeItem = $stmt->fetch(PDO::FETCH_ASSOC);
         }
-        
+
         if (!$animeItem && $mal_id) {
             // Si falla o no hay ID, intentamos por mal_id que es lo más común desde fuera
             $stmt = $dbConn->prepare("SELECT * FROM anime WHERE mal_id = ? LIMIT 1");
             $stmt->execute([$mal_id]);
             $animeItem = $stmt->fetch(PDO::FETCH_ASSOC);
-            
+
             // Si falla, intentamos por id interno (fallback por si mal_id era en realidad un id)
             if (!$animeItem && is_numeric($mal_id)) {
                 $stmt = $dbConn->prepare("SELECT * FROM anime WHERE id = ? LIMIT 1");
@@ -48,13 +51,13 @@ class AnimeDataController extends Controller
                 $animeItem = $stmt->fetch(PDO::FETCH_ASSOC);
             }
         }
-        
+
         if (!$animeItem && $q) {
             // Intento 1: Búsqueda exacta
             $stmt = $dbConn->prepare("SELECT * FROM anime WHERE titulo = ? LIMIT 1");
             $stmt->execute([$q]);
             $animeItem = $stmt->fetch(PDO::FETCH_ASSOC);
-            
+
             // Intento 2: Búsqueda flexible (LIKE)
             if (!$animeItem) {
                 $stmt = $dbConn->prepare("SELECT * FROM anime WHERE titulo LIKE ? LIMIT 1");
@@ -62,7 +65,7 @@ class AnimeDataController extends Controller
                 $animeItem = $stmt->fetch(PDO::FETCH_ASSOC);
             }
         }
-        
+
         if (!$animeItem) {
             ApiResponse::error('Not found in local DB', 404);
             exit;
@@ -85,29 +88,29 @@ class AnimeDataController extends Controller
         ");
         $genreStmt->execute([$animeItem['id']]);
         $genres = $genreStmt->fetchAll(PDO::FETCH_COLUMN);
-        
+
         foreach ($genres as $gn) {
             if (in_array($gn, $this->restrictedGenres)) {
                 ApiResponse::error('Restricted content', 403);
                 exit;
             }
         }
-        
+
         $studioNames = array_values(array_filter(array_map('trim', explode(',', (string) ($animeItem['estudio'] ?? '')))));
         $titleEnglish = trim((string) ($animeItem['titulo_ingles'] ?? ''));
         $seasonValue = strtolower(trim((string) ($animeItem['temporada'] ?? '')));
-        
+
         $jikanData = [
             'mal_id' => $animeItem['mal_id'] ?: $animeItem['id'],
             'title' => $animeItem['titulo'],
             'title_english' => $titleEnglish !== '' ? $titleEnglish : $animeItem['titulo'],
             'title_japanese' => $animeItem['titulo'],
             'type' => $animeItem['tipo'],
-            'episodes' => (int)$animeItem['episodios'],
+            'episodes' => (int) $animeItem['episodios'],
             'status' => $animeItem['estado'],
-            'year' => (int)$animeItem['anio'],
+            'year' => (int) $animeItem['anio'],
             'season' => $seasonValue,
-            'score' => (float)$animeItem['puntuacion'],
+            'score' => (float) $animeItem['puntuacion'],
             'synopsis' => (string) ($animeItem['sinopsis'] ?? ''),
             'rating' => (string) ($animeItem['clasificacion'] ?? ''),
             'duration' => '',
@@ -118,12 +121,13 @@ class AnimeDataController extends Controller
                     'image_url' => $animeItem['imagen_url']
                 ]
             ],
-            'genres' => array_map(function($g) { return ['name' => $g]; }, $genres),
+            'genres' => array_map(function ($g) {
+                return ['name' => $g]; }, $genres),
             'studios' => array_map(static function ($name) {
                 return ['name' => $name];
             }, $studioNames)
         ];
-        
+
         // Characters
         $charStmt = $dbConn->prepare("SELECT * FROM anime_characters WHERE anime_id = ?");
         $charStmt->execute([$animeItem['id']]);
@@ -138,7 +142,7 @@ class AnimeDataController extends Controller
                 'role' => $c['role']
             ];
         }
-        
+
         // Pictures
         $picStmt = $dbConn->prepare("SELECT * FROM anime_pictures WHERE anime_id = ?");
         $picStmt->execute([$animeItem['id']]);
@@ -148,7 +152,7 @@ class AnimeDataController extends Controller
                 'jpg' => ['image_url' => $p['image_url'], 'large_image_url' => $p['image_url']]
             ];
         }
-        
+
         // Videos
         $vidStmt = $dbConn->prepare("SELECT * FROM anime_videos WHERE anime_id = ?");
         $vidStmt->execute([$animeItem['id']]);
@@ -162,15 +166,15 @@ class AnimeDataController extends Controller
                 ]
             ];
         }
-        
+
         $episodeCache = new EpisodeCacheService($dbConn);
         try {
             $jikanData['episodes_data'] = $episodeCache->getByAnimeId((int) $animeItem['id']);
         } catch (Throwable $e) {
             $jikanData['episodes_data'] = [];
         }
-        
+
         ApiResponse::success(['data' => $jikanData]);
-        
+
     }
 }

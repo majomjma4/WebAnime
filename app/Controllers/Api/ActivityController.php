@@ -16,6 +16,7 @@ class ActivityController extends Controller
 
         $userId = $_SESSION['user_id'] ?? null;
         $role = $_SESSION['role'] ?? 'Invitado';
+        session_write_close();
 
         if (!$userId || $role === 'Invitado') {
             echo json_encode(['success' => true, 'message' => 'Modo invitado: no se registra actividad']);
