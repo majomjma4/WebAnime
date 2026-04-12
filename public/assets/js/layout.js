@@ -16,7 +16,15 @@
     if (typeof sharedBuilder === "function") return sharedBuilder(path);
     const pathname = window.location.pathname.replace(/\\/g, "/");
     const publicIndex = pathname.toLowerCase().indexOf("/public/");
-    const basePath = publicIndex >= 0 ? pathname.slice(0, publicIndex + 8) : "/";
+    let basePath = "/";
+    if (publicIndex >= 0) {
+        basePath = pathname.slice(0, publicIndex + 8);
+    } else {
+        const parts = pathname.split('/');
+        if (parts.length > 1) {
+            basePath = "/" + parts[1] + "/";
+        }
+    }
     const cleanPath = String(path || "").replace(/^\/+/, "");
     return cleanPath ? `${basePath}${cleanPath}` : basePath.replace(/\/$/, "");
   };

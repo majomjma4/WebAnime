@@ -740,7 +740,7 @@
     <!-- Secciones Premium/Admin Ocultas por defecto -->
     <div data-premium-only class="mt-2 pt-2 border-t border-white/5 flex flex-col gap-1 hidden">
       <div class="text-[10px] font-bold text-amber-400 uppercase tracking-[0.2em] px-3 py-1">Premium Perks</div>
-      <a href="premium.php" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-amber-200 hover:text-white hover:bg-amber-500/10 transition-all">
+      <a href="<?= route_path('payment') ?>" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-amber-200 hover:text-white hover:bg-amber-500/10 transition-all">
         <span class="material-symbols-outlined text-lg">workspace_premium</span>
         Beneficios Gold
       </a>

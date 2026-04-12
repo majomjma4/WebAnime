@@ -64,18 +64,62 @@ function app_routes() {
 function route_path($name, $params = array()) {
     $routes = app_routes();
     if (!isset($routes[$name])) return '#';
-    $path = $routes[$name]['path'];
-    if (!empty($params)) {
-        $path .= '?' . http_build_query($params);
+    
+    $routeConfig = $routes[$name];
+    $path = isset($routeConfig['path']) ? $routeConfig['path'] : '';
+    $patterns = isset($routeConfig['patterns']) ? $routeConfig['patterns'] : array();
+    
+    // Intentar usar un patrón si los parámetros coinciden
+    if (!empty($patterns)) {
+        foreach ($patterns as $pattern) {
+            $tempParams = $params;
+            $placeholders = array();
+            preg_match_all('/\{([a-zA-Z_][a-zA-Z0-9_]*)\}/', $pattern, $matches);
+            
+            $canUsePattern = true;
+            if (!empty($matches[1])) {
+                foreach ($matches[1] as $placeholder) {
+                    if (!isset($tempParams[$placeholder])) {
+                        $canUsePattern = false;
+                        break;
+                    }
+                }
+            }
+
+            if ($canUsePattern && !empty($matches[1])) {
+                $filledPath = $pattern;
+                foreach ($matches[1] as $placeholder) {
+                    $filledPath = str_replace('{' . $placeholder . '}', (string)$tempParams[$placeholder], $filledPath);
+                    unset($tempParams[$placeholder]);
+                }
+                $path = $filledPath;
+                $params = $tempParams; // Los parámetros usados se quitan de la query string
+                break;
+            }
+        }
     }
+
+    // Normalización de ruta 'index' a raíz
+    if ($path === 'index') {
+        $path = '';
+    }
+
+    if (!empty($params)) {
+        $path .= (strpos($path, '?') === false ? '?' : '&') . http_build_query($params);
+    }
+    
     return app_base_url($path);
 }
 
 function app_base_url($path = '') {
     $protocol = app_is_https() ? 'https://' : 'http://';
     $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost';
-    $scriptName = isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : '';
-    $baseUrl = rtrim(dirname($scriptName), '/\\');
+    $scriptName = isset($_SERVER['SCRIPT_NAME']) ? str_replace('\\', '/', $_SERVER['SCRIPT_NAME']) : '';
+    
+    // Detectamos la carpeta base eliminando el script y el segmento /public si existe
+    $baseUrl = rtrim(dirname($scriptName), '/');
+    $baseUrl = preg_replace('/\/public$/', '', $baseUrl);
+    
     return $protocol . $host . $baseUrl . '/' . ltrim($path, '/');
 }
 

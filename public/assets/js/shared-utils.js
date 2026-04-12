@@ -42,16 +42,14 @@
       return path.slice(0, publicIndex + "/public/".length);
     }
     
-    if (path.toLowerCase().includes("/webanime-master/")) {
-      return "/WebAnime-master/";
+    // Remoción de rutas estáticas forzadas para mayor dinamismo
+    if (path.toLowerCase().includes("/nekoralist/")) {
+      return "/Nekoralist/";
     }
-    if (path.toLowerCase().includes("/replica/")) {
-      return "/replica/";
+    if (path.toLowerCase().includes("/webanime/")) {
+      return "/WebAnime/";
     }
 
-    if (path.toLowerCase().endsWith("/public")) {
-      return `${path}/`;
-    }
     return "/";
   };
 

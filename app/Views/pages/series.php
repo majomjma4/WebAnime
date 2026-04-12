@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="dark" lang="es">
   <head>
     <script data-ui-preload>document.documentElement.classList.add("preload-ui");</script>
@@ -367,7 +367,7 @@
             <section class="mt-6 rounded-lg bg-surface-container-low p-4" aria-label="Ranking">
               <div class="mb-3 flex items-center justify-between gap-3">
                 <h3 class="text-sm font-bold uppercase tracking-widest text-on-surface-variant">Top 5 Ranking</h3>
-                <a class="text-xs font-semibold text-primary hover:text-primary-dim" href="ranking\.php">Ver ranking</a>
+                <a class="text-xs font-semibold text-primary hover:text-primary-dim" href="<?= route_path('ranking') ?>">Ver ranking</a>
               </div>
               <div id="sidebar-ranking" data-sidebar-ranking data-ranking-type="anime" class="space-y-3">
                 <div class="text-xs text-on-surface-variant">Cargando ranking...</div>

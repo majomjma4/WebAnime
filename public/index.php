@@ -11,16 +11,17 @@ require_once __DIR__ . '/../app/bootstrap.php';
 $requestUri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/';
 $scriptName = isset($_SERVER['SCRIPT_NAME']) ? str_replace('\\', '/', $_SERVER['SCRIPT_NAME']) : '';
 $baseDir = rtrim(str_replace('\\', '/', dirname($scriptName)), '/.');
+$baseDir = preg_replace('/\/public$/', '', $baseDir);
 
 $path = '/' . ltrim(parse_url($requestUri, PHP_URL_PATH), '/');
 
-// Normalización de rutas
-if ($baseDir !== '' && $baseDir !== '/' && strpos($path, $baseDir) === 0) {
+// Normalización de rutas (insensible a mayúsculas para evitar errores por nombres de carpeta)
+if ($baseDir !== '' && $baseDir !== '/' && stripos($path, $baseDir) === 0) {
     $path = '/' . ltrim(substr($path, strlen($baseDir)), '/');
 }
 
 $configuredBasePath = rtrim(app_env('APP_BASE_PATH', ''), '/');
-if ($configuredBasePath !== '' && $configuredBasePath !== '/' && strpos($path, $configuredBasePath) === 0) {
+if ($configuredBasePath !== '' && $configuredBasePath !== '/' && stripos($path, $configuredBasePath) === 0) {
     $path = '/' . ltrim(substr($path, strlen($configuredBasePath)), '/');
 }
 
