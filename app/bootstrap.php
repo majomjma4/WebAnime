@@ -112,3 +112,30 @@ function app_detail_ref_from_input($id, $title) {
     if ($title) return app_slugify($title);
     return '';
 }
+
+// --- Helpers para API y Seguridad (Legacy v1) ---
+
+function app_require_method($method) {
+    if ($_SERVER['REQUEST_METHOD'] !== strtoupper($method)) {
+        header("HTTP/1.1 405 Method Not Allowed");
+        echo json_encode(array('error' => 'Method not allowed'));
+        exit;
+    }
+}
+
+function app_get_json_input() {
+    $input = file_get_contents('php://input');
+    return json_decode($input, true);
+}
+
+function app_verify_csrf() {
+    // Versión simplificada para compatibilidad legacy
+    // En producción idealmente verificar tokens, aquí al menos validamos origen básico
+    $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
+    $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
+    if (!empty($referer) && strpos($referer, $host) === false) {
+        header("HTTP/1.1 403 Forbidden");
+        echo json_encode(array('error' => 'CSRF validation failed'));
+        exit;
+    }
+}
