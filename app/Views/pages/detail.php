@@ -65,7 +65,7 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <link rel="icon" href="<?= asset_path('img/icon3.png') ?>" />
-    <title>Solo Leveling | NekoraList</title>
+    <title><?= e(!empty($detailQuery) ? ucwords($detailQuery) : 'Cargando...') ?> | NekoraList</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -281,13 +281,13 @@
                   <span class="text-on-surface-variant text-sm font-normal ml-1">Puntuaci&oacute;n</span>
                 </span>
               </div>
-              <h1 class="font-headline text-5xl lg:text-7xl font-extrabold tracking-tighter text-on-surface">Solo Leveling</h1>
+              <h1 class="font-headline text-5xl lg:text-7xl font-extrabold tracking-tighter text-on-surface"><?= e(!empty($detailQuery) ? ucwords($detailQuery) : 'Cargando...') ?></h1>
               <p id="detail-status-meta" class="text-on-surface-variant font-medium flex gap-4 text-sm lg:text-base">
-                <span>Estado: En emisi&oacute;n</span>
+                <span>Estado: ...</span>
                 <span class="text-outline-variant">&gt;&lt;</span>
-                <span>Episodios: 12/24</span>
+                <span>Episodios: ...</span>
                 <span class="text-outline-variant">&gt;&lt;</span>
-                <span>Duraci&oacute;n: 24m</span>
+                <span>Duraci&oacute;n: ...</span>
               </p>
             </div>
             <div id="detail-genres" class="flex flex-wrap gap-2">
@@ -338,7 +338,7 @@ endif; ?>
               </div>
               <div class="flex flex-col gap-1">
                 <span class="text-xs text-on-surface-variant uppercase tracking-widest font-bold">Studio</span>
-                <span class="text-primary font-medium">A-1 Pictures</span>
+                <span class="text-primary font-medium">...</span>
               </div>
               <div class="flex flex-col gap-1">
                 <span class="text-xs text-on-surface-variant uppercase tracking-widest font-bold">Source</span>
