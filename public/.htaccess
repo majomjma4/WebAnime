@@ -1,7 +1,7 @@
 RewriteEngine On
 
 # Ajuste para el nuevo nombre de directorio
-RewriteBase /Nekoralist/
+RewriteBase /nekoralist/
 
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d

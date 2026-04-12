@@ -5,7 +5,7 @@
  */
 
 // Configuración del comando facilitado anteriormente
-$workingDir = '/home/jcsfacyt/public_html/Nekoralist/';
+$workingDir = '/home/jcsfacyt/public_html/nekoralist/';
 $command = 'git fetch --all && git reset --hard origin/master 2>&1';
 
 header('Content-Type: text/plain; charset=UTF-8');
