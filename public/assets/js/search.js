@@ -572,11 +572,20 @@
       const isHeaderSearch = input.id !== "filter-search" && input.getAttribute("data-catalog-search") !== "1";
       if (!isHeaderSearch) return;
 
-      // Desvanecer recomendaciones de inmediato al escribir
-      closeBox();
-
       const term = (input.value || "").trim();
-      if (!term) return;
+      
+      // Si está vacío, cerramos todo de inmediato
+      if (!term) {
+        closeBox();
+        return;
+      }
+      
+      // Si hay texto, limpiamos las recomendaciones viejas pero mantenemos la caja abierta 
+      // con un indicador de carga para que el usuario sepa que está funcionando.
+      const b = ensureBox();
+      if (b) b.innerHTML = '<div class="px-3 py-3 text-xs text-zinc-500 italic">Buscando...</div>';
+      openBox();
+
       clearTimeout(timer);
       timer = setTimeout(async () => {
         const local = getLocalSuggestions(term);
