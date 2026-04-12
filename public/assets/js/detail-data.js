@@ -1186,9 +1186,9 @@ const AniDexDetailDataBoot = () => {
         episodeModal.className = "fixed inset-0 z-[110] hidden flex items-center justify-center p-4 sm:p-6";
         episodeModal.innerHTML = `
           <div class="absolute inset-0 bg-black/80 backdrop-blur-md"></div>
-          <div class="relative w-full max-w-4xl rounded-2xl bg-black shadow-2xl overflow-hidden border border-white/10" data-episode-shell>
-            <button type="button" data-episode-close class="absolute top-4 right-4 w-11 h-11 rounded-full bg-black/50 text-white/90 hover:text-white hover:bg-violet-600 flex items-center justify-center backdrop-blur-md z-30 transition-all duration-300 shadow-xl border border-white/10" aria-label="Cerrar">
-              <span class="material-symbols-outlined text-[28px]">close</span>
+          <div class="relative w-[min(92vw,720px)] rounded-2xl bg-black shadow-2xl overflow-hidden border border-white/10" data-episode-shell>
+            <button type="button" data-episode-close class="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/50 text-white/90 hover:text-white hover:bg-violet-600 flex items-center justify-center backdrop-blur-md z-30 transition-all duration-300 shadow-xl border border-white/10" aria-label="Cerrar">
+              <span class="material-symbols-outlined text-[24px]">close</span>
             </button>
             <video data-episode-video-player class="w-full aspect-video bg-black" controls playsinline preload="metadata">
               <source data-episode-video-source type="video/mp4" />
@@ -1207,9 +1207,9 @@ const AniDexDetailDataBoot = () => {
           linkModal.className = "fixed inset-0 z-[110] hidden flex items-center justify-center p-4 sm:p-6";
           linkModal.innerHTML = `
             <div class="absolute inset-0 bg-black/80 backdrop-blur-md" data-link-backdrop></div>
-            <div class="relative w-full max-w-5xl aspect-video rounded-2xl bg-black shadow-2xl overflow-hidden border border-white/10" data-link-shell>
-              <button type="button" data-link-close class="absolute top-4 right-4 w-12 h-12 rounded-full bg-black/50 text-white/90 hover:text-white hover:bg-violet-600 flex items-center justify-center backdrop-blur-md z-30 transition-all duration-300 shadow-xl border border-white/10" aria-label="Cerrar">
-                <span class="material-symbols-outlined text-[32px]">close</span>
+            <div class="relative w-[min(94vw,1100px)] h-[min(80vh,720px)] rounded-2xl bg-black shadow-2xl overflow-hidden border border-white/10" data-link-shell>
+              <button type="button" data-link-close class="absolute top-4 right-4 w-11 h-11 rounded-full bg-black/50 text-white/90 hover:text-white hover:bg-violet-600 flex items-center justify-center backdrop-blur-md z-30 transition-all duration-300 shadow-xl border border-white/10" aria-label="Cerrar">
+                <span class="material-symbols-outlined text-[28px]">close</span>
               </button>
               <iframe data-link-frame class="w-full h-full border-none" allow="autoplay; fullscreen" allowfullscreen referrerpolicy="no-referrer"></iframe>
             </div>
