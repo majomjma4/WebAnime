@@ -198,7 +198,7 @@ class SaveAnimeController extends Controller
             $dbConn->commit();
 
             // Guardar Personajes (Solo los primeros 10)
-            if (isset($data['characters']) && is_array($data['characters'])) {
+            if ($new_id && isset($data['characters']) && is_array($data['characters'])) {
                 $dbConn->prepare("DELETE FROM anime_characters WHERE anime_id = ?")->execute(array($new_id));
                 $charStmt = $dbConn->prepare("INSERT INTO anime_characters (anime_id, mal_id, name, role, image_url) VALUES (?, ?, ?, ?, ?)");
                 $count = 0;
@@ -218,7 +218,7 @@ class SaveAnimeController extends Controller
             }
 
             // Guardar Imágenes
-            if (isset($data['pictures']) && is_array($data['pictures'])) {
+            if ($new_id && isset($data['pictures']) && is_array($data['pictures'])) {
                 $dbConn->prepare("DELETE FROM anime_pictures WHERE anime_id = ?")->execute(array($new_id));
                 $picStmt = $dbConn->prepare("INSERT INTO anime_pictures (anime_id, image_url) VALUES (?, ?)");
                 foreach ($data['pictures'] as $p) {
@@ -229,7 +229,8 @@ class SaveAnimeController extends Controller
             }
 
             // Guardar Promos/Trailers
-            if (isset($data['videos']) && is_array($data['videos']['promo'])) {
+            if (!$new_id) return;
+            if (isset($data['videos']) && isset($data['videos']['promo']) && is_array($data['videos']['promo'])) {
                 $dbConn->prepare("DELETE FROM anime_videos WHERE anime_id = ?")->execute(array($new_id));
                 $vidStmt = $dbConn->prepare("INSERT INTO anime_videos (anime_id, youtube_id, url, image_url) VALUES (?, ?, ?, ?)");
                 foreach ($data['videos']['promo'] as $v) {
@@ -243,7 +244,7 @@ class SaveAnimeController extends Controller
             }
 
             // Guardar Episodios
-            if (isset($data['episodes_data']) && is_array($data['episodes_data'])) {
+            if ($new_id && isset($data['episodes_data']) && is_array($data['episodes_data'])) {
                 $episodeCacheService->saveForAnime((int) $new_id, $data['episodes_data']);
             }
 

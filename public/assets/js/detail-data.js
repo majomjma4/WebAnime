@@ -414,27 +414,30 @@ const AniDexDetailDataBoot = () => {
     } catch {}
 
     // 1. PERSISTENCIA INMEDIATA (FASE 1: Datos Básicos)
-    // Guardamos lo esencial primero para que el contador de la web suba de inmediato
+    // Guardamos lo esencial primero para asegurarnos de que el anime exista en la BD
     if (full && full.mal_id) {
       const saveUrl = appUrl("api/save_anime");
-      console.log("NekoraDetail: Enviando persistencia rápida (Fase 1) para:", full.title);
-      
-      window.fetch(saveUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(full)
-      })
-      .then(r => r.json())
-      .then(res => {
-          if (res.success) {
-            console.log(`NekoraDetail: Fase 1 [${res.action}] exitosa. DB_ID: ${res.id} | MAL_ID: ${selectedId}`);
-          }
-      })
-      .catch(e => console.error("NekoraDetail: Error en persistencia rápida:", e));
+      console.log("NekoraDetail: Enviando Fase 1 (Persistencia Rápida)...");
+      try {
+        const res1 = await window.fetch(saveUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(full)
+        }).then(r => r.json());
+
+        if (res1.success) {
+          console.log(`NekoraDetail: Fase 1 [${res1.action}] exitosa. DB_ID: ${res1.id}`);
+          selectedId = Number(res1.mal_id || selectedId); // Refuerzo
+        } else {
+          console.warn("NekoraDetail: Fase 1 no reportó éxito:", res1.error);
+        }
+      } catch (e) {
+        console.error("NekoraDetail: Error crítico en Fase 1:", e);
+      }
     }
 
     // 2. CARGA PROFUNDA (FASE 2: Personajes, Videos, Fotos)
-    // Esto se puede demorar por los timeouts del servidor (504), así que lo hacemos por separado
+    // Se ejecuta DESPUÉS de asegurar que la Fase 1 terminó o falló, para no colisionar
     const [chars, vids, pics] = await Promise.all([
       (isLocal && full.characters && full.characters.length > 0) ? Promise.resolve(full.characters) : byId(selectedId, "characters").then((data) => data || []),
       (isLocal && full.videos && (full.videos.promo?.length > 0)) ? Promise.resolve(full.videos) : byId(selectedId, "videos").then((data) => data || {}),
@@ -450,24 +453,23 @@ const AniDexDetailDataBoot = () => {
       };
       
       const saveUrl = appUrl("api/save_anime");
-      console.log("NekoraDetail: Enviando persistencia profunda (Fase 2)...");
+      console.log("NekoraDetail: Enviando Fase 2 (Persistencia Profunda)...");
 
-      window.fetch(saveUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(deepData)
-      })
-      .then(r => r.json())
-      .then(res => {
-        if (!res.success) {
-          console.error("NekoraDetail: Error al persistir datos profundos:", res.error);
+      try {
+        const res2 = await window.fetch(saveUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(deepData)
+        }).then(r => r.json());
+
+        if (res2.success) {
+          console.log(`NekoraDetail: Fase 2 [${res2.action}] exitosa. DB_ID: ${res2.id}`);
         } else {
-          console.log(`NekoraDetail: Fase 2 [${res.action}] exitosa. DB_ID: ${res.id}`);
+          console.error("NekoraDetail: Error en Fase 2:", res2.error);
         }
-      })
-      .catch(err => {
-        console.error("NekoraDetail: Fallo de red en persistencia profunda:", err);
-      });
+      } catch (err) {
+        console.error("NekoraDetail: Fallo de red en Fase 2:", err);
+      }
     }
     const forceTitles = [
       "Jujutsu Kaisen: Shimetsu Kaiyuu - Zenpen"
