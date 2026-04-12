@@ -500,6 +500,8 @@
         if (t.includes("movie") || t.includes("pelicula") || t.includes("película")) movieCount += 1;
         else tvCount += 1;
       });
+      // Si hay mezcla, vamos a la búsqueda general (home/index)
+      if (movieCount > 0 && tvCount > 0) return "index";
       return movieCount > tvCount ? "peliculas" : "series";
     };
 
@@ -569,11 +571,12 @@
     input.addEventListener("input", () => {
       const isHeaderSearch = input.id !== "filter-search" && input.getAttribute("data-catalog-search") !== "1";
       if (!isHeaderSearch) return;
+
+      // Desvanecer recomendaciones de inmediato al escribir
+      closeBox();
+
       const term = (input.value || "").trim();
-      if (!term) {
-        closeBox();
-        return;
-      }
+      if (!term) return;
       clearTimeout(timer);
       timer = setTimeout(async () => {
         const local = getLocalSuggestions(term);

@@ -37,10 +37,7 @@ class SiteController extends Controller
         if ($detailRef !== '' && ctype_digit($detailRef)) {
             $animeModel = new \Models\Anime();
             $resolvedAnime = $animeModel->getById((int) $detailRef);
-            if (!$resolvedAnime || empty($resolvedAnime['mal_id'])) {
-                $this->renderNotFound('detail/' . $detailRef);
-                return;
-            }
+            // Ya no retornamos 404. Si no existe en la DB, dejamos que el JS lo busque en Jikan.
         }
 
         $isLoggedIn = isset($_SESSION['user_id']);

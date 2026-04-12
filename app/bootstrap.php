@@ -131,15 +131,16 @@ function app_get_json_input() {
 function app_verify_csrf() {
     $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
     $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
-    if (empty($referer) || empty($host)) return;
-
-    // Normalizar: quitar protocolo y www.
-    $refDomain = strtolower(preg_replace('/^https?:\/\/(www\.)?/', '', parse_url($referer, PHP_URL_HOST)));
-    $hostDomain = strtolower(preg_replace('/^www\./', '', $host));
-
-    if ($refDomain !== $hostDomain && strpos($refDomain, $hostDomain) === false) {
-        header("HTTP/1.1 403 Forbidden");
-        echo json_encode(array('error' => 'CSRF validation failed', 'ref' => $refDomain, 'host' => $hostDomain));
-        exit;
+    
+    // Si no hay referer (visita directa), permitimos. 
+    // Si es AJAX y el host está en el referer de alguna forma, permitimos.
+    if (!empty($referer) && !empty($host)) {
+        $cleanHost = strtolower(preg_replace('/^www\./', '', $host));
+        $cleanRef = strtolower($referer);
+        if (strpos($cleanRef, $cleanHost) === false) {
+             header("HTTP/1.1 403 Forbidden");
+             echo json_encode(array('error' => 'CSRF fail', 'h' => $cleanHost, 'r' => $cleanRef));
+             exit;
+        }
     }
 }

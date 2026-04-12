@@ -610,6 +610,8 @@
             class="bg-transparent border-none focus:ring-0 text-sm w-full placeholder:text-on-surface-variant/50"
             placeholder="Buscar..."
             type="text"
+            autocomplete="off"
+            spellcheck="false"
           />
         </div>
 <div class="relative">
