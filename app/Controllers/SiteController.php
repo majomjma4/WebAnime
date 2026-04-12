@@ -22,11 +22,13 @@ class SiteController extends Controller
         $this->render('pages/destacados');
     }
 
-    public function detail()
+    public function detail($detailRef = null)
     {
         $this->ensureSessionStarted();
 
-        $detailRef = isset($_GET['_detail_ref']) ? trim((string)$_GET['_detail_ref']) : '';
+        if ($detailRef === null) {
+            $detailRef = isset($_GET['_detail_ref']) ? trim((string)$_GET['_detail_ref']) : '';
+        }
         $legacyId = isset($_GET['mal_id']) ? trim((string)$_GET['mal_id']) : (isset($_GET['id']) ? trim((string)$_GET['id']) : '');
         $legacyTitle = isset($_GET['q']) ? trim((string)$_GET['q']) : '';
 

@@ -1,7 +1,7 @@
 RewriteEngine On
 
-# Ajuste para subcarpetas en CPanel
-RewriteBase /WebAnime-master/public/
+# Ajuste para el nuevo nombre de directorio
+RewriteBase /Nekoralist/
 
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d

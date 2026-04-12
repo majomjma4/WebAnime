@@ -79,10 +79,10 @@ return [
         'aliases' => ['pago.php'],
     ],
     'movies' => [
-        'path' => 'peliculas',
+        'path' => 'movies',
         'controller' => SiteController::class,
         'action' => 'movies',
-        'aliases' => ['peliculas.php'],
+        'aliases' => ['peliculas', 'peliculas.php'],
     ],
     'ranking' => [
         'path' => 'ranking',
@@ -103,11 +103,11 @@ return [
         'aliases' => ['series.php'],
     ],
     'user' => [
-        'path' => 'user',
+        'path' => 'profile',
         'controller' => UserController::class,
         'action' => 'profile',
         'guard' => 'auth',
-        'aliases' => ['user.php'],
+        'aliases' => ['user', 'user.php', 'perfil'],
     ],
     'partial_layout' => [
         'path' => 'partials/layout',
