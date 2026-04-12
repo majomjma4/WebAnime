@@ -146,13 +146,7 @@ class Anime
         if (!$this->db)
             return array('data' => array(), 'total' => 0, 'totalPages' => 1, 'currentPage' => 1, 'airingCount' => 0);
 
-        $restrictedGenres = array("'Hentai'", "'Erotica'", "'Ecchi'", "'Yaoi'", "'Yuri'", "'Girls Love'", "'Boys Love'");
-        $restrictedTitles = array("'%does it count if%'", "'%futanari%'", "'%test%'");
-
-        $where = array(
-            "id NOT IN (SELECT anime_id FROM anime_generos WHERE genero_id IN (SELECT id FROM generos WHERE nombre IN (" . implode(",", $restrictedGenres) . ")))",
-            "LOWER(titulo) NOT LIKE " . implode(" AND LOWER(titulo) NOT LIKE ", $restrictedTitles)
-        );
+        $where = array("1=1");
         $params = array();
 
         if (!empty($search)) {
@@ -210,7 +204,7 @@ class Anime
         $animes = $listStmt->fetchAll(PDO::FETCH_ASSOC);
 
         // Conteo para dashboard
-        $airingSql = "SELECT COUNT(*) FROM anime WHERE LOWER(estado) IN ('en emision', 'currently airing') AND id NOT IN (SELECT anime_id FROM anime_generos WHERE genero_id IN (SELECT id FROM generos WHERE nombre IN (" . implode(",", $restrictedGenres) . ")))";
+        $airingSql = "SELECT COUNT(*) FROM anime WHERE LOWER(estado) IN ('en emision', 'currently airing')";
         $airingCount = (int) $this->db->query($airingSql)->fetchColumn();
 
         return array(

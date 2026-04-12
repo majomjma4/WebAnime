@@ -97,7 +97,7 @@
 </head>
 <body class="overflow-x-hidden" data-admin-page="requests">
 <!-- SideNavBar Component -->
-<div data-admin-sidebar></div>
+<?php include __DIR__ . '/../partials/admin-layout.php'; ?>
 <main class="ml-64 min-h-screen">
 <!-- TopAppBar Component -->
 <header class="fixed top-0 right-0 w-[calc(100%-16rem)] z-40 bg-[#0e0e0e]/70 backdrop-blur-xl flex justify-between items-center h-20 px-12">

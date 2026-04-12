@@ -67,7 +67,7 @@
 <script src="assets/js/admin-layout.js?v=20260330a" defer></script>
 </head>
 <body class="flex min-h-screen overflow-x-hidden" data-admin-page="manage">
-<div data-admin-sidebar></div>
+<?php include __DIR__ . '/../partials/admin-layout.php'; ?>
 <main class="ml-64 flex-1 flex flex-col min-h-screen bg-surface">
   <header class="fixed top-0 right-0 z-40 flex h-20 w-[calc(100%-16rem)] items-center justify-between bg-[#0e0e0e]/85 px-12 backdrop-blur-xl border-b border-outline-variant/10">
     <div class="flex items-center gap-4">

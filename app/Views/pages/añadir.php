@@ -80,7 +80,7 @@
 </head>
 <body class="flex min-h-screen" data-admin-page="add">
 <!-- SideNavBar Component -->
-<div data-admin-sidebar></div>
+<?php include __DIR__ . '/../partials/admin-layout.php'; ?>
 <main class="ml-64 flex-1 relative min-h-screen">
 <!-- Form Content -->
 <section class="pt-20 pb-20 px-12 max-w-6xl mx-auto">

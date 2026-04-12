@@ -1,4 +1,3 @@
-<template id="admin-sidebar">
   <style data-admin-logo>
     @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&display=swap");
     .logo-badge {
@@ -108,7 +107,6 @@
       </div>
     </div>
   </aside>
-</template>
 
 
 
