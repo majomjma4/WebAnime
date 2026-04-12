@@ -1380,7 +1380,7 @@
           
           if (emptyBox) {
             const msg = emptyBox.querySelector("p");
-            if (msg) msg.textContent = "Buscando en el cat?logo global...";
+            if (msg) msg.textContent = "Buscando en el cat\u00e1logo global...";
           }
 
           fetch(`${appUrl("api/jikan_proxy")}?endpoint=${encodeURIComponent(`anime?q=${encodeURIComponent(state.search)}&type=${mediaType}&limit=12&order_by=popularity&sort=asc`)}`)
@@ -1391,7 +1391,7 @@
                 hydrateCardsWithResults(json.data, mediaType);
               } else {
                  if (emptyBox && emptyBox.querySelector("p")) {
-                   emptyBox.querySelector("p").textContent = "No se encontraron resultados en el cat?logo global.";
+                   emptyBox.querySelector("p").textContent = "No se encontraron resultados en el cat\u00e1logo global.";
                  }
               }
             })
@@ -1447,8 +1447,8 @@
 
     function canonicalStatus(v) {
       const n = normalize(v);
-      if (n.includes("emision") || n.includes("airing")) return "En emisión";
-      if (n.includes("upcoming") || n.includes("proxim")) return "Próximamente";
+      if (n.includes("emision") || n.includes("airing")) return "En emisi\u00f3n";
+      if (n.includes("upcoming") || n.includes("proxim")) return "Pr\u00f3ximamente";
       if (n.includes("finalizada") || n.includes("finalizado") || n.includes("final") || n.includes("finished")) return "Finalizado";
       if (n.includes("cancelada") || n.includes("cancelado") || n.includes("cancel")) return "Cancelado";
       if (n.includes("hiatus") || n.includes("paus")) return "Pausado";
