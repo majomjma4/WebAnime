@@ -773,35 +773,42 @@ const AniDexDetailDataBoot = () => {
               : isOshiNoKo
                 ? "3"
                 : "1";
+      const decodeLink = (b64) => {
+        try {
+          return b64 ? atob(b64) : "";
+        } catch {
+          return b64 || "";
+        }
+      };
       const linksForTitle = isFrieren
         ? {
-            1: "https://uqload.is/2eeexv9bzxa9.html",
-            2: "https://uqload.is/5teq2c61tck5.html",
-            3: "https://uqload.is/7us4sel7kyxu.html"
+            1: "aHR0cHM6Ly91cWxvYWQuaXMvMmVlZXh2OWJ6eGE5Lmh0bWw=",
+            2: "aHR0cHM6Ly91cWxvYWQuaXMvNXRlcTJjNjF0Y2s1Lmh0bWw=",
+            3: "aHR0cHM6Ly91cWxvYWQuaXMvN3VzNHNlbDdreXh1Lmh0bWw="
           }
         : isJujutsuZenpen
           ? {
-              1: "https://uqload.is/praiiforf0iu.html",
-              2: "https://uqload.is/93eiodftxf42.html",
-              3: "https://uqload.is/a6u97rsk6m45.html"
+              1: "aHR0cHM6Ly91cWxvYWQuaXMvcHJhaWlmb3JmMGl1Lmh0bWw=",
+              2: "aHR0cHM6Ly91cWxvYWQuaXMvOTNlaW9kZnhmNDIuaHRtbA==",
+              3: "aHR0cHM6Ly91cWxvYWQuaXMvYTZ1OTdyc2s2bTQ1Lmh0bWw="
             }
           : isHellsParadise
             ? {
-                1: "https://uqload.is/rxbcak4w8fv2.html",
-                2: "https://uqload.is/0mu7b2lg2b9y.html",
-                3: "https://uqload.is/e2vhqb3mp4v8.html"
+                1: "aHR0cHM6Ly91cWxvYWQuaXMvcnhiY2FrNHc4ZnYyLmh0bWw=",
+                2: "aHR0cHM6Ly91cWxvYWQuaXMvMG11N2IybGcyYjl5Lmh0bWw=",
+                3: "aHR0cHM6Ly91cWxvYWQuaXMvZTJ2aHFiM21wNHY4Lmh0bWw="
               }
             : isSentencedHero
               ? {
-                  1: "https://uqload.is/l7qqqbie1dag.html",
-                  2: "https://uqload.is/s2sw5qm1wq35.html",
-                  3: "https://uqload.is/hdv22owq6n74.html"
+                  1: "aHR0cHM6Ly91cWxvYWQuaXMvbDdxcXFiaWUxZGFnLmh0bWw=",
+                  2: "aHR0cHM6Ly91cWxvYWQuaXMvczJzdzVxbTF3cTM1Lmh0bWw=",
+                  3: "aHR0cHM6Ly91cWxvYWQuaXMvaGR2MjJvd3E2bnc0Lmh0bWw="
                 }
               : isOshiNoKo
                 ? {
-                    1: "https://uqload.is/8p4gel5ytxm0.html",
-                    2: "https://uqload.is/upmo7gybfcap.html",
-                    3: "https://uqload.is/22odusepde14.html"
+                    1: "aHR0cHM6Ly91cWxvYWQuaXMvOHA0Z2VsNXl0eG0wLmh0bWw=",
+                    2: "aHR0cHM6Ly91cWxvYWQuaXMvdXBtbzdneWJmY2FwLmh0bWw=",
+                    3: "aHR0cHM6Ly91cWxvYWQuaXMvMjJvZHVzZXBkZTE0Lmh0bWw="
                   }
                 : {};
       const toEmbed = (link) => {
@@ -957,8 +964,8 @@ const AniDexDetailDataBoot = () => {
         }[char] || char));
 
       const renderEpisodeCard = (item) => {
-        const safeLinkUrl = escapeHtml(item.linkUrl || "");
-        const safeEmbedUrl = escapeHtml(item.linkUrl ? toEmbed(item.linkUrl) : "");
+        const safeLinkUrl = item.linkUrl || "";
+        const safeEmbedUrl = item.linkUrl ? toEmbed(decodeLink(item.linkUrl)) : "";
         const safeEpisodeTitle = escapeHtml(item.epTitle);
         const safeEpisodeSynopsis = escapeHtml(item.epSynopsis);
         const safeImageSrc = escapeHtml(src);
@@ -1187,8 +1194,8 @@ const AniDexDetailDataBoot = () => {
         episodeModal.innerHTML = `
           <div class="absolute inset-0 bg-black/80 backdrop-blur-md"></div>
           <div class="relative w-[min(92vw,720px)] rounded-2xl bg-black shadow-2xl border border-white/10 transform translate-y-6 sm:translate-y-8" data-episode-shell>
-            <button type="button" data-episode-close class="absolute -top-5 -right-5 sm:-top-6 sm:-right-6 w-11 h-11 rounded-full bg-violet-600 text-white hover:bg-violet-500 flex items-center justify-center z-50 transition-all duration-300 shadow-[0_0_20px_rgba(139,92,246,0.5)] border border-white/20" aria-label="Cerrar">
-              <span class="material-symbols-outlined text-[28px]">close</span>
+            <button type="button" data-episode-close class="absolute -top-3 -right-3 w-9 h-9 rounded-full bg-violet-600 text-white hover:bg-violet-500 flex items-center justify-center z-50 transition-all duration-300 shadow-[0_0_15px_rgba(139,92,246,0.5)] border border-white/20" aria-label="Cerrar">
+              <span class="material-symbols-outlined text-[20px]">close</span>
             </button>
             <video data-episode-video-player class="w-full aspect-video bg-black rounded-2xl" controls playsinline preload="metadata">
               <source data-episode-video-source type="video/mp4" />
@@ -1208,8 +1215,8 @@ const AniDexDetailDataBoot = () => {
           linkModal.innerHTML = `
             <div class="absolute inset-0 bg-black/80 backdrop-blur-md" data-link-backdrop></div>
             <div class="relative w-[min(94vw,1100px)] h-[min(80vh,720px)] rounded-2xl bg-black shadow-2xl border border-white/10 transform translate-y-6 sm:translate-y-8" data-link-shell>
-              <button type="button" data-link-close class="absolute -top-5 -right-5 sm:-top-7 sm:-right-7 w-12 h-12 rounded-full bg-violet-600 text-white hover:bg-violet-500 flex items-center justify-center z-50 transition-all duration-300 shadow-[0_0_25px_rgba(139,92,246,0.5)] border border-white/20" aria-label="Cerrar">
-                <span class="material-symbols-outlined text-[32px]">close</span>
+              <button type="button" data-link-close class="absolute -top-3 -right-3 w-10 h-10 rounded-full bg-violet-600 text-white hover:bg-violet-500 flex items-center justify-center z-50 transition-all duration-300 shadow-[0_0_20px_rgba(139,92,246,0.5)] border border-white/20" aria-label="Cerrar">
+                <span class="material-symbols-outlined text-[24px]">close</span>
               </button>
               <iframe data-link-frame class="w-full h-full border-none rounded-2xl" allow="autoplay; fullscreen" allowfullscreen referrerpolicy="no-referrer"></iframe>
             </div>
@@ -1253,7 +1260,7 @@ const AniDexDetailDataBoot = () => {
         const openLink = (card) => {
           const embedLink = card.getAttribute("data-episode-embed") || "";
           const directLink = card.getAttribute("data-episode-link") || "";
-          const link = embedLink || directLink;
+          const link = decodeLink(embedLink || directLink);
           if (!link || !linkFrame) return;
           markSeenByCard(card);
           linkFrame.src = link;
@@ -1331,7 +1338,7 @@ const AniDexDetailDataBoot = () => {
         const openEpisode = () => {
           if (!player || !source) return;
           markSeenByCard(videoCard);
-          source.src = videoCard.getAttribute("data-episode-video") || "";
+          source.src = decodeLink(videoCard.getAttribute("data-episode-video") || "");
           player.load();
           player.currentTime = 0;
           episodeModal.classList.remove("hidden");
