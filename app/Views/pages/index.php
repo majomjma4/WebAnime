@@ -387,12 +387,12 @@
       <section class="relative w-full h-[min(100vh,57.6rem)] flex items-end overflow-hidden">
         <div class="absolute inset-0 z-0">
           <video id="hero-video" class="absolute inset-0 w-full h-full object-cover opacity-0 pointer-events-none" playsinline muted loop></video>
-          <img id="hero-image" alt="Fondo de anime destacado" class="w-full h-full object-cover hero-mask scale-105 translate-y-[100px]" data-alt="Escena cinematogr&aacute;fica de alta calidad con iluminaci&oacute;n et&eacute;rea y tonos p&uacute;rpura" src="https://lh3.googleusercontent.com/aida-public/AB6AXuASyl0CtuKLwGu8E0g6kJg-AFMonCwUb2HQ4hZvUGuD0_n-GwG61WBtLa1P4WxLShGtZ1WdK79L8IStuCkdamLElWUpBsSuyOjlLszhFAARPXJXAMh5O1B7nkmoUbt235bb4gzcno51HQSRTI6Oh2kkDxU1qcK6jFx8LgH0ImqNPAd91dTA_ZC-HvQVlTdYcRV6Atw2S7_DgDyx7j2rgSWD3OpPRb6OBprhy06fu2rokdR9xMrz_zaaSt7N3Zs--RXOE0QQpITwOxiB"/>
+          <img id="hero-image" alt="Fondo de anime destacado" class="w-full h-full object-cover hero-mask scale-105 translate-y-[60px]" data-alt="Escena cinematogr&aacute;fica de alta calidad con iluminaci&oacute;n et&eacute;rea y tonos p&uacute;rpura" src="https://lh3.googleusercontent.com/aida-public/AB6AXuASyl0CtuKLwGu8E0g6kJg-AFMonCwUb2HQ4hZvUGuD0_n-GwG61WBtLa1P4WxLShGtZ1WdK79L8IStuCkdamLElWUpBsSuyOjlLszhFAARPXJXAMh5O1B7nkmoUbt235bb4gzcno51HQSRTI6Oh2kkDxU1qcK6jFx8LgH0ImqNPAd91dTA_ZC-HvQVlTdYcRV6Atw2S7_DgDyx7j2rgSWD3OpPRb6OBprhy06fu2rokdR9xMrz_zaaSt7N3Zs--RXOE0QQpITwOxiB"/>
           <div class="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-transparent"></div>
           <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-background/95 via-background/60 to-transparent"></div>
           <div class="absolute inset-0 bg-gradient-to-r from-background via-transparent to-transparent"></div>
         </div>
-          <div class="relative z-10 px-8 md:px-16 pb-[86px] w-full md:w-1/2 max-w-none text-left translate-y-[110px]">
+          <div class="relative z-10 px-8 md:px-16 pb-[86px] w-full md:w-1/2 max-w-none text-left translate-y-[70px]">
           <div class="flex items-center gap-2 mb-4">
             <span class="bg-gradient-to-r from-cyan-400 via-fuchsia-500 to-violet-500 text-white px-4 py-1.5 rounded-full text-sm font-extrabold tracking-widest uppercase shadow-[0_0_18px_rgba(34,211,238,0.55)]">Lo m&aacute;s nuevo</span>
             <span id="hero-meta" class="text-on-surface-variant text-sm font-medium"> 28 Episodios</span>
