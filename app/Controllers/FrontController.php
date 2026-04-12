@@ -14,8 +14,8 @@ class FrontController extends Controller
             return;
         }
 
-        $controllerClass = $resolved['controller'] ?? null;
-        $action = $resolved['action'] ?? null;
+        $controllerClass = isset($resolved['controller']) ? $resolved['controller'] : null;
+        $action = isset($resolved['action']) ? $resolved['action'] : null;
 
         if (!$controllerClass || !$action || !class_exists($controllerClass)) {
             $this->abort(500, 'Ruta mal configurada');
@@ -28,8 +28,11 @@ class FrontController extends Controller
             return;
         }
 
-        $this->publishRouteParams($resolved['params'] ?? []);
-        $controller->authorize($resolved['guard'] ?? null);
+        $params = isset($resolved['params']) ? $resolved['params'] : array();
+        $this->publishRouteParams($params);
+        
+        $guard = isset($resolved['guard']) ? $resolved['guard'] : null;
+        $controller->authorize($guard);
 
         if (!method_exists($controller, $action)) {
             $this->abort(500, 'Accion no encontrada');

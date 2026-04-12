@@ -1,29 +1,32 @@
 <?php
+// PHP 5.6+ Compatible Entry Point
+
 // TEMPORAL: Activar errores para diagnóstico
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 
-require __DIR__ . '/../app/bootstrap.php';
+require_once __DIR__ . '/../app/bootstrap.php';
 
-$requestUri = (string) ($_SERVER['REQUEST_URI'] ?? '/');
-$scriptName = str_replace('\\', '/', (string) ($_SERVER['SCRIPT_NAME'] ?? ''));
+$requestUri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/';
+$scriptName = isset($_SERVER['SCRIPT_NAME']) ? str_replace('\\', '/', $_SERVER['SCRIPT_NAME']) : '';
 $baseDir = rtrim(str_replace('\\', '/', dirname($scriptName)), '/.');
-$path = (string) parse_url($requestUri, PHP_URL_PATH);
 
-if ($baseDir !== '' && $baseDir !== '/' && (strpos($path, $baseDir) === 0)) {
-    $path = substr($path, strlen($baseDir));
+$path = '/' . ltrim(parse_url($requestUri, PHP_URL_PATH), '/');
+
+// Normalización de rutas
+if ($baseDir !== '' && $baseDir !== '/' && strpos($path, $baseDir) === 0) {
+    $path = '/' . ltrim(substr($path, strlen($baseDir)), '/');
 }
 
-$configuredBasePath = (string) parse_url(app_base_url(), PHP_URL_PATH);
-$configuredBasePath = rtrim(str_replace('\\', '/', $configuredBasePath), '/');
-if ($configuredBasePath !== '' && $configuredBasePath !== '/' && (strpos($path, $configuredBasePath) === 0)) {
-    $path = substr($path, strlen($configuredBasePath));
+$configuredBasePath = rtrim(app_env('APP_BASE_PATH', ''), '/');
+if ($configuredBasePath !== '' && $configuredBasePath !== '/' && strpos($path, $configuredBasePath) === 0) {
+    $path = '/' . ltrim(substr($path, strlen($configuredBasePath)), '/');
 }
 
 $route = trim($path, '/');
-if ($route === 'index.php') {
-    $route = '';
+if ($route === '') {
+    $route = 'index';
 }
 
 $frontController = new Controllers\FrontController();

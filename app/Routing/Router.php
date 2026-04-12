@@ -3,11 +3,14 @@ namespace Routing;
 
 class Router
 {
-    public function __construct(private readonly array $routes)
+    private $routes;
+
+    public function __construct($routes)
     {
+        $this->routes = $routes;
     }
 
-    public function match(string $route): ?array
+    public function match($route)
     {
         $normalized = $this->normalize($route);
         if ($normalized === null) {
@@ -15,14 +18,15 @@ class Router
         }
 
         foreach ($this->routes as $name => $config) {
-            foreach ($this->candidatesFor($config) as $candidate) {
-                $matched = $this->matchCandidate($normalized, (string) $candidate);
+            $candidates = $this->candidatesFor($config);
+            foreach ($candidates as $candidate) {
+                $matched = $this->matchCandidate($normalized, (string)$candidate);
                 if ($matched === null) {
                     continue;
                 }
 
                 $config['name'] = $name;
-                if ($matched !== []) {
+                if (!empty($matched)) {
                     $config['params'] = $matched;
                 }
 
@@ -33,32 +37,34 @@ class Router
         return null;
     }
 
-    private function candidatesFor(array $config): array
+    private function candidatesFor($config)
     {
-        $candidates = [$config['path'] ?? ''];
+        $candidates = array(isset($config['path']) ? $config['path'] : '');
 
-        foreach (($config['aliases'] ?? []) as $alias) {
+        $aliases = isset($config['aliases']) ? $config['aliases'] : array();
+        foreach ($aliases as $alias) {
             $candidates[] = $alias;
         }
 
-        foreach (($config['patterns'] ?? []) as $pattern) {
+        $patterns = isset($config['patterns']) ? $config['patterns'] : array();
+        foreach ($patterns as $pattern) {
             $candidates[] = $pattern;
         }
 
         return $candidates;
     }
 
-    private function matchCandidate(string $normalizedRoute, string $candidate): ?array
+    private function matchCandidate($normalizedRoute, $candidate)
     {
         $normalizedCandidate = $this->normalize($candidate);
         if ($normalizedCandidate !== null && $normalizedCandidate === $normalizedRoute) {
-            return [];
+            return array();
         }
 
         return $this->extractPatternParams($normalizedRoute, $candidate);
     }
 
-    private function extractPatternParams(string $normalizedRoute, string $candidate): ?array
+    private function extractPatternParams($normalizedRoute, $candidate)
     {
         if (strpos($candidate, '{') === false) {
             return null;
@@ -71,14 +77,14 @@ class Router
             return null;
         }
 
-        $paramNames = [];
+        $paramNames = array();
         $quotedPattern = preg_quote($normalizedCandidate, '#');
-        $regex = preg_replace_callback('/\\\\\{([a-zA-Z_][a-zA-Z0-9_]*)\\\\\}/', static function (array $matches) use (&$paramNames): string {
+        $regex = preg_replace_callback('/\\\\\{([a-zA-Z_][a-zA-Z0-9_]*)\\\\\}/', function ($matches) use (&$paramNames) {
             $paramNames[] = $matches[1];
             return '([^/]+)';
         }, $quotedPattern);
 
-        if ($regex === null || $paramNames === []) {
+        if ($regex === null || empty($paramNames)) {
             return null;
         }
 
@@ -86,9 +92,10 @@ class Router
             return null;
         }
 
-        $params = [];
+        $params = array();
         foreach ($paramNames as $index => $name) {
-            $value = trim((string) urldecode($matches[$index + 1] ?? ''));
+            $valIdx = $index + 1;
+            $value = trim((string)urldecode(isset($matches[$valIdx]) ? $matches[$valIdx] : ''));
             if ($value === '') {
                 return null;
             }
@@ -98,7 +105,7 @@ class Router
         return $params;
     }
 
-    private function normalize(string $route): ?string
+    private function normalize($route)
     {
         $normalized = urldecode(trim($route));
         $normalized = str_replace('\\', '/', $normalized);
@@ -112,7 +119,7 @@ class Router
             return null;
         }
 
-        $normalized = preg_replace('/\.php$/i', '', $normalized) ?? $normalized;
+        $normalized = preg_replace('/\.php$/i', '', $normalized);
         $normalized = trim($normalized, '/');
 
         if ($normalized === '') {

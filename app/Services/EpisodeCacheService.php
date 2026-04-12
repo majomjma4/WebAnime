@@ -29,19 +29,19 @@ class EpisodeCacheService
     public function getByAnimeId($animeId)
     {
         if ($animeId <= 0) {
-            return [];
+            return array();
         }
 
         $stmt = $this->db->prepare('SELECT episode_number, title, synopsis FROM anime_episodes WHERE anime_id = ? ORDER BY episode_number ASC');
-        $stmt->execute([$animeId]);
+        $stmt->execute(array($animeId));
 
-        $items = [];
+        $items = array();
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $items[] = [
-                'number' => (int) ($row['episode_number'] ?? 0),
-                'title' => (string) ($row['title'] ?? ''),
-                'synopsis' => (string) ($row['synopsis'] ?? ''),
-            ];
+            $items[] = array(
+                'number' => (int) (isset($row['episode_number']) ? $row['episode_number'] : 0),
+                'title' => (string) (isset($row['title']) ? $row['title'] : ''),
+                'synopsis' => (string) (isset($row['synopsis']) ? $row['synopsis'] : ''),
+            );
         }
 
         return $items;
@@ -61,18 +61,18 @@ class EpisodeCacheService
                 updated_at = CURRENT_TIMESTAMP");
 
         foreach ($episodesData as $episode) {
-            $episodeNumber = (int) ($episode['number'] ?? $episode['episode_number'] ?? 0);
+            $episodeNumber = (int) (isset($episode['number']) ? $episode['number'] : (isset($episode['episode_number']) ? $episode['episode_number'] : 0));
             if ($episodeNumber <= 0) {
                 continue;
             }
 
-            $title = trim((string) ($episode['title'] ?? ''));
-            $synopsis = trim((string) ($episode['synopsis'] ?? ''));
+            $title = trim((string) (isset($episode['title']) ? $episode['title'] : ''));
+            $synopsis = trim((string) (isset($episode['synopsis']) ? $episode['synopsis'] : ''));
             if ($title === '' && $synopsis === '') {
                 continue;
             }
 
-            $stmt->execute([$animeId, $episodeNumber, $title, $synopsis]);
+            $stmt->execute(array($animeId, $episodeNumber, $title, $synopsis));
         }
     }
 }

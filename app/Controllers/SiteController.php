@@ -26,9 +26,9 @@ class SiteController extends Controller
     {
         $this->ensureSessionStarted();
 
-        $detailRef = trim((string) ($_GET['_detail_ref'] ?? ''));
-        $legacyId = trim((string) ($_GET['mal_id'] ?? $_GET['id'] ?? ''));
-        $legacyTitle = trim((string) ($_GET['q'] ?? ''));
+        $detailRef = isset($_GET['_detail_ref']) ? trim((string)$_GET['_detail_ref']) : '';
+        $legacyId = isset($_GET['mal_id']) ? trim((string)$_GET['mal_id']) : (isset($_GET['id']) ? trim((string)$_GET['id']) : '');
+        $legacyTitle = isset($_GET['q']) ? trim((string)$_GET['q']) : '';
 
         if ($detailRef === '') {
             $detailRef = app_detail_ref_from_input($legacyId, $legacyTitle);
@@ -44,20 +44,24 @@ class SiteController extends Controller
         }
 
         $isLoggedIn = isset($_SESSION['user_id']);
-        $sessionRole = $_SESSION['role'] ?? 'Invitado';
+        $sessionRole = isset($_SESSION['role']) ? $_SESSION['role'] : 'Invitado';
         $sessionPremium = !empty($_SESSION['premium']) || $sessionRole === 'Admin';
-        $detailQuery = $detailRef !== '' && !ctype_digit($detailRef) ? str_replace('-', ' ', $detailRef) : '';
+        
+        $detailQuery = '';
+        if ($detailRef !== '' && !ctype_digit($detailRef)) {
+            $detailQuery = str_replace('-', ' ', $detailRef);
+        }
 
         // Release session lock before view if feasible
         session_write_close();
 
-        $this->render('pages/detail', [
+        $this->render('pages/detail', array(
             'isLoggedIn' => $isLoggedIn,
             'sessionRole' => $sessionRole,
             'sessionPremium' => $sessionPremium,
             'detailRef' => $detailRef,
             'detailQuery' => $detailQuery,
-        ]);
+        ));
     }
 
     public function login()
@@ -79,10 +83,10 @@ class SiteController extends Controller
         app_start_session();
         session_write_close();
 
-        $this->render('pages/peliculas', [
+        $this->render('pages/peliculas', array(
             'dbGenres' => $dbGenres,
             'animes' => $animes,
-        ]);
+        ));
     }
 
     public function ranking()
@@ -106,9 +110,9 @@ class SiteController extends Controller
         app_start_session();
         session_write_close();
 
-        $this->render('pages/series', [
+        $this->render('pages/series', array(
             'dbGenres' => $dbGenres,
             'animes' => $animes,
-        ]);
+        ));
     }
 }

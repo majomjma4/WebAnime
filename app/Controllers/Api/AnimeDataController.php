@@ -5,22 +5,24 @@ use Controllers\Controller;
 use PDO;
 use Helpers\ApiResponse;
 use Services\EpisodeCacheService;
+use Models\Database;
 
 class AnimeDataController extends Controller
 {
-    private $restrictedGenres = ['Hentai', 'Erotica', 'Ecchi', 'Yaoi', 'Yuri', 'Gore', 'Harem', 'Reverse Harem', 'Rx', 'Girls Love', 'Boys Love'];
-    private $restrictedTitles = ['does it count if', 'futanari'];
+    private $restrictedGenres = array('Hentai', 'Erotica', 'Ecchi', 'Yaoi', 'Yuri', 'Gore', 'Harem', 'Reverse Harem', 'Rx', 'Girls Love', 'Boys Love');
+    private $restrictedTitles = array('does it count if', 'futanari');
 
     public function handle()
     {
         app_start_session();
         session_write_close();
 
-        $q = trim($_GET['q'] ?? '');
-        $mal_id = trim($_GET['mal_id'] ?? '');
-        $id = trim($_GET['id'] ?? '');
+        $q = isset($_GET['q']) ? trim($_GET['q']) : '';
+        $mal_id = isset($_GET['mal_id']) ? trim($_GET['mal_id']) : '';
+        $id = isset($_GET['id']) ? trim($_GET['id']) : '';
 
-        $dbConn = (new \Models\Database())->getConnection();
+        $dbObj = new Database();
+        $dbConn = $dbObj->getConnection();
         if (!$dbConn) {
             ApiResponse::error('DB Connection Error', 500);
             exit;
@@ -29,28 +31,25 @@ class AnimeDataController extends Controller
         $animeItem = null;
 
         if ($id) {
-            // Si tenemos un ID interno, es la fuente más confiable
             $stmt = $dbConn->prepare("SELECT * FROM anime WHERE id = ? LIMIT 1");
-            $stmt->execute([$id]);
+            $stmt->execute(array($id));
             $animeItem = $stmt->fetch(PDO::FETCH_ASSOC);
         }
 
         if (!$animeItem && $mal_id) {
-            // Si no, buscamos por mal_id
             $stmt = $dbConn->prepare("SELECT * FROM anime WHERE mal_id = ? LIMIT 1");
-            $stmt->execute([$mal_id]);
+            $stmt->execute(array($mal_id));
             $animeItem = $stmt->fetch(PDO::FETCH_ASSOC);
         }
 
         if (!$animeItem && $q) {
-            // Último recurso: búsqueda por título exacto o aproximado (Legacy Support)
             $stmt = $dbConn->prepare("SELECT * FROM anime WHERE titulo = ? LIMIT 1");
-            $stmt->execute([$q]);
+            $stmt->execute(array($q));
             $animeItem = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if (!$animeItem) {
                 $stmt = $dbConn->prepare("SELECT * FROM anime WHERE titulo LIKE ? LIMIT 1");
-                $stmt->execute(["%$q%"]);
+                $stmt->execute(array("%$q%"));
                 $animeItem = $stmt->fetch(PDO::FETCH_ASSOC);
             }
         }
@@ -60,8 +59,8 @@ class AnimeDataController extends Controller
             exit;
         }
 
-        // --- Verificación de Seguridad (Restricción de Contenido +18) ---
-        $title = strtolower($animeItem['titulo'] ?? '');
+        // --- Verificación de Seguridad ---
+        $title = strtolower(isset($animeItem['titulo']) ? $animeItem['titulo'] : '');
         foreach ($this->restrictedTitles as $rt) {
             if (strpos($title, $rt) !== false) {
                 ApiResponse::error('Restricted', 403);
@@ -69,14 +68,13 @@ class AnimeDataController extends Controller
             }
         }
 
-        // Obtener géneros para verificar restricciones
         $genreStmt = $dbConn->prepare("
             SELECT g.nombre 
             FROM generos g 
             JOIN anime_generos ag ON g.id = ag.genero_id 
             WHERE ag.anime_id = ?
         ");
-        $genreStmt->execute([$animeItem['id']]);
+        $genreStmt->execute(array($animeItem['id']));
         $genres = $genreStmt->fetchAll(PDO::FETCH_COLUMN);
 
         foreach ($genres as $gn) {
@@ -90,10 +88,10 @@ class AnimeDataController extends Controller
         $episodeCache = new EpisodeCacheService($dbConn);
         $episodes = $episodeCache->getByAnimeId((int)$animeItem['id']);
 
-        ApiResponse::success([
+        ApiResponse::success(array(
             'anime' => $animeItem,
             'genres' => $genres,
             'episodes' => $episodes
-        ]);
+        ));
     }
 }
