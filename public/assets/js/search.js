@@ -406,10 +406,11 @@
       if (!q) return [];
       if (suggestCache.has(q)) return suggestCache.get(q);
       try {
-        const res = await fetch(`${API_BASE}?endpoint=${encodeURIComponent('anime?q=' + encodeURIComponent(q) + '&limit=' + API_SUGGEST_LIMIT + '&order_by=popularity&sort=asc')}`);
+        const blacklist = ["hentai", "futanari", "dick", "pussy", "sex", "porn", "cock", "blowjob"];
+        const res = await fetch(`${API_BASE}?endpoint=${encodeURIComponent('anime?q=' + encodeURIComponent(q) + '&limit=' + API_SUGGEST_LIMIT + '&order_by=popularity&sort=asc&sfw=1')}`);
         if (!res.ok) return [];
         const json = await res.json();
-        const list = (json?.data || []).map((item) => {
+        const rawList = (json?.data || []).map((item) => {
           const base = item?.title || "";
           const english = item?.title_english || "";
           const japanese = item?.title_japanese || "";
@@ -427,6 +428,12 @@
               item?.images?.jpg?.image_url ||
               ""
           };
+        });
+
+        // Filtro estricto de seguridad +18 (Local)
+        const list = rawList.filter(it => {
+          const lower = (it.title + " " + it.titleEn).toLowerCase();
+          return !blacklist.some(word => lower.includes(word));
         });
 
         // Filtro estricto: evita sugerencias que no tienen relacin real.

@@ -9,6 +9,9 @@ use Services\EpisodeCacheService;
 
 class SaveAnimeController extends Controller
 {
+    private $restrictedGenres = array('Hentai', 'Erotica', 'Ecchi', 'Yaoi', 'Yuri', 'Gore', 'Harem', 'Reverse Harem', 'Rx', 'Girls Love', 'Boys Love', 'Explicit Genres');
+    private $restrictedTitles = array('does it count if', 'futanari', 'hentai', 'dick', 'pussy', 'sex', 'porn', 'cock', 'blowjob');
+
     public function handle()
     {
         header('Content-Type: application/json; charset=UTF-8');
@@ -42,10 +45,29 @@ class SaveAnimeController extends Controller
 
         // Bloqueo de contenido +18
         $rating = isset($data['rating']) ? (string) $data['rating'] : '';
-        $restrictedKeywords = array('Rx', 'Hentai', 'Erotica', 'Adults');
-        foreach ($restrictedKeywords as $kw) {
+        $restrictedRating = array('Rx', 'Hentai', 'Erotica', 'Adults');
+        foreach ($restrictedRating as $kw) {
             if (stripos($rating, $kw) !== false) {
-                ApiResponse::error('Contenido restringido (+18) no permitido.');
+                ApiResponse::error('Contenido restringido (Rating) no permitido.');
+                exit;
+            }
+        }
+
+        // Bloqueo por Título
+        $fullTitle = strtolower($titulo . ' ' . (isset($data['title_japanese']) ? $data['title_japanese'] : ''));
+        foreach ($this->restrictedTitles as $rt) {
+            if (strpos($fullTitle, $rt) !== false) {
+                ApiResponse::error('Contenido restringido (Título) no permitido.');
+                exit;
+            }
+        }
+
+        // Bloqueo por Género
+        $genres = isset($data['genres']) && is_array($data['genres']) ? $data['genres'] : array();
+        foreach ($genres as $g) {
+            $gn = isset($g['name']) ? (string)$g['name'] : '';
+            if (in_array($gn, $this->restrictedGenres)) {
+                ApiResponse::error('Contenido restringido (Género) no permitido.');
                 exit;
             }
         }
@@ -55,16 +77,16 @@ class SaveAnimeController extends Controller
         $existingAnime = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$isAdmin) {
-            if (!$existingAnime) {
-                ApiResponse::error('Forbidden: Guest cannot create new anime from scratch', 403);
-                exit;
-            }
-            // Solo permitimos guardar si no tiene personajes (para completar data)
-            $stmtC = $dbConn->prepare("SELECT COUNT(*) FROM anime_characters WHERE anime_id = ?");
-            $stmtC->execute(array($existingAnime['id']));
-            if ($stmtC->fetchColumn() > 0 && !isset($data['force_update'])) {
-                ApiResponse::error('Forbidden: Data is already populated', 403);
-                exit;
+            // Permitimos CREACIÓN automática (Silent Cache) para invitados.
+            // Solo restringimos si ya existe y tiene datos completos (para evitar spam o sobreescritura de datos curados)
+            if ($existingAnime) {
+                $stmtC = $dbConn->prepare("SELECT COUNT(*) FROM anime_characters WHERE anime_id = ?");
+                $stmtC->execute(array($existingAnime['id']));
+                if ($stmtC->fetchColumn() > 0 && !isset($data['force_update'])) {
+                    // Si ya tiene personajes, asumimos que está completo y no dejamos que un invitado lo sobreescriba
+                    ApiResponse::success(array('message' => 'Anime already populated, no update needed by guest', 'id' => $existingAnime['id']));
+                    exit;
+                }
             }
         }
 

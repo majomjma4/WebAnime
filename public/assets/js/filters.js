@@ -1383,7 +1383,7 @@
             if (msg) msg.textContent = "Buscando en el cat\u00e1logo global...";
           }
 
-          fetch(`${appUrl("api/jikan_proxy")}?endpoint=${encodeURIComponent(`anime?q=${encodeURIComponent(state.search)}&type=${mediaType}&limit=12&order_by=popularity&sort=asc`)}`)
+          fetch(`${appUrl("api/jikan_proxy")}?endpoint=${encodeURIComponent(`anime?q=${encodeURIComponent(state.search)}&type=${mediaType}&limit=12&order_by=popularity&sort=asc&sfw=1`)}`)
             .then(r => r.ok ? r.json() : null)
             .then(json => {
               state.isFetchingGlobal = false;
@@ -1469,7 +1469,8 @@
 
         const title = item.title_english || item.title || "Anime";
       const normalizedTitle = normalize(title);
-      if (normalizedTitle.includes("does it count if you lose your innocence to an android") || normalizedTitle.includes("does it count if") || normalizedTitle.includes("futanari")) return null;
+      const blacklist = ["hentai", "futanari", "dick", "pussy", "sex", "porn", "cock", "blowjob", "does it count if"];
+      if (blacklist.some(word => normalizedTitle.includes(word))) return null;
         const img = item.images?.webp?.large_image_url || item.images?.jpg?.large_image_url || "";
         const year = item.year || (item.aired?.prop?.from?.year) || "";
         const score = item.score || item.scored || 0;

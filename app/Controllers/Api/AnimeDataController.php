@@ -10,8 +10,8 @@ use Exception;
 
 class AnimeDataController extends Controller
 {
-    private $restrictedGenres = array('Hentai', 'Erotica', 'Ecchi', 'Yaoi', 'Yuri', 'Gore', 'Harem', 'Reverse Harem', 'Rx', 'Girls Love', 'Boys Love');
-    private $restrictedTitles = array('does it count if', 'futanari');
+    private $restrictedGenres = array('Hentai', 'Erotica', 'Ecchi', 'Yaoi', 'Yuri', 'Gore', 'Harem', 'Reverse Harem', 'Rx', 'Girls Love', 'Boys Love', 'Explicit Genres');
+    private $restrictedTitles = array('does it count if', 'futanari', 'hentai', 'dick', 'pussy', 'sex', 'porn', 'cock', 'blowjob');
 
     public function handle()
     {
