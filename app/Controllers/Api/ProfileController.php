@@ -36,23 +36,33 @@ class ProfileController extends Controller
                 $stmt->execute([$userId]);
                 $meta = $stmt->fetchAll(\PDO::FETCH_KEY_PAIR);
 
+                $data = [
+                    'anidex_profile_name' => $meta['profile_name'] ?? ($_SESSION['username'] ?? ''),
+                    'anidex_profile_desc' => $meta['profile_desc'] ?? 'Explorador de animes en NekoraList',
+                    'anidex_profile_color' => $meta['profile_color'] ?? '',
+                    'anidex_profile_avatar' => $meta['profile_avatar'] ?? '',
+                    'anidex_profile_member_since' => $meta['profile_member_since'] ?? date('Y'),
+                    'anidex_user_id' => (string) $userId,
+                    'anidex_public_user_id' => $userRow['codigo_publico'] ?? null,
+                    'anidex_profile_hours' => $meta['profile_hours'] ?? '0',
+                    'anidex_profile_prefs' => json_decode($meta['anidex_profile_prefs'] ?? '[]', true),
+                    'anidex_continue_v1' => json_decode($meta['anidex_continue_v1'] ?? '[]', true),
+                    'anidex_my_list_v1' => json_decode($meta['my_list'] ?? '[]', true),
+                    'anidex_favorites_v1' => json_decode($meta['favorites'] ?? '[]', true),
+                    'anidex_status_v1' => json_decode($meta['status_list'] ?? '[]', true),
+                ];
+
+                // Agregar el resto de claves dinámicas (ej: anidex_seen_eps_*)
+                foreach ($meta as $k => $v) {
+                    if (strpos($k, 'anidex_') === 0 && !isset($data[$k])) {
+                        $parsed = json_decode($v, true);
+                        $data[$k] = (json_last_error() === JSON_ERROR_NONE) ? $parsed : $v;
+                    }
+                }
+
                 echo json_encode([
                     'success' => true,
-                    'data' => [
-                        'anidex_profile_name' => $meta['profile_name'] ?? ($_SESSION['username'] ?? ''),
-                        'anidex_profile_desc' => $meta['profile_desc'] ?? 'Explorador de animes en NekoraList',
-                        'anidex_profile_color' => $meta['profile_color'] ?? '',
-                        'anidex_profile_avatar' => $meta['profile_avatar'] ?? '',
-                        'anidex_profile_member_since' => $meta['profile_member_since'] ?? date('Y'),
-                        'anidex_user_id' => (string) $userId,
-                        'anidex_public_user_id' => $userRow['codigo_publico'] ?? null,
-                        'anidex_profile_hours' => $meta['profile_hours'] ?? '0',
-                        'anidex_profile_prefs' => json_decode($meta['anidex_profile_prefs'] ?? '[]', true),
-                        'anidex_continue_v1' => json_decode($meta['anidex_continue_v1'] ?? '[]', true),
-                        'anidex_my_list_v1' => json_decode($meta['my_list'] ?? '[]', true),
-                        'anidex_favorites_v1' => json_decode($meta['favorites'] ?? '[]', true),
-                        'anidex_status_v1' => json_decode($meta['status_list'] ?? '[]', true),
-                    ],
+                    'data' => $data,
                 ]);
             } elseif ($action === 'save') {
                 app_require_method('POST');

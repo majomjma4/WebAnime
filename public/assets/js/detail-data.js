@@ -889,7 +889,11 @@ const AniDexDetailDataBoot = () => {
         } catch {}
       };
       let continueMap = loadContinue();
-      const isSeen = (ep) => Boolean(seenMap[String(ep)]);
+      const isSeen = (ep) => {
+        if (seenMap[String(ep)]) return true;
+        const key = `${selectedId || norm(preferredTitle || "")}-${ep}`;
+        return Boolean(continueMap[key]);
+      };
       const setSeen = (ep, seen) => {
         if (seen) seenMap[String(ep)] = true;
         else delete seenMap[String(ep)];

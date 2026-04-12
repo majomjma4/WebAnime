@@ -498,6 +498,22 @@
       favorites: JSON.parse(localStorage.getItem(getIsolatedKey("anidex_favorites_v1")) || "[]"),
       status_list: JSON.parse(localStorage.getItem(getIsolatedKey("anidex_status_v1")) || "[]")
     };
+    
+    // Recolección dinámica de claves adicionales (ej. episodios vistos)
+    const suffix = authState.userKey ? `_${authState.userKey}` : "";
+    for (let i = 0; i < localStorage.length; i++) {
+        const fullKey = localStorage.key(i);
+        if (fullKey && fullKey.startsWith("anidex_seen_eps_")) {
+            let baseKey = fullKey;
+            if (suffix && fullKey.endsWith(suffix)) {
+                baseKey = fullKey.substring(0, fullKey.length - suffix.length);
+            }
+            if (!data[baseKey]) {
+                const val = localStorage.getItem(fullKey);
+                try { data[baseKey] = JSON.parse(val); } catch { data[baseKey] = val; }
+            }
+        }
+    }
     try {
       await fetch(buildAppUrl("api/profile?action=save"), {
         method: "POST",

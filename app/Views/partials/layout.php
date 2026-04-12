@@ -585,7 +585,7 @@
 
 <!-- Navbar Component -->
 <template id="layout-header">
-  <nav class="fixed top-0 w-full z-50 bg-neutral-950/70 backdrop-blur-xl shadow-[0px_20px_40px_rgba(0,0,0,0.4)] transition-all duration-300">
+  <nav class="fixed top-0 w-full z-[1000] bg-neutral-950/70 backdrop-blur-xl shadow-[0px_20px_40px_rgba(0,0,0,0.4)] transition-all duration-300">
     <div class="flex items-center justify-between px-5 h-[5.6rem] pt-2 w-full font-['Manrope'] antialiased">
       <a class="logo-badge" href="<?= route_path('home') ?>" aria-label="NekoraList">
         <img src="<?= asset_path('img/icon3.png') ?>" alt="NekoraList" class="logo-icon" />
