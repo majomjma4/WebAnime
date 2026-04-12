@@ -1280,14 +1280,11 @@ const AniDexDetailDataBoot = () => {
           if (!link || !linkFrame) return;
           markSeenByCard(card);
           const isUqload = /:\/\/(?:www\.)?uqload\.is\//i.test(directLink || link);
-          if (isUqload && directLink) {
-            window.location.href = directLink;
-            return;
-          }
+          // Redirección forzada eliminada a petición del usuario para que cargue en el iframe modal
           linkFrame.src = link;
           linkModal.classList.remove("hidden");
           // Uqload sometimes blocks iframe embeds; fall back to the direct page.
-          if (directLink) {
+          if (false) {
             const fallbackTimer = window.setTimeout(() => {
               if (!linkModal.classList.contains("hidden") && linkFrame.src === link) {
                 window.open(directLink, "_blank", "noopener,noreferrer");
