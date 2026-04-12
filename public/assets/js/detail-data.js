@@ -1163,6 +1163,12 @@ const AniDexDetailDataBoot = () => {
         });
         listEl.appendChild(fragment);
         const addedCards = Array.from(listEl.children).slice(shown);
+        addedCards.forEach((card) => {
+          const ep = card.getAttribute("data-episode");
+          if (ep && isSeen(ep)) {
+            updateSeenUI(card, true);
+          }
+        });
         shown += next.length;
         if (shown >= episodeItems.length) {
           if (moreBtn) moreBtn.classList.add("hidden");
