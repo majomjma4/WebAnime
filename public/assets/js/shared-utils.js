@@ -190,8 +190,15 @@
     return text;
   };
 
+  const buildDetailUrl = (malId, title, dbId) => {
+    const ref = malId || slugify(title);
+    if (!ref) return buildAppUrl("detail");
+    return buildAppUrl(`detail/${ref}`);
+  };
+
   window.AniDexShared = {
     buildAppUrl,
+    buildDetailUrl,
     getBasePath,
     getCookie,
     normalizeText,

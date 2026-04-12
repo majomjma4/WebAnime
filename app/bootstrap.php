@@ -138,9 +138,14 @@ function e($text) {
 }
 
 function detail_path($query = '', $title = '') {
-    $ref = $query;
+    // Priorizamos el slug del título para URLs más limpias (SEO)
+    $ref = app_slugify($title);
     if (!$ref) {
-        $ref = app_slugify($title);
+        $ref = $query;
+    }
+    // Si aún no hay nada (muy raro), fallback a 'anime'
+    if (!$ref) {
+        $ref = 'anime';
     }
     return route_path('detail', array('detail_ref' => $ref));
 }

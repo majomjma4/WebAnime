@@ -24,10 +24,16 @@
     return textual || "";
   };
 
-  const buildUrl = (malId = "", title = "", dbId = "") =>
-    window.AniDexShared?.buildDetailUrl
-      ? window.AniDexShared.buildDetailUrl(malId, title, dbId)
-      : (malId ? `detail/${encodeURIComponent(String(malId))}` : `detail/${encodeURIComponent(String(title || "anime").trim())}`);
+  const buildUrl = (malId = "", title = "", dbId = "") => {
+    if (window.AniDexShared && typeof window.AniDexShared.buildDetailUrl === "function") {
+      return window.AniDexShared.buildDetailUrl(malId, title, dbId);
+    }
+    const cleanTitle = (title || "").toString().toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+    const ref = malId || cleanTitle || "anime";
+    const base = window.AniDexShared?.buildAppUrl ? window.AniDexShared.buildAppUrl('') : '/';
+    const separator = (base.endsWith('/') ? '' : '/');
+    return `${base}${separator}detail/${ref}`;
+  };
 
   const parseDetailSource = (value) => {
     if (!value || !String(value).includes("detail")) return null;

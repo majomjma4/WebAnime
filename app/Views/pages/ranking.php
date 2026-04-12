@@ -363,14 +363,11 @@
         article.setAttribute('data-anime-card', '1');
         article.setAttribute('data-type', type);
         article.onclick = function () {
-          var url = 'detail';
-          if (it && it.mal_id) {
-            url += '?mal_id=' + encodeURIComponent(String(it.mal_id));
-            if (title) url += '&q=' + encodeURIComponent(title);
-          } else if (title) {
-            url += '?q=' + encodeURIComponent(title);
+          if (window.AniDexShared && typeof window.AniDexShared.buildDetailUrl === 'function') {
+            window.location.href = window.AniDexShared.buildDetailUrl(it.mal_id, title);
+          } else {
+            window.location.href = 'detail/' + (it.mal_id || (it.title ? encodeURIComponent(it.title) : 'anime'));
           }
-          window.location.href = url;
         };
         if (idx < 3) {
           article.className = 'group rounded-2xl overflow-hidden bg-gradient-to-br from-zinc-900 via-zinc-900 to-amber-900/30 border border-amber-400/60 shadow-[0_24px_60px_rgba(251,191,36,0.35)] hover:-translate-y-1 hover:border-amber-300/90 transition-all sm:flex sm:gap-6';
