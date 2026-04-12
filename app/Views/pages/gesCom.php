@@ -51,6 +51,8 @@
         body { background-color: #0e0e0e; color: #e7e5e4; font-family: 'Inter', sans-serif; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
     </style>
+<script src="assets/js/shared-utils.js?v=20260408a" defer></script>
+<script src="assets/js/admin-layout.js?v=20260330a" defer></script>
 </head>
 <body class="bg-background text-on-background selection:bg-primary-container selection:text-on-primary-container" data-admin-page="comments">
 <div data-admin-sidebar></div>
@@ -797,7 +799,7 @@
     });
   })();
 </script>
-<script src="assets/js/admin-layout.js?v=20260330a"></script>
+
 </body></html>
 
 

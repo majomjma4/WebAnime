@@ -75,6 +75,8 @@
         },
       }
     </script>
+<script src="assets/js/shared-utils.js?v=20260408a" defer></script>
+<script src="assets/js/admin-layout.js?v=20260330a" defer></script>
 </head>
 <body class="flex min-h-screen" data-admin-page="add">
 <!-- SideNavBar Component -->
@@ -605,7 +607,7 @@
     });
   })();
 </script>
-<script src="assets/js/admin-layout.js?v=20260330a"></script>
+
 </body></html>
 
 

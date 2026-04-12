@@ -92,6 +92,8 @@
 </style>
 
 
+<script src="assets/js/shared-utils.js?v=20260408a" defer></script>
+<script src="assets/js/admin-layout.js?v=20260330a" defer></script>
 </head>
 <body class="overflow-x-hidden" data-admin-page="requests">
 <!-- SideNavBar Component -->
@@ -268,7 +270,7 @@
 
 </div>
 </main>
-<script src="assets/js/admin-layout.js?v=20260330a"></script>
+
 <script data-admin-pagination-script>
 (function () {
   function initAdmin() {

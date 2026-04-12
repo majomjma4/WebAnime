@@ -63,6 +63,8 @@
     font-family: 'Inter', sans-serif;
   }
 </style>
+<script src="assets/js/shared-utils.js?v=20260408a" defer></script>
+<script src="assets/js/admin-layout.js?v=20260330a" defer></script>
 </head>
 <body class="flex min-h-screen overflow-x-hidden" data-admin-page="manage">
 <div data-admin-sidebar></div>
@@ -546,7 +548,7 @@
     backfillVisibleStudios();
   })();
 </script>
-<script src="assets/js/admin-layout.js?v=20260330a"></script>
+
 </body>
 </html>
 
