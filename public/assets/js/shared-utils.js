@@ -187,6 +187,21 @@
     return normalized || "anime";
   };
 
+  const translateAutoToEs = async (text) => {
+    if (!text || !/[a-zA-Z]/.test(text)) return text;
+    try {
+      const q = encodeURIComponent(text);
+      const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=es&dt=t&q=${q}`;
+      const res = await nativeFetch(url);
+      if (res.ok) {
+        const json = await res.json();
+        const translated = (json?.[0] || []).map(x => x?.[0]).join('').trim();
+        return translated || text;
+      }
+    } catch {}
+    return text;
+  };
+
   window.AniDexShared = {
     buildAppUrl,
     getBasePath,
@@ -194,6 +209,7 @@
     normalizeText,
     fetchJson,
     smartFetchJikan,
-    slugify
+    slugify,
+    translateAutoToEs
   };
 })();

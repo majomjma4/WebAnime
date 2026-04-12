@@ -972,25 +972,23 @@ endif; ?>
     let translationCache = loadTranslationCache();
     const translateToSpanish = async (text) => {
       const clean = String(text || "").replace(/\s+/g, " ").trim();
-      if (!clean) return "";
-      if (isLikelySpanish(clean)) return clean;
-      if (translationCache[clean]) return translationCache[clean];
+      if (!clean) return { text: "", translated: false };
+      if (isLikelySpanish(clean)) return { text: clean, translated: false };
+      if (translationCache[clean]) return { text: translationCache[clean], translated: true };
+
       try {
-        const query = encodeURIComponent(clean.slice(0, 500));
-        const res = await fetch(`https://api.mymemory.translated.net/get?q=${query}&langpair=en|es`);
-        if (!res.ok) return "";
-        const json = await res.json();
-        let translated = String(json?.responseData?.translatedText || "").replace(/\s+/g, " ").trim();
-        if (!translated) return "";
-        if (!isLikelySpanish(translated) && translated.toLowerCase() === clean.toLowerCase()) {
-          return "";
+        if (window.AniDexShared && typeof window.AniDexShared.translateAutoToEs === "function") {
+          const translated = await window.AniDexShared.translateAutoToEs(clean);
+          if (translated && translated !== clean) {
+            translationCache[clean] = translated;
+            saveTranslationCache(translationCache);
+            return { text: translated, translated: true };
+          }
         }
-        translationCache[clean] = translated;
-        saveTranslationCache(translationCache);
-        return translated;
-      } catch {
-        return "";
+      } catch (e) {
+        console.warn("Error en traducción:", e);
       }
+      return { text: clean, translated: false };
     };
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
     const fetchJikanReviews = async (retries = 2) => {
@@ -1018,12 +1016,10 @@ endif; ?>
           };
         });
         for (const item of mapped) {
-          if (!item.text) {
-            item.text = "Comentario no disponible en espa&ntilde;ol.";
-            continue;
-          }
-          const translated = await translateToSpanish(item.text);
-          item.text = translated ? truncate(translated) : "Comentario no disponible en espa&ntilde;ol.";
+          if (!item.text) continue;
+          const res = await translateToSpanish(item.text);
+          item.text = truncate(res.text);
+          item.isTranslated = res.translated;
         }
         return mapped;
       } catch {
@@ -1092,7 +1088,7 @@ endif; ?>
                 </div>
               </div>
             </div>
-            <p class="text-sm text-on-surface leading-relaxed">${item.text}</p>
+            <p class="text-sm text-on-surface leading-relaxed">${item.text}${item.isTranslated ? ' <span class="text-[10px] font-bold text-sky-400/80 italic ml-1" title="Traducido autom&aacute;ticamente">(Traducido)</span>' : ''}</p>
           </div>`;
       }).join("");
       list.querySelectorAll("[data-comment-delete-id]").forEach((btn) => {
