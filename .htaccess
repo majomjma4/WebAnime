@@ -1,12 +1,14 @@
 # WebAnime Professional MVC - Transparent Public Bridge
-# Este archivo redirige todo el tráfico a la carpeta /public de forma invisible.
-
 RewriteEngine On
 
 # 1. Proteger carpetas internas
 RewriteRule ^(app|vendor|cache|\.env) - [F,L]
 
-# 2. Redirigir todo a /public
-# Si ya estamos en /public, no hacemos nada
-RewriteCond %{REQUEST_URI} !^/public/
+# 2. Redirigir todo a /public de forma inteligente
+# Si el archivo existe físicamente, lo mostramos
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# Si NO estamos ya en la carpeta public, entramos en ella
+RewriteCond %{REQUEST_URI} !/public/
 RewriteRule ^(.*)$ public/$1 [L,QSA]
