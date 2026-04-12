@@ -42,7 +42,6 @@
       return path.slice(0, publicIndex + "/public/".length);
     }
     
-    // Fallback para subdirectorios de producción (como cPanel)
     if (path.toLowerCase().includes("/webanime-master/")) {
       return "/WebAnime-master/";
     }
@@ -60,42 +59,6 @@
     const basePath = getBasePath();
     const cleanPath = String(path || "").replace(/^\/+/, "");
     return cleanPath ? `${basePath}${cleanPath}` : basePath.replace(/\/$/, "");
-  };
-  const slugify = (value) => {
-    const normalized = String(value || "")
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "");
-    return normalized || "anime";
-  };
-
-  const buildDetailUrl = (malId = "", title = "", dbId = "") => {
-    const basePath = getBasePath();
-    const numericId = String(malId || dbId || "").trim();
-    if (/^\d+$/.test(numericId)) {
-      return `${basePath}detail/${encodeURIComponent(numericId)}`;
-    }
-    const cleanTitle = String(title || "").trim();
-    if (cleanTitle) {
-      return `${basePath}detail/${encodeURIComponent(slugify(cleanTitle))}`;
-    }
-    return `${basePath}detail`;
-  };
-
-  const getDetailRouteInfo = () => {
-    const path = window.location.pathname.replace(/\/+/g, "/");
-    const match = path.match(/\/detail(?:\/([^/?#]+))?$/i);
-    const search = new URLSearchParams(window.location.search);
-    const routeSegment = match?.[1] ? decodeURIComponent(match[1]) : "";
-    const legacyId = search.get("mal_id") || search.get("id") || "";
-    const legacyTitle = search.get("q") || "";
-    const numericCandidate = routeSegment || legacyId;
-    const malId = /^\d+$/.test(String(numericCandidate)) ? String(numericCandidate) : "";
-    const slug = malId ? "" : routeSegment;
-    const query = legacyTitle || (slug ? slug.replace(/-/g, " ") : "");
-    return { routeSegment, malId, slug, query };
   };
 
   const withSecurityDefaults = (url, options = {}) => {
@@ -123,9 +86,77 @@
   };
 
   const nativeFetch = window.fetch.bind(window);
+
+  // --- SMART FETCH JIKAN: Puente Inteligente ---
+  const smartFetchJikan = async (endpoint) => {
+    const appUrl = buildAppUrl("api/jikan_proxy");
+    const cleanEndpoint = String(endpoint || "").replace(/^\/+/, "");
+    
+    // 1. Intentar el Proxy del Servidor (timeout agresivo 2.5s)
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 2500);
+    
+    try {
+      const serverRes = await nativeFetch(`${appUrl}?endpoint=${encodeURIComponent(cleanEndpoint)}`, { 
+        signal: controller.signal,
+        headers: { "X-Requested-With": "XMLHttpRequest" }
+      });
+      clearTimeout(timeoutId);
+      if (serverRes && serverRes.ok) {
+        const data = await serverRes.json();
+        if (data && !data.error) return data;
+      }
+    } catch (e) {
+      console.warn("Proxy falló o tardó demasiado, usando puente directo a Jikan...");
+    }
+
+    // 2. Puente Directo a Jikan (Bypass de bloqueo de servidor)
+    try {
+      const jikanUrl = `https://api.jikan.moe/v4/${cleanEndpoint}${cleanEndpoint.includes("?") ? "&" : "?"}sfw=1`;
+      const jikanRes = await nativeFetch(jikanUrl);
+      if (jikanRes && jikanRes.ok) {
+        const data = await jikanRes.json();
+        
+        // 3. Alimentar la Base de Datos local (segundo plano)
+        if (data && data.data && !isRankingEndpoint(cleanEndpoint)) {
+           nativeFetch(buildAppUrl("api/save_anime"), {
+             method: "POST",
+             headers: { "Content-Type": "application/json" },
+             body: JSON.stringify({ mal_id: data.data.mal_id || 0, ...data.data, force_update: 1 })
+           }).catch(() => {});
+        }
+        
+        return data;
+      }
+    } catch (e) {
+      console.error("Fallo total al conectar con Jikan:", e);
+    }
+    return null;
+  };
+
+  const isRankingEndpoint = (endpoint) => endpoint.includes("top/anime") || endpoint.includes("ranking");
+
+  // Interceptar Fetch Globalmente para simplificar la integración
   window.fetch = (input, init = {}) => {
-    const url = typeof input === "string" || input instanceof URL ? String(input) : input?.url || window.location.href;
-    const secureInit = withSecurityDefaults(url, init);
+    const urlStr = typeof input === "string" || input instanceof URL ? String(input) : input?.url || "";
+    
+    // Si la llamada es al Jikan Proxy, usamos el Puente Inteligente
+    if (urlStr.includes("api/jikan_proxy")) {
+      const urlObj = new URL(urlStr, window.location.href);
+      const endpoint = urlObj.searchParams.get("endpoint");
+      if (endpoint) {
+        return (async () => {
+          const data = await smartFetchJikan(endpoint);
+          return new Response(JSON.stringify(data), {
+            status: data ? 200 : 504,
+            headers: { "Content-Type": "application/json" }
+          });
+        })();
+      }
+    }
+
+    // Para cualquier otra llamada, usamos fetch normal con seguridad
+    const secureInit = withSecurityDefaults(urlStr, init);
     return nativeFetch(input, secureInit);
   };
 
@@ -138,14 +169,7 @@
 
   const fetchJson = async (url, options = {}, retries = 1, retryDelayMs = 700) => {
     try {
-      const secureOptions = withSecurityDefaults(url, options);
-      let res = await nativeFetch(url, secureOptions);
-      let remaining = retries;
-      while (res && res.status === 429 && remaining > 0) {
-        await new Promise((resolve) => setTimeout(resolve, retryDelayMs));
-        res = await nativeFetch(url, secureOptions);
-        remaining -= 1;
-      }
+      const res = await window.fetch(url, options);
       if (!res || !res.ok) return null;
       return await res.json();
     } catch {
@@ -153,62 +177,23 @@
     }
   };
 
-  const translateAutoToEs = async (text) => {
-    const raw = String(text || "").trim();
-    if (!raw) return "";
-    const url =
-      "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=es&dt=t&q=" +
-      encodeURIComponent(raw);
-    const data = await fetchJson(url, {}, 1, 700);
-    const out = (data?.[0] || []).map((row) => row?.[0] || "").join("").trim();
-    return out || raw;
+  const slugify = (value) => {
+    const normalized = String(value || "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+    return normalized || "anime";
   };
-
-  const scoreTextMatch = (query, candidate) => {
-    const q = normalizeText(query);
-    const c = normalizeText(candidate);
-    if (!q || !c) return 0;
-    if (q === c) return 100;
-    if (c.includes(q) || q.includes(c)) return 80;
-    const qTokens = q.split(" ").filter(Boolean);
-    const cTokens = c.split(" ").filter(Boolean);
-    const overlap = qTokens.filter((token) => cTokens.includes(token)).length;
-    if (!overlap) return 0;
-    return Math.round((overlap / Math.max(qTokens.length, cTokens.length)) * 70);
-  };
-
-  const safeOpenExternal = (url, target = "_blank") => {
-    const opened = window.open(url, target, "noopener,noreferrer");
-    if (opened) {
-      try {
-        opened.opener = null;
-      } catch {}
-    }
-    return opened;
-  };
-
-  document.addEventListener("click", (event) => {
-    const trigger = event.target.closest("[data-external-url]");
-    if (!trigger) return;
-
-    event.preventDefault();
-    const url = trigger.getAttribute("data-external-url");
-    if (!url) return;
-    safeOpenExternal(url);
-  });
 
   window.AniDexShared = {
     buildAppUrl,
-    buildDetailUrl,
     getBasePath,
     getCookie,
-    getDetailRouteInfo,
     normalizeText,
-    scoreTextMatch,
-    slugify,
-    safeOpenExternal,
-    translateAutoToEs,
-    withSecurityDefaults,
-    fetchJson
+    fetchJson,
+    smartFetchJikan,
+    slugify
   };
 })();

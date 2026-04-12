@@ -21,18 +21,6 @@ class JikanProxyController extends Controller
         $endpoint = isset($_GET['endpoint']) ? $_GET['endpoint'] : '';
         $endpoint = urldecode($endpoint);
 
-        // Soporte para endpoints en el path (ej. api/jikan_proxy/anime/1/characters)
-        if (empty($endpoint)) {
-            $uri = $_SERVER['REQUEST_URI'];
-            $base = 'api/jikan_proxy';
-            $pos = strpos($uri, $base);
-            if ($pos !== false) {
-                $endpoint = substr($uri, $pos + strlen($base));
-                $endpoint = ltrim($endpoint, '/');
-                $endpoint = explode('?', $endpoint)[0]; // Quitar query params de la URL
-            }
-        }
-
         if (empty($endpoint)) {
             echo json_encode(array('error' => 'No endpoint provided'));
             exit;
@@ -42,53 +30,36 @@ class JikanProxyController extends Controller
         $db = $dbObj->getConnection();
         $cacheKey = md5($endpoint);
 
-        // 1. Prioridad absoluta al Cache para el Ranking
-        $isRanking = (strpos($endpoint, 'top/') !== false);
-        $cachedResponse = null;
-
+        // 1. Prioridad absoluta al Cache (para evitar bloqueos de red)
         if ($db) {
             try {
-                $stmt = $db->prepare("SELECT response, created_at FROM jikan_cache WHERE cache_key = ? LIMIT 1");
+                $stmt = $db->prepare("SELECT response FROM jikan_cache WHERE cache_key = ? LIMIT 1");
                 $stmt->execute(array($cacheKey));
-                $cached = $stmt->fetch(PDO::FETCH_ASSOC);
-                
-                if ($cached) {
-                    $cachedResponse = $cached['response'];
-                    $age = time() - strtotime($cached['created_at']);
-                    
-                    // Si es Ranking y tiene menos de 12 horas, lo damos de inmediato
-                    if ($isRanking && $age < 43200) {
-                        echo $cachedResponse;
-                        exit;
-                    }
-                    // Para otros, si tiene menos de 1 hora, lo damos de inmediato
-                    if (!$isRanking && $age < 3600) {
-                        echo $cachedResponse;
-                        exit;
-                    }
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                if ($row) {
+                    echo $row['response'];
+                    exit;
                 }
             } catch (Exception $e) {}
         }
 
-        // 2. Petición a Jikan con timeout agresivo para evitar Error 500 del servidor
+        // 2. Intento de conexión con la API (Ultra-rápida, 3s max)
         $url = 'https://api.jikan.moe/v4/' . ltrim($endpoint, '/');
-        if (strpos($url, 'sfw=') === false) {
-            $url .= (strpos($url, '?') !== false ? '&' : '?') . 'sfw=1';
-        }
+        $url .= (strpos($url, '?') !== false ? '&' : '?') . 'sfw=1';
 
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_USERAGENT, 'NekoraList-Bot/1.1');
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36');
         
-        // El servidor suele matar procesos a los 10-15s. Seteamos curl a 8s para tener margen de responder.
-        curl_setopt($ch, CURLOPT_TIMEOUT, 8); 
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 4);
+        // Timeout muy corto. Si el servidor está bloqueado, fallará rápido y el Frontend hará el puente.
+        curl_setopt($ch, CURLOPT_TIMEOUT, 3); 
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2);
+        curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); 
         
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $curlError = curl_error($ch);
         curl_close($ch);
 
         if ($httpCode === 200 && !empty($response)) {
@@ -107,18 +78,8 @@ class JikanProxyController extends Controller
             exit;
         } 
         
-        // 3. Si la API falló o tardó mucho, devolvemos el cache que tengamos (aunque sea viejo)
-        if ($cachedResponse) {
-            echo $cachedResponse;
-            exit;
-        }
-
-        // 4. Si no hay nada, error final
-        http_response_code($httpCode ? $httpCode : 504);
-        echo json_encode(array(
-            'error' => 'Timeout or API Error',
-            'curl_error' => $curlError,
-            'endpoint' => $endpoint
-        ));
+        // Si falló (ej. por bloqueo de servidor), retornamos error rápido para que el Frontend use el puente
+        http_response_code(504);
+        echo json_encode(array('error' => 'API Timeout on Server', 'bridge_mode' => true));
     }
 }

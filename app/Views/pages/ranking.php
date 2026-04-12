@@ -444,27 +444,24 @@
         return article;
       }
 
-      function fetchJson(url) {
-        if (window.AniDexShared && typeof window.AniDexShared.fetchJson === 'function') {
-          return window.AniDexShared.fetchJson(url, { cache: 'no-store' })
-            .then(function (json) { return json && Array.isArray(json.data) ? json.data : null; });
+      function fetchRankingData(endpoint) {
+        if (window.AniDexShared && typeof window.AniDexShared.smartFetchJikan === 'function') {
+           return window.AniDexShared.smartFetchJikan(endpoint)
+             .then(function(json) { return json && Array.isArray(json.data) ? json.data : null; });
         }
-        return fetch(url, { cache: 'no-store' })
-          .then(function (res) { return res && res.ok ? res.json() : null; })
-          .then(function (json) { return json && Array.isArray(json.data) ? json.data : null; });
+        return fetch(endpoint)
+          .then(function(res) { return res && res.ok ? res.json() : null; })
+          .then(function(json) { return json && Array.isArray(json.data) ? json.data : null; });
       }
 
       function loadRanking() {
-        var appUrl = (window.AniDexShared && window.AniDexShared.buildAppUrl) || function (p) { return p; };
-        var proxy = appUrl('api/jikan_proxy');
-
         grid.innerHTML = '<p class="text-zinc-400">Cargando ranking...</p>';
-        return fetchJson(proxy + '?endpoint=' + encodeURIComponent('top/anime?limit=50'))
+        return fetchRankingData('top/anime?limit=50')
           .then(function (items) {
             if (items && items.length) return items.slice(0, 50);
             return Promise.all([
-              fetchJson(proxy + '?endpoint=' + encodeURIComponent('top/anime?page=1&limit=25')),
-              fetchJson(proxy + '?endpoint=' + encodeURIComponent('top/anime?page=2&limit=25'))
+              fetchRankingData('top/anime?page=1&limit=25'),
+              fetchRankingData('top/anime?page=2&limit=25')
             ]).then(function (parts) {
               var merged = [].concat(parts[0] || [], parts[1] || []);
               return merged.slice(0, 50);
