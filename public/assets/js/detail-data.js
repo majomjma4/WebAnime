@@ -139,8 +139,8 @@ const AniDexDetailDataBoot = () => {
   const toSpanishStatus = (value) => {
     const v = (value || "").toLowerCase();
     if (v.includes("finished")) return "Finalizado";
-    if (v.includes("currently")) return "En emisión";
-    if (v.includes("not yet")) return "Próximamente";
+    if (v.includes("currently")) return "En emisi\u00f3n";
+    if (v.includes("not yet")) return "Pr\u00f3ximamente";
     return value || "N/A";
   };
 
@@ -160,9 +160,9 @@ const AniDexDetailDataBoot = () => {
   const toSpanishRating = (value) => {
     const v = value || "";
     return v
-      .replace("R - 17+ (violence & profanity)", "R - 17+ (violencia y lenguaje explícito)")
-      .replace("PG-13 - Teens 13 or older", "PG-13 - Mayores de 13 años")
-      .replace("PG - Children", "PG - Público general")
+      .replace("R - 17+ (violence & profanity)", "R - 17+ (violencia y lenguaje expl\u00edcito)")
+      .replace("PG-13 - Teens 13 or older", "PG-13 - Mayores de 13 a\u00f1os")
+      .replace("PG - Children", "PG - P\u00fablico general")
       .replace("G - All Ages", "G - Todas las edades")
       .replace("Rx - Hentai", "Rx - Adultos");
   };
@@ -335,7 +335,6 @@ const AniDexDetailDataBoot = () => {
       selectedId = full.mal_id;
       isLocal = true;
       
-      // COMPLEMENT: If local data is sparse, fetch full Jikan info to fill gaps
       const needsComplement = !full.studios?.length || !full.genres?.length || (full.synopsis || "").length < 50 || !full.title_english || !full.title_japanese;
       if (needsComplement && selectedId) {
         const jikanFull = await byId(selectedId, "full");
@@ -351,7 +350,6 @@ const AniDexDetailDataBoot = () => {
             if (!full.title_japanese && jikanFull.title_japanese) full.title_japanese = jikanFull.title_japanese;
         }
       }
-      // Safety Fallback: Never show N/A if we have the main title
       if (!full.title_english) full.title_english = full.title;
       if (!full.title_japanese) full.title_japanese = full.title;
     } else {
@@ -368,9 +366,6 @@ const AniDexDetailDataBoot = () => {
       }
     }
     if (!full) return;
-
-    // Defer saving until sub-data (chars, vids, pics) is ready
-
 
     try {
       const mapKey = "anidex_title_id_map_v1";
@@ -716,7 +711,6 @@ const AniDexDetailDataBoot = () => {
       syn.textContent = await translateToEs(synText);
     }
 
-    // Update Status Meta (Status, Episodes, Duration)
     const statusMeta = document.getElementById("detail-status-meta");
     if (statusMeta) {
       const statusText = toSpanishStatus(full.status);
@@ -731,7 +725,6 @@ const AniDexDetailDataBoot = () => {
       `;
     }
 
-    // Update Genres
     const genreContainer = document.getElementById("detail-genres");
     if (genreContainer && full.genres) {
       genreContainer.innerHTML = full.genres.map(g => `
@@ -739,7 +732,6 @@ const AniDexDetailDataBoot = () => {
       `).join("");
     }
 
-    // Update Detailed Info Block
     const infoBlock = document.getElementById("detail-info-block");
     if (infoBlock) {
       infoBlock.innerHTML = "";
@@ -1021,7 +1013,7 @@ const AniDexDetailDataBoot = () => {
       const lockEpisodes = () => {
         const lockText = isLogged
           ? "Activa el modo premium para ver los episodios"
-          : "Inicia sesión y accede al modo premium para ver los episodios";
+          : "Inicia sesi\u00f3n y accede al modo premium para ver los episodios";
         const goPremium = () => {
                     const appUrl = window.AniDexShared?.buildAppUrl;
           window.location.href = appUrl
@@ -1151,52 +1143,34 @@ const AniDexDetailDataBoot = () => {
             });
           }
         }));
-        flushEpisodeCache().catch(() => {});
+        flushEpisodeCache();
       };
-      const appendBatch = () => {
-        const nextItems = episodeItems.slice(shown, shown + pageSize);
-        if (!nextItems.length) return;
-        listEl.insertAdjacentHTML("beforeend", nextItems.map(renderEpisodeCard).join(""));
-        shown += nextItems.length;
-        if (shown >= episodeItems.length) {
-          moreBtn?.classList.add("hidden");
-        } else {
-          moreBtn?.classList.remove("hidden");
-        }
-        if (!isLogged || !isPremium) {
-          lockEpisodes();
-          if (typeof bindEpisodeCards === "function") {
-            bindEpisodeCards();
-          }
-          return;
-        }
-        const freshCards = Array.from(episodesSection.querySelectorAll(".episode-card"));
-        freshCards.forEach((card) => updateSeenUI(card, isSeen(card.getAttribute("data-episode"))));
-        freshCards.forEach((card) => {
-          const btn = card.querySelector("[data-episode-seen]");
-          if (!btn || btn.dataset.bound) return;
-          btn.dataset.bound = "1";
-          btn.addEventListener("click", (e) => {
-            e.stopPropagation();
-            const ep = card.getAttribute("data-episode");
-            const next = !isSeen(ep);
-            setSeen(ep, next);
-            if (next) upsertContinue(card);
-            else removeContinue(card);
-            updateSeenUI(card, next);
-          });
+      const renderNextEpisodes = () => {
+        const next = episodeItems.slice(shown, shown + pageSize);
+        if (!next.length) return;
+        const fragment = document.createDocumentFragment();
+        next.forEach((item) => {
+          const div = document.createElement("div");
+          div.innerHTML = renderEpisodeCard(item);
+          fragment.appendChild(div.firstElementChild);
         });
-        const pendingCards = freshCards.filter((card) => card.dataset.episodeEnhanced !== "1");
-        pendingCards.forEach((card) => { card.dataset.episodeEnhanced = "1"; });
-        enrichEpisodeCards(pendingCards).catch(() => {});
-        if (typeof bindEpisodeCards === "function") {
-          bindEpisodeCards();
+        listEl.appendChild(fragment);
+        const addedCards = Array.from(listEl.children).slice(shown);
+        shown += next.length;
+        if (shown >= episodeItems.length) {
+          if (moreBtn) moreBtn.classList.add("hidden");
+        } else {
+          if (moreBtn) moreBtn.classList.remove("hidden");
         }
+        if (canWatchEpisodes || isLogged) {
+          if (bindEpisodeCards) bindEpisodeCards();
+          enrichEpisodeCards(addedCards);
+        }
+        lockEpisodes();
       };
-      appendBatch();
-      if (moreBtn) {
-        moreBtn.addEventListener("click", appendBatch);
-      }
+      if (moreBtn) moreBtn.addEventListener("click", renderNextEpisodes);
+      renderNextEpisodes();
+
       const episodesHost = document.getElementById("detail-episodes-host");
       if (episodesHost) {
         episodesHost.appendChild(episodesSection);
@@ -1209,12 +1183,14 @@ const AniDexDetailDataBoot = () => {
       if (!episodeModal) {
         episodeModal = document.createElement("div");
         episodeModal.id = episodeModalId;
-        episodeModal.className = "fixed inset-0 z-[90] hidden";
+        episodeModal.className = "fixed inset-0 z-[110] hidden flex items-center justify-center p-4 sm:p-6";
         episodeModal.innerHTML = `
-          <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
-          <div class="relative mx-auto mt-[12vh] w-[min(92vw,720px)] rounded-2xl bg-surface-container-high/95 border border-violet-500/30 p-4 shadow-2xl overflow-hidden" data-episode-shell>
-            <button type="button" data-episode-close class="absolute top-3 right-3 w-9 h-9 rounded-full bg-surface-container-low text-on-surface-variant hover:text-on-surface flex items-center justify-center">x</button>
-            <video data-episode-video-player class="w-full rounded-xl bg-black" controls playsinline preload="metadata">
+          <div class="absolute inset-0 bg-black/80 backdrop-blur-md"></div>
+          <div class="relative w-full max-w-4xl rounded-2xl bg-black shadow-2xl overflow-hidden border border-white/10" data-episode-shell>
+            <button type="button" data-episode-close class="absolute top-4 right-4 w-11 h-11 rounded-full bg-black/50 text-white/90 hover:text-white hover:bg-violet-600 flex items-center justify-center backdrop-blur-md z-30 transition-all duration-300 shadow-xl border border-white/10" aria-label="Cerrar">
+              <span class="material-symbols-outlined text-[28px]">close</span>
+            </button>
+            <video data-episode-video-player class="w-full aspect-video bg-black" controls playsinline preload="metadata">
               <source data-episode-video-source type="video/mp4" />
             </video>
           </div>
@@ -1228,14 +1204,14 @@ const AniDexDetailDataBoot = () => {
         if (!linkModal) {
           linkModal = document.createElement("div");
           linkModal.id = "detail-episode-link-modal";
-          linkModal.className = "fixed inset-0 z-[90] hidden";
+          linkModal.className = "fixed inset-0 z-[110] hidden flex items-center justify-center p-4 sm:p-6";
           linkModal.innerHTML = `
-            <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
-            <div class="relative mx-auto mt-[8vh] w-[min(94vw,1100px)] h-[min(80vh,720px)] overflow-visible" data-link-shell>
-              <button type="button" data-link-close class="absolute -top-5 -right-5 w-10 h-10 rounded-full bg-violet-500 text-white text-lg font-bold shadow-lg shadow-violet-500/40 hover:bg-violet-400 flex items-center justify-center">&times;</button>
-              <div class="w-full h-full overflow-hidden">
-                <iframe data-link-frame class="w-full h-full bg-black" allow="autoplay; fullscreen" allowfullscreen referrerpolicy="no-referrer"></iframe>
-              </div>
+            <div class="absolute inset-0 bg-black/80 backdrop-blur-md" data-link-backdrop></div>
+            <div class="relative w-full max-w-5xl aspect-video rounded-2xl bg-black shadow-2xl overflow-hidden border border-white/10" data-link-shell>
+              <button type="button" data-link-close class="absolute top-4 right-4 w-12 h-12 rounded-full bg-black/50 text-white/90 hover:text-white hover:bg-violet-600 flex items-center justify-center backdrop-blur-md z-30 transition-all duration-300 shadow-xl border border-white/10" aria-label="Cerrar">
+                <span class="material-symbols-outlined text-[32px]">close</span>
+              </button>
+              <iframe data-link-frame class="w-full h-full border-none" allow="autoplay; fullscreen" allowfullscreen referrerpolicy="no-referrer"></iframe>
             </div>
           `;
           document.body.appendChild(linkModal);
@@ -1248,9 +1224,9 @@ const AniDexDetailDataBoot = () => {
         if (!imageModal) {
           imageModal = document.createElement("div");
           imageModal.id = "detail-episode-image-modal";
-          imageModal.className = "fixed inset-0 z-[90] hidden";
+          imageModal.className = "fixed inset-0 z-[110] hidden flex items-center justify-center p-4 sm:p-6";
           imageModal.innerHTML = `
-            <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+            <div class="absolute inset-0 bg-black/80 backdrop-blur-md"></div>
             <div class="relative w-full h-full flex items-center justify-center p-6">
               <div class="relative inline-flex overflow-visible" data-image-shell>
                 <button type="button" data-image-close class="absolute -top-8 -right-12 w-10 h-10 rounded-full bg-violet-500/60 text-white text-lg font-bold shadow-lg shadow-violet-500/40 backdrop-blur hover:bg-violet-400/70 flex items-center justify-center">&times;</button>
@@ -1272,6 +1248,7 @@ const AniDexDetailDataBoot = () => {
         const closeLink = () => {
           if (linkFrame) linkFrame.src = "";
           linkModal.classList.add("hidden");
+          document.body.style.overflow = "";
         };
         const openLink = (card) => {
           const embedLink = card.getAttribute("data-episode-embed") || "";
@@ -1279,24 +1256,9 @@ const AniDexDetailDataBoot = () => {
           const link = embedLink || directLink;
           if (!link || !linkFrame) return;
           markSeenByCard(card);
-          const isUqload = /:\/\/(?:www\.)?uqload\.is\//i.test(directLink || link);
-          // Redirección forzada eliminada a petición del usuario para que cargue en el iframe modal
           linkFrame.src = link;
           linkModal.classList.remove("hidden");
-          // Uqload sometimes blocks iframe embeds; fall back to the direct page.
-          if (false) {
-            const fallbackTimer = window.setTimeout(() => {
-              if (!linkModal.classList.contains("hidden") && linkFrame.src === link) {
-                window.open(directLink, "_blank", "noopener,noreferrer");
-              }
-            }, 1800);
-            const clearFallback = () => window.clearTimeout(fallbackTimer);
-            linkFrame.addEventListener("load", clearFallback, { once: true });
-            linkFrame.addEventListener("error", () => {
-              clearFallback();
-              window.open(directLink, "_blank", "noopener,noreferrer");
-            }, { once: true });
-          }
+          document.body.style.overflow = "hidden";
         };
         const imageFrame = imageModal.querySelector("[data-image-frame]");
         const imageCloseBtn = imageModal.querySelector("[data-image-close]");
@@ -1304,6 +1266,7 @@ const AniDexDetailDataBoot = () => {
         const closeImage = () => {
           if (imageFrame) imageFrame.removeAttribute("src");
           imageModal.classList.add("hidden");
+          document.body.style.overflow = "";
         };
         const openImage = (card) => {
           const src = card.getAttribute("data-episode-image");
@@ -1313,6 +1276,7 @@ const AniDexDetailDataBoot = () => {
           imageFrame.src = src;
           imageFrame.alt = title;
           imageModal.classList.remove("hidden");
+          document.body.style.overflow = "hidden";
         };
         const linkCards = Array.from(episodesSection.querySelectorAll("[data-episode-link]")).filter((card) => canAccessEpisode(card));
         const imageCards = Array.from(episodesSection.querySelectorAll("[data-episode-image]")).filter((card) => canAccessEpisode(card));
@@ -1371,6 +1335,7 @@ const AniDexDetailDataBoot = () => {
           player.load();
           player.currentTime = 0;
           episodeModal.classList.remove("hidden");
+          document.body.style.overflow = "hidden";
           const playPromise = player.play();
           if (playPromise?.catch) playPromise.catch(() => {});
         };
@@ -1381,6 +1346,7 @@ const AniDexDetailDataBoot = () => {
             player.load();
           }
           episodeModal.classList.add("hidden");
+          document.body.style.overflow = "";
         };
         videoCard.addEventListener("click", openEpisode);
         if (closeBtn) closeBtn.addEventListener("click", closeEpisode);
@@ -1403,7 +1369,7 @@ const AniDexDetailDataBoot = () => {
       const episodesValue = full.episodes || "";
       statusLine.className = "text-on-surface-variant font-medium space-y-2 text-sm lg:text-base";
       const yearBlock = (!isMovie || yearValue)
-        ? `<span class="flex flex-col"><span class="text-primary-dim text-xs uppercase tracking-wider">Año</span><span>${yearValue || "N/A"}</span></span>`
+        ? `<span class="flex flex-col"><span class="text-primary-dim text-xs uppercase tracking-wider">A\u00f1o</span><span>${yearValue || "N/A"}</span></span>`
         : "";
       const episodesBlock = !isMovie
         ? `<div><span class="flex flex-col"><span class="text-primary-dim text-xs uppercase tracking-wider">Episodios</span><span>${episodesValue || "N/A"}</span></span></div>`
@@ -1533,7 +1499,7 @@ const AniDexDetailDataBoot = () => {
       charsRow.innerHTML = topChars.map((c, idx) => {
         const cleanName = (c.character?.name || "Personaje").replace(/,/g, "");
         const roleLabel = /main/i.test(c?.role || "") ? "principal" : "secundario";
-        const fallbackMini = "Cargando biografía...";
+        const fallbackMini = "Cargando biograf\u00eda...";
         const desc = fallbackMini;
         const charId = c.character?.mal_id || "";
         const charImg = c.character?.images?.jpg?.image_url || "";
@@ -1581,7 +1547,6 @@ const AniDexDetailDataBoot = () => {
             }
          }
       };
-      // Fire the background queue asynchronously
       loadBios();
       const prev = document.getElementById("chars-prev");
       const next = document.getElementById("chars-next");
@@ -1647,33 +1612,31 @@ const AniDexDetailDataBoot = () => {
         if (modal) return modal;
         modal = document.createElement("div");
         modal.id = "detail-character-modal";
-        modal.className = "fixed inset-0 z-[95] hidden";
+        modal.className = "fixed inset-0 z-[120] hidden flex items-center justify-center p-4 sm:p-6";
         modal.innerHTML = `
-          <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" data-char-backdrop></div>
-          <div class="relative w-full h-full flex items-center justify-center p-4">
-            <div class="relative w-[min(92vw,560px)] rounded-2xl bg-surface-container-high/95 border border-white/10 shadow-2xl overflow-hidden" data-char-shell>
-              <button type="button" data-char-close class="absolute top-3 right-3 w-10 h-10 rounded-full bg-black/40 text-white/90 hover:text-white hover:bg-violet-500/80 flex items-center justify-center backdrop-blur-md transition-all duration-300 z-10 shadow-lg border border-white/10" aria-label="Cerrar">
-                <span class="material-symbols-outlined text-2xl">close</span>
-              </button>
-              <div class="grid grid-cols-1 sm:grid-cols-[240px_1fr] gap-6 p-6 items-stretch">
-                <div class="w-full h-full min-h-[260px] sm:min-h-[320px] rounded-2xl overflow-hidden bg-black/30 shadow-[0_0_24px_rgba(0,0,0,0.35)] flex items-center justify-center">
-                  <img data-char-img class="max-w-full max-h-full object-contain block" alt="Personaje" />
+          <div class="absolute inset-0 bg-black/80 backdrop-blur-md" data-char-backdrop></div>
+          <div class="relative w-full max-w-2xl rounded-2xl bg-surface-container-high shadow-2xl overflow-hidden border border-white/10" data-char-shell>
+            <button type="button" data-char-close class="absolute top-4 right-4 w-11 h-11 rounded-full bg-black/50 text-white/90 hover:text-white hover:bg-violet-600 flex items-center justify-center backdrop-blur-md z-30 transition-all duration-300 shadow-xl border border-white/10" aria-label="Cerrar">
+              <span class="material-symbols-outlined text-[28px]">close</span>
+            </button>
+            <div class="grid grid-cols-1 sm:grid-cols-[240px_1fr] gap-6 p-6 items-stretch">
+              <div class="w-full h-full min-h-[260px] sm:min-h-[320px] rounded-2xl overflow-hidden bg-black/30 shadow-[0_0_24px_rgba(0,0,0,0.35)] flex items-center justify-center">
+                <img data-char-img class="max-w-full max-h-full object-contain block" alt="Personaje" />
+              </div>
+              <div class="space-y-4">
+                <div>
+                  <h3 data-char-name class="text-2xl font-extrabold font-headline text-on-surface">Personaje</h3>
+                  <p data-char-role class="text-xs uppercase tracking-widest text-primary-dim font-semibold mt-1">Rol</p>
                 </div>
-                <div class="space-y-4">
-                  <div>
-                    <h3 data-char-name class="text-2xl font-extrabold font-headline">Personaje</h3>
-                    <p data-char-role class="text-xs uppercase tracking-widest text-primary-dim font-semibold mt-1">Rol</p>
-                  </div>
-                  <div class="h-px w-16 bg-violet-400/40"></div>
-                  <div>
-                    <h4 class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Descripci\u00f3n</h4>
-                    <p data-char-info class="text-sm text-on-surface-variant leading-relaxed mt-2">Cargando información del personaje...</p>
-                  </div>
-                  <div class="h-px w-16 bg-violet-400/40"></div>
-                  <div data-char-fields-wrap>
-                    <h4 class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Datos personales</h4>
-                    <div data-char-fields class="mt-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-2 text-sm text-on-surface-variant"></div>
-                  </div>
+                <div class="h-px w-16 bg-violet-400/40"></div>
+                <div>
+                  <h4 class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Descripci\u00f3n</h4>
+                  <p data-char-info class="text-sm text-on-surface-variant leading-relaxed mt-2">Cargando informaci\u00f3n del personaje...</p>
+                </div>
+                <div class="h-px w-16 bg-violet-400/40"></div>
+                <div data-char-fields-wrap>
+                  <h4 class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Datos personales</h4>
+                  <div data-char-fields class="mt-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-2 text-sm text-on-surface-variant"></div>
                 </div>
               </div>
             </div>
@@ -1737,7 +1700,7 @@ const AniDexDetailDataBoot = () => {
           const data = json?.data || {};
           
           const fieldMap = {
-            "Birthday": "Cumpleaños",
+            "Birthday": "Cumplea\u00f1os",
             "Height": "Altura"
           };
           const fields = [];
@@ -1760,8 +1723,6 @@ const AniDexDetailDataBoot = () => {
             if (fields.some((f) => f.label === label)) return;
             fields.push({ label, value: clean });
           };
-          // addField("Cumpleaños", data?.birthday);
-          // addField("Altura", data?.height);
           if (typeof data?.favorites === "number") {
              addField("Popularidad", ` ${data.favorites} favoritos`);
           }
@@ -1874,7 +1835,6 @@ const AniDexDetailDataBoot = () => {
               "";
             characterCache.set(charId, { miniSummary, img: cachedImg, full: false });
           } catch {
-            // ignore
           }
           await new Promise((r) => setTimeout(r, 180));
         }
@@ -1903,8 +1863,6 @@ const AniDexDetailDataBoot = () => {
       }
     }
 
-    // Galera relacionada eliminada por solicitud.
-
     const external = Array.from(document.querySelectorAll("h3")).find((x) => /enlaces externos/i.test((x.textContent || "").toLowerCase()));
     if (external) external.parentElement?.remove();
 
@@ -1929,7 +1887,6 @@ const AniDexDetailDataBoot = () => {
     document.body.dataset.detailType = (full.type || "").toLowerCase() === "movie" ? "Pel\u00edcula" : "Anime";
     if (window.AniDexFavorites) window.AniDexFavorites.refresh();
 
-    // Recomendados: si es película, mostrar películas; si no, series.
     const recCards = Array.from(document.querySelectorAll("section a.group.cursor-pointer"));
     if (recCards.length) {
       const recType = (full.type || "").toLowerCase() === "movie" ? "movie" : "tv";
@@ -1950,7 +1907,6 @@ const AniDexDetailDataBoot = () => {
       });
     }
 
-    // Zoom simple para imgenes del slider
     document.addEventListener("click", (e) => {
       const img = e.target.closest("img[data-zoomable]");
       if (!img) return;
@@ -1966,15 +1922,3 @@ const AniDexDetailDataBoot = () => {
 };
 
 AniDexDetailDataBoot();
-
-
-
-
-
-
-
-
-
-
-
-
