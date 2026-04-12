@@ -137,4 +137,88 @@ class Anime
         }
         return $animes;
     }
+
+    /**
+     * Obtiene el catálogo administrativo con filtros y paginación
+     */
+    public function getCatalog($page = 1, $perPage = 50, $search = '', $status = 'ALL', $type = 'ALL', $year = '')
+    {
+        if (!$this->db)
+            return array('data' => array(), 'total' => 0, 'totalPages' => 1, 'currentPage' => 1, 'airingCount' => 0);
+
+        $restrictedGenres = array("'Hentai'", "'Erotica'", "'Ecchi'", "'Yaoi'", "'Yuri'", "'Girls Love'", "'Boys Love'");
+        $restrictedTitles = array("'%does it count if%'", "'%futanari%'", "'%test%'");
+
+        $where = array(
+            "id NOT IN (SELECT anime_id FROM anime_generos WHERE genero_id IN (SELECT id FROM generos WHERE nombre IN (" . implode(",", $restrictedGenres) . ")))",
+            "LOWER(titulo) NOT LIKE " . implode(" AND LOWER(titulo) NOT LIKE ", $restrictedTitles)
+        );
+        $params = array();
+
+        if (!empty($search)) {
+            $where[] = "(titulo LIKE ? OR tipo LIKE ? OR estado LIKE ? OR CAST(anio AS CHAR) LIKE ? OR estudio LIKE ?)";
+            $searchVal = '%' . $search . '%';
+            $params[] = $searchVal;
+            $params[] = $searchVal;
+            $params[] = $searchVal;
+            $params[] = $searchVal;
+            $params[] = $searchVal;
+        }
+
+        if ($status !== 'ALL' && !empty($status)) {
+            $statusMap = array(
+                'EN EMISION' => array('en emision', 'en emisi?n', 'currently airing'),
+                'FINALIZADO' => array('finished airing', 'finalizado', 'finalizada'),
+                'PROXIMAMENTE' => array('not yet aired', 'proximamente', 'pr?ximamente'),
+            );
+            $normalizedStatus = strtoupper($status);
+            if (isset($statusMap[$normalizedStatus])) {
+                $parts = array();
+                foreach ($statusMap[$normalizedStatus] as $statusValue) {
+                    $parts[] = 'LOWER(estado) = ?';
+                    $params[] = $statusValue;
+                }
+                $where[] = '(' . implode(' OR ', $parts) . ')';
+            }
+        }
+
+        if ($type !== 'ALL' && !empty($type)) {
+            $where[] = "UPPER(tipo) = ?";
+            $params[] = strtoupper($type);
+        }
+
+        if (!empty($year)) {
+            $where[] = "CAST(anio AS CHAR) LIKE ?";
+            $params[] = '%' . $year . '%';
+        }
+
+        $whereSql = " WHERE " . implode(" AND ", $where);
+
+        // Total registros
+        $countStmt = $this->db->prepare("SELECT COUNT(*) FROM anime" . $whereSql);
+        $countStmt->execute($params);
+        $total = (int) $countStmt->fetchColumn();
+
+        $totalPages = max(1, (int) ceil($total / $perPage));
+        $page = min(max(1, $page), $totalPages);
+        $offset = ($page - 1) * $perPage;
+
+        // Lista paginada
+        $sqlList = "SELECT * FROM anime" . $whereSql . " ORDER BY id DESC LIMIT " . (int) $perPage . " OFFSET " . (int) $offset;
+        $listStmt = $this->db->prepare($sqlList);
+        $listStmt->execute($params);
+        $animes = $listStmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Conteo para dashboard
+        $airingSql = "SELECT COUNT(*) FROM anime WHERE LOWER(estado) IN ('en emision', 'currently airing') AND id NOT IN (SELECT anime_id FROM anime_generos WHERE genero_id IN (SELECT id FROM generos WHERE nombre IN (" . implode(",", $restrictedGenres) . ")))";
+        $airingCount = (int) $this->db->query($airingSql)->fetchColumn();
+
+        return array(
+            'data' => $animes,
+            'total' => $total,
+            'totalPages' => $totalPages,
+            'currentPage' => $page,
+            'airingCount' => $airingCount
+        );
+    }
 }
