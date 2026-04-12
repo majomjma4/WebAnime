@@ -3,17 +3,14 @@ namespace Controllers\Api;
 
 use Controllers\Controller;
 use PDO;
-use Exception;
-use Throwable;
 use Models\Database;
-
 
 class JikanProxyController extends Controller
 {
     private $restrictedGenres = ['Hentai', 'Erotica', 'Ecchi', 'Yaoi', 'Yuri', 'Gore', 'Harem', 'Reverse Harem', 'Rx', 'Girls Love', 'Boys Love'];
-    private $restrictedTitles = ['does it count if', 'futanari', 'e-p-h-o-r-i-a']; // Added Obfuscation checks for titles if needed
+    private $restrictedTitles = ['does it count if', 'futanari', 'e-p-h-o-r-i-a'];
 
-    public function handle(): void
+    public function handle()
     {
         /**
          * jikan_proxy.php
@@ -28,6 +25,10 @@ class JikanProxyController extends Controller
         header('Access-Control-Allow-Origin: *');
 
         $endpoint = $_GET['endpoint'] ?? '';
+        
+        // Manual decoding just in case
+        $endpoint = urldecode($endpoint);
+
         if (empty($endpoint)) {
             http_response_code(400);
             echo json_encode(['error' => 'Endpoint is required']);
@@ -56,8 +57,8 @@ class JikanProxyController extends Controller
             }
         }
 
-        // 2. Rate Limiting (Only if we REALLY need to fetch from Jikan)
-        $lockDir = __DIR__ . '/../../Storage/locks';
+        // 2. Rate Limiting (Using temp files for atomicity across processes)
+        $lockDir = sys_get_temp_dir() . '/webanime_locks_v3';
         if (!is_dir($lockDir)) {
             @mkdir($lockDir, 0777, true);
         }
@@ -83,8 +84,8 @@ class JikanProxyController extends Controller
         $url = 'https://api.jikan.moe/v4/' . ltrim($endpoint, '/');
 
         // Auto-append SFW filter for searches/lists if not present
-        if (preg_match('/(anime|manga|top|seasons|search)/i', $url) && !str_contains($url, 'sfw=')) {
-            $url .= (str_contains($url, '?') ? '&' : '?') . 'sfw=1';
+        if (preg_match('/(anime|manga|top|seasons|search)/i', $url) && strpos($url, 'sfw=') === false) {
+            $url .= (strpos($url, '?') !== false ? '&' : '?') . 'sfw=1';
         }
 
         $ch = curl_init();
@@ -118,7 +119,7 @@ class JikanProxyController extends Controller
 
     }
 
-    private function filterResponse(string $json): string
+    private function filterResponse($json)
     {
         $data = json_decode($json, true);
         if (!$data || !isset($data['data']))
@@ -142,7 +143,7 @@ class JikanProxyController extends Controller
         return json_encode($data);
     }
 
-    private function isRestricted($item): bool
+    private function isRestricted($item)
     {
         if (!$item)
             return false;
@@ -150,7 +151,7 @@ class JikanProxyController extends Controller
         // 1. Title Check
         $title = strtolower($item['title'] ?? $item['title_english'] ?? '');
         foreach ($this->restrictedTitles as $restricted) {
-            if (str_contains($title, $restricted))
+            if (strpos($title, $restricted) !== false)
                 return true;
         }
 
@@ -164,7 +165,7 @@ class JikanProxyController extends Controller
 
         // 3. Rating Check
         $rating = $item['rating'] ?? '';
-        if (str_contains($rating, 'Rx') || str_contains($rating, 'Hentai'))
+        if (strpos($rating, 'Rx') !== false || strpos($rating, 'Hentai') !== false)
             return true;
 
         return false;

@@ -5,11 +5,14 @@ use PDO;
 
 class EpisodeCacheService
 {
-    public function __construct(private PDO $db)
+    private $db;
+
+    public function __construct(PDO $db)
     {
+        $this->db = $db;
     }
 
-    public function ensureTable(): void
+    public function ensureTable()
     {
         $this->db->exec("CREATE TABLE IF NOT EXISTS anime_episodes (
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -23,7 +26,7 @@ class EpisodeCacheService
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
     }
 
-    public function getByAnimeId(int $animeId): array
+    public function getByAnimeId($animeId)
     {
         if ($animeId <= 0) {
             return [];
@@ -44,7 +47,7 @@ class EpisodeCacheService
         return $items;
     }
 
-    public function saveForAnime(int $animeId, array $episodesData): void
+    public function saveForAnime($animeId, $episodesData)
     {
         if ($animeId <= 0 || !$episodesData) {
             return;

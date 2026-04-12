@@ -60,14 +60,14 @@ class Router
 
     private function extractPatternParams(string $normalizedRoute, string $candidate): ?array
     {
-        if (!str_contains($candidate, '{')) {
+        if (strpos($candidate, '{') === false) {
             return null;
         }
 
         $normalizedCandidate = urldecode(trim($candidate));
         $normalizedCandidate = str_replace('\\', '/', $normalizedCandidate);
         $normalizedCandidate = trim($normalizedCandidate, '/');
-        if ($normalizedCandidate === '' || str_contains($normalizedCandidate, '..') || preg_match('#//+#', $normalizedCandidate)) {
+        if ($normalizedCandidate === '' || strpos($normalizedCandidate, '..') !== false || preg_match('#//+#', $normalizedCandidate)) {
             return null;
         }
 
@@ -108,7 +108,7 @@ class Router
             return 'index';
         }
 
-        if (str_contains($normalized, '..') || preg_match('#//+#', $normalized)) {
+        if (strpos($normalized, '..') !== false || preg_match('#//+#', $normalized)) {
             return null;
         }
 

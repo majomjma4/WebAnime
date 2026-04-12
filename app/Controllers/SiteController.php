@@ -3,26 +3,26 @@ namespace Controllers;
 
 class SiteController extends Controller
 {
-    public function home(): void
+    public function home()
     {
         app_start_session();
         session_write_close();
         $this->render('pages/index');
     }
 
-    public function character(): void
+    public function character()
     {
         $this->render('pages/character');
     }
 
-    public function featured(): void
+    public function featured()
     {
         app_start_session();
         session_write_close();
         $this->render('pages/destacados');
     }
 
-    public function detail(): void
+    public function detail()
     {
         $this->ensureSessionStarted();
 
@@ -60,17 +60,17 @@ class SiteController extends Controller
         ]);
     }
 
-    public function login(): void
+    public function login()
     {
         $this->render('pages/ingresar');
     }
 
-    public function payment(): void
+    public function payment()
     {
         $this->render('pages/pago');
     }
 
-    public function movies(): void
+    public function movies()
     {
         $animeModel = new \Models\Anime();
         $dbGenres = $animeModel->getFilteredGenres();
@@ -85,19 +85,19 @@ class SiteController extends Controller
         ]);
     }
 
-    public function ranking(): void
+    public function ranking()
     {
         app_start_session();
         session_write_close();
         $this->render('pages/ranking');
     }
 
-    public function register(): void
+    public function register()
     {
         $this->render('pages/registro');
     }
 
-    public function series(): void
+    public function series()
     {
         $animeModel = new \Models\Anime();
         $dbGenres = $animeModel->getFilteredGenres();

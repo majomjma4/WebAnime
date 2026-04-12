@@ -3,11 +3,11 @@ namespace Controllers;
 
 abstract class Controller
 {
-    protected function render(string $view, array $data = []): void
+    protected function render($view, $data = [])
     {
         $viewPath = __DIR__ . '/../Views/' . $view . '.php';
         if (!file_exists($viewPath)) {
-            $this->abort(404, 'Vista no encontrada: ' . e($view));
+            $this->abort(404, 'Vista no encontrada: ' . $view);
             return;
         }
 
@@ -15,19 +15,19 @@ abstract class Controller
         require $viewPath;
     }
 
-    protected function redirectToRoute(string $routeName, array $query = []): void
+    protected function redirectToRoute($routeName, $query = [])
     {
         header('Location: ' . route_path($routeName, $query));
         exit;
     }
 
-    protected function abort(int $statusCode, string $message): void
+    protected function abort($statusCode, $message)
     {
         http_response_code($statusCode);
         echo $message;
     }
 
-    protected function renderNotFound(string $requestedPath = ''): void
+    protected function renderNotFound($requestedPath = '')
     {
         http_response_code(404);
         $this->render('pages/404', [
@@ -35,12 +35,12 @@ abstract class Controller
         ]);
     }
 
-    protected function ensureSessionStarted(): void
+    protected function ensureSessionStarted()
     {
         app_start_session();
     }
 
-    public function authorize(?string $guard): void
+    public function authorize($guard)
     {
         if (!$guard) {
             return;

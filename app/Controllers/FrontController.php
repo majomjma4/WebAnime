@@ -5,7 +5,7 @@ use Routing\Router;
 
 class FrontController extends Controller
 {
-    public function handle(string $route): void
+    public function handle($route)
     {
         $router = new Router(app_routes());
         $resolved = $router->match($route);
@@ -39,18 +39,18 @@ class FrontController extends Controller
         $controller->{$action}();
     }
 
-    private function publishRouteParams(array $params): void
+    private function publishRouteParams($params)
     {
         unset($_GET['_detail_ref']);
 
-        foreach ($params as $name => $value) {
-            if (!is_string($name)) {
-                continue;
-            }
+        if (is_array($params)) {
+            foreach ($params as $name => $value) {
+                if (!is_string($name)) {
+                    continue;
+                }
 
-            if ($name === 'detail_ref') {
-                $detailRef = trim((string) $value);
-                if ($detailRef !== '' && app_is_valid_detail_ref($detailRef)) {
+                if ($name === 'detail_ref') {
+                    $detailRef = trim((string) $value);
                     $_GET['_detail_ref'] = $detailRef;
                 }
             }

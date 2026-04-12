@@ -605,6 +605,8 @@
         <div class="hidden lg:flex items-center bg-surface-container-high rounded-full px-4 py-2 w-36 group focus-within:ring-1 focus-within:ring-primary/30 transition-all">
           <span class="material-symbols-outlined text-violet-400 text-sm">search</span>
           <input
+            id="layout-search-input"
+            data-header-search="1"
             class="bg-transparent border-none focus:ring-0 text-sm w-full placeholder:text-on-surface-variant/50"
             placeholder="Buscar..."
             type="text"
