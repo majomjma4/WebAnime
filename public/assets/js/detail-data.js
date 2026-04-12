@@ -419,7 +419,7 @@ const AniDexDetailDataBoot = () => {
       const saveUrl = appUrl("api/save_anime");
       console.log("NekoraDetail: Enviando persistencia rápida (Fase 1) para:", full.title);
       
-      nativeFetch(saveUrl, {
+      window.fetch(saveUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(full)
