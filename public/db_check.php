@@ -24,6 +24,16 @@ try {
     echo "<li><b>Total Relaciones Género:</b> $gens</li>";
     echo "</ul>";
 
+    // 2.5 Detección de Huérfanos (Investigación de fallos de transacciones)
+    $orphanChars = $db->query("SELECT COUNT(*) FROM anime_characters WHERE anime_id NOT IN (SELECT id FROM anime)")->fetchColumn();
+    $orphanGens = $db->query("SELECT COUNT(*) FROM anime_generos WHERE anime_id NOT IN (SELECT id FROM anime)")->fetchColumn();
+    
+    echo "<h2>Detección de Errores (Huérfanos)</h2>";
+    echo "<ul>";
+    echo "<li style='color:".($orphanChars > 0 ? "red" : "green")."'><b>Personajes sin Anime:</b> $orphanChars</li>";
+    echo "<li style='color:".($orphanGens > 0 ? "red" : "green")."'><b>Géneros sin Anime:</b> $orphanGens</li>";
+    echo "</ul>";
+
     // 3. Últimos 10 agregados
     $lastTen = $db->query("SELECT id, mal_id, titulo, creado_en FROM anime ORDER BY id DESC LIMIT 10")->fetchAll(PDO::FETCH_ASSOC);
     
