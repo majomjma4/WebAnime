@@ -1,5 +1,15 @@
 const AniDexDetailDataBoot = () => {
-  const appUrl = window.AniDexShared?.buildAppUrl || ((path = "") => String(path || ""));
+  const getFallbackBasePath = () => {
+    const loc = window.location.pathname;
+    if (loc.includes("/WebAnime/")) return "/WebAnime/";
+    if (loc.includes("/WebAnime_CI4_Replica/")) return "/WebAnime_CI4_Replica/";
+    return "/";
+  };
+  const appUrl = (path = "") => {
+    if (window.AniDexShared?.buildAppUrl) return window.AniDexShared.buildAppUrl(path);
+    const base = getFallbackBasePath();
+    return base + (path.startsWith("/") ? path.slice(1) : path);
+  };
   const API = appUrl("api/jikan_proxy");
   const DETAIL_OVERRIDES = {
     57658: {
@@ -361,24 +371,31 @@ const AniDexDetailDataBoot = () => {
     } else {
       if (malIdParam) {
         selectedId = Number(malIdParam);
-        if (selectedId) full = await byId(selectedId, "full");
+        if (selectedId) {
+          const res = await byId(selectedId, "full");
+          full = res?.data || res; // Manejo de Jikan v4
+        }
       }
       if (!full && query) {
         const found = await pickTitle(query);
         if (found) {
           selectedId = found.mal_id;
-          full = await byId(selectedId, "full");
+          const res = await byId(selectedId, "full");
+          full = res?.data || res; // Manejo de Jikan v4
         }
       }
     }
 
     if (!full) {
-      console.warn("NekoraDetail: No se pudo obtener información del anime (Local o Jikan).");
+      console.warn("NekoraDetail: No se pudo obtener información del anime.");
       return;
     }
 
-    // Asegurarnos de que selectedId esté sincronizado con full
-    if (full.mal_id) selectedId = full.mal_id;
+    // Normalizar selectedId y mal_id
+    if (full.mal_id) selectedId = Number(full.mal_id);
+    else if (selectedId) full.mal_id = selectedId;
+    
+    console.log("NekoraDetail: Iniciando sincronización para MAL_ID:", selectedId);
 
     try {
       const mapKey = "anidex_title_id_map_v1";
@@ -410,7 +427,10 @@ const AniDexDetailDataBoot = () => {
         pictures: pics
       };
       
-      window.fetch(appUrl("api/save_anime"), {
+      const saveUrl = appUrl("api/save_anime");
+      console.log("NekoraDetail: Enviando persistencia a:", saveUrl);
+
+      window.fetch(saveUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(deepData)

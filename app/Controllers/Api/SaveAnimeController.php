@@ -39,9 +39,14 @@ class SaveAnimeController extends Controller
             exit;
         }
 
-        $mal_id = (int) $data['mal_id'];
+        $mal_id = (int) ($data['mal_id'] ?? 0);
         $titulo = isset($data['title_english']) ? $data['title_english'] : (isset($data['title']) ? $data['title'] : 'Unknown');
         $titulo = trim((string) $titulo);
+
+        // LOG DE DEPURACIÓN (Temporal) enviando a la raíz
+        $logFile = __DIR__ . '/../../../persistence_debug.log';
+        $logData = date('[Y-m-d H:i:s]') . " | MAL_ID: $mal_id | Titulo: $titulo | RAW_KEYS: " . implode(',', array_keys($data)) . "\n";
+        @file_put_contents($logFile, $logData, FILE_APPEND);
 
         if (empty($titulo) || strtolower($titulo) === 'unknown') {
             ApiResponse::error('Invalid title: cannot save anime with unknown title.');
