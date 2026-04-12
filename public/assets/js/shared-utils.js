@@ -116,16 +116,6 @@
       const jikanRes = await nativeFetch(jikanUrl);
       if (jikanRes && jikanRes.ok) {
         const data = await jikanRes.json();
-        
-        // 3. Alimentar la Base de Datos local (segundo plano)
-        if (data && data.data && !isRankingEndpoint(cleanEndpoint)) {
-           nativeFetch(buildAppUrl("api/save_anime"), {
-             method: "POST",
-             headers: { "Content-Type": "application/json" },
-             body: JSON.stringify({ mal_id: data.data.mal_id || 0, ...data.data, force_update: 1 })
-           }).catch(() => {});
-        }
-        
         return data;
       }
     } catch (e) {

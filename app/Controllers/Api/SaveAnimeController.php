@@ -43,6 +43,11 @@ class SaveAnimeController extends Controller
         $titulo = isset($data['title_english']) ? $data['title_english'] : (isset($data['title']) ? $data['title'] : 'Unknown');
         $titulo = trim((string) $titulo);
 
+        if (empty($titulo) || strtolower($titulo) === 'unknown') {
+            ApiResponse::error('Invalid title: cannot save anime with unknown title.');
+            exit;
+        }
+
         // Bloqueo de contenido +18
         $rating = isset($data['rating']) ? (string) $data['rating'] : '';
         $restrictedRating = array('Rx', 'Hentai', 'Erotica', 'Adults');

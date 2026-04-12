@@ -183,4 +183,10 @@ return [
         'action' => 'handle',
         'aliases' => ['api/users.php'],
     ],
+    'api_cleanup' => [
+        'path' => 'api/cleanup',
+        'controller' => Controllers\Api\CleanupController::class,
+        'action' => 'handle',
+        'aliases' => ['api/cleanup.php'],
+    ],
 ];
