@@ -277,7 +277,7 @@
           img.src = defaultAvatar;
         };
       });
-    } catch {}
+    } catch { }
   }
   async function setupProfileMenu() {
     const profileBtn = document.querySelector("[data-profile-trigger]");
@@ -287,7 +287,7 @@
     const role = getRole();
 
     nameEls.forEach((el) => {
-        el.textContent = logged ? authState.username : getGuestName();
+      el.textContent = logged ? authState.username : getGuestName();
     });
 
     if (logged) {
@@ -380,8 +380,8 @@
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ action: "time_sync", delta: deltaHours.toFixed(4) })
-        }).catch(() => {});
-      } catch (e) {}
+        }).catch(() => { });
+      } catch (e) { }
     };
 
     const pauseTracking = () => {
@@ -420,10 +420,10 @@
     setActiveMenu();
     const adminBtn = document.getElementById("admin-mode-btn");
     if (!isLoggedIn() || localStorage.getItem("nekora_user") !== "Admin99") {
-      try { localStorage.removeItem("nekora_admin"); } catch {}
+      try { localStorage.removeItem("nekora_admin"); } catch { }
     }
     if (isLoggedIn() && isAdmin()) {
-      try { localStorage.setItem("nekora_premium", "true"); } catch {}
+      try { localStorage.setItem("nekora_premium", "true"); } catch { }
     }
     if (adminBtn) {
       const showAdmin = isLoggedIn() && isAdmin();
@@ -530,7 +530,7 @@
           // Mezcla Inteligente para Listas
           if (Array.isArray(serverVal)) {
             let localArr = [];
-            try { localArr = localValRaw ? JSON.parse(localValRaw) : []; } catch(e) {}
+            try { localArr = localValRaw ? JSON.parse(localValRaw) : []; } catch (e) { }
             if (!Array.isArray(localArr)) localArr = [];
             const seen = new Set();
             const merged = [];
@@ -542,7 +542,7 @@
           } else if (typeof serverVal === "object" && serverVal !== null) {
             // Mezcla de objetos (status_v1, etc.): local prevalece
             let localObj = {};
-            try { localObj = localValRaw ? JSON.parse(localValRaw) : {}; } catch(e) {}
+            try { localObj = localValRaw ? JSON.parse(localValRaw) : {}; } catch (e) { }
             finalVal = Object.assign({}, serverVal, localObj);
           }
 
@@ -552,18 +552,18 @@
           }
         });
         // profile_name se guarda SIN sufijo; el resto CON sufijo aislado.
-        if (d.anidex_profile_name)         localStorage.setItem("anidex_profile_name",                              d.anidex_profile_name);
-        if (d.anidex_profile_desc)         localStorage.setItem(getIsolatedKey("anidex_profile_desc"),         d.anidex_profile_desc);
-        if (d.anidex_profile_color)        localStorage.setItem(getIsolatedKey("anidex_profile_color"),        d.anidex_profile_color);
-        if (d.anidex_profile_avatar)       localStorage.setItem(getIsolatedKey("anidex_profile_avatar"),       d.anidex_profile_avatar);
-        if (d.anidex_profile_avatar)       localStorage.setItem("anidex_profile_avatar", d.anidex_profile_avatar);
+        if (d.anidex_profile_name) localStorage.setItem("anidex_profile_name", d.anidex_profile_name);
+        if (d.anidex_profile_desc) localStorage.setItem(getIsolatedKey("anidex_profile_desc"), d.anidex_profile_desc);
+        if (d.anidex_profile_color) localStorage.setItem(getIsolatedKey("anidex_profile_color"), d.anidex_profile_color);
+        if (d.anidex_profile_avatar) localStorage.setItem(getIsolatedKey("anidex_profile_avatar"), d.anidex_profile_avatar);
+        if (d.anidex_profile_avatar) localStorage.setItem("anidex_profile_avatar", d.anidex_profile_avatar);
         if (d.anidex_profile_member_since) localStorage.setItem(getIsolatedKey("anidex_profile_member_since"), d.anidex_profile_member_since);
-        if (d.anidex_public_user_id)       localStorage.setItem("anidex_public_user_id", d.anidex_public_user_id);
+        if (d.anidex_public_user_id) localStorage.setItem("anidex_public_user_id", d.anidex_public_user_id);
         // Se usa Math.max en vez de "if server > local" para garantizar atomicidad.
         const serverHoursRaw = d.anidex_profile_hours;
         if (serverHoursRaw !== undefined && serverHoursRaw !== null) {
           const localKey = getIsolatedKey("anidex_profile_hours");
-          const local  = parseFloat(localStorage.getItem(localKey) || "0");
+          const local = parseFloat(localStorage.getItem(localKey) || "0");
           const server = parseFloat(serverHoursRaw || "0");
           const winner = Math.max(local, server);
           localStorage.setItem(localKey, winner.toFixed(2));
