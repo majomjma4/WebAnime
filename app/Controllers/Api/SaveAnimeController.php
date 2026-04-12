@@ -77,6 +77,12 @@ class SaveAnimeController extends Controller
             }
         }
 
+        // Validamos que el mal_id sea válido (> 0)
+        if ($mal_id <= 0) {
+            ApiResponse::error('Invalid MyAnimeList ID: ' . $mal_id);
+            exit;
+        }
+
         $stmt = $dbConn->prepare("SELECT id FROM anime WHERE mal_id = ? LIMIT 1");
         $stmt->execute(array($mal_id));
         $existingAnime = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -142,7 +148,7 @@ class SaveAnimeController extends Controller
                 $stmt->execute(array($mal_id, $titulo, $titulo_ingles, $tipo, $estudio, $estado, $episodios, $temporada, $anio, $clasificacion, $sinopsis, $imagen_url, $trailer_url, $puntuacion));
                 $new_id = $dbConn->lastInsertId();
             } else {
-                $sql = "UPDATE anime SET mal_id = ?, titulo = ?, titulo_ingles = ?, tipo = ?, estudio = ?, estado = ?, episodios = ?, temporada = ?, anio = ?, clasificacion = ?, sinopsis = ?, imagen_url = ?, trailer_url = ?, puntuacion = ? WHERE id = ?";
+                $sql = "UPDATE anime SET mal_id = ?, titulo = ?, titulo_ingles = ?, tipo = ?, estudio = ?, estado = ?, episodios = ?, temporada = ?, anio = ?, clasificacion = ?, sinopsis = ?, imagen_url = ?, trailer_url = ?, puntuacion = ?, activo = 1 WHERE id = ?";
                 $stmt = $dbConn->prepare($sql);
                 $stmt->execute(array($mal_id, $titulo, $titulo_ingles, $tipo, $estudio, $estado, $episodios, $temporada, $anio, $clasificacion, $sinopsis, $imagen_url, $trailer_url, $puntuacion, $new_id));
 
@@ -225,9 +231,14 @@ class SaveAnimeController extends Controller
             ApiResponse::success(array('message' => 'Anime and deep data updated successfully', 'id' => $new_id));
 
         } catch (Exception $e) {
-            if ($dbConn->inTransaction())
+            if (isset($dbConn) && $dbConn->inTransaction()) {
                 $dbConn->rollBack();
-            ApiResponse::error($e->getMessage(), 500);
+            }
+            error_log("SaveAnime Error: " . $e->getMessage() . " at " . $e->getFile() . ":" . $e->getLine());
+            ApiResponse::error("Error en servidor: " . $e->getMessage(), 500, array(
+                'file' => basename($e->getFile()),
+                'line' => $e->getLine()
+            ));
         }
     }
 }

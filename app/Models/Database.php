@@ -10,7 +10,7 @@ class Database
     private $db_name;
     private $username;
     private $password;
-    public $conn;
+    private $conn;
 
     public function __construct()
     {
@@ -32,18 +32,43 @@ class Database
      */
     public function getConnection()
     {
-        $this->conn = null;
-        try {
-            $dsn = "mysql:host=" . $this->host . ";dbname=" . $this->db_name . ";charset=utf8mb4";
-            $this->conn = new PDO($dsn, $this->username, $this->password);
-            
-            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $this->conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-            $this->conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-            
-        } catch (PDOException $exception) {
-            echo "Error de conexión PDO: " . $exception->getMessage();
+        if ($this->conn !== null) {
+            return $this->conn;
         }
-        return $this->conn;
+
+        try {
+            $dsn = "mysql:host={$this->host};dbname={$this->db_name};charset=utf8mb4";
+            $options = array(
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_EMULATE_PREPARES => false,
+            );
+
+            $this->conn = new PDO($dsn, $this->username, $this->password, $options);
+            return $this->conn;
+        } catch (PDOException $e) {
+            // Log error but don't expose credentials
+            error_log("Database Connection Error: " . $e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Prueba la conexión y verifica si la base de datos es accesible.
+     * @return array array('success' => bool, 'message' => string)
+     */
+    public function testConnection()
+    {
+        $conn = $this->getConnection();
+        if (!$conn) {
+            return array('success' => false, 'message' => 'No se pudo establecer conexión con el servidor de base de datos.');
+        }
+
+        try {
+            $stmt = $conn->query("SELECT 1");
+            return array('success' => true, 'message' => 'Conexión exitosa y base de datos accesible.');
+        } catch (PDOException $e) {
+            return array('success' => false, 'message' => 'Conexión establecida pero error al consultar: ' . $e->getMessage());
+        }
     }
 }

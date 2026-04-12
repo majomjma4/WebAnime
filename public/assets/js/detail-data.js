@@ -330,8 +330,14 @@ const AniDexDetailDataBoot = () => {
     let isLocal = false;
 
     const localData = await fetchLocalAnime(malIdParam, query, dbIdParam);
-    if (localData) {
-      full = localData;
+    if (localData && localData.anime) {
+      full = localData.anime;
+      // Inyectamos datos profundos si vinieron de la DB
+      if (localData.characters) full.characters = localData.characters;
+      if (localData.videos) full.videos = localData.videos;
+      if (localData.pictures) full.pictures = localData.pictures;
+      if (localData.episodes) full.episodes_data = localData.episodes;
+      
       selectedId = full.mal_id;
       isLocal = true;
       
@@ -365,7 +371,14 @@ const AniDexDetailDataBoot = () => {
         }
       }
     }
-    if (!full) return;
+
+    if (!full) {
+      console.warn("NekoraDetail: No se pudo obtener información del anime (Local o Jikan).");
+      return;
+    }
+
+    // Asegurarnos de que selectedId esté sincronizado con full
+    if (full.mal_id) selectedId = full.mal_id;
 
     try {
       const mapKey = "anidex_title_id_map_v1";
@@ -382,6 +395,7 @@ const AniDexDetailDataBoot = () => {
       addMap(preTitle);
       localStorage.setItem(mapKey, JSON.stringify(map));
     } catch {}
+
     const [chars, vids, pics] = await Promise.all([
       (isLocal && full.characters && full.characters.length > 0) ? Promise.resolve(full.characters) : byId(selectedId, "characters").then((data) => data || []),
       (isLocal && full.videos && (full.videos.promo?.length > 0)) ? Promise.resolve(full.videos) : byId(selectedId, "videos").then((data) => data || {}),
@@ -395,11 +409,23 @@ const AniDexDetailDataBoot = () => {
         videos: vids,
         pictures: pics
       };
-      fetch(appUrl("api/save_anime"), {
+      
+      window.fetch(appUrl("api/save_anime"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(deepData)
-      }).catch(() => {});
+      })
+      .then(r => r.json())
+      .then(res => {
+        if (!res.success) {
+          console.error("NekoraDetail: Error al persistir anime:", res.error);
+        } else {
+          console.log("NekoraDetail: Datos sincronizados exitosamente.", res.message);
+        }
+      })
+      .catch(err => {
+        console.error("NekoraDetail: Fallo de red en persistencia:", err);
+      });
     }
     const forceTitles = [
       "Jujutsu Kaisen: Shimetsu Kaiyuu - Zenpen"
