@@ -387,29 +387,6 @@
     if (reloadBtn) reloadBtn.classList.toggle("hidden", isOk);
   };
 
-
-  const applyFilter = () => {
-    const value = select ? select.value : "all";
-    Array.from(grid.querySelectorAll("article")).forEach((card) => {
-      const t = card.dataset.featuredType || "anime";
-      const show = value === "all" || value === t;
-      card.style.display = show ? "" : "none";
-    });
-  };
-
-  if (select) select.addEventListener("change", applyFilter);
-
-  const getActionEls = () => ({
-    backHomeBtn: document.getElementById("featured-back-home"),
-    reloadBtn: document.getElementById("featured-reload")
-  });
-
-  const setActionState = (isOk) => {
-    const { backHomeBtn, reloadBtn } = getActionEls();
-    if (backHomeBtn) backHomeBtn.classList.toggle("hidden", !isOk);
-    if (reloadBtn) reloadBtn.classList.toggle("hidden", isOk);
-  };
-
   document.addEventListener("DOMContentLoaded", () => {
     const { reloadBtn } = getActionEls();
     if (reloadBtn) reloadBtn.addEventListener("click", () => window.location.reload());
