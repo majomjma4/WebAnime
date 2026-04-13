@@ -529,14 +529,17 @@
         const subtitle = [it.titleEn].filter(Boolean).join("  ");
         const isMovie = normalize(it.mediaType || "").includes("movie") || normalize(it.mediaType || "").includes("pelicula") || normalize(it.mediaType || "").includes("pel\u00edcula");
         const typeBadge = isMovie 
-          ? `<span class="inline-block px-1.5 py-0.5 rounded bg-sky-500/20 border border-sky-500/30 text-sky-400 text-[9px] font-bold uppercase tracking-widest ml-2 shrink-0">Película</span>` 
-          : `<span class="inline-block px-1.5 py-0.5 rounded bg-violet-500/20 border border-violet-500/30 text-violet-400 text-[9px] font-bold uppercase tracking-widest ml-2 shrink-0">Serie</span>`;
+          ? `<span class="inline-block px-1.5 py-0.5 rounded bg-sky-500/20 border border-sky-500/30 text-sky-400 text-[9px] font-bold uppercase tracking-widest shrink-0 w-[60px] text-center">Película</span>` 
+          : `<span class="inline-block px-1.5 py-0.5 rounded bg-violet-500/20 border border-violet-500/30 text-violet-400 text-[9px] font-bold uppercase tracking-widest shrink-0 w-[60px] text-center">Serie</span>`;
 
         btn.innerHTML = `
           <div class="flex items-center gap-3 w-full">
             <img src="${it.image || ""}" alt="${it.title}" class="h-14 w-10 object-cover bg-zinc-800 shrink-0" />
             <div class="min-w-0 flex-1 overflow-hidden">
-              <div class="text-sm text-zinc-100 flex items-center"><span class="truncate">${it.title}</span>${typeBadge}</div>
+              <div class="text-sm text-zinc-100 flex items-center justify-between gap-2">
+                <span class="truncate block" title="${it.title}">${it.title}</span>
+                ${typeBadge}
+              </div>
               ${subtitle ? `<div class="text-[11px] text-zinc-400 truncate mt-0.5">${subtitle}</div>` : ""}
             </div>
           </div>

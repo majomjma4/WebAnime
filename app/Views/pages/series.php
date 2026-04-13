@@ -506,7 +506,7 @@
     </div>
     <script src="<?= asset_path('assets/js/i18n.js') ?>"></script>
     <script src="<?= asset_path('assets/js/title-images.js?v=1774473995,33386') ?>"></script>
-    <script src="<?= asset_path('assets/js/search.js?v=popular5') ?>"></script>
+    <script src="<?= asset_path('assets/js/search.js?v=popular6') ?>"></script>
     <script src="<?= asset_path('assets/js/detail-links.js?v=5') ?>"></script>
     <script src="<?= asset_path('assets/js/filters.js?v=final5') ?>"></script>
     <script src="<?= asset_path('assets/js/load-more.js?v=1774473995,33386') ?>"></script>
