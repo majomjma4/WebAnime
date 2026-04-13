@@ -300,7 +300,7 @@
   </div>
 
   <script src="assets/js/i18n.js"></script>
-  <script src="assets/js/search.js?v=popular4"></script>
+  <script src="assets/js/search.js?v=popular5"></script>
   <script src="assets/js/detail-links.js?v=5"></script>
   <script src="assets/js/load-more.js?v=3"></script>
   <script>
