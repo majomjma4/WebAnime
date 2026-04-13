@@ -1371,6 +1371,30 @@
 
       toggleEmptyState(visible.length);
 
+      // METODOS DE SKELETON
+      function ensureGridSkeletons(count) {
+        const host = grid || document.querySelector("[data-anime-card]")?.parentElement;
+        if (!host) return;
+        host.querySelectorAll(".skeleton-loader").forEach(e => e.remove());
+        for (let i = 0; i < count; i++) {
+          const skel = document.createElement("article");
+          skel.className = "group rounded-lg bg-surface-container-low p-4 animate-pulse skeleton-loader";
+          skel.innerHTML = `
+            <div class="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface-container-highest/40"></div>
+            <div class="space-y-2 mt-3">
+              <div class="h-5 bg-surface-container-highest/40 rounded w-full"></div>
+              <div class="h-4 bg-surface-container-highest/40 rounded w-2/3"></div>
+            </div>
+          `;
+          host.appendChild(skel);
+        }
+      }
+
+      function clearGridSkeletons() {
+        const host = grid || document.querySelector("[data-anime-card]")?.parentElement;
+        if (host) host.querySelectorAll(".skeleton-loader").forEach(e => e.remove());
+      }
+
       // FALLBACK: Si no hay resultados locales y hay texto de búsqueda, buscar en Jikan
       if (visible.length === 0 && q && q.length > 2) {
         if (!state.isFetchingGlobal) {
@@ -1379,26 +1403,35 @@
           const mediaType = isMoviesPage ? "movie" : "tv";
           
           if (emptyBox) {
-            const msg = emptyBox.querySelector("p");
-            if (msg) msg.textContent = "Buscando en el cat\u00e1logo global...";
+            emptyBox.style.display = "none";
           }
+          
+          ensureGridSkeletons(6); // Mostrar skeletons de busqueda
 
           fetch(`${appUrl("api/jikan_proxy")}?endpoint=${encodeURIComponent(`anime?q=${encodeURIComponent(state.search)}&type=${mediaType}&limit=12&order_by=popularity&sort=asc&sfw=1`)}`)
             .then(r => r.ok ? r.json() : null)
             .then(json => {
               state.isFetchingGlobal = false;
+              clearGridSkeletons();
               if (json && json.data && json.data.length > 0) {
                 hydrateCardsWithResults(json.data, mediaType);
               } else {
-                 if (emptyBox && emptyBox.querySelector("p")) {
-                   emptyBox.querySelector("p").textContent = "No se encontraron resultados en el cat\u00e1logo global.";
+                 if (emptyBox) {
+                   emptyBox.style.display = "";
+                   if (emptyBox.querySelector("p")) {
+                     emptyBox.querySelector("p").textContent = "No se encontraron resultados en el cat\u00e1logo global.";
+                   }
                  }
               }
             })
             .catch(() => {
               state.isFetchingGlobal = false;
+              clearGridSkeletons();
+              if (emptyBox) emptyBox.style.display = "";
             });
         }
+      } else {
+         clearGridSkeletons();
       }
 
       const filtersActive =
