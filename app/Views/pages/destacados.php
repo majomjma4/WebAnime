@@ -439,7 +439,21 @@
     }
   };
 
-  loadFeatured().then(setActionState);
+  const initDestacados = () => {
+    loadFeatured().then(setActionState);
+  };
+
+  if (window.AniDexLayout && typeof window.AniDexLayout.onReady === "function") {
+    window.AniDexLayout.onReady(initDestacados);
+  } else {
+    document.addEventListener("DOMContentLoaded", () => {
+      if (window.AniDexLayout && typeof window.AniDexLayout.onReady === "function") {
+        window.AniDexLayout.onReady(initDestacados);
+      } else {
+        initDestacados();
+      }
+    });
+  }
 })();
 </script>
       <div class="mt-12 flex justify-center gap-4" id="featured-actions">
