@@ -64,7 +64,7 @@
     <div class="flex flex-col h-full py-8 gap-y-6">
       <div class="px-8 mb-4">
         <a class="logo-badge logo-badge--admin" href="<?= route_path('home') ?>" aria-label="NekoraList">
-          <img src="img/icon3.png" alt="NekoraList" class="logo-icon" />
+          <img src="img/icon3.webp" alt="NekoraList" class="logo-icon" />
           <span class="logo-text">NekoraList</span>
         </a>
       </div>

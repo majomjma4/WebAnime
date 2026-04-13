@@ -3,7 +3,7 @@
   const API_BASE = appUrl("api/jikan_proxy");
   const cache = {};
   const YEAR_BADGE_PAGES = /series\.php|peliculas\.php/i.test(window.location.pathname || "");
-  const DEFAULT_FALLBACK = appUrl("img/fondoanime.png");
+  const DEFAULT_FALLBACK = appUrl("img/fondoanime.webp");
   const INDEX_TITLE_ALIASES = {
     "Frieren: Ms all del final del viaje": "Frieren: Beyond Journey's End",
     "Solo Leveling": "Solo Leveling",

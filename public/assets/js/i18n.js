@@ -20,8 +20,8 @@
   const STORAGE_KEY = "anidex_lang";
   const CACHE_KEY = "anidex_en_cache_v1";
   const LANGS = {
-    es: { src: buildAssetPath("img/espana.png"), alt: "ES" },
-    en: { src: buildAssetPath("img/reino-unido.png"), alt: "EN" }
+    es: { src: buildAssetPath("img/espana.webp"), alt: "ES" },
+    en: { src: buildAssetPath("img/reino-unido.webp"), alt: "EN" }
   };
 
   const fixedMap = new Map([
