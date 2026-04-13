@@ -163,8 +163,8 @@ function app_is_valid_detail_ref($ref) {
     if (empty($ref)) return false;
     
     // Si empieza con números pero tiene letras después sin un separador (como 59978abc), es sospechoso.
-    // Un ID de MyAnimeList debe ser puramente numérico.
-    if (preg_match('/^[0-9]+[a-zA-Z]+/', $ref)) {
+    // Un ID de MyAnimeList debe ser puramente numérico y actualmente no supera los 7 dígitos.
+    if (preg_match('/^[0-9]+[a-zA-Z]+/', $ref) || (ctype_digit($ref) && strlen($ref) > 7)) {
         return false;
     }
 

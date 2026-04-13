@@ -49,10 +49,8 @@ class SaveAnimeController extends Controller
         $titulo = $data['title_english'] ?? ($data['titulo_ingles'] ?? ($data['title'] ?? ($data['titulo'] ?? 'Unknown')));
         $titulo = trim((string) $titulo);
 
-        // LOG DE DEPURACIÓN (Temporal) enviando a la raíz
-        $logFile = __DIR__ . '/../../../persistence_debug.log';
-        $logData = date('[Y-m-d H:i:s]') . " | MAL_ID: $mal_id | Titulo: $titulo | RAW_KEYS: " . implode(',', array_keys($data)) . "\n";
-        @file_put_contents($logFile, $logData, FILE_APPEND);
+        // Asegurar que las tablas existan antes de proceder
+        $this->ensureTables($dbConn);
 
         if (empty($titulo) || strtolower($titulo) === 'unknown') {
             ApiResponse::error('Invalid title: cannot save anime with unknown title.');
@@ -195,8 +193,6 @@ class SaveAnimeController extends Controller
                 $dbConn->prepare("INSERT INTO anime_generos (anime_id, genero_id) VALUES (?, ?)")->execute(array($new_id, $g_id));
             }
 
-            $dbConn->commit();
-
             // Guardar Personajes (Solo los primeros 10)
             if ($new_id && isset($data['characters']) && is_array($data['characters'])) {
                 $dbConn->prepare("DELETE FROM anime_characters WHERE anime_id = ?")->execute(array($new_id));
@@ -229,8 +225,7 @@ class SaveAnimeController extends Controller
             }
 
             // Guardar Promos/Trailers
-            if (!$new_id) return;
-            if (isset($data['videos']) && isset($data['videos']['promo']) && is_array($data['videos']['promo'])) {
+            if ($new_id && isset($data['videos']) && isset($data['videos']['promo']) && is_array($data['videos']['promo'])) {
                 $dbConn->prepare("DELETE FROM anime_videos WHERE anime_id = ?")->execute(array($new_id));
                 $vidStmt = $dbConn->prepare("INSERT INTO anime_videos (anime_id, youtube_id, url, image_url) VALUES (?, ?, ?, ?)");
                 foreach ($data['videos']['promo'] as $v) {
@@ -248,6 +243,8 @@ class SaveAnimeController extends Controller
                 $episodeCacheService->saveForAnime((int) $new_id, $data['episodes_data']);
             }
 
+            $dbConn->commit();
+
             ApiResponse::success(array('message' => 'Anime processed successfully', 'id' => $new_id, 'action' => $action));
 
         } catch (Exception $e) {
@@ -259,6 +256,72 @@ class SaveAnimeController extends Controller
                 'file' => basename($e->getFile()),
                 'line' => $e->getLine()
             ));
+        }
+    }
+
+    /**
+     * Asegura que las tablas necesarias para la persistencia de anime existan.
+     */
+    private function ensureTables(PDO $db)
+    {
+        $queries = array(
+            "CREATE TABLE IF NOT EXISTS anime (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                mal_id INT UNIQUE NOT NULL,
+                titulo VARCHAR(255) NOT NULL,
+                titulo_ingles VARCHAR(255),
+                tipo VARCHAR(50),
+                estudio VARCHAR(255),
+                estado VARCHAR(50),
+                episodios INT DEFAULT 0,
+                temporada VARCHAR(50),
+                anio INT,
+                clasificacion VARCHAR(100),
+                sinopsis TEXT,
+                imagen_url VARCHAR(255),
+                trailer_url VARCHAR(255),
+                puntuacion DECIMAL(3,2) DEFAULT 0.00,
+                activo TINYINT(1) DEFAULT 1,
+                creado_en DATETIME
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+            "CREATE TABLE IF NOT EXISTS generos (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                nombre VARCHAR(100) UNIQUE NOT NULL
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+            "CREATE TABLE IF NOT EXISTS anime_generos (
+                anime_id INT,
+                genero_id INT,
+                PRIMARY KEY (anime_id, genero_id),
+                FOREIGN KEY (anime_id) REFERENCES anime(id) ON DELETE CASCADE,
+                FOREIGN KEY (genero_id) REFERENCES generos(id) ON DELETE CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+            "CREATE TABLE IF NOT EXISTS anime_characters (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                anime_id INT,
+                mal_id INT,
+                name VARCHAR(255),
+                role VARCHAR(100),
+                image_url VARCHAR(255),
+                FOREIGN KEY (anime_id) REFERENCES anime(id) ON DELETE CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+            "CREATE TABLE IF NOT EXISTS anime_pictures (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                anime_id INT,
+                image_url VARCHAR(255),
+                FOREIGN KEY (anime_id) REFERENCES anime(id) ON DELETE CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+            "CREATE TABLE IF NOT EXISTS anime_videos (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                anime_id INT,
+                youtube_id VARCHAR(50),
+                url VARCHAR(255),
+                image_url VARCHAR(255),
+                FOREIGN KEY (anime_id) REFERENCES anime(id) ON DELETE CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
+        );
+
+        foreach ($queries as $q) {
+            $db->exec($q);
         }
     }
 }

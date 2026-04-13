@@ -388,6 +388,9 @@ const AniDexDetailDataBoot = () => {
 
     if (!full) {
       console.warn("NekoraDetail: No se pudo obtener información del anime.");
+      // Redirigir suavemente al 404 si el recurso no existe en absoluto
+      const notFoundUrl = appUrl("not-found"); 
+      window.location.href = notFoundUrl;
       return;
     }
 
