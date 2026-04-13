@@ -452,7 +452,26 @@
       }
 
       function loadRanking() {
-        grid.innerHTML = '<p class="text-zinc-400">Cargando ranking...</p>';
+        grid.innerHTML = Array.from({length: 6}, function(_, idx) {
+           var rankClass = 'absolute top-3 left-3 rounded-full bg-zinc-800 w-12 h-6';
+           if (idx < 3) rankClass = 'absolute top-3 left-3 rounded-full bg-zinc-800 w-16 h-16';
+          return `
+          <article class="group rounded-2xl overflow-hidden bg-zinc-900 border border-zinc-800 animate-pulse sm:flex sm:gap-6">
+            <div class="relative w-40 sm:w-44 aspect-[2/3] flex-none">
+              <div class="w-full h-full bg-zinc-800 rounded-t-2xl sm:rounded-l-2xl sm:rounded-tr-none"></div>
+              <div class="${rankClass}"></div>
+            </div>
+            <div class="p-5 sm:p-6 w-full space-y-3">
+              <div class="h-6 bg-zinc-800 rounded w-3/4"></div>
+              <div class="h-4 bg-zinc-800 rounded w-1/2"></div>
+              <div class="flex gap-2 mt-4">
+                <div class="h-6 bg-zinc-800 rounded-full w-24"></div>
+                <div class="h-6 bg-zinc-800 rounded-full w-20"></div>
+              </div>
+            </div>
+          </article>
+        `;
+        }).join('');
         return fetchRankingData('top/anime?limit=50')
           .then(function (items) {
             if (items && items.length) return items.slice(0, 50);

@@ -387,13 +387,46 @@
     if (reloadBtn) reloadBtn.classList.toggle("hidden", isOk);
   };
 
+
+  const applyFilter = () => {
+    const value = select ? select.value : "all";
+    Array.from(grid.querySelectorAll("article")).forEach((card) => {
+      const t = card.dataset.featuredType || "anime";
+      const show = value === "all" || value === t;
+      card.style.display = show ? "" : "none";
+    });
+  };
+
+  if (select) select.addEventListener("change", applyFilter);
+
+  const getActionEls = () => ({
+    backHomeBtn: document.getElementById("featured-back-home"),
+    reloadBtn: document.getElementById("featured-reload")
+  });
+
+  const setActionState = (isOk) => {
+    const { backHomeBtn, reloadBtn } = getActionEls();
+    if (backHomeBtn) backHomeBtn.classList.toggle("hidden", !isOk);
+    if (reloadBtn) reloadBtn.classList.toggle("hidden", isOk);
+  };
+
   document.addEventListener("DOMContentLoaded", () => {
     const { reloadBtn } = getActionEls();
     if (reloadBtn) reloadBtn.addEventListener("click", () => window.location.reload());
   });
 
   const loadFeatured = async () => {
-    grid.innerHTML = "<p class=\"text-zinc-400\">Cargando destacados...</p>";
+    grid.innerHTML = Array.from({length: 8}, () => `
+      <article class="featured-card group rounded-[0.9rem] overflow-hidden bg-zinc-900 border border-zinc-800 animate-pulse">
+        <div class="relative aspect-[2/3] p-2">
+          <div class="w-full h-full bg-zinc-800 rounded-[0.7rem]"></div>
+        </div>
+        <div class="p-4 space-y-3">
+          <div class="h-5 bg-zinc-800 rounded w-3/4"></div>
+          <div class="h-4 bg-zinc-800 rounded w-1/2"></div>
+        </div>
+      </article>
+    `).join('');
     try {
       const [resAnime, resMovie] = await Promise.all([
         fetch(`${API}?endpoint=${encodeURIComponent('top/anime?filter=bypopularity&limit=20')}`),

@@ -281,13 +281,13 @@
                   <span class="text-on-surface-variant text-sm font-normal ml-1">Puntuaci&oacute;n</span>
                 </span>
               </div>
-              <h1 class="font-headline text-5xl lg:text-7xl font-extrabold tracking-tighter text-on-surface"><?= e(!empty($detailQuery) ? ucwords($detailQuery) : 'Cargando...') ?></h1>
+              <h1 class="font-headline text-5xl lg:text-7xl font-extrabold tracking-tighter text-on-surface"><?php if(!empty($detailQuery)): ?><?= e(ucwords($detailQuery)) ?><?php else: ?><span class="inline-block animate-pulse bg-surface-container-higher/80 rounded-xl h-[48px] lg:h-[72px] w-[60%]"></span><?php endif; ?></h1>
               <p id="detail-status-meta" class="text-on-surface-variant font-medium flex gap-4 text-sm lg:text-base">
-                <span>Estado: ...</span>
+                <span class="flex items-center gap-2">Estado: <span class="inline-block animate-pulse bg-surface-container-highest rounded h-4 w-16"></span></span>
                 <span class="text-outline-variant">&gt;&lt;</span>
-                <span>Episodios: ...</span>
+                <span class="flex items-center gap-2">Episodios: <span class="inline-block animate-pulse bg-surface-container-highest rounded h-4 w-8"></span></span>
                 <span class="text-outline-variant">&gt;&lt;</span>
-                <span>Duraci&oacute;n: ...</span>
+                <span class="flex items-center gap-2">Duraci&oacute;n: <span class="inline-block animate-pulse bg-surface-container-highest rounded h-4 w-16"></span></span>
               </p>
             </div>
             <div id="detail-genres" class="flex flex-wrap gap-2">
@@ -330,27 +330,26 @@ endif; ?>
         <!-- Right Column: Información -->
         <div class="space-y-10">
           <div class="bg-surface-container-low rounded-lg p-8 border border-outline-variant/5 space-y-8">
-        <!-- Right Column: Información -->
             <div id="detail-info-block" class="space-y-6">
               <div class="flex flex-col gap-1">
-            <h3 class="font-headline text-xl font-bold border-b border-outline-variant/10 pb-4">Información</h3>
-                <span class="text-on-surface font-medium">...</span>
+                <h3 class="font-headline text-xl font-bold border-b border-outline-variant/10 pb-4">Información</h3>
+                <span class="mt-2 text-on-surface font-medium inline-block animate-pulse bg-surface-container-highest rounded h-5 w-32"></span>
               </div>
               <div class="flex flex-col gap-1">
                 <span class="text-xs text-on-surface-variant uppercase tracking-widest font-bold">Studio</span>
-                <span class="text-primary font-medium">...</span>
+                <span class="text-primary font-medium inline-block animate-pulse bg-surface-container-highest rounded h-5 w-24"></span>
               </div>
               <div class="flex flex-col gap-1">
                 <span class="text-xs text-on-surface-variant uppercase tracking-widest font-bold">Source</span>
-                <span class="text-on-surface font-medium">...</span>
+                <span class="text-on-surface font-medium inline-block animate-pulse bg-surface-container-highest rounded h-5 w-28"></span>
               </div>
               <div class="flex flex-col gap-1">
                 <span class="text-xs text-on-surface-variant uppercase tracking-widest font-bold">Aired</span>
-                <span class="text-on-surface font-medium">...</span>
+                <span class="text-on-surface font-medium inline-block animate-pulse bg-surface-container-highest rounded h-5 w-20"></span>
               </div>
               <div class="flex flex-col gap-1">
                 <span class="text-xs text-on-surface-variant uppercase tracking-widest font-bold">Rating</span>
-                <span class="text-on-surface font-medium">...</span>
+                <span class="text-on-surface font-medium inline-block animate-pulse bg-surface-container-highest rounded h-5 w-32"></span>
               </div>
             </div>
           </div>

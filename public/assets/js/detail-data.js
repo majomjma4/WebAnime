@@ -1582,7 +1582,7 @@ const AniDexDetailDataBoot = () => {
       charsRow.innerHTML = topChars.map((c, idx) => {
         const cleanName = (c.character?.name || "Personaje").replace(/,/g, "");
         const roleLabel = /main/i.test(c?.role || "") ? "principal" : "secundario";
-        const fallbackMini = "Cargando biograf\u00eda...";
+        const fallbackMini = `<div class="w-full space-y-1.5 mt-1"><div class="h-2.5 bg-surface-container-highest rounded w-[80%] mx-auto animate-pulse"></div><div class="h-2.5 bg-surface-container-highest rounded w-[60%] mx-auto animate-pulse"></div></div>`;
         const desc = fallbackMini;
         const charId = c.character?.mal_id || "";
         const charImg = c.character?.images?.jpg?.image_url || "";
