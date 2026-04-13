@@ -161,6 +161,14 @@ function app_slugify($text) {
 
 function app_is_valid_detail_ref($ref) {
     if (empty($ref)) return false;
+    
+    // Si empieza con números pero tiene letras después sin un separador (como 59978abc), es sospechoso.
+    // Un ID de MyAnimeList debe ser puramente numérico.
+    if (preg_match('/^[0-9]+[a-zA-Z]+/', $ref)) {
+        return false;
+    }
+
+    // Permitimos: puramente números OR formato slug válido (letras, números y guiones)
     return preg_match('/^[a-z0-9\-]+$/i', $ref);
 }
 

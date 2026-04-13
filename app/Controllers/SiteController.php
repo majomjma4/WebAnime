@@ -36,10 +36,16 @@ class SiteController extends Controller
             $detailRef = app_detail_ref_from_input($legacyId, $legacyTitle);
         }
 
-        if ($detailRef !== '' && ctype_digit($detailRef)) {
+        // Validación estricta: Si la referencia es inválida o sospechosa (ej: 59978abc), damos 404.
+        if ($detailRef === '' || !app_is_valid_detail_ref($detailRef)) {
+            $this->renderNotFound($detailRef);
+            return;
+        }
+
+        if (ctype_digit($detailRef)) {
             $animeModel = new \Models\Anime();
             $resolvedAnime = $animeModel->getById((int) $detailRef);
-            // Ya no retornamos 404. Si no existe en la DB, dejamos que el JS lo busque en Jikan.
+            // Seguimos permitiendo el renderizado si es un ID válido para el fallback de Jikan.
         }
 
         $isLoggedIn = isset($_SESSION['user_id']);
