@@ -530,7 +530,7 @@
         const isMovie = normalize(it.mediaType || "").includes("movie") || normalize(it.mediaType || "").includes("pelicula") || normalize(it.mediaType || "").includes("pel\u00edcula");
         const typeBadge = isMovie 
           ? `<span class="inline-block px-1.5 py-0.5 rounded bg-sky-500/20 border border-sky-500/30 text-sky-400 text-[9px] font-bold uppercase tracking-widest shrink-0 w-[60px] text-center">Película</span>` 
-          : `<span class="inline-block px-1.5 py-0.5 rounded bg-violet-500/20 border border-violet-500/30 text-violet-400 text-[9px] font-bold uppercase tracking-widest shrink-0 w-[60px] text-center">Serie</span>`;
+          : `<span class="inline-block px-1.5 py-0.5 rounded bg-violet-500/20 border border-violet-500/30 text-violet-400 text-[9px] font-bold uppercase tracking-widest shrink-0 w-[60px] text-center">Anime</span>`;
 
         btn.innerHTML = `
           <div class="flex items-center gap-3 w-full">

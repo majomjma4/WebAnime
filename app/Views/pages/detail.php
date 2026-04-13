@@ -564,7 +564,7 @@ endif; ?>
     <script src="<?= asset_path('assets/js/shared-utils.js?v=3') ?>"></script>
     <script src="<?= asset_path('assets/js/i18n.js') ?>"></script>
     <script src="<?= asset_path('assets/js/title-images.js?v=3') ?>"></script>
-    <script src="<?= asset_path('assets/js/search.js?v=popular6') ?>"></script>
+    <script src="<?= asset_path('assets/js/search.js?v=popular7') ?>"></script>
     <script src="<?= asset_path('assets/js/favorites.js?v=4') ?>"></script>
     <script src="<?= asset_path('assets/js/detail-links.js?v=6') ?>"></script>
     <script>window.__DETAIL_ROUTE_INFO = { ref: <?= json_encode($detailRef ?? "") ?>, query: <?= json_encode($detailQuery ?? "") ?> };</script>
