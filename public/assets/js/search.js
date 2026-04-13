@@ -507,8 +507,7 @@
         if (t.includes("movie") || t.includes("pelicula") || t.includes("pel\u00edcula")) movieCount += 1;
         else tvCount += 1;
       });
-      // Si hay mezcla, vamos a la b\u00fasqueda general (home/index)
-      if (movieCount > 0 && tvCount > 0) return "index";
+      // index no procesa búsquedas; enviar a series por defecto.
       return movieCount > tvCount ? "peliculas" : "series";
     };
 
